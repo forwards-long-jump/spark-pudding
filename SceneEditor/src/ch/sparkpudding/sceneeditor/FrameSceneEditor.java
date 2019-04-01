@@ -5,6 +5,9 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
 import ch.sparkpudding.sceneeditor.menu.MenuBar;
+import ch.sparkpudding.sceneeditor.panel.PanelGame;
+import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
+import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
 
 public class FrameSceneEditor extends JFrame {
 
@@ -13,16 +16,30 @@ public class FrameSceneEditor extends JFrame {
 	private static final int HEIGHT = 720;
 
 	private MenuBar menuBar;
+	private PanelSidebarRight panelSidebarRight;
+	private PanelSidebarLeft panelSidebarLeft;
+	private PanelGame panelGame;
 	private BorderLayout borderLayout;
 
 	public FrameSceneEditor() {
 		init();
+		setupLayout();
 		setupFrame();
 	}
 
 	private void init() {
 		borderLayout = new BorderLayout();
 		menuBar = new MenuBar();
+
+		panelSidebarRight = new PanelSidebarRight();
+		panelSidebarLeft = new PanelSidebarLeft();
+		panelGame = new PanelGame();
+	}
+
+	private void setupLayout() {
+		add(panelSidebarRight, BorderLayout.EAST);
+		add(panelSidebarLeft, BorderLayout.WEST);
+		add(panelGame, BorderLayout.CENTER);
 	}
 
 	private void setupFrame() {
