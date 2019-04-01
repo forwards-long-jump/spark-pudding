@@ -1,10 +1,13 @@
 package ch.sparkpudding.coreengine;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,13 +22,13 @@ public class Input {
 	private List<Integer> keysReleased;
 	private List<Integer> mouseButtonsPressed;
 	private List<Integer> mouseButtonsReleased;
-	private Dimension mousePositionBuffer;
+	private Point mousePositionBuffer;
 	private boolean mouseClickedBuffer = false;
 
 	// Values to be read by systems
 	private Map<Integer, Boolean> keys;
 	private Map<Integer, Boolean> mouseButtons;
-	private Dimension mousePosition;
+	private Point mousePosition;
 	private boolean mouseClicked = false;
 
 	private JPanel panel;
@@ -38,10 +41,11 @@ public class Input {
 		keysReleased = new ArrayList<Integer>();
 		mouseButtonsPressed = new ArrayList<Integer>();
 		mouseButtonsReleased = new ArrayList<Integer>();
-		mousePositionBuffer = new Dimension();
+		mousePositionBuffer = new Point();
 
 		keys = new HashMap<Integer, Boolean>();
 		mouseButtons = new HashMap<Integer, Boolean>();
+		mousePosition = new Point();
 	}
 
 	public void update() {
@@ -99,6 +103,21 @@ public class Input {
 				mouseClickedBuffer = true;
 			}
 		});
+		
+		panel.addMouseMotionListener(new MouseMotionAdapter() {
+			
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				mousePositionBuffer = e.getPoint();
+			}
+			
+			// This stays commented in case we ever want to add it later
+//			@Override
+//			public void mouseDragged(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+		});
 	}
 
 	public boolean isKeyDown(int keyCode) {
@@ -114,7 +133,7 @@ public class Input {
 		return mouseClicked;
 	}
 	
-	public Dimension getMousePosition() {
+	public Point getMousePosition() {
 		return mousePosition;
 	}
 }
