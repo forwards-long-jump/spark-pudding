@@ -15,6 +15,7 @@ public class CoreEngine {
 	private boolean exit = false;
 	
 	private JPanel panel;
+	public Input input;
 	
 	private Map<String, Scene> scenes;
 	private Scene currentScene;
@@ -24,6 +25,7 @@ public class CoreEngine {
 
 	public CoreEngine(JPanel panel) {
 		this.panel = panel;
+		this.input = new Input(panel);
 		
 		this.scenes = new HashMap<String, Scene>();
 		this.currentScene = null;
