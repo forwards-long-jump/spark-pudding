@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LELManager {
+public class LelManager {
 	private String directory;
 
 	private Map<String, String> mapComponents;
@@ -24,7 +24,7 @@ public class LELManager {
 	final String[] requiredSubFolders = { "components", "assets/textures", "assets/sounds", "assets/music", "scenes",
 			"entitytemplates", "systems" };
 
-	public LELManager(String directory) throws Exception {
+	public LelManager(String directory) throws Exception {
 		this.directory = directory;
 
 		if (!isValidLEL())
@@ -83,27 +83,27 @@ public class LELManager {
 		return (new File(this.directory + "/metadata.xml").exists());
 	}
 
-	public String[] getComponentsXML() {
-		return  (String[]) mapComponents.values().toArray();
+	public Collection<String> getComponentsXML() {
+		return  mapComponents.values();
 	}
 
-	public String[] getScenesXML() {
-		return (String[]) mapScenes.values().toArray();
+	public Collection<String> getScenesXML() {
+		return mapScenes.values();
 	}
 
-	public String[] getEntityTemplatesXML() {
-		return (String[]) mapEntityTemplates.values().toArray();
+	public Collection<String> getEntityTemplatesXML() {
+		return mapEntityTemplates.values();
 	}
 
-	public Files[] getTextures() {
-		return (Files[]) mapTextures.values().toArray();
+	public Collection<File> getTextures() {
+		return mapTextures.values();
 	}
 
-	public Files[] getMusics() {
-		return (Files[]) mapMusic.values().toArray();
+	public Collection<File> getMusics() {
+		return mapMusic.values();
 	}
 
-	public Files[] getSounds() {
-		return (Files[]) mapSounds.values().toArray();
+	public Collection<File> getSounds() {
+		return mapSounds.values();
 	}
 }
