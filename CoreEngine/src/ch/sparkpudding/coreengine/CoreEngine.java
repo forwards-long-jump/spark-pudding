@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import ch.sparkpudding.coreengine.ecs.Scene;
+import ch.sparkpudding.coreengine.filereader.LelManager;
 
 public class CoreEngine {
 
@@ -17,15 +18,19 @@ public class CoreEngine {
 	private JPanel panel;
 	public Input input;
 	
+	private LelManager lelManager;
+	
 	private Map<String, Scene> scenes;
 	private Scene currentScene;
 	
 	private List<System> systems;
 	private System renderSystem;	
 
-	public CoreEngine(JPanel panel) {
+	public CoreEngine(JPanel panel, String gameFolder) throws Exception {
 		this.panel = panel;
 		this.input = new Input(panel);
+		
+		this.lelManager = new LelManager(gameFolder);
 		
 		this.scenes = new HashMap<String, Scene>();
 		this.currentScene = null;

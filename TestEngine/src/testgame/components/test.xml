@@ -2,6 +2,6 @@
 <component name="test">
 	<field type="int" name="x">12</field>
 	<field type="int" name="y">22</field>
-	<field type="bool" name="joli">true</field>
+	<field type="bool" name="jôôôli">true</field>
 	<field type="string" name="image">lel.png</field>
 </component>
