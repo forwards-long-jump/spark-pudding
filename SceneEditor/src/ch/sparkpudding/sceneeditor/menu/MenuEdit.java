@@ -11,8 +11,8 @@ import java.awt.event.KeyEvent;
 
 /**
  * 
- * @author Alexandre Bianchi
- *
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
  */
 public class MenuEdit extends JMenu {
 

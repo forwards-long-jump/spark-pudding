@@ -10,6 +10,11 @@ import ch.sparkpudding.sceneeditor.panel.PanelGame;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
 
+/**
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ */
 public class FrameSceneEditor extends JFrame {
 
 	private static final String TITLE = "Scene Editor";

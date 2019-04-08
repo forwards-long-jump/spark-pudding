@@ -8,8 +8,8 @@ import javax.swing.KeyStroke;
 
 /**
  * 
- * @author Alexandre Bianchi
- *
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
  */
 public class MenuFile extends JMenu {
 
