@@ -39,6 +39,7 @@ public class FrameSceneEditor extends JFrame {
 
 	private void setupLayout() {
 		setLayout(borderLayout);
+		setJMenuBar(menuBar);
 		
 		add(panelSidebarRight, BorderLayout.EAST);
 		add(panelSidebarLeft, BorderLayout.WEST);
