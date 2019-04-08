@@ -46,6 +46,7 @@ public class FrameSceneEditor extends JFrame {
 		add(panelSidebarLeft, BorderLayout.WEST);
 		add(panelGame, BorderLayout.CENTER);
 		
+		// FIXME Remove color
 		panelSidebarLeft.setBackground(Color.BLUE);
 		panelSidebarRight.setBackground(Color.RED);
 		panelGame.setBackground(Color.GREEN);

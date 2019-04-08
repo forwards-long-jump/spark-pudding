@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 
 public class PanelEntity extends JPanel {
 	
-	
 	public PanelEntity() {
 		
 	}
