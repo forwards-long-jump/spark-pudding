@@ -79,8 +79,7 @@ public class CoreEngine {
 	 * Populates entity templates list with entity template files
 	 */
 	private void populateEntityTemplates() {
-		// TODO Auto-generated method stub
-		
+		entityTemplates = new HashMap<String, Entity>();
 	}
 
 	/**
@@ -88,17 +87,10 @@ public class CoreEngine {
 	 */
 	private void populateComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
 		componentTemplates = new HashMap<String, Component>();
+		
 		for (File xmlFile : lelFile.getComponentsXML()) {
 			Component c = new Component(XMLParser.parse(xmlFile));
 			componentTemplates.put(c.getType(), c);
-		}
-		for (Entry<String, Component> components : componentTemplates.entrySet()) {
-			System.out.println(components.getKey() +" :");
-			for (Entry<String, Field> fields : components.getValue().getFields().entrySet())
-			{
-				System.out.println(" " + fields.getKey() + " -> " + fields.getValue().getValue());				
-			}
-			System.out.println();
 		}
 	}
 
