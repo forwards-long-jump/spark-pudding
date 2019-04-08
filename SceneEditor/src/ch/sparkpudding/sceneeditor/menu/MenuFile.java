@@ -20,6 +20,7 @@ public class MenuFile extends JMenu {
 
 	public MenuFile() {
 		init();
+		addAction();
 		addKeyStroke();
 		addItem();
 	}
@@ -33,6 +34,13 @@ public class MenuFile extends JMenu {
 		itemNew = new JMenuItem("New", KeyEvent.VK_N);
 		itemSave = new JMenuItem("Save", KeyEvent.VK_S);
 		itemExit = new JMenuItem("Exit", KeyEvent.VK_X);
+	}
+	
+	/**
+	 * Add the shortcut to the different item
+	 */
+	private void addAction() {
+		// TODO: Implement method
 	}
 
 	/**
