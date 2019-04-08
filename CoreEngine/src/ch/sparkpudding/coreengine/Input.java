@@ -15,6 +15,11 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ */
 public class Input {
 
 	// Values read by the panel

@@ -5,6 +5,11 @@ import java.util.Map;
 
 import ch.sparkpudding.coreengine.ecs.Field;
 
+/**
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ */
 public class Register {
 
 	private Map<String, Field> fields;

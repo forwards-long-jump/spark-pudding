@@ -2,6 +2,11 @@ package ch.sparkpudding.coreengine.ecs;
 
 import java.util.List;
 
+/**
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ */
 public class System {
 
 	private String filename;

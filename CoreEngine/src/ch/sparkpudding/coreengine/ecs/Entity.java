@@ -3,6 +3,11 @@ package ch.sparkpudding.coreengine.ecs;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ */
 public class Entity {
 
 	private Map<String, Component> components;

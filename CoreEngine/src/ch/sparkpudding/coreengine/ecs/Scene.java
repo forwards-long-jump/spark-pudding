@@ -3,6 +3,11 @@ package ch.sparkpudding.coreengine.ecs;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ */
 public class Scene {
 
 	private List<Entity> entities;
