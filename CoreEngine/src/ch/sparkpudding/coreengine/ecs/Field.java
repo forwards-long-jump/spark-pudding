@@ -2,7 +2,7 @@ package ch.sparkpudding.coreengine.ecs;
 
 public class Field {
 
-	enum FieldType {
+	public enum FieldType {
 		INTEGER, DOUBLE, STRING, FILE_PATH, BOOLEAN
 	}
 
@@ -17,6 +17,14 @@ public class Field {
 
 	public String getName() {
 		return name;
+	}
+
+	public FieldType getType() {
+		return type;
+	}
+
+	public Object getValue() {
+		return value;
 	}
 
 }
