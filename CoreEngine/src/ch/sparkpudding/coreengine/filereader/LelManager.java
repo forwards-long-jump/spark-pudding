@@ -27,7 +27,7 @@ public class LelManager {
 	public LelManager(String directory) throws Exception {
 		this.directory = directory;
 
-		if (!isValidLEL())
+		if (!isValidLel())
 			throw new FileNotFoundException();
 
 		File folder = new File(directory);
@@ -79,7 +79,7 @@ public class LelManager {
 		}
 	}
 
-	private boolean isValidLEL() {
+	private boolean isValidLel() {
 		return (new File(this.directory + "/metadata.xml").exists());
 	}
 
