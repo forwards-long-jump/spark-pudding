@@ -7,6 +7,11 @@ import ch.sparkpudding.coreengine.CoreEngine;
 public class Main {
 
 	public static void main(String[] args) {
-		new CoreEngine(new JPanel());
+		try {
+			new CoreEngine(new JPanel(), Main.class.getResource("/testgame").getPath());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

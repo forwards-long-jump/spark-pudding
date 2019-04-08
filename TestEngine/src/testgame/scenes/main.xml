@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene name="main">
+	<entities>
+		<entity name="tartemp'" zindex="1">
+			<components>
+				<component name="test">
+					<field name="x">13</field>
+				</component>
+			</components>
+		</entity>
+	</entities>
+</scene>
