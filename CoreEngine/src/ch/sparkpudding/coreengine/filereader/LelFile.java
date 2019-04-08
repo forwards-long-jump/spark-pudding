@@ -7,9 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 
+ * Manages  Ludique Engine in Lua game files, supports reading from folder and from .lel
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
  */
 public class LelFile {
 	private String directory;
@@ -26,6 +25,11 @@ public class LelFile {
 	final String[] requiredSubFolders = { "components", "assets/textures", "assets/sounds", "assets/music", "scenes",
 			"entitytemplates", "systems" };
 
+	/**
+	 * Reads a game file and exposes all of the files in differents maps
+	 * @param directory The path to the directory or Lel file
+	 * @throws Exception
+	 */
 	public LelFile(String directory) throws Exception {
 		this.directory = directory;
 
@@ -55,6 +59,11 @@ public class LelFile {
 		populateMaps(new File(directory + "/assets/sounds"), mapSounds);
 	}
 
+	/**
+	 * Populate maps from the files present in the game folder
+	 * @param folder Folder to read the files from
+	 * @param map Map to populate
+	 */
 	private void populateMaps(File folder, Map<String, File> map) {
 		for (File file : folder.listFiles()) {
 			if (file.isDirectory()) {
@@ -65,30 +74,58 @@ public class LelFile {
 		}
 	}
 
+	/**
+	 * Check whetever a Lel folder is valid or not using its metadata.xml file
+	 * @return validity of the Lel folder
+	 */
 	private boolean isValidLel() {
 		return (new File(this.directory + "/metadata.xml").exists());
 	}
 
+	/**
+	 * Get components files
+	 * @return component files
+	 */
 	public Collection<File> getComponentsXML() {
 		return  mapComponents.values();
 	}
 
+	/**
+	 * Get scenes files
+	 * @return scenes files
+	 */
 	public Collection<File> getScenesXML() {
 		return mapScenes.values();
 	}
 
+	/**
+	 * Get entity templates files
+	 * @return entity templates files
+	 */
 	public Collection<File> getEntityTemplatesXML() {
 		return mapEntityTemplates.values();
 	}
 
+	/**
+	 * Get textures files
+	 * @return textures files
+	 */
 	public Collection<File> getTextures() {
 		return mapTextures.values();
 	}
 
+	/**
+	 * Get musics files
+	 * @return music files
+	 */
 	public Collection<File> getMusics() {
 		return mapMusic.values();
 	}
 
+	/**
+	 * Get sounds files
+	 * @return sounds files
+	 */
 	public Collection<File> getSounds() {
 		return mapSounds.values();
 	}
