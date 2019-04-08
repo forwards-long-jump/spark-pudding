@@ -12,23 +12,26 @@ public class Entity {
 
 	private Map<String, Component> components;
 	
+	/**
+	 * Default constructor
+	 */
 	public Entity() {
 		this.components = new HashMap<String, Component>();
 	}
 	
 	/**
-	 * Add a component to the entity
-	 * @param c
+	 * Adds a component to the entity
+	 * @param c Component to be added
 	 */
 	public void add(Component c) {
 		components.put(c.getType(), c);
 	}
 	
 	/**
-	 * Add a component to the entity
-	 * @param c
+	 * Removes a component to the entity
+	 * @param name Name of the component to be removed 
 	 */
-	public void remove(String type) {
-		components.remove(type);
+	public void remove(String name) {
+		components.remove(name);
 	}
 }

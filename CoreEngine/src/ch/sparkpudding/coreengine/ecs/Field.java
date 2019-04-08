@@ -15,12 +15,24 @@ public class Field {
 	private String name;
 	private Object value;
 
+	/**
+	 * Create field using actual types
+	 * @param name Name of the field
+	 * @param type Type of the data
+	 * @param value Data
+	 */
 	public Field(String name, FieldType type, Object value) {
 		this.name = name;
 		this.type = type;
 		this.setValue(value);
 	}
 
+	/**
+	 * Constructor using Strings only
+	 * @param name Name of the field
+	 * @param type Type of the data
+	 * @param value Data
+	 */
 	public Field(String name, String type, String value) {
 		this.name = name;
 		this.type = FieldType.valueOf(type);
@@ -44,14 +56,26 @@ public class Field {
 		}
 	}
 
+	/**
+	 * Get field name
+	 * @return Field name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Get field value
+	 * @return Field value
+	 */
 	public Object getValue() {
 		return value;
 	}
 
+	/**
+	 * Sets field value
+	 * @param value New value
+	 */
 	public void setValue(Object value) {
 		this.value = value;
 	}
