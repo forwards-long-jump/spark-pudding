@@ -17,6 +17,14 @@ import org.xml.sax.SAXException;
  */
 public class XMLParser {
 	
+	/**
+	 * Parse XML from file
+	 * @param xmlFile
+	 * @return XML Document
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
 	static public Document parse(File xmlFile) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();

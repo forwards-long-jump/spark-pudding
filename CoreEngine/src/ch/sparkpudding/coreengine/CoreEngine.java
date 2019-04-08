@@ -59,21 +59,33 @@ public class CoreEngine {
 		}).start();
 	}
 
+	/**
+	 * Populates systems list with system files
+	 */
 	private void loadSystems() {
 		systems = new ArrayList<System>();
 		renderSystem = null;
 	}
 
+	/**
+	 * Populates scenes list with scene files
+	 */
 	private void populateScenes() {
 		scenes = new HashMap<String, Scene>();
 		currentScene = null;
 	}
 
+	/**
+	 * Populates entity templates list with entity template files
+	 */
 	private void populateEntityTemplates() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Populates component templates list with component template files
+	 */
 	private void populateComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
 		componentTemplates = new HashMap<String, Component>();
 		for (File xmlFile : lelFile.getComponentsXML()) {
@@ -90,6 +102,9 @@ public class CoreEngine {
 		}
 	}
 
+	/**
+	 * Runs update and render loops
+	 */
 	private void startGame() {
 		double previous = System.currentTimeMillis();
 		double lag = 0.0;
@@ -110,41 +125,70 @@ public class CoreEngine {
 		}
 	}
 
+	/**
+	 * Runs all systems once
+	 */
 	private void update() {
 		// TODO: Update logic
 		// for 
 	}
 
+	/**
+	 * Runs the renderer system
+	 */
 	private void render() {
 		// TODO: Render logic
 		// using panel and renderSystem
 	}
 	
+	/**
+	 * Pauses all systems indescriminately
+	 */
 	public void pauseAll()
 	{
 		// TODO: pause
 	}
 	
+	/**
+	 * Pauses all systems which are labelled "pausable"
+	 */
 	public void pause()
 	{
 		// TODO: pause (toggle)
 	}
 	
+	/**
+	 * Add scene to scenes list
+	 * @param name Name of the scene
+	 * @param s Scene
+	 */
 	public void addScene(String name, Scene s)
 	{
 		scenes.put(name, s);
 	}
 	
+	/**
+	 * Sets scene as current scene, without reloading
+	 * @param name Name of the scene
+	 */
 	public void setScene(String name)
 	{
 		setScene(name, false);
 	}
 	
+	/**
+	 * Sets scene as current scene, and reloads it if demanded
+	 * @param name Name of the Scene
+	 * @param reset The scene will be reloaded when set to true
+	 */
 	public void setScene(String name, boolean reset)
 	{
 		// TODO: set current scene
 	}
 	
+	/**
+	 * Resets current scene
+	 */
 	public void resetScene()
 	{
 		// TODO: reset current scene
