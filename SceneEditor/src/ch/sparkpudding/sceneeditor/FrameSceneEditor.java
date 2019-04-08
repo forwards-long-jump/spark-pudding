@@ -30,6 +30,7 @@ public class FrameSceneEditor extends JFrame {
 
 	private void init() {
 		borderLayout = new BorderLayout();
+		
 		menuBar = new MenuBar();
 
 		panelSidebarRight = new PanelSidebarRight();

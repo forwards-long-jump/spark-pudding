@@ -5,21 +5,28 @@ import javax.swing.JPanel;
 
 public class PanelSidebarRight extends JPanel {
 
-	BoxLayout layout;
-
-	PanelScene panelScene;
-	PanelEntityTree panelEntityTree;
-	PanelEntity panelEntity;
-	PanelComponent panelComponent;
+	private PanelScene panelScene;
+	private PanelEntityTree panelEntityTree;
+	private PanelEntity panelEntity;
+	private PanelComponent panelComponent;
+	
+	private BoxLayout layout;
 
 	public PanelSidebarRight() {
-
+		init();
+		setupLayout();
+	}
+	
+	private void init() {
+		layout = new BoxLayout(this, BoxLayout.Y_AXIS);
+		
 		panelScene = new PanelScene();
 		panelEntityTree = new PanelEntityTree();
 		panelEntity = new PanelEntity();
 		panelComponent = new PanelComponent();
-
-		layout = new BoxLayout(this, BoxLayout.Y_AXIS);
+	}
+	
+	private void setupLayout() {
 		setLayout(layout);
 
 		add(panelScene);
