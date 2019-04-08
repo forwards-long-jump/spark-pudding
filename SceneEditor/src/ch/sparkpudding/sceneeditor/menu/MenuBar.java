@@ -5,7 +5,7 @@ import javax.swing.JMenuBar;
 /**
  * 
  * @author Alexandre Bianchi
- * 
+ *
  */
 public class MenuBar extends JMenuBar {
 
@@ -16,7 +16,7 @@ public class MenuBar extends JMenuBar {
 		init();
 		addMenu();
 	}
-	
+
 	private void init() {
 		menuFile = new MenuFile();
 		menuEdit = new MenuEdit();
