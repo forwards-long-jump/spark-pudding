@@ -1,12 +1,9 @@
 package ch.sparkpudding.sceneeditor.menu;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 /**
@@ -14,6 +11,7 @@ import java.awt.event.KeyEvent;
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
+@SuppressWarnings("serial")
 public class MenuEdit extends JMenu {
 
 	private JMenuItem itemUndo;

@@ -11,6 +11,7 @@ import javax.swing.KeyStroke;
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
+@SuppressWarnings("serial")
 public class MenuFile extends JMenu {
 
 	private JMenuItem itemNew;

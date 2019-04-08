@@ -15,6 +15,7 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
+@SuppressWarnings("serial")
 public class FrameSceneEditor extends JFrame {
 
 	private static final String TITLE = "Scene Editor";
