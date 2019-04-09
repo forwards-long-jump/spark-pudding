@@ -24,9 +24,6 @@ import ch.sparkpudding.coreengine.ecs.Field;
 @SuppressWarnings("serial")
 public class FieldGenerator extends JComponent {
 
-	List<JLabel> names;
-	List<JComponent> values;
-
 	public FieldGenerator(List<Field> fields) {
 		setLayout(new GridLayout(0, 2));
 

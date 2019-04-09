@@ -10,10 +10,12 @@ public class Field {
 	private String name;
 	private Object value;
 
-	public Field(FieldType type, Object value) {
+	public Field(String name, FieldType type, Object value) {
+		this.name = name;
 		this.type = type;
 		this.value = value;
 	}
+
 
 	public String getName() {
 		return name;
