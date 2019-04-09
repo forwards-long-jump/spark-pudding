@@ -1,7 +1,8 @@
 package ch.sparkpudding.coreengine.ecs;
 
 /**
- * 
+ * Piece of data to be contained by a component, described by its name,
+ * the type of its value, and the value itself.
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */

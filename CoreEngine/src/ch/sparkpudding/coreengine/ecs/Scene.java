@@ -9,7 +9,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * 
+ * Scene of the game, described by the entities it contains.
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */

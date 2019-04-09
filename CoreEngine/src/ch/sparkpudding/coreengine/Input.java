@@ -14,7 +14,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 /**
- * 
+ * Keeps tabs of all keyboard and mouse inputs for the game. Should be updated once before all systems are.
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */

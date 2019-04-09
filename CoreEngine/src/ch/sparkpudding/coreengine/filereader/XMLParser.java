@@ -11,7 +11,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
- * 
+ * Tool for handling XML files.
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Manages  Ludique Engine in Lua game files, supports reading from folder and from .lel
+ * Manages Ludic Engine in Lua game files, supports reading from folder and from .lel
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  */
 public class LelFile {
@@ -27,7 +27,7 @@ public class LelFile {
 
 	/**
 	 * Reads a game file and exposes all of the files in differents maps
-	 * @param directory The path to the directory or Lel file
+	 * @param directory The path to the directory or LEL file
 	 * @throws Exception
 	 */
 	public LelFile(String directory) throws Exception {
@@ -75,8 +75,8 @@ public class LelFile {
 	}
 
 	/**
-	 * Check whetever a Lel folder is valid or not using its metadata.xml file
-	 * @return validity of the Lel folder
+	 * Check whether a LEL folder is valid or not using its metadata.xml file
+	 * @return validity of the LEL folder
 	 */
 	private boolean isValidLel() {
 		return (new File(this.directory + "/metadata.xml").exists());

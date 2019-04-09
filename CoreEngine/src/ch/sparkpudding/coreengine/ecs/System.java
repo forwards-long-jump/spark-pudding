@@ -3,7 +3,8 @@ package ch.sparkpudding.coreengine.ecs;
 import java.util.List;
 
 /**
- * 
+ * Part of the ECS design pattern. Works on entities which have components necessary to the system.
+ * All of its logic is to be described in its Lua file.
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
