@@ -35,8 +35,6 @@ public class CoreEngine {
 	
 	private LelFile lelFile;
 	
-	private Map<String, Component> componentTemplates;
-	private Map<String, Entity> entityTemplates;
 	private Map<String, Scene> scenes;
 	private Scene currentScene;
 	
@@ -77,20 +75,36 @@ public class CoreEngine {
 
 	/**
 	 * Populates entity templates list with entity template files
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
 	 */
-	private void populateEntityTemplates() {
-		entityTemplates = new HashMap<String, Entity>();
+	private void populateEntityTemplates() throws ParserConfigurationException, SAXException, IOException {	
+		for (File xmlFile : lelFile.getEntityTemplatesXML()) {
+			Entity e = new Entity(XMLParser.parse(xmlFile));
+			Entity.addTemplate(e);
+		}
+		for (Entity entity : Entity.getTemplates().values()) {
+			System.out.println(entity.getName() + ":");
+			for (Component component : entity.getComponents().values()) {
+				System.out.println(" "  + component.getName());
+				for (Field field : component.getFields().values()) {
+					System.out.println("  " + field.getName() + ": " + field.getValue());
+				}
+			}
+		}
 	}
 
 	/**
 	 * Populates component templates list with component template files
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
 	 */
 	private void populateComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
-		componentTemplates = new HashMap<String, Component>();
-		
 		for (File xmlFile : lelFile.getComponentsXML()) {
 			Component c = new Component(XMLParser.parse(xmlFile));
-			componentTemplates.put(c.getType(), c);
+			Component.addTemplate(c);
 		}
 	}
 

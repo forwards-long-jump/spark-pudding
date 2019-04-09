@@ -26,6 +26,14 @@ public class Field {
 		this.type = type;
 		this.setValue(value);
 	}
+	
+	/**
+	 * Copy constructor
+	 * @param field
+	 */
+	public Field(Field field) {
+		this(field.name, field.type, field.value);
+	}
 
 	/**
 	 * Constructor using Strings only
@@ -36,24 +44,7 @@ public class Field {
 	public Field(String name, String type, String value) {
 		this.name = name;
 		this.type = FieldType.valueOf(type);
-		switch (this.type) {
-		case BOOLEAN:
-			this.setValue(value == "true" ? true : false);
-			break;
-		case DOUBLE:
-			this.setValue(Double.parseDouble(value));
-			break;
-		case FILE_PATH:
-		case STRING:
-			this.setValue(value);
-			break;
-		case INTEGER:
-			this.setValue(Integer.parseInt(value));
-			break;
-		default:
-			java.lang.System.err.println();
-			break;
-		}
+		this.setValueFromString(value);
 	}
 
 	/**
@@ -78,6 +69,27 @@ public class Field {
 	 */
 	public void setValue(Object value) {
 		this.value = value;
+	}
+	
+	public void setValueFromString(String value) {
+		switch (this.type) {
+		case BOOLEAN:
+			this.setValue(value == "true" ? true : false);
+			break;
+		case DOUBLE:
+			this.setValue(Double.parseDouble(value));
+			break;
+		case FILE_PATH:
+		case STRING:
+			this.setValue(value);
+			break;
+		case INTEGER:
+			this.setValue(Integer.parseInt(value));
+			break;
+		default:
+			java.lang.System.err.println();
+			break;
+		}
 	}
 
 }
