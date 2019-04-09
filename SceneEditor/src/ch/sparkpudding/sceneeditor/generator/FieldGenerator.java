@@ -17,6 +17,9 @@ import ch.sparkpudding.coreengine.ecs.Field;
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 8 avr. 2019
  *
+ * Generate the interface for the fields passed in arguments.
+ * Since it inherits JComponent, it can be used as one.
+ * 
  */
 @SuppressWarnings("serial")
 public class FieldGenerator extends JComponent {
@@ -33,6 +36,9 @@ public class FieldGenerator extends JComponent {
 		}
 	}
 
+	/*
+	 * Generate the right JComponent and it's parameters following the type of the field.
+	 */
 	private JComponent createValueField(Field field) {
 		JComponent input;
 
@@ -63,5 +69,4 @@ public class FieldGenerator extends JComponent {
 		}
 		return input;
 	}
-
 }
