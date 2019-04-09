@@ -71,6 +71,10 @@ public class Field {
 		this.value = value;
 	}
 	
+	/**
+	 * Sets field value, casting from String into actual value type
+	 * @param value New value
+	 */
 	public void setValueFromString(String value) {
 		switch (this.type) {
 		case BOOLEAN:

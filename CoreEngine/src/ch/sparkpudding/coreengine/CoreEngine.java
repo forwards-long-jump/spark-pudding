@@ -67,10 +67,21 @@ public class CoreEngine {
 
 	/**
 	 * Populates scenes list with scene files
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
 	 */
-	private void populateScenes() {
+	private void populateScenes() throws ParserConfigurationException, SAXException, IOException {
 		scenes = new HashMap<String, Scene>();
 		currentScene = null;
+		
+		for (File xmlFile : lelFile.getScenesXML()) {
+			Scene scene = new Scene(XMLParser.parse(xmlFile));
+			addScene(scene.getName(), scene);
+			if (scene.isStartScene()) {
+				currentScene = scene;
+			}
+		}
 	}
 
 	/**
@@ -83,15 +94,6 @@ public class CoreEngine {
 		for (File xmlFile : lelFile.getEntityTemplatesXML()) {
 			Entity e = new Entity(XMLParser.parse(xmlFile));
 			Entity.addTemplate(e);
-		}
-		for (Entity entity : Entity.getTemplates().values()) {
-			System.out.println(entity.getName() + ":");
-			for (Component component : entity.getComponents().values()) {
-				System.out.println(" "  + component.getName());
-				for (Field field : component.getFields().values()) {
-					System.out.println("  " + field.getName() + ": " + field.getValue());
-				}
-			}
 		}
 	}
 

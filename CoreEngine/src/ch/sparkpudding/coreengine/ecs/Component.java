@@ -49,7 +49,7 @@ public class Component {
 
 	/**
 	 * Create a component from a parsed XML Document and populate its fields
-	 * 
+	 * Note that if a document is to describe a component, then this component must be a template
 	 * @param document A properly formated Document to get fields from
 	 */
 	public Component(Document document) {
@@ -69,8 +69,7 @@ public class Component {
 	
 	/**
 	 * Create a component from a template, and adds changes described in the XML element 
-	 * @param name
-	 * @param element
+	 * @param element A properly formatted XML element describing the component
 	 */
 	public Component(Element element) {
 		this(templates.get(element.getAttribute("template")));
@@ -96,7 +95,7 @@ public class Component {
 	}
 
 	/**
-	 * Fields getter	 * 
+	 * Fields getter
 	 * @return Map<String, Field> containing all fields
 	 */
 	public Map<String, Field> getFields() {

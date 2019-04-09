@@ -17,7 +17,7 @@ public class Entity {
 
 	private static Map<String, Entity> templates;
 	static {
-		setTemplates(new HashMap<String, Entity>());
+		templates = new HashMap<String, Entity>();
 	}
 	
 	private Map<String, Component> components;
@@ -38,31 +38,74 @@ public class Entity {
 	 */
 	public Entity(String name, int zIndex) {
 		this.name = name;
-		this.setzIndex(zIndex);
+		this.setZIndex(zIndex);
 		this.components = new HashMap<String, Component>();
 	}
 	
 	/**
+	 * Copy constructor
+	 * @param entity
+	 */
+	public Entity(Entity entity) {
+		this.name = entity.name;
+		this.zIndex = entity.zIndex;
+		this.components = new HashMap<String, Component>();
+		for (Component component : entity.getComponents().values()) {
+			this.add(new Component(component));
+		}
+	}
+	
+	/**
 	 * Create an entity from a parsed XML Document and populate its components
+	 * Note that entities described in documents must be templates.
 	 * @param document A properly formated Document to get components from
 	 */
 	public Entity(Document document) {
-		this.components = new HashMap<String, Component>();
 		Element entityElement = document.getDocumentElement();
+		
 		this.name = entityElement.getAttribute("name");
-		String zindex = entityElement.getAttribute("zindex");
+		
+		String zindex = entityElement.getAttribute("z-index");
 		if (zindex.length() > 0) {
-			this.setzIndex(Integer.parseInt(zindex));
+			this.setZIndex(Integer.parseInt(zindex));
 		} else {
-			this.setzIndex(0);
+			this.setZIndex(0);
 		}
 		
+		this.components = new HashMap<String, Component>();
 		NodeList components = entityElement.getChildNodes();
 		for (int i = 0; i < components.getLength(); i++) {
 			Node node = components.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element componentElement = (Element) components.item(i);
 				this.add(new Component(componentElement));
+			}
+		}
+	}
+	
+	/**
+	 * Creates an entity from a template, and adds changes described in the XML element
+	 * @param element A properly formated XML element describing the entitiy
+	 */
+	public Entity(Element element) {
+		this(templates.get(element.getAttribute("template")));
+		this.name = element.getAttribute("name");
+		this.zIndex = Integer.parseInt(element.getAttribute("z-index"));
+		
+		NodeList components = element.getChildNodes();
+		for (int i = 0; i < components.getLength(); i++) {
+			Node node = components.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element componentElement = (Element) components.item(i);
+				if (componentElement.hasAttribute("delete")) {
+					this.remove(componentElement.getAttribute("template"));
+				} else {
+					// Either edit or add this component
+					// Since this.remove does nothing on inexistent names,
+					// we can just remove and add anew
+					this.remove(componentElement.getAttribute("template"));
+					this.add(new Component(componentElement));
+				}
 			}
 		}
 	}
@@ -91,11 +134,11 @@ public class Entity {
 		return name;
 	}
 	
-	public int getzIndex() {
+	public int getZIndex() {
 		return zIndex;
 	}
 
-	public void setzIndex(int zIndex) {
+	public void setZIndex(int zIndex) {
 		this.zIndex = zIndex;
 	}
 	
@@ -103,8 +146,6 @@ public class Entity {
 		return components;
 	}
 	
-	
-	//******** STATIC **************
 
 	/**
 	 * Get entity templates
