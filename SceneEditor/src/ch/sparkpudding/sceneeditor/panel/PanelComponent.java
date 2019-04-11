@@ -12,7 +12,7 @@ import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
 
 /**
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br />
+ * @author Alexandre Bianchi, Pierre BÃ¼rki, LoÃ¯ck Jeanneret, John Leuba<br />
  *         Creation Date : 9 avr. 2019
  * 
  *         Display the components of the selected entity
@@ -27,7 +27,7 @@ public class PanelComponent extends JPanel {
 		fs.add(new Field("Vrai", FieldType.BOOLEAN, true));
 		fs.add(new Field("Chemin", FieldType.FILE_PATH, "/test/lala"));
 		fs.add(new Field("Text", FieldType.STRING, " le vol LeL 737 est partira avec un retard d'une semaine"));
-		fs.add(new Field("nombre à virgule", FieldType.DOUBLE, 11.123453));
+		fs.add(new Field("nombre  virgule", FieldType.DOUBLE, 11.123453));
 
 		List<Component> cs = new ArrayList<Component>();
 		cs.add(new Component("lala"));
