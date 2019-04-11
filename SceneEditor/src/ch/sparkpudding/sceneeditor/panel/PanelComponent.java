@@ -20,31 +20,6 @@ import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
 @SuppressWarnings("serial")
 public class PanelComponent extends JPanel {
 	public PanelComponent() {
-		// serve only to test the FieldGenerator
-		// TODO : Delete the lines concerning fs and cs before merging with develop
-		List<Field> fs = new ArrayList<Field>();
-		fs.add(new Field("Nombre", FieldType.INTEGER, 11));
-		fs.add(new Field("Vrai", FieldType.BOOLEAN, true));
-		fs.add(new Field("Chemin", FieldType.FILE_PATH, "/test/lala"));
-		fs.add(new Field("Text", FieldType.STRING, " le vol LeL 737 est partira avec un retard d'une semaine"));
-		fs.add(new Field("nombre  virgule", FieldType.DOUBLE, 11.123453));
-
-		List<Component> cs = new ArrayList<Component>();
-		cs.add(new Component("lala"));
-		cs.get(0).addField(fs.get(0));
-		cs.get(0).addField(fs.get(1));
-
-		cs.add(new Component("lel"));
-		cs.get(1).addField(fs.get(0));
-		cs.get(1).addField(fs.get(2));
-
-		cs.add(new Component("Is this a test ?"));
-		cs.get(2).addField(fs.get(0));
-		cs.get(2).addField(fs.get(1));
-		cs.get(2).addField(fs.get(2));
-		cs.get(2).addField(fs.get(3));
-		cs.get(2).addField(fs.get(4));
-
-		add(new ComponentGenerator(cs));
+	    
 	}
 }
