@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="test">
-	<field type="int" name="x">12</field>
-	<field type="int" name="y">22</field>
-	<field type="bool" name="jôôôli">true</field>
-	<field type="string" name="image">lel.png</field>
+	<field type="INTEGER" name="x">12</field>
+	<field type="DOUBLE" name="y">22</field>
+	<field type="BOOLEAN" name="jôôôli">true</field>
+	<field type="STRING" name="image">lel.png</field>
 </component>

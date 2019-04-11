@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="test2">
+	<field type="INTEGER" name="x">12</field>
+	<field type="DOUBLE" name="y">32</field>
+	<field type="BOOLEAN" name="jôôôli">false</field>
+	<field type="FILE_PATH" name="image">lelolel.png</field>
+</component>
