@@ -22,7 +22,7 @@ import ch.sparkpudding.coreengine.filereader.XMLParser;
  * Class keeping track of all the elements of the ECS, and responsible of
  * running it. Also owns inputs and outputs of the game.
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * @author Alexandre Bianchi, Pierre BÃ¼rki, LoÃ¯ck Jeanneret, John Leuba
  * 
  */
 public class CoreEngine {

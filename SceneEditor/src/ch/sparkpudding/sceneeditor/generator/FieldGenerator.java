@@ -14,7 +14,7 @@ import ch.sparkpudding.coreengine.ecs.Field;
 
 /**
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ * @author Alexandre Bianchi, Pierre BÃ¼rki, LoÃ¯ck Jeanneret, John Leuba<br/>
  *         Creation Date : 8 avr. 2019
  *
  *         Generate the interface for the fields passed in arguments. Since it
