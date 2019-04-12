@@ -8,7 +8,7 @@ import javax.swing.KeyStroke;
 
 /**
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * @author Alexandre Bianchi, Pierre BÃ¼rki, LoÃ¯ck Jeanneret, John Leuba
  * 
  */
 @SuppressWarnings("serial")
