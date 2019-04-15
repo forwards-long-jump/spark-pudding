@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 
 /**
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * @author Alexandre Bianchi, Pierre BÃ¼rki, LoÃ¯ck Jeanneret, John Leuba
  * 
  */
 @SuppressWarnings("serial")
@@ -24,7 +24,7 @@ public class PanelSidebarLeft extends JPanel {
 
 	private void init() {
 		layout = new BoxLayout(this, BoxLayout.Y_AXIS);
-		
+
 		btnPlay = new JButton("Play");
 		btnReset = new JButton("Reset");
 	}

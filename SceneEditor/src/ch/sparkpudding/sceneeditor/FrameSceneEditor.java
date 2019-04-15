@@ -12,7 +12,7 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
 
 /**
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * @author Alexandre Bianchi, Pierre BÃ¼rki, LoÃ¯ck Jeanneret, John Leuba
  * 
  */
 @SuppressWarnings("serial")
@@ -36,7 +36,7 @@ public class FrameSceneEditor extends JFrame {
 
 	private void init() {
 		borderLayout = new BorderLayout();
-		
+
 		menuBar = new MenuBar();
 
 		panelSidebarRight = new PanelSidebarRight();
@@ -47,11 +47,11 @@ public class FrameSceneEditor extends JFrame {
 	private void setupLayout() {
 		setLayout(borderLayout);
 		setJMenuBar(menuBar);
-		
+
 		add(panelSidebarRight, BorderLayout.EAST);
 		add(panelSidebarLeft, BorderLayout.WEST);
 		add(panelGame, BorderLayout.CENTER);
-		
+
 		// FIXME Remove color
 		panelSidebarLeft.setBackground(Color.BLUE);
 		panelSidebarRight.setBackground(Color.RED);
