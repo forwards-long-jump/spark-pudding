@@ -1,5 +1,6 @@
 package ch.sparkpudding.sceneeditor.ecs;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -14,7 +15,7 @@ import ch.sparkpudding.coreengine.ecs.Entity;
  *         specific attributes
  * 
  */
-public class SEEntity {
+public class SEEntity implements Iterable<Entry<String, SEComponent>> {
 
 	private Entity gameEntity;
 	private Map<String, SEComponent> components;
@@ -32,5 +33,28 @@ public class SEEntity {
 			components.put(entry.getKey(), new SEComponent(entry.getValue()));
 		}
 
+	}
+
+	/**
+	 * Getter for gameEntity
+	 * 
+	 * @return the gameEntity attached to this
+	 */
+	public Entity getGameEntity() {
+		return gameEntity;
+	}
+
+	/**
+	 * Getter for components
+	 * 
+	 * @return the components map of this entity
+	 */
+	public Map<String, SEComponent> getComponents() {
+		return components;
+	}
+
+	@Override
+	public Iterator<Entry<String, SEComponent>> iterator() {
+		return components.entrySet().iterator();
 	}
 }
