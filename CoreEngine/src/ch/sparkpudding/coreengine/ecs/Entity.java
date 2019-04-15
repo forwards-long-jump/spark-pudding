@@ -9,8 +9,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Part of the ECS design pattern, described by the components it contains.
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ *         Part of the ECS design pattern, described by the components it
+ *         contains.
  * 
  */
 public class Entity {
