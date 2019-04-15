@@ -9,9 +9,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Represents settings (key values pairs) that can be attached to an entity
- * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ *         Represents settings (key values pairs) that can be attached to an
+ *         entity
  * 
  */
 public class Component {
