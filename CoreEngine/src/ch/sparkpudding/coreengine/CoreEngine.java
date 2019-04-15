@@ -13,10 +13,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import ch.sparkpudding.coreengine.ecs.Component;
-import ch.sparkpudding.coreengine.ecs.Entity;
-import ch.sparkpudding.coreengine.ecs.Field;
-import ch.sparkpudding.coreengine.ecs.Scene;
+import ch.sparkpudding.coreengine.ecs.*;
+import ch.sparkpudding.coreengine.ecs.System;
 import ch.sparkpudding.coreengine.filereader.LelFile;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
 
@@ -64,6 +62,10 @@ public class CoreEngine {
 	private void loadSystems() {
 		systems = new ArrayList<System>();
 		renderSystem = null;
+		
+		for (File systemFile : lelFile.getSystems()) {
+			systems.add(new System(systemFile));
+		}
 	}
 
 	/**
@@ -115,11 +117,11 @@ public class CoreEngine {
 	 * Runs update and render loops
 	 */
 	private void startGame() {
-		double previous = System.currentTimeMillis();
+		double previous = java.lang.System.currentTimeMillis();
 		double lag = 0.0;
 
 		while (!exit) {
-			double current = System.currentTimeMillis();
+			double current = java.lang.System.currentTimeMillis();
 			double elapsed = current - previous;
 
 			previous = current;
@@ -138,8 +140,10 @@ public class CoreEngine {
 	 * Runs all systems once
 	 */
 	private void update() {
-		// TODO: Update logic
-		// for 
+		for (System system : systems) {
+			system.update();
+		}
+		// TODO : give priority to certain system, i.e. the input systems
 	}
 
 	/**
