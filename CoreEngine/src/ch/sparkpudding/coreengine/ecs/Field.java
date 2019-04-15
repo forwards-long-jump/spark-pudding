@@ -1,14 +1,15 @@
 package ch.sparkpudding.coreengine.ecs;
 
 /**
- * Piece of data to be contained by a component, described by its name,
- * the type of its value, and the value itself.
+ * Piece of data to be contained by a component, described by its name, the type
+ * of its value, and the value itself.
+ * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
 public class Field {
 
-	enum FieldType {
+	public enum FieldType {
 		INTEGER, DOUBLE, STRING, FILE_PATH, BOOLEAN
 	}
 
@@ -18,8 +19,9 @@ public class Field {
 
 	/**
 	 * Create field using actual types
-	 * @param name Name of the field
-	 * @param type Type of the data
+	 * 
+	 * @param name  Name of the field
+	 * @param type  Type of the data
 	 * @param value Data
 	 */
 	public Field(String name, FieldType type, Object value) {
@@ -27,9 +29,10 @@ public class Field {
 		this.type = type;
 		this.setValue(value);
 	}
-	
+
 	/**
 	 * Copy constructor
+	 * 
 	 * @param field
 	 */
 	public Field(Field field) {
@@ -38,8 +41,9 @@ public class Field {
 
 	/**
 	 * Constructor using Strings only
-	 * @param name Name of the field
-	 * @param type Type of the data
+	 * 
+	 * @param name  Name of the field
+	 * @param type  Type of the data
 	 * @param value Data
 	 */
 	public Field(String name, String type, String value) {
@@ -50,6 +54,7 @@ public class Field {
 
 	/**
 	 * Get field name
+	 * 
 	 * @return Field name
 	 */
 	public String getName() {
@@ -57,7 +62,17 @@ public class Field {
 	}
 
 	/**
+	 * Get field type
+	 * 
+	 * @return Field type
+	 */
+	public FieldType getType() {
+		return type;
+	}
+
+	/**
 	 * Get field value
+	 * 
 	 * @return Field value
 	 */
 	public Object getValue() {
@@ -66,14 +81,16 @@ public class Field {
 
 	/**
 	 * Sets field value
+	 * 
 	 * @param value New value
 	 */
 	public void setValue(Object value) {
 		this.value = value;
 	}
-	
+
 	/**
 	 * Sets field value, casting from String into actual value type
+	 * 
 	 * @param value New value
 	 */
 	public void setValueFromString(String value) {
