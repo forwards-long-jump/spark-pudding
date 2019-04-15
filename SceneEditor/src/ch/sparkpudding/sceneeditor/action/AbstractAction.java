@@ -11,16 +11,15 @@ import java.awt.event.ActionEvent;
  */
 @SuppressWarnings("serial")
 public abstract class AbstractAction extends javax.swing.AbstractAction {
-	
+
 	/**
-     * Creates an Action with the specified name.
-     *
-     * @param name the name for the action; a
-     *        value of {@code null} is ignored
-     */
-    public AbstractAction(String name) {
-        super(name);
-    }
+	 * Creates an Action with the specified name.
+	 *
+	 * @param name the name for the action; a value of {@code null} is ignored
+	 */
+	public AbstractAction(String name) {
+		super(name);
+	}
 
 	/**
 	 * Specify the action to perform

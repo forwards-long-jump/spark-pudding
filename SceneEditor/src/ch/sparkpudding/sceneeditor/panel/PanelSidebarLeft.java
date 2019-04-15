@@ -24,7 +24,7 @@ public class PanelSidebarLeft extends JPanel {
 
 	private void init() {
 		layout = new BoxLayout(this, BoxLayout.Y_AXIS);
-		
+
 		btnPlay = new JButton("Play");
 		btnReset = new JButton("Reset");
 	}

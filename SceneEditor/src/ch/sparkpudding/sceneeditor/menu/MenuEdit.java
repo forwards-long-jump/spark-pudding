@@ -35,13 +35,13 @@ public class MenuEdit extends JMenu {
 		itemUndo = new JMenuItem("Undo");
 		itemRedo = new JMenuItem("Redo");
 	}
-	
+
 	/**
 	 * Add the shortcut to the different item
 	 */
 	private void addAction() {
-		// TODO: 	Implement method
-		// FIXME:	Remove the test
+		// TODO: Implement method
+		// FIXME: Remove the test
 		itemUndo.setAction(new ActionTest("Undo"));
 	}
 

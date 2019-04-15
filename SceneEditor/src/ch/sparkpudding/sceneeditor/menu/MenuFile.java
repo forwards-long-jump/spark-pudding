@@ -35,7 +35,7 @@ public class MenuFile extends JMenu {
 		itemSave = new JMenuItem("Save", KeyEvent.VK_S);
 		itemExit = new JMenuItem("Exit", KeyEvent.VK_X);
 	}
-	
+
 	/**
 	 * Add the shortcut to the different item
 	 */
@@ -47,7 +47,8 @@ public class MenuFile extends JMenu {
 	 * Add the shortcut to the different item
 	 */
 	private void addKeyStroke() {
-		itemNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.ALT_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
+		itemNew.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.ALT_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
 		itemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
 	}
 
