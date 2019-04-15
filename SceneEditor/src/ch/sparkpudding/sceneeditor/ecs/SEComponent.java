@@ -1,6 +1,11 @@
 package ch.sparkpudding.sceneeditor.ecs;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import ch.sparkpudding.coreengine.ecs.Component;
+import ch.sparkpudding.coreengine.ecs.Field;
 
 /**
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
@@ -10,7 +15,7 @@ import ch.sparkpudding.coreengine.ecs.Component;
  *         specific attributes
  *
  */
-public class SEComponent {
+public class SEComponent implements Iterable<Entry<String, Field>> {
 
 	private Component gameComponent;
 	private Map<String, Field> fields;
@@ -29,5 +34,27 @@ public class SEComponent {
 		}
 
 	}
+
+	/**
+	 * Getter for gameComponent
+	 * 
+	 * @return the gameComponent attached to this
+	 */
+	public Component getGameComponent() {
+		return gameComponent;
+	}
+
+	/**
+	 * Getter for fields
+	 * 
+	 * @return the fields map of this component (initial values)
+	 */
+	public Map<String, Field> getFields() {
+		return fields;
+	}
+
+	@Override
+	public Iterator<Entry<String, Field>> iterator() {
+		return fields.entrySet().iterator();
 	}
 }
