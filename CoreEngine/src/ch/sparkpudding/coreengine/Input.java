@@ -1,13 +1,11 @@
 package ch.sparkpudding.coreengine;
 
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +13,11 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+/**
+ * Keeps tabs of all keyboard and mouse inputs for the game. Should be updated once before all systems are.
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ */
 public class Input {
 
 	// Values read by the panel

@@ -1,49 +1,120 @@
 package ch.sparkpudding.coreengine;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.xml.sax.SAXException;
+
+import ch.sparkpudding.coreengine.ecs.Component;
+import ch.sparkpudding.coreengine.ecs.Entity;
 import ch.sparkpudding.coreengine.ecs.Scene;
-import ch.sparkpudding.coreengine.filereader.LelManager;
+import ch.sparkpudding.coreengine.filereader.LelFile;
+import ch.sparkpudding.coreengine.filereader.XMLParser;
 
+/**
+ * Class keeping track of all the elements of the ECS, and responsible of
+ * running it. Also owns inputs and outputs of the game.
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ */
 public class CoreEngine {
 
 	private double msPerUpdate = (1000 / 60);
 	private boolean exit = false;
-	
+
 	private JPanel panel;
 	public Input input;
-	
-	private LelManager lelManager;
-	
+
+	private LelFile lelFile;
+
 	private Map<String, Scene> scenes;
 	private Scene currentScene;
-	
+
 	private List<System> systems;
-	private System renderSystem;	
+	private System renderSystem;
 
 	public CoreEngine(JPanel panel, String gameFolder) throws Exception {
 		this.panel = panel;
 		this.input = new Input(panel);
-		
-		this.lelManager = new LelManager(gameFolder);
-		
-		this.scenes = new HashMap<String, Scene>();
-		this.currentScene = null;
-		
-		this.systems = new ArrayList<System>();
-		this.renderSystem = null;
-		
-		
+
+		this.lelFile = new LelFile(gameFolder);
+		populateComponentTemplates();
+		populateEntityTemplates();
+		populateScenes();
+		loadSystems();
+
 		new Thread(() -> {
 			startGame();
 		}).start();
 	}
 
+	/**
+	 * Populates systems list with system files
+	 */
+	private void loadSystems() {
+		systems = new ArrayList<System>();
+		renderSystem = null;
+	}
+
+	/**
+	 * Populates scenes list with scene files
+	 * 
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 */
+	private void populateScenes() throws ParserConfigurationException, SAXException, IOException {
+		scenes = new HashMap<String, Scene>();
+		currentScene = null;
+
+		for (File xmlFile : lelFile.getScenesXML()) {
+			Scene scene = new Scene(XMLParser.parse(xmlFile));
+			addScene(scene.getName(), scene);
+			if (scene.isStartScene()) {
+				currentScene = scene;
+			}
+		}
+	}
+
+	/**
+	 * Populates entity templates list with entity template files
+	 * 
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 */
+	private void populateEntityTemplates() throws ParserConfigurationException, SAXException, IOException {
+		for (File xmlFile : lelFile.getEntityTemplatesXML()) {
+			Entity e = new Entity(XMLParser.parse(xmlFile));
+			Entity.addTemplate(e);
+		}
+	}
+
+	/**
+	 * Populates component templates list with component template files
+	 * 
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	private void populateComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
+		for (File xmlFile : lelFile.getComponentsXML()) {
+			Component c = new Component(XMLParser.parse(xmlFile));
+			Component.addTemplate(c);
+		}
+	}
+
+	/**
+	 * Runs update and render loops
+	 */
 	private void startGame() {
 		double previous = System.currentTimeMillis();
 		double lag = 0.0;
@@ -64,43 +135,69 @@ public class CoreEngine {
 		}
 	}
 
+	/**
+	 * Runs all systems once
+	 */
 	private void update() {
 		// TODO: Update logic
-		// for 
+		// for
 	}
 
+	/**
+	 * Runs the renderer system
+	 */
 	private void render() {
 		// TODO: Render logic
 		// using panel and renderSystem
 	}
-	
-	public void pauseAll()
-	{
+
+	/**
+	 * Pauses all systems indescriminately
+	 */
+	public void pauseAll() {
 		// TODO: pause
 	}
-	
-	public void pause()
-	{
+
+	/**
+	 * Pauses all systems which are labelled "pausable"
+	 */
+	public void pause() {
 		// TODO: pause (toggle)
 	}
-	
-	public void addScene(String name, Scene s)
-	{
+
+	/**
+	 * Add scene to scenes list
+	 * 
+	 * @param name Name of the scene
+	 * @param s    Scene
+	 */
+	public void addScene(String name, Scene s) {
 		scenes.put(name, s);
 	}
-	
-	public void setScene(String name)
-	{
+
+	/**
+	 * Sets scene as current scene, without reloading
+	 * 
+	 * @param name Name of the scene
+	 */
+	public void setScene(String name) {
 		setScene(name, false);
 	}
-	
-	public void setScene(String name, boolean reset)
-	{
+
+	/**
+	 * Sets scene as current scene, and reloads it if demanded
+	 * 
+	 * @param name  Name of the Scene
+	 * @param reset The scene will be reloaded when set to true
+	 */
+	public void setScene(String name, boolean reset) {
 		// TODO: set current scene
 	}
-	
-	public void resetScene()
-	{
+
+	/**
+	 * Resets current scene
+	 */
+	public void resetScene() {
 		// TODO: reset current scene
 	}
 }
