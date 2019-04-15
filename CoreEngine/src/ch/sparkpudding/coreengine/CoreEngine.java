@@ -50,6 +50,8 @@ public class CoreEngine {
 		populateScenes();
 		loadSystems();
 		
+		setCurrentScene(scenes.get("main"));
+		
 		
 		new Thread(() -> {
 			startGame();
@@ -64,7 +66,7 @@ public class CoreEngine {
 		renderSystem = null;
 		
 		for (File systemFile : lelFile.getSystems()) {
-			systems.add(new System(systemFile));
+			systems.add(new System(systemFile, this));
 		}
 	}
 
@@ -76,14 +78,10 @@ public class CoreEngine {
 	 */
 	private void populateScenes() throws ParserConfigurationException, SAXException, IOException {
 		scenes = new HashMap<String, Scene>();
-		currentScene = null;
 		
 		for (File xmlFile : lelFile.getScenesXML()) {
 			Scene scene = new Scene(XMLParser.parse(xmlFile));
 			addScene(scene.getName(), scene);
-			if (scene.isStartScene()) {
-				currentScene = scene;
-			}
 		}
 	}
 
@@ -205,5 +203,16 @@ public class CoreEngine {
 	public void resetScene()
 	{
 		// TODO: reset current scene
+	}
+
+	public Scene getCurrentScene() {
+		return currentScene;
+	}
+
+	public void setCurrentScene(Scene currentScene) {
+		this.currentScene = currentScene;
+		for (System system : systems) {
+			system.setEntities(currentScene.getEntities());
+		}
 	}
 }
