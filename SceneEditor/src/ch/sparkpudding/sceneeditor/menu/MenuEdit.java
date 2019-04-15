@@ -4,11 +4,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import ch.sparkpudding.sceneeditor.action.ActionTest;
+
 import java.awt.event.KeyEvent;
 
 /**
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * @author Alexandre Bianchi, Pierre BÃ¼rki, LoÃ¯ck Jeanneret, John Leuba
  * 
  */
 @SuppressWarnings("serial")
@@ -19,6 +21,7 @@ public class MenuEdit extends JMenu {
 
 	public MenuEdit() {
 		init();
+		addAction();
 		addKeyStroke();
 		addItem();
 	}
@@ -29,8 +32,17 @@ public class MenuEdit extends JMenu {
 	private void init() {
 		setText("Edit");
 
-		itemUndo = new JMenuItem("Undo", KeyEvent.VK_1);
+		itemUndo = new JMenuItem("Undo");
 		itemRedo = new JMenuItem("Redo");
+	}
+
+	/**
+	 * Add the shortcut to the different item
+	 */
+	private void addAction() {
+		// TODO: Implement method
+		// FIXME: Remove the test
+		itemUndo.setAction(new ActionTest("Undo"));
 	}
 
 	/**

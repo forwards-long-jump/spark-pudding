@@ -3,6 +3,7 @@
 	<name>SceneEditor</name>
 	<comment></comment>
 	<projects>
+		<project>CoreEngine</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

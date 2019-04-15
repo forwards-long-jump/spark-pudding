@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 /**
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * @author Alexandre Bianchi, Pierre BÃ¼rki, LoÃ¯ck Jeanneret, John Leuba
  * 
  */
 @SuppressWarnings("serial")
@@ -15,23 +15,23 @@ public class PanelSidebarRight extends JPanel {
 	private PanelEntityTree panelEntityTree;
 	private PanelEntity panelEntity;
 	private PanelComponent panelComponent;
-	
+
 	private BoxLayout layout;
 
 	public PanelSidebarRight() {
 		init();
 		setupLayout();
 	}
-	
+
 	private void init() {
 		layout = new BoxLayout(this, BoxLayout.Y_AXIS);
-		
+
 		panelScene = new PanelScene();
 		panelEntityTree = new PanelEntityTree();
 		panelEntity = new PanelEntity();
 		panelComponent = new PanelComponent();
 	}
-	
+
 	private void setupLayout() {
 		setLayout(layout);
 

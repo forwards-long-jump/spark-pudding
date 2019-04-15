@@ -8,7 +8,7 @@ import javax.swing.KeyStroke;
 
 /**
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * @author Alexandre Bianchi, Pierre BÃ¼rki, LoÃ¯ck Jeanneret, John Leuba
  * 
  */
 @SuppressWarnings("serial")
@@ -20,6 +20,7 @@ public class MenuFile extends JMenu {
 
 	public MenuFile() {
 		init();
+		addAction();
 		addKeyStroke();
 		addItem();
 	}
@@ -38,8 +39,16 @@ public class MenuFile extends JMenu {
 	/**
 	 * Add the shortcut to the different item
 	 */
+	private void addAction() {
+		// TODO: Implement method
+	}
+
+	/**
+	 * Add the shortcut to the different item
+	 */
 	private void addKeyStroke() {
-		itemNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.ALT_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
+		itemNew.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.ALT_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
 		itemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
 	}
 
