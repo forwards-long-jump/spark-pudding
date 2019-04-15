@@ -37,6 +37,7 @@ public class System {
 	private boolean pausable;
 
 	Globals globals;
+	private LuaValue setMetaTableMethod;
 	private LuaValue updateMethod;
 	private LuaValue isPausableMethod;
 	private LuaValue getRequiredComponentsMethod;
@@ -61,7 +62,21 @@ public class System {
 		LuaC.install(globals);
 
 		globals.get("dofile").call(LuaValue.valueOf(file.getAbsolutePath()));
-
+		
+		LuaValue chunk = globals.load("function setmt(component)\n" + 
+				"local mt = {}\n" + 
+				"mt.__index = function (self, key)\n" + 
+				"        return self[\"_\" .. key]:getValue()\n" + 
+				"end\n" +
+				
+				"mt.__newindex = function (self, key, value)\n" + 
+				"        self[\"_\" .. key]:setValue(value)\n" + 
+				"end\n" +
+				"setmetatable(component, mt)\n" +
+		"end");
+		chunk.call();
+		
+		setMetaTableMethod = globals.get("setmt");
 		updateMethod = globals.get("update");
 		isPausableMethod = globals.get("isPausable");
 		getRequiredComponentsMethod = globals.get("getRequiredComponents");
@@ -112,19 +127,22 @@ public class System {
 		}
 
 		// Build Lua instances of entites for greater ergonomy in lua code
-		LuaTable entitiesTableLua = new LuaTable();
-		for (Entity entity : entities) {
-			// entity
-			LuaTable entityLua = new LuaTable();
-			for (Component component : entity.getComponents().values()) {
-				// entity.component
-				LuaTable componentLua = new LuaTable();
-				for (Field field : component.getFields().values()) {
-					// entity.component.field
-					LuaValue fieldLua = CoerceJavaToLua.coerce(field.getValue());
-					componentLua.set(field.getName(), fieldLua);
-				}
-				entityLua.set(component.getName(), componentLua);
+			LuaTable entitiesTableLua = new LuaTable();
+			for (Entity entity : entities) {
+				// entity
+				LuaTable entityLua = new LuaTable();
+				for (Component component : entity.getComponents().values()) {
+					// entity.component
+					LuaTable componentLua = new LuaTable();
+					
+					for (Field field : component.getFields().values()) {
+						// entity.component.field
+						LuaValue fieldLua = CoerceJavaToLua.coerce(field);
+						componentLua.set("_" + field.getName(), fieldLua);
+					}
+	
+					setMetaTableMethod.call(componentLua);
+					entityLua.set(component.getName(), componentLua);
 			}
 			entitiesTableLua.set(entity.getName(), entityLua);
 			entitiesLua.add(entityLua);
