@@ -13,8 +13,21 @@ import ch.sparkpudding.coreengine.ecs.Component;
 public class SEComponent {
 
 	private Component gameComponent;
+	private Map<String, Field> fields;
 
+	/**
+	 * Ctor create a SEComponent and copy it fields to keep initial values
+	 * 
+	 * @param gameComponent the component link to this SceneEditor Component
+	 */
 	public SEComponent(Component gameComponent) {
+
 		this.gameComponent = gameComponent;
+
+		for (Entry<String, Field> entry : this.gameComponent) {
+			fields.put(entry.getKey(), new Field(entry.getValue()));
+		}
+
+	}
 	}
 }
