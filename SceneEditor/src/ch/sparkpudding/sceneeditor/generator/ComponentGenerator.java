@@ -31,7 +31,7 @@ public class ComponentGenerator extends JComponent {
 			Box titleBar = new Box(BoxLayout.X_AXIS);
 			titleBar.add(new JLabel(component.getName()));
 			titleBar.add(new JButton("Delete"));
-			titleBar.add(new JButton("Detache"));
+			titleBar.add(new JButton("Detach"));
 			add(titleBar);
 			add(new FieldGenerator(new ArrayList<Field>(component.getFields().values())));
 		}
