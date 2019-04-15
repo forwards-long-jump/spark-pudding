@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="test-entity">
+	<component template="test">
+		<field name="y">2</field>
+	</component>
+	<component template="test2"/>
+</entity-template>
