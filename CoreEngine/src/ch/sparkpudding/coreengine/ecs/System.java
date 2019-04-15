@@ -29,15 +29,15 @@ public class System {
 
 	private CoreEngine coreEngine;
 
-	private String filename;
+	private String filepath;
 	private List<String> componentNames;
 	private List<Entity> entities;
 	private List<LuaTable> entitiesLua;
 
 	private boolean pausable;
 
-	Globals globals;
-	private LuaValue setMetaTableMethod;
+	private Globals globals;
+	private LuaValue metatableSetterMethod;
 	private LuaValue updateMethod;
 	private LuaValue isPausableMethod;
 	private LuaValue getRequiredComponentsMethod;
@@ -49,44 +49,77 @@ public class System {
 	 * @param coreEngine Reference to the CoreEngine for API access
 	 */
 	public System(File file, CoreEngine coreEngine) {
-		this.filename = filename;
+		this.filepath = file.getAbsolutePath();
 		this.coreEngine = coreEngine;
 
-		globals = new Globals();
-		globals.load(new JseBaseLib());
-		globals.load(new PackageLib());
-		globals.load(new JseMathLib());
-		globals.load(new StringLib());
+		// (re)Load system from filepath
+		reload();
+	}
 
-		LoadState.install(globals);
-		LuaC.install(globals);
+	/**
+	 * Get a LuaValue reference to all methods that should be defined in the system
+	 * globals
+	 */
+	private void readMethodsFromLua() {
+		metatableSetterMethod = globals.get("setmt");
+		updateMethod = globals.get("update");
+		isPausableMethod = globals.get("isPausable");
+		getRequiredComponentsMethod = globals.get("getRequiredComponents");
+	}
 
-		globals.get("dofile").call(LuaValue.valueOf(file.getAbsolutePath()));
-
+	/**
+	 * Add a setmt lua function to the system globals
+	 * 
+	 * setmt(luaComponent) creates the metatable to get and set component fields
+	 * value easily
+	 */
+	private void injectMetatableSetter() {
+		// See the Lua doc about metatables to get a better idea on what's happening here
 		LuaValue chunk = globals.load("function setmt(component)\n" + "local mt = {}\n"
 				+ "mt.__index = function (self, key)\n" + "return self[\"_\" .. key]:getValue()\n" + "end\n"
 				+ "mt.__newindex = function (self, key, value)\n" + "self[\"_\" .. key]:setValue(value)\n" + "end\n"
 				+ "setmetatable(component, mt)\n" + "end");
 		chunk.call();
+	}
 
-		setMetaTableMethod = globals.get("setmt");
-		updateMethod = globals.get("update");
-		isPausableMethod = globals.get("isPausable");
-		getRequiredComponentsMethod = globals.get("getRequiredComponents");
+	/**
+	 * Load basic libraries that are exposed to systems
+	 */
+	private void loadLuaLibs() {
+		globals.load(new JseBaseLib());
+		globals.load(new PackageLib());
+		globals.load(new JseMathLib());
+		globals.load(new StringLib());
 
-		pausable = isPausableMethod.call().toboolean();
+		LoadState.install(globals); // http://luaj.org/luaj/3.0/api/org/luaj/vm2/LoadState.html
+		LuaC.install(globals); // Install the compiler
+	}
 
-		componentNames = new ArrayList<String>();
-		entitiesLua = new ArrayList<LuaTable>();
-		loadRequiredComponents();
-		entities = new ArrayList<Entity>();
+	/**
+	 * Load the system from the specified filepath
+	 */
+	private void loadLuaSystem() {
+		globals.get("dofile").call(LuaValue.valueOf(filepath));
 	}
 
 	/**
 	 * Reloads the system from file
 	 */
 	public void reload() {
-		// TODO: reload
+		java.lang.System.out.println("Reloaded system");
+		globals = new Globals();
+		componentNames = new ArrayList<String>();
+		entitiesLua = new ArrayList<LuaTable>();
+		entities = new ArrayList<Entity>();
+
+		loadLuaLibs();
+		loadLuaSystem();
+		injectMetatableSetter();
+		readMethodsFromLua();
+
+		pausable = isPausableMethod.call().toboolean();
+
+		loadRequiredComponents();
 	}
 
 	/**
@@ -134,7 +167,7 @@ public class System {
 					componentLua.set("_" + field.getName(), fieldLua);
 				}
 
-				setMetaTableMethod.call(componentLua);
+				metatableSetterMethod.call(componentLua);
 				entityLua.set(component.getName(), componentLua);
 			}
 			entitiesTableLua.set(entity.getName(), entityLua);
