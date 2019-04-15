@@ -9,7 +9,6 @@ import org.luaj.vm2.LoadState;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
-import org.luaj.vm2.ast.Chunk;
 import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.PackageLib;
 import org.luaj.vm2.lib.StringLib;
@@ -29,28 +28,29 @@ import ch.sparkpudding.coreengine.CoreEngine;
 public class System {
 
 	private CoreEngine coreEngine;
-	
+
 	private String filename;
 	private List<String> componentNames;
 	private List<Entity> entities;
 	private List<LuaTable> entitiesLua;
-	
+
 	private boolean pausable;
-	
+
 	Globals globals;
 	private LuaValue updateMethod;
 	private LuaValue isPausableMethod;
 	private LuaValue getRequiredComponentsMethod;
 
 	/**
-	 * Constructs the system from the Lua filename
+	 * Constructs the system from the Lua file
 	 * 
-	 * @param filename
+	 * @param file       Lua script file
+	 * @param coreEngine Reference to the CoreEngine for API access
 	 */
 	public System(File file, CoreEngine coreEngine) {
 		this.filename = filename;
 		this.coreEngine = coreEngine;
-		
+
 		globals = new Globals();
 		globals.load(new JseBaseLib());
 		globals.load(new PackageLib());
@@ -67,7 +67,7 @@ public class System {
 		getRequiredComponentsMethod = globals.get("getRequiredComponents");
 
 		pausable = isPausableMethod.call().toboolean();
-		
+
 		componentNames = new ArrayList<String>();
 		entitiesLua = new ArrayList<LuaTable>();
 		loadRequiredComponents();
@@ -75,7 +75,7 @@ public class System {
 	}
 
 	/**
-	 * 
+	 * Reloads the system from file
 	 */
 	public void reload() {
 		// TODO: reload
@@ -87,7 +87,7 @@ public class System {
 	public void loadRequiredComponents() {
 		componentNames.clear();
 		LuaTable list = (LuaTable) getRequiredComponentsMethod.call();
-		
+
 		// list iteration in LuaJ
 		LuaValue k = LuaValue.NIL;
 		while (true) {
@@ -112,7 +112,7 @@ public class System {
 				entities.add(entity);
 			}
 		}
-		
+
 		// Build Lua instances of entites for greater ergonomy in lua code
 		LuaTable entitiesTableLua = new LuaTable();
 		for (Entity entity : entities) {
@@ -131,23 +131,27 @@ public class System {
 			entitiesTableLua.set(entity.getName(), entityLua);
 			entitiesLua.add(entityLua);
 		}
-		
+
 		// Lua code has access to all of these entites
 		globals.set("entities", entitiesTableLua);
-		
+
 		// TODO: coerce APIs
 	}
-	
+
+	/**
+	 * Returns whether the system should be affected by the in-game pause
+	 * 
+	 * @return boolean True if pausable
+	 */
 	public boolean isPausable() {
 		return pausable;
 	}
 
 	/**
-	 * Runs the update function of the Lua script
+	 * Runs the update function of the Lua script on every entity
 	 */
 	public void update() {
 		for (LuaTable entityLua : entitiesLua) {
-			//java.lang.System.out.println(entityLua);
 			updateMethod.call(entityLua);
 		}
 	}
