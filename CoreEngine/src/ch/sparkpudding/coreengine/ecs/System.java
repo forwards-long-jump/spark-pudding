@@ -90,12 +90,10 @@ public class System {
 
 		// list iteration in LuaJ
 		LuaValue k = LuaValue.NIL;
-		while (true) {
-			Varargs n = list.next(k);
-			if ((k = n.arg(1)).isnil()) {
-				break;
-			}
+		Varargs n = list.next(k);
+		while (!(k = n.arg(1)).isnil()) {
 			componentNames.add(n.arg(2).tojstring());
+			n = list.next(k);
 		}
 	}
 
