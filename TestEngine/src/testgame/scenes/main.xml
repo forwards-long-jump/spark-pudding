@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene name="main">
 	<entity name="tartemp'" template="test-entity" z-index="1">
-		<!-- édition -->
+		<!-- edit existing -->
 		<component template="test">
 			<field name="x">13</field>
 		</component>
-		<!-- suppression -->
+		<!-- delete existing -->
 		<component template="test2" delete="true"/>
-		<!-- ajout -->
+		<!-- add component not in template -->
 		<component template="test3"/> 
 	</entity>
 </scene>
