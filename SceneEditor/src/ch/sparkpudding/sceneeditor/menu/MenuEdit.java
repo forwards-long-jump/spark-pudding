@@ -1,12 +1,13 @@
 package ch.sparkpudding.sceneeditor.menu;
 
+import java.awt.event.KeyEvent;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import ch.sparkpudding.sceneeditor.action.ActionTest;
-
-import java.awt.event.KeyEvent;
+import ch.sparkpudding.sceneeditor.action.ActionRedo;
+import ch.sparkpudding.sceneeditor.action.ActionUndo;
 
 /**
  * 
@@ -41,8 +42,8 @@ public class MenuEdit extends JMenu {
 	 */
 	private void addAction() {
 		// TODO: Implement method
-		// FIXME: Remove the test
-		itemUndo.setAction(new ActionTest("Undo"));
+		itemUndo.setAction(new ActionUndo());
+		itemRedo.setAction(new ActionRedo());
 	}
 
 	/**
