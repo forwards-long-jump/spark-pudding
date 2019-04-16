@@ -106,7 +106,6 @@ public class System {
 	 * Reloads the system from file
 	 */
 	public void reload() {
-		java.lang.System.out.println("Reloaded system");
 		globals = new Globals();
 		componentNames = new ArrayList<String>();
 		entitiesLua = new ArrayList<LuaTable>();
