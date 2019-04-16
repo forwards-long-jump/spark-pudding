@@ -8,6 +8,8 @@ import javax.swing.KeyStroke;
 
 import ch.sparkpudding.sceneeditor.action.ActionRedo;
 import ch.sparkpudding.sceneeditor.action.ActionUndo;
+import ch.sparkpudding.sceneeditor.action.ActionsHistory;
+import ch.sparkpudding.sceneeditor.action.HistoryEventListener;
 
 /**
  * 
@@ -44,6 +46,24 @@ public class MenuEdit extends JMenu {
 		// TODO: Implement method
 		itemUndo.setAction(new ActionUndo());
 		itemRedo.setAction(new ActionRedo());
+
+		itemUndo.setEnabled(false);
+		itemRedo.setEnabled(false);
+
+		ActionsHistory.getInstance().addHistoryEventListener(new HistoryEventListener() {
+			@Override
+			public void historyEvent(int stackPointer, int stackSize) {
+				if (stackPointer > 0)
+					itemUndo.setEnabled(true);
+				else
+					itemUndo.setEnabled(false);
+
+				if (stackPointer < stackSize - 1)
+					itemRedo.setEnabled(true);
+				else
+					itemRedo.setEnabled(false);
+			}
+		});
 	}
 
 	/**
