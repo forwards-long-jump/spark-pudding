@@ -6,8 +6,8 @@ import ch.sparkpudding.coreengine.ecs.Entity;
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 15 avr. 2019
  * 
- *         Allow to track a game entity from the SceneEditor and add the
- *         specific attributes
+ *         Allow to track a game entity from the SceneEditor and duplicate it
+ *         with it default values
  * 
  */
 public class SEEntityLinker {
