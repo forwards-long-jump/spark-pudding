@@ -129,4 +129,12 @@ public class LelFile {
 	public Collection<File> getSounds() {
 		return mapSounds.values();
 	}
+	
+	/**
+	 * Get system files
+	 * @return
+	 */
+	public Collection<File> getSystems() {
+		return mapSystems.values();
+	}
 }

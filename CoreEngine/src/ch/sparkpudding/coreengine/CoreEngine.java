@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 import ch.sparkpudding.coreengine.ecs.Component;
 import ch.sparkpudding.coreengine.ecs.Entity;
 import ch.sparkpudding.coreengine.ecs.Scene;
+import ch.sparkpudding.coreengine.ecs.System;
 import ch.sparkpudding.coreengine.filereader.LelFile;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
 
@@ -51,6 +52,8 @@ public class CoreEngine {
 		populateScenes();
 		loadSystems();
 
+		setCurrentScene(scenes.get("main"));
+
 		new Thread(() -> {
 			startGame();
 		}).start();
@@ -62,6 +65,10 @@ public class CoreEngine {
 	private void loadSystems() {
 		systems = new ArrayList<System>();
 		renderSystem = null;
+
+		for (File systemFile : lelFile.getSystems()) {
+			systems.add(new System(systemFile, this));
+		}
 	}
 
 	/**
@@ -73,14 +80,10 @@ public class CoreEngine {
 	 */
 	private void populateScenes() throws ParserConfigurationException, SAXException, IOException {
 		scenes = new HashMap<String, Scene>();
-		currentScene = null;
 
 		for (File xmlFile : lelFile.getScenesXML()) {
 			Scene scene = new Scene(XMLParser.parse(xmlFile));
 			addScene(scene.getName(), scene);
-			if (scene.isStartScene()) {
-				currentScene = scene;
-			}
 		}
 	}
 
@@ -116,11 +119,11 @@ public class CoreEngine {
 	 * Runs update and render loops
 	 */
 	private void startGame() {
-		double previous = System.currentTimeMillis();
+		double previous = java.lang.System.currentTimeMillis();
 		double lag = 0.0;
 
 		while (!exit) {
-			double current = System.currentTimeMillis();
+			double current = java.lang.System.currentTimeMillis();
 			double elapsed = current - previous;
 
 			previous = current;
@@ -139,8 +142,10 @@ public class CoreEngine {
 	 * Runs all systems once
 	 */
 	private void update() {
-		// TODO: Update logic
-		// for
+		for (System system : systems) {
+			system.update();
+		}
+		// TODO : give priority to certain system, i.e. the input systems
 	}
 
 	/**
@@ -199,5 +204,16 @@ public class CoreEngine {
 	 */
 	public void resetScene() {
 		// TODO: reset current scene
+	}
+
+	public Scene getCurrentScene() {
+		return currentScene;
+	}
+
+	public void setCurrentScene(Scene currentScene) {
+		this.currentScene = currentScene;
+		for (System system : systems) {
+			system.setEntities(currentScene.getEntities());
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package ch.sparkpudding.coreengine.ecs;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Document;
@@ -165,5 +166,9 @@ public class Entity {
 	
 	public static void addTemplate(Entity template) {
 		templates.put(template.getName(), template);
+	}
+
+	public boolean hasComponents(List<String> componentNames) {
+		return components.keySet().containsAll(componentNames);
 	}
 }
