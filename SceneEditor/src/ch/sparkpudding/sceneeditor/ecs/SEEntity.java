@@ -15,10 +15,10 @@ import ch.sparkpudding.coreengine.ecs.Entity;
  *         specific attributes
  * 
  */
-public class SEEntity implements Iterable<Entry<String, SEComponent>> {
+public class SEEntity {
 
 	private Entity gameEntity;
-	private Map<String, SEComponent> components;
+	private Entity editorEntity;
 
 	/**
 	 * Ctor create a SEEntity and it components as SEComponent
@@ -28,10 +28,7 @@ public class SEEntity implements Iterable<Entry<String, SEComponent>> {
 	public SEEntity(Entity gameEntity) {
 
 		this.gameEntity = gameEntity;
-
-		for (Entry<String, Component> entry : this.gameEntity) {
-			components.put(entry.getKey(), new SEComponent(entry.getValue()));
-		}
+		this.editorEntity = new Entity(gameEntity);
 
 	}
 
@@ -43,18 +40,13 @@ public class SEEntity implements Iterable<Entry<String, SEComponent>> {
 	public Entity getGameEntity() {
 		return gameEntity;
 	}
-
+	
 	/**
-	 * Getter for components
+	 * Getter for editorEntity
 	 * 
-	 * @return the components map of this entity
+	 * @return the gameEntity attached to this
 	 */
-	public Map<String, SEComponent> getComponents() {
-		return components;
-	}
-
-	@Override
-	public Iterator<Entry<String, SEComponent>> iterator() {
-		return components.entrySet().iterator();
+	public Entity getEditorEntity() {
+		return editorEntity;
 	}
 }
