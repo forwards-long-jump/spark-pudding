@@ -1,8 +1,10 @@
 package ch.sparkpudding.coreengine.ecs;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -10,31 +12,34 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Part of the ECS design pattern, described by the components it contains.
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
+ *         Part of the ECS design pattern, described by the components it
+ *         contains.
+ * 
  */
-public class Entity {
+public class Entity implements Iterable<Entry<String, Component>> {
 
 	private static Map<String, Entity> templates;
 	static {
 		templates = new HashMap<String, Entity>();
 	}
-	
+
 	private Map<String, Component> components;
 	private String name;
 	private int zIndex;
-	
+
 	/**
 	 * Default constructor
 	 */
 	public Entity() {
 		this("", 0);
 	}
-	
+
 	/**
 	 * Constructor
-	 * @param name Name of the entity
+	 * 
+	 * @param name   Name of the entity
 	 * @param zIndex z index, larger numbers imply foreground
 	 */
 	public Entity(String name, int zIndex) {
@@ -42,9 +47,10 @@ public class Entity {
 		this.setZIndex(zIndex);
 		this.components = new HashMap<String, Component>();
 	}
-	
+
 	/**
 	 * Copy constructor
+	 * 
 	 * @param entity
 	 */
 	public Entity(Entity entity) {
@@ -55,24 +61,26 @@ public class Entity {
 			this.add(new Component(component));
 		}
 	}
-	
+
 	/**
-	 * Create an entity from a parsed XML Document and populate its components
+	 * Create an entity from a parsed XML Document and populate its components.
+	 * 
 	 * Note that entities described in documents must be templates.
+	 * 
 	 * @param document A properly formated Document to get components from
 	 */
 	public Entity(Document document) {
 		Element entityElement = document.getDocumentElement();
-		
+
 		this.name = entityElement.getAttribute("name");
-		
+
 		String zindex = entityElement.getAttribute("z-index");
 		if (zindex.length() > 0) {
 			this.setZIndex(Integer.parseInt(zindex));
 		} else {
 			this.setZIndex(0);
 		}
-		
+
 		this.components = new HashMap<String, Component>();
 		NodeList components = entityElement.getChildNodes();
 		for (int i = 0; i < components.getLength(); i++) {
@@ -83,16 +91,18 @@ public class Entity {
 			}
 		}
 	}
-	
+
 	/**
-	 * Creates an entity from a template, and adds changes described in the XML element
+	 * Creates an entity from a template, and adds changes described in the XML
+	 * element
+	 * 
 	 * @param element A properly formated XML element describing the entitiy
 	 */
 	public Entity(Element element) {
 		this(templates.get(element.getAttribute("template")));
 		this.name = element.getAttribute("name");
 		this.zIndex = Integer.parseInt(element.getAttribute("z-index"));
-		
+
 		NodeList components = element.getChildNodes();
 		for (int i = 0; i < components.getLength(); i++) {
 			Node node = components.item(i);
@@ -110,31 +120,34 @@ public class Entity {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds a component to the entity
+	 * 
 	 * @param c Component to be added
 	 */
 	public void add(Component c) {
 		components.put(c.getName(), c);
 	}
-	
+
 	/**
 	 * Removes a component to the entity
-	 * @param name Name of the component to be removed 
+	 * 
+	 * @param name Name of the component to be removed
 	 */
 	public void remove(String name) {
 		components.remove(name);
 	}
-	
+
 	/**
 	 * Gets the name of the entity
+	 * 
 	 * @return Name of the entity
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	public int getZIndex() {
 		return zIndex;
 	}
@@ -142,14 +155,19 @@ public class Entity {
 	public void setZIndex(int zIndex) {
 		this.zIndex = zIndex;
 	}
-	
+
 	public Map<String, Component> getComponents() {
 		return components;
 	}
-	
+
+	@Override
+	public Iterator<Entry<String, Component>> iterator() {
+		return components.entrySet().iterator();
+	}
 
 	/**
 	 * Get entity templates
+	 * 
 	 * @return Associative array name => entity
 	 */
 	public static Map<String, Entity> getTemplates() {
@@ -158,12 +176,13 @@ public class Entity {
 
 	/**
 	 * Set entity templates
+	 * 
 	 * @param templates
 	 */
 	public static void setTemplates(Map<String, Entity> templates) {
 		Entity.templates = templates;
 	}
-	
+
 	public static void addTemplate(Entity template) {
 		templates.put(template.getName(), template);
 	}

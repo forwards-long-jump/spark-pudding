@@ -1,7 +1,9 @@
 package ch.sparkpudding.coreengine.ecs;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -9,12 +11,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Represents settings (key values pairs) that can be attached to an entity
- * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
+ *         Represents settings (key values pairs) that can be attached to an
+ *         entity
+ * 
  */
-public class Component {
+public class Component implements Iterable<Entry<String, Field>> {
 
 	private static Map<String, Component> templates;
 	static {
@@ -109,6 +112,11 @@ public class Component {
 	 */
 	public Map<String, Field> getFields() {
 		return fields;
+	}
+
+	@Override
+	public Iterator<Entry<String, Field>> iterator() {
+		return fields.entrySet().iterator();
 	}
 
 	/**
