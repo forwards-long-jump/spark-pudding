@@ -27,7 +27,19 @@ public class Field {
 	public Field(String name, FieldType type, Object value) {
 		this.name = name;
 		this.type = type;
-		this.setValue(value);
+		switch (type) {
+		case BOOLEAN:
+		case INTEGER:
+		case DOUBLE:
+			this.value = value;
+			break;
+		case FILE_PATH:
+		case STRING:
+			this.value = new String(value.toString());
+			break;
+		default:
+			break;
+		}
 	}
 
 	/**
@@ -36,7 +48,20 @@ public class Field {
 	 * @param field
 	 */
 	public Field(Field field) {
-		this(field.name, field.type, field.value);
+		this(new String(field.name), field.type, new Object());
+		switch (type) {
+		case BOOLEAN:
+		case INTEGER:
+		case DOUBLE:
+			this.value = field.value;
+			break;
+		case FILE_PATH:
+		case STRING:
+			this.value = new String(field.value.toString());
+			break;
+		default:
+			break;
+		}
 	}
 
 	/**
@@ -50,6 +75,11 @@ public class Field {
 		this.name = name;
 		this.type = FieldType.valueOf(type);
 		this.setValueFromString(value);
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return new Field(this);
 	}
 
 	/**
