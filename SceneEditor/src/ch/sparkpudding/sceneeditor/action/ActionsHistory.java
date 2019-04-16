@@ -1,5 +1,7 @@
 package ch.sparkpudding.sceneeditor.action;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -14,11 +16,14 @@ public class ActionsHistory {
 
 	private static ActionsHistory INSTANCE = new ActionsHistory();
 
-	private int undoRedoPointer = -1;
+	private List<HistoryEventListener> eventListeners;
+
+	private int stackPointer = -1;
 	private Stack<AbstractAction> actionsStack;
 
 	private ActionsHistory() {
 		this.actionsStack = new Stack<AbstractAction>();
+		this.eventListeners = new ArrayList<HistoryEventListener>();
 	}
 
 	/**
@@ -31,8 +36,9 @@ public class ActionsHistory {
 		deleteElementsAfterPointer();
 		actionsStack.push(action);
 
-		undoRedoPointer++;
+		stackPointer++;
 
+		fireHistoryEvent();
 	}
 
 	/**
@@ -43,7 +49,7 @@ public class ActionsHistory {
 		if (actionsStack.size() < 1)
 			return;
 
-		for (int i = actionsStack.size() - 1; i > undoRedoPointer; i--) {
+		for (int i = actionsStack.size() - 1; i > stackPointer; i--) {
 			actionsStack.remove(i);
 		}
 
@@ -54,11 +60,12 @@ public class ActionsHistory {
 	 */
 	public void undo() {
 
-		AbstractAction action = actionsStack.get(undoRedoPointer);
+		AbstractAction action = actionsStack.get(stackPointer);
 		action.undoAction();
 
-		undoRedoPointer--;
+		stackPointer--;
 
+		fireHistoryEvent();
 	}
 
 	/**
@@ -66,14 +73,33 @@ public class ActionsHistory {
 	 */
 	public void redo() {
 
-		if (undoRedoPointer == actionsStack.size() - 1)
+		if (stackPointer == actionsStack.size() - 1)
 			return;
 
-		undoRedoPointer++;
+		stackPointer++;
 
-		AbstractAction action = actionsStack.get(undoRedoPointer);
+		AbstractAction action = actionsStack.get(stackPointer);
 		action.doAction();
 
+		fireHistoryEvent();
+	}
+
+	/**
+	 * Add a listener for the event of the History
+	 * 
+	 * @param evtListener the listener
+	 */
+	public void addHistoryEventListener(HistoryEventListener evtListener) {
+		eventListeners.add(evtListener);
+	}
+
+	/**
+	 * Allow to fire the history event of the listeners
+	 */
+	private void fireHistoryEvent() {
+		for (HistoryEventListener historyEventListener : eventListeners) {
+			historyEventListener.historyEvent(stackPointer, actionsStack.size());
+		}
 	}
 
 	/**

@@ -4,7 +4,7 @@ package ch.sparkpudding.sceneeditor.action;
 public class ActionTest extends AbstractAction {
 
 	private int count = 0;
-	
+
 	public ActionTest(String name) {
 		super(name);
 	}
