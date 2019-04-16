@@ -15,7 +15,7 @@ import ch.sparkpudding.coreengine.ecs.Entity;
  *         specific attributes
  * 
  */
-public class SEEntity {
+public class SEEntityLinker {
 
 	private Entity gameEntity;
 	private Entity editorEntity;
@@ -25,7 +25,7 @@ public class SEEntity {
 	 * 
 	 * @param gameEntity the entity link to this SceneEditor Entity
 	 */
-	public SEEntity(Entity gameEntity) {
+	public SEEntityLinker(Entity gameEntity) {
 
 		this.gameEntity = gameEntity;
 		this.editorEntity = new Entity(gameEntity);
