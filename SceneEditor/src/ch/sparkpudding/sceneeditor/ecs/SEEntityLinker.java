@@ -1,10 +1,5 @@
 package ch.sparkpudding.sceneeditor.ecs;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import ch.sparkpudding.coreengine.ecs.Component;
 import ch.sparkpudding.coreengine.ecs.Entity;
 
 /**
@@ -40,7 +35,7 @@ public class SEEntityLinker {
 	public Entity getGameEntity() {
 		return gameEntity;
 	}
-	
+
 	/**
 	 * Getter for editorEntity
 	 * 
