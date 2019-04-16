@@ -2,6 +2,7 @@ package ch.sparkpudding.coreengine.ecs;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -186,4 +187,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		templates.put(template.getName(), template);
 	}
 
+	public boolean hasComponents(List<String> componentNames) {
+		return components.keySet().containsAll(componentNames);
+	}
 }
