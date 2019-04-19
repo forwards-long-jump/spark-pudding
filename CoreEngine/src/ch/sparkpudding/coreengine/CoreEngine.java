@@ -41,7 +41,7 @@ public class CoreEngine {
 	private Scene currentScene;
 
 	private List<UpdateSystem> systems;
-	private UpdateSystem renderSystem;
+	private RenderSystem renderSystem;
 
 	public CoreEngine(JPanel panel, String gameFolder) throws Exception {
 		this.panel = panel;
