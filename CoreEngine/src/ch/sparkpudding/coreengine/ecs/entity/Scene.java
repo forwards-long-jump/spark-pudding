@@ -1,4 +1,4 @@
-package ch.sparkpudding.coreengine.ecs;
+package ch.sparkpudding.coreengine.ecs.entity;
 
 import java.util.ArrayList;
 import java.util.List;

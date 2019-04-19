@@ -12,11 +12,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import ch.sparkpudding.coreengine.ecs.Component;
-import ch.sparkpudding.coreengine.ecs.Entity;
-import ch.sparkpudding.coreengine.ecs.RenderSystem;
-import ch.sparkpudding.coreengine.ecs.Scene;
-import ch.sparkpudding.coreengine.ecs.UpdateSystem;
+import ch.sparkpudding.coreengine.ecs.component.Component;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.coreengine.ecs.system.RenderSystem;
+import ch.sparkpudding.coreengine.ecs.system.UpdateSystem;
 import ch.sparkpudding.coreengine.filereader.LelFile;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
 

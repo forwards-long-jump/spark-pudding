@@ -1,4 +1,4 @@
-package ch.sparkpudding.coreengine.ecs;
+package ch.sparkpudding.coreengine.ecs.system;
 
 import java.awt.Graphics2D;
 import java.io.File;

@@ -10,7 +10,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import ch.sparkpudding.coreengine.ecs.Field;
+import ch.sparkpudding.coreengine.ecs.component.Field;
 
 /**
  * 

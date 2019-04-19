@@ -1,6 +1,6 @@
 package ch.sparkpudding.sceneeditor.ecs;
 
-import ch.sparkpudding.coreengine.ecs.Entity;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
 /**
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>

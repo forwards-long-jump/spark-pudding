@@ -1,4 +1,4 @@
-package ch.sparkpudding.coreengine.ecs;
+package ch.sparkpudding.coreengine.ecs.component;
 
 import java.util.HashMap;
 import java.util.Iterator;

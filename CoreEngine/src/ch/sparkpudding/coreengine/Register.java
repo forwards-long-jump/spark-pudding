@@ -3,7 +3,7 @@ package ch.sparkpudding.coreengine;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.sparkpudding.coreengine.ecs.Field;
+import ch.sparkpudding.coreengine.ecs.component.Field;
 
 /**
  * Owns a map of persistent data to be used at the user's discretion in systems.
