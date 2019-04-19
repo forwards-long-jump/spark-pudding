@@ -30,7 +30,6 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
  * 
  */
 public abstract class System {
-	private CoreEngine coreEngine;
 	private String filepath;
 
 	private List<String> componentNames;
@@ -41,6 +40,7 @@ public abstract class System {
 
 	protected List<LuaTable> entitiesLua;
 	protected Globals globals;
+	protected CoreEngine coreEngine;
 
 	/**
 	 * Constructs the system from the Lua file
@@ -121,7 +121,7 @@ public abstract class System {
 	/**
 	 * Updates the component names list according to lua file
 	 */
-	public void loadRequiredComponents() {
+	private void loadRequiredComponents() {
 		componentNames.clear();
 		LuaTable list = (LuaTable) getRequiredComponentsMethod.call();
 
