@@ -14,8 +14,9 @@ import org.xml.sax.SAXException;
 
 import ch.sparkpudding.coreengine.ecs.Component;
 import ch.sparkpudding.coreengine.ecs.Entity;
+import ch.sparkpudding.coreengine.ecs.RenderSystem;
 import ch.sparkpudding.coreengine.ecs.Scene;
-import ch.sparkpudding.coreengine.ecs.System;
+import ch.sparkpudding.coreengine.ecs.UpdateSystem;
 import ch.sparkpudding.coreengine.filereader.LelFile;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
 
@@ -39,8 +40,8 @@ public class CoreEngine {
 	private Map<String, Scene> scenes;
 	private Scene currentScene;
 
-	private List<System> systems;
-	private System renderSystem;
+	private List<UpdateSystem> systems;
+	private UpdateSystem renderSystem;
 
 	public CoreEngine(JPanel panel, String gameFolder) throws Exception {
 		this.panel = panel;
@@ -63,11 +64,16 @@ public class CoreEngine {
 	 * Populates systems list with system files
 	 */
 	private void loadSystems() {
-		systems = new ArrayList<System>();
+		systems = new ArrayList<UpdateSystem>();
 		renderSystem = null;
 
 		for (File systemFile : lelFile.getSystems()) {
-			systems.add(new System(systemFile, this));
+			if(systemFile.getName().equals(RenderSystem.LUA_FILE_NAME)) {
+				renderSystem = new RenderSystem(systemFile, this);
+			}
+			else {
+				systems.add(new UpdateSystem(systemFile, this));
+			}
 		}
 	}
 
@@ -142,7 +148,7 @@ public class CoreEngine {
 	 * Runs all systems once
 	 */
 	private void update() {
-		for (System system : systems) {
+		for (UpdateSystem system : systems) {
 			system.update();
 		}
 		// TODO : give priority to certain system, i.e. the input systems
@@ -212,7 +218,7 @@ public class CoreEngine {
 
 	public void setCurrentScene(Scene currentScene) {
 		this.currentScene = currentScene;
-		for (System system : systems) {
+		for (UpdateSystem system : systems) {
 			system.setEntities(currentScene.getEntities());
 		}
 	}
