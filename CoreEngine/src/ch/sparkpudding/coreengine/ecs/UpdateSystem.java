@@ -1,26 +1,14 @@
 package ch.sparkpudding.coreengine.ecs;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LoadState;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.compiler.LuaC;
-import org.luaj.vm2.lib.PackageLib;
-import org.luaj.vm2.lib.StringLib;
-import org.luaj.vm2.lib.jse.CoerceJavaToLua;
-import org.luaj.vm2.lib.jse.JseBaseLib;
-import org.luaj.vm2.lib.jse.JseMathLib;
 
 import ch.sparkpudding.coreengine.CoreEngine;
 
 /**
- * Part of the ECS design pattern. Works on entities which have components
- * necessary to the system. All of its logic is to be described in its Lua file.
+ * Handle systems that will be updated. These systems can also be paused
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
@@ -30,12 +18,21 @@ public class UpdateSystem extends System {
 	private LuaValue updateMethod;
 	private LuaValue isPausableMethod;
 
+	/**
+	 * Constructs the update system from its lua file
+	 * 
+	 * @param file
+	 * @param coreEngine
+	 */
 	public UpdateSystem(File file, CoreEngine coreEngine) {
 		super(file, coreEngine);
 		// (re)Load system from filepath
 		reload();
 	}
 
+	/**
+	 * Get a LuaValue reference to update and isPausable lua methods
+	 */
 	@Override
 	protected void readMethodsFromLua() {
 		super.readMethodsFromLua();
@@ -54,8 +51,6 @@ public class UpdateSystem extends System {
 		readMethodsFromLua();
 
 		pausable = isPausableMethod.call().toboolean();
-
-		loadRequiredComponents();
 	}
 
 	/**
