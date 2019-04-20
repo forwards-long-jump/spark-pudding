@@ -52,6 +52,9 @@ public class Input {
 	}
 
 	public void update() {
+		// Needed for listening to the keyboard
+		panel.requestFocusInWindow();
+		
 		for (Integer key : keysPressed) {
 			keys.put(key, true);
 		}
@@ -75,7 +78,6 @@ public class Input {
 	}
 
 	public void createListeners() {
-
 		panel.addKeyListener(new KeyAdapter() {
 
 			@Override
