@@ -7,5 +7,5 @@ function isPausable()
 end
 
 function update(entity)
-  print("system2 " .. entity.test.x)
+  --print("system2 " .. entity.test.x)
 end

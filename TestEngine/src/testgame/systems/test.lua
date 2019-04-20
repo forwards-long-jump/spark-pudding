@@ -7,8 +7,5 @@ function isPausable()
 end
 
 function update(entity)
-  --for n, e in pairs(entities) do print(n .. " " .. e.test.x) end
-  
-  --entity.test.x = entity.test.x + 1
-	--print(entity.test.x)
+  entity.test.x = entity.test.x + 1
 end
