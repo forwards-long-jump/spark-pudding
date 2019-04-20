@@ -45,15 +45,14 @@ public class RenderSystem extends System {
 	}
 	
 	/**
-	 *
 	 * Runs the render function of the Lua script on every entity
-	 *
 	 * 
 	 * @param g Graphics2D context
 	 */
 	public void render(Graphics2D g) {
+		LuaValue luaG = CoerceJavaToLua.coerce(g);
 		for (LuaTable entityLua : entitiesLua) {
-			renderMethod.call(entityLua, CoerceJavaToLua.coerce(g));
+			renderMethod.call(entityLua, luaG);
 		}
 	}
 }
