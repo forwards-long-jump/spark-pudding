@@ -1,5 +1,8 @@
 package ch.sparkpudding.coreengine;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,12 +30,11 @@ import ch.sparkpudding.coreengine.filereader.XMLParser;
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
-public class CoreEngine {
+public class CoreEngine extends JPanel {
 
 	private double msPerUpdate = (1000 / 60);
 	private boolean exit = false;
 
-	private JPanel panel;
 	public Input input;
 
 	private LelFile lelFile;
@@ -43,9 +45,8 @@ public class CoreEngine {
 	private List<UpdateSystem> systems;
 	private RenderSystem renderSystem;
 
-	public CoreEngine(JPanel panel, String gameFolder) throws Exception {
-		this.panel = panel;
-		this.input = new Input(panel);
+	public CoreEngine(String gameFolder) throws Exception {
+		this.input = new Input(this);
 
 		this.lelFile = new LelFile(gameFolder);
 		populateComponentTemplates();
@@ -68,10 +69,9 @@ public class CoreEngine {
 		renderSystem = null;
 
 		for (File systemFile : lelFile.getSystems()) {
-			if(systemFile.getName().equals(RenderSystem.LUA_FILE_NAME)) {
+			if (systemFile.getName().equals(RenderSystem.LUA_FILE_NAME)) {
 				renderSystem = new RenderSystem(systemFile, this);
-			}
-			else {
+			} else {
 				systems.add(new UpdateSystem(systemFile, this));
 			}
 		}
@@ -135,12 +135,15 @@ public class CoreEngine {
 			previous = current;
 			lag += elapsed;
 
-			while (lag >= msPerUpdate) {
-				update();
-				lag -= msPerUpdate;
-			}
+			input.update();
 
-			render();
+			if (lag >= msPerUpdate) {
+				do {
+					update();
+					lag -= msPerUpdate;
+				} while (lag >= msPerUpdate);
+				render();
+			}
 		}
 	}
 
@@ -158,8 +161,7 @@ public class CoreEngine {
 	 * Runs the renderer system
 	 */
 	private void render() {
-		// TODO: Render logic
-		// using panel and renderSystem
+		repaint();
 	}
 
 	/**
@@ -221,5 +223,15 @@ public class CoreEngine {
 		for (UpdateSystem system : systems) {
 			system.setEntities(currentScene.getEntities());
 		}
+		renderSystem.setEntities(currentScene.getEntities());
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		renderSystem.render((Graphics2D) g);
+		g.dispose();
 	}
 }
