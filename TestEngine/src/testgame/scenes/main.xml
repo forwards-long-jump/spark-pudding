@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene name="main">
-	<entity name="tartemp'" template="test-entity" z-index="1">
-		<!-- edit existing -->
-		<component template="test">
-			<field name="x">13</field>
-		</component>
-		<!-- delete existing -->
-		<component template="test2" delete="true"/>
-		<!-- add component not in template -->
-		<component template="test3"/> 
-	</entity>
+	<entity name="dummy" template="test-entity" z-index="1"/>
 </scene>

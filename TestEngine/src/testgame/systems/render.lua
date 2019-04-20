@@ -1,8 +1,9 @@
 function getRequiredComponents()
-  return {"test"}
+  return {"position", "size"}
 end
 
-
 function render(entity, g)
-  g:drawRect(entity.test.x, 0, 100, 100)
+  pos = entity.position
+  size = entity.size
+  g:fillRect(pos.x, pos.y, size.width, size.height)
 end
