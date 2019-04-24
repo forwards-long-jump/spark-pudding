@@ -30,6 +30,7 @@ import ch.sparkpudding.coreengine.filereader.XMLParser;
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
+@SuppressWarnings("serial")
 public class CoreEngine extends JPanel {
 
 	private double msPerUpdate = (1000 / 60);
@@ -231,13 +232,14 @@ public class CoreEngine extends JPanel {
 		super.paintComponent(g);
 
 		Graphics2D g2d = (Graphics2D) g;
-		
+
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
+
 		renderSystem.render((Graphics2D) g);
-		
+
 		g.dispose();
-		// Source: https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
+		// Source:
+		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
 		java.awt.Toolkit.getDefaultToolkit().sync();
 	}
 }

@@ -11,10 +11,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * Represents settings (key values pairs) that can be attached to an entity
  * 
- *         Represents settings (key values pairs) that can be attached to an
- *         entity
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
 public class Component implements Iterable<Entry<String, Field>> {

@@ -7,6 +7,7 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 
 /**
  * Owns a map of persistent data to be used at the user's discretion in systems.
+ * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
