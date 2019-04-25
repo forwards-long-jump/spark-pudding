@@ -1,14 +1,14 @@
 function getRequiredComponents()
-	return {"test"}
+	return {"position"}
 end
 
 function isPausable()
 	return false
 end
 
+timer = 0
+
 function update(entity)
-  --for n, e in pairs(entities) do print(n .. " " .. e.test.x) end
-  
-  --entity.test.x = entity.test.x + 1
-	--print(entity.test.x)
+  timer = (timer + 0.07) % 360
+  entity.position.x = 50 + 50 * math.sin(timer)
 end

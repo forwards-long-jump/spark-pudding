@@ -1,4 +1,4 @@
-package ch.sparkpudding.coreengine.ecs;
+package ch.sparkpudding.coreengine.ecs.entity;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,6 +10,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import ch.sparkpudding.coreengine.ecs.component.Component;
 
 /**
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba

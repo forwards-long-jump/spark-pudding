@@ -9,8 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import ch.sparkpudding.coreengine.ecs.Component;
-import ch.sparkpudding.coreengine.ecs.Field;
+import ch.sparkpudding.coreengine.ecs.component.Component;
+import ch.sparkpudding.coreengine.ecs.component.Field;
 
 /**
  * 

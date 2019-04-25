@@ -1,5 +1,8 @@
 package ch.sparkpudding.coreengine;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,10 +15,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import ch.sparkpudding.coreengine.ecs.Component;
-import ch.sparkpudding.coreengine.ecs.Entity;
-import ch.sparkpudding.coreengine.ecs.Scene;
-import ch.sparkpudding.coreengine.ecs.System;
+import ch.sparkpudding.coreengine.ecs.component.Component;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.coreengine.ecs.system.RenderSystem;
+import ch.sparkpudding.coreengine.ecs.system.UpdateSystem;
 import ch.sparkpudding.coreengine.filereader.LelFile;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
 
@@ -26,12 +30,12 @@ import ch.sparkpudding.coreengine.filereader.XMLParser;
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
-public class CoreEngine {
+@SuppressWarnings("serial")
+public class CoreEngine extends JPanel {
 
 	private double msPerUpdate = (1000 / 60);
 	private boolean exit = false;
 
-	private JPanel panel;
 	public Input input;
 
 	private LelFile lelFile;
@@ -39,12 +43,11 @@ public class CoreEngine {
 	private Map<String, Scene> scenes;
 	private Scene currentScene;
 
-	private List<System> systems;
-	private System renderSystem;
+	private List<UpdateSystem> systems;
+	private RenderSystem renderSystem;
 
-	public CoreEngine(JPanel panel, String gameFolder) throws Exception {
-		this.panel = panel;
-		this.input = new Input(panel);
+	public CoreEngine(String gameFolder) throws Exception {
+		this.input = new Input(this);
 
 		this.lelFile = new LelFile(gameFolder);
 		populateComponentTemplates();
@@ -63,11 +66,15 @@ public class CoreEngine {
 	 * Populates systems list with system files
 	 */
 	private void loadSystems() {
-		systems = new ArrayList<System>();
+		systems = new ArrayList<UpdateSystem>();
 		renderSystem = null;
 
 		for (File systemFile : lelFile.getSystems()) {
-			systems.add(new System(systemFile, this));
+			if (systemFile.getName().equals(RenderSystem.LUA_FILE_NAME)) {
+				renderSystem = new RenderSystem(systemFile, this);
+			} else {
+				systems.add(new UpdateSystem(systemFile, this));
+			}
 		}
 	}
 
@@ -129,12 +136,15 @@ public class CoreEngine {
 			previous = current;
 			lag += elapsed;
 
-			while (lag >= msPerUpdate) {
-				update();
-				lag -= msPerUpdate;
-			}
+			input.update();
 
-			render();
+			if (lag >= msPerUpdate) {
+				do {
+					update();
+					lag -= msPerUpdate;
+				} while (lag >= msPerUpdate);
+				render();
+			}
 		}
 	}
 
@@ -142,7 +152,7 @@ public class CoreEngine {
 	 * Runs all systems once
 	 */
 	private void update() {
-		for (System system : systems) {
+		for (UpdateSystem system : systems) {
 			system.update();
 		}
 		// TODO : give priority to certain system, i.e. the input systems
@@ -152,8 +162,7 @@ public class CoreEngine {
 	 * Runs the renderer system
 	 */
 	private void render() {
-		// TODO: Render logic
-		// using panel and renderSystem
+		repaint();
 	}
 
 	/**
@@ -212,8 +221,25 @@ public class CoreEngine {
 
 	public void setCurrentScene(Scene currentScene) {
 		this.currentScene = currentScene;
-		for (System system : systems) {
+		for (UpdateSystem system : systems) {
 			system.setEntities(currentScene.getEntities());
 		}
+		renderSystem.setEntities(currentScene.getEntities());
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		super.paintComponent(g);
+
+		Graphics2D g2d = (Graphics2D) g;
+
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		renderSystem.render((Graphics2D) g);
+
+		g.dispose();
+		// Source:
+		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
+		java.awt.Toolkit.getDefaultToolkit().sync();
 	}
 }

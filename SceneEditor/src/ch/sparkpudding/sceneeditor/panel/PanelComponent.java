@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import ch.sparkpudding.coreengine.ecs.Component;
-import ch.sparkpudding.coreengine.ecs.Field;
-import ch.sparkpudding.coreengine.ecs.Field.FieldType;
+import ch.sparkpudding.coreengine.ecs.component.Component;
+import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.coreengine.ecs.component.Field.FieldType;
 import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
 
 /**

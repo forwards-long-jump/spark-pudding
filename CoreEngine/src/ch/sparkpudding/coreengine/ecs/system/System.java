@@ -1,4 +1,4 @@
-package ch.sparkpudding.coreengine.ecs;
+package ch.sparkpudding.coreengine.ecs.system;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,30 +17,30 @@ import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JseMathLib;
 
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.ecs.component.Component;
+import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
 /**
- * Part of the ECS design pattern. Works on entities which have components
- * necessary to the system. All of its logic is to be described in its Lua file.
+ * Read components required by a lua script, builds a list of entities affected
+ * by this system that can be passed to lua functions. Expose CoreEngine APIs
+ * Part of the ECS design pattern
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
-public class System {
-
-	private CoreEngine coreEngine;
-
+public abstract class System {
 	private String filepath;
+
 	private List<String> componentNames;
 	private List<Entity> entities;
-	private List<LuaTable> entitiesLua;
 
-	private boolean pausable;
-
-	private Globals globals;
 	private LuaValue metatableSetterMethod;
-	private LuaValue updateMethod;
-	private LuaValue isPausableMethod;
 	private LuaValue getRequiredComponentsMethod;
+
+	protected List<LuaTable> entitiesLua;
+	protected Globals globals;
+	protected CoreEngine coreEngine;
 
 	/**
 	 * Constructs the system from the Lua file
@@ -52,34 +52,25 @@ public class System {
 		this.filepath = file.getAbsolutePath();
 		this.coreEngine = coreEngine;
 
-		// (re)Load system from filepath
+		// (re)Load this system
 		reload();
 	}
 
 	/**
-	 * Get a LuaValue reference to all methods that should be defined in the system
-	 * globals
+	 * (re)Loads the system from file
 	 */
-	private void readMethodsFromLua() {
-		metatableSetterMethod = globals.get("setmt");
-		updateMethod = globals.get("update");
-		isPausableMethod = globals.get("isPausable");
-		getRequiredComponentsMethod = globals.get("getRequiredComponents");
-	}
+	public void reload() {
+		globals = new Globals();
+		componentNames = new ArrayList<String>();
+		entitiesLua = new ArrayList<LuaTable>();
+		entities = new ArrayList<Entity>();
 
-	/**
-	 * Add a setmt lua function to the system globals
-	 * 
-	 * setmt(luaComponent) creates the metatable to get and set component fields
-	 * value easily
-	 */
-	private void injectMetatableSetter() {
-		// See the Lua doc about metatables to get a better idea on what's happening here
-		LuaValue chunk = globals.load("function setmt(component)\n" + "local mt = {}\n"
-				+ "mt.__index = function (self, key)\n" + "return self[\"_\" .. key]:getValue()\n" + "end\n"
-				+ "mt.__newindex = function (self, key, value)\n" + "self[\"_\" .. key]:setValue(value)\n" + "end\n"
-				+ "setmetatable(component, mt)\n" + "end");
-		chunk.call();
+		loadLuaLibs();
+		loadLuaSystem();
+		injectMetatableSetter();
+		readMethodsFromLua();
+
+		loadRequiredComponents();
 	}
 
 	/**
@@ -103,28 +94,34 @@ public class System {
 	}
 
 	/**
-	 * Reloads the system from file
+	 * Get a LuaValue reference to all methods that should be defined in all system
+	 * globals
 	 */
-	public void reload() {
-		globals = new Globals();
-		componentNames = new ArrayList<String>();
-		entitiesLua = new ArrayList<LuaTable>();
-		entities = new ArrayList<Entity>();
+	protected void readMethodsFromLua() {
+		metatableSetterMethod = globals.get("setmt");
+		getRequiredComponentsMethod = globals.get("getRequiredComponents");
+	}
 
-		loadLuaLibs();
-		loadLuaSystem();
-		injectMetatableSetter();
-		readMethodsFromLua();
-
-		pausable = isPausableMethod.call().toboolean();
-
-		loadRequiredComponents();
+	/**
+	 * Add a setmt lua function to the system globals
+	 * 
+	 * setmt(luaComponent) creates the metatable to get and set component fields
+	 * value easily
+	 */
+	private void injectMetatableSetter() {
+		// See the Lua doc about metatables to get a better idea on what's happening
+		// here
+		LuaValue chunk = globals.load("function setmt(component)\n" + "local mt = {}\n"
+				+ "mt.__index = function (self, key)\n" + "return self[\"_\" .. key]:getValue()\n" + "end\n"
+				+ "mt.__newindex = function (self, key, value)\n" + "self[\"_\" .. key]:setValue(value)\n" + "end\n"
+				+ "setmetatable(component, mt)\n" + "end");
+		chunk.call();
 	}
 
 	/**
 	 * Updates the component names list according to lua file
 	 */
-	public void loadRequiredComponents() {
+	private void loadRequiredComponents() {
 		componentNames.clear();
 		LuaTable list = (LuaTable) getRequiredComponentsMethod.call();
 
@@ -179,21 +176,4 @@ public class System {
 		// TODO: coerce APIs
 	}
 
-	/**
-	 * Returns whether the system should be affected by the in-game pause
-	 * 
-	 * @return boolean True if pausable
-	 */
-	public boolean isPausable() {
-		return pausable;
-	}
-
-	/**
-	 * Runs the update function of the Lua script on every entity
-	 */
-	public void update() {
-		for (LuaTable entityLua : entitiesLua) {
-			updateMethod.call(entityLua);
-		}
-	}
 }

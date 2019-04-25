@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="position">
+	<field type="INTEGER" name="x">0</field>
+	<field type="INTEGER" name="y">0</field>
+</component>

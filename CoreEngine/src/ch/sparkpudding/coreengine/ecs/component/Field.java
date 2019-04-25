@@ -1,4 +1,4 @@
-package ch.sparkpudding.coreengine.ecs;
+package ch.sparkpudding.coreengine.ecs.component;
 
 /**
  * Piece of data to be contained by a component, described by its name, the type
