@@ -1,8 +1,13 @@
 package ch.sparkpudding.sceneeditor.panel;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import ch.sparkpudding.coreengine.CoreEngine;
 
 /**
  * 
@@ -12,28 +17,53 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class PanelSidebarLeft extends JPanel {
 
-	private JButton btnPlay;
+	private JButton btnPausePlay;
 	private JButton btnReset;
 
 	private BoxLayout layout;
 
-	public PanelSidebarLeft() {
+	private CoreEngine ce;
+	
+	private final String PAUSE_TEXT = "Pause";
+	private final String PLAY_TEXT = "Play";
+
+	public PanelSidebarLeft(CoreEngine ce) {
+		this.ce = ce;
+
 		init();
 		setupLayout();
+		addListener();
 	}
 
 	private void init() {
 		layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 
-		btnPlay = new JButton("Play");
+		btnPausePlay = new JButton(PLAY_TEXT);
 		btnReset = new JButton("Reset");
 	}
 
 	private void setupLayout() {
 		setLayout(layout);
 
-		add(btnPlay);
+		add(btnPausePlay);
 		add(btnReset);
+	}
+
+	private void addListener() {
+		btnPausePlay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ce.togglePauseAll();
+				toggleTextPausePlay();
+			}
+		});
+	}
+	
+	private void toggleTextPausePlay() {
+		if (btnPausePlay.getText() == PLAY_TEXT)
+			btnPausePlay.setText(PAUSE_TEXT);
+		else
+			btnPausePlay.setText(PLAY_TEXT);
 	}
 
 }

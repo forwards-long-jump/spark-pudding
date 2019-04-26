@@ -3,6 +3,8 @@ package ch.sparkpudding.sceneeditor.panel;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import ch.sparkpudding.coreengine.CoreEngine;
+
 /**
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
@@ -18,7 +20,7 @@ public class PanelSidebarRight extends JPanel {
 
 	private BoxLayout layout;
 
-	public PanelSidebarRight() {
+	public PanelSidebarRight(CoreEngine ce) {
 		init();
 		setupLayout();
 	}

@@ -5,6 +5,7 @@ import java.awt.Color;
 
 import javax.swing.JFrame;
 
+import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.sceneeditor.menu.MenuBar;
 import ch.sparkpudding.sceneeditor.panel.PanelGame;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
@@ -27,21 +28,26 @@ public class FrameSceneEditor extends JFrame {
 	private PanelSidebarLeft panelSidebarLeft;
 	private PanelGame panelGame;
 	private BorderLayout borderLayout;
+	
+	private CoreEngine ce;
 
-	public FrameSceneEditor() {
-		init();
+	public FrameSceneEditor(String gameFolder) throws Exception {
+		init(gameFolder);
 		setupLayout();
 		setupFrame();
 	}
 
-	private void init() {
+	private void init(String gameFolder) throws Exception {
 		borderLayout = new BorderLayout();
 
 		menuBar = new MenuBar();
 
-		panelSidebarRight = new PanelSidebarRight();
-		panelSidebarLeft = new PanelSidebarLeft();
-		panelGame = new PanelGame();
+		ce = new CoreEngine(gameFolder);
+		ce.togglePauseAll();
+		
+		panelSidebarRight = new PanelSidebarRight(ce);
+		panelSidebarLeft = new PanelSidebarLeft(ce);
+		panelGame = new PanelGame(ce);
 	}
 
 	private void setupLayout() {
@@ -55,7 +61,6 @@ public class FrameSceneEditor extends JFrame {
 		// FIXME Remove color
 		panelSidebarLeft.setBackground(Color.BLUE);
 		panelSidebarRight.setBackground(Color.RED);
-		panelGame.setBackground(Color.GREEN);
 	}
 
 	private void setupFrame() {

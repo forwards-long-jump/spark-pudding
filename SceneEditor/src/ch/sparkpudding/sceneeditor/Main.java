@@ -8,7 +8,12 @@ package ch.sparkpudding.sceneeditor;
 public class Main {
 
 	public static void main(String[] args) {
-		new FrameSceneEditor();
+		try {
+			new FrameSceneEditor(Main.class.getResource("/emptygame").getPath());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
