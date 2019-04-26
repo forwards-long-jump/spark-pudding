@@ -129,11 +129,8 @@ public abstract class System {
 		LuaValue k = LuaValue.NIL;
 		Varargs n = list.next(k);
 
-		for (int i = 1; i < 3; i++) {
-			// java.lang.System.out.println("name: " + n.arg(1).arg(1).tojstring());
-			// java.lang.System.out.println("table (?) :" + n.arg(2).arg(1).tojstring());
-		}
-
+		// name: n.arg(1).arg(1).tojstring()
+		// table (?) : n.arg(2).arg(1).tojstring()
 		if (n.arg(2).arg(1).istable()) {
 			// System needs multiple lists of entities
 			while (!(k = n.arg(1)).isnil()) {
@@ -153,7 +150,6 @@ public abstract class System {
 			}
 
 		} else {
-			// java.lang.System.out.println("what");
 			// System needs only one list of entities
 			List<String> components = new ArrayList<String>();
 			while (!(k = n.arg(1)).isnil()) {
