@@ -50,7 +50,12 @@ public class UpdateSystem extends System {
 
 		readMethodsFromLua();
 
-		pausable = isPausableMethod.call().toboolean();
+		if(isPausableMethod.isnil()) {
+			pausable = false;
+		}
+		else {			
+			pausable = isPausableMethod.call().toboolean();
+		}
 	}
 
 	/**
