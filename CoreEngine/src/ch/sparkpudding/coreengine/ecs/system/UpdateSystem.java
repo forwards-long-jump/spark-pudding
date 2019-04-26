@@ -66,8 +66,6 @@ public class UpdateSystem extends System {
 	 * Runs the update function of the Lua script on every entity
 	 */
 	public void update() {
-		for (LuaTable entityLua : entitiesLua) {
-			updateMethod.call(entityLua);
-		}
+		updateMethod.call();
 	}
 }

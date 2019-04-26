@@ -40,7 +40,6 @@ public abstract class System {
 	private LuaValue metatableSetterMethod;
 	private LuaValue getRequiredComponentsMethod;
 
-	protected List<LuaTable> entitiesLua;
 	protected Globals globals;
 	protected CoreEngine coreEngine;
 
@@ -64,7 +63,6 @@ public abstract class System {
 	public void reload() {
 		globals = new Globals();
 		componentNames = new HashMap<String, List<String>>();
-		entitiesLua = new ArrayList<LuaTable>();
 
 		loadLuaLibs();
 		loadLuaSystem();
@@ -202,7 +200,6 @@ public abstract class System {
 					entityLua.set(component.getName(), componentLua);
 				}
 				entitiesTableLua.set(entity.getName(), entityLua);
-				entitiesLua.add(entityLua);
 			}
 
 			// Lua code has access to all of these entities via the name of the list
