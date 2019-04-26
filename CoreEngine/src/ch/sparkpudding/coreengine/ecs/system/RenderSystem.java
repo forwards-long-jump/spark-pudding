@@ -51,8 +51,6 @@ public class RenderSystem extends System {
 	 */
 	public void render(Graphics2D g) {
 		LuaValue luaG = CoerceJavaToLua.coerce(g);
-		for (LuaTable entityLua : entitiesLua) {
-			renderMethod.call(entityLua, luaG);
-		}
+		renderMethod.call(luaG);
 	}
 }

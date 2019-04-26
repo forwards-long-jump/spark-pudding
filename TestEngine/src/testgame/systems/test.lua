@@ -1,5 +1,6 @@
 function getRequiredComponents()
-	return {"position"}
+	return {rectangle = {"position", "size"},
+	        point = {"position"}}
 end
 
 function isPausable()
@@ -8,7 +9,9 @@ end
 
 timer = 0
 
-function update(entity)
+function update()
   timer = (timer + 0.07) % 360
-  entity.position.x = 50 + 50 * math.sin(timer)
+  for name, rect in pairs(rectangle) do
+    rect.position.x = 500 + 500 * math.sin(timer)
+  end
 end

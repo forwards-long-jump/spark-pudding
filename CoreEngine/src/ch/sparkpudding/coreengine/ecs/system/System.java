@@ -2,7 +2,10 @@ package ch.sparkpudding.coreengine.ecs.system;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
@@ -32,8 +35,7 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
 public abstract class System {
 	private String filepath;
 
-	private List<String> componentNames;
-	private List<Entity> entities;
+	private Map<String, List<String>> componentNames;
 
 	private LuaValue metatableSetterMethod;
 	private LuaValue getRequiredComponentsMethod;
@@ -61,14 +63,14 @@ public abstract class System {
 	 */
 	public void reload() {
 		globals = new Globals();
-		componentNames = new ArrayList<String>();
+		componentNames = new HashMap<String, List<String>>();
 		entitiesLua = new ArrayList<LuaTable>();
-		entities = new ArrayList<Entity>();
 
 		loadLuaLibs();
 		loadLuaSystem();
 		injectMetatableSetter();
 		readMethodsFromLua();
+		// TODO: coerce APIs
 
 		loadRequiredComponents();
 	}
@@ -128,9 +130,39 @@ public abstract class System {
 		// list iteration in LuaJ
 		LuaValue k = LuaValue.NIL;
 		Varargs n = list.next(k);
-		while (!(k = n.arg(1)).isnil()) {
-			componentNames.add(n.arg(2).tojstring());
-			n = list.next(k);
+
+		for (int i = 1; i < 3; i++) {
+			// java.lang.System.out.println("name: " + n.arg(1).arg(1).tojstring());
+			// java.lang.System.out.println("table (?) :" + n.arg(2).arg(1).tojstring());
+		}
+
+		if (n.arg(2).arg(1).istable()) {
+			// System needs multiple lists of entities
+			while (!(k = n.arg(1)).isnil()) {
+				List<String> components = new ArrayList<String>();
+				String fieldName = n.arg(1).tojstring();
+
+				LuaValue j = LuaValue.NIL;
+				Varargs m = n.arg(2).arg(1).next(j);
+				while (!(j = m.arg(1)).isnil()) {
+					components.add(m.arg(2).tojstring());
+					m = n.arg(2).next(j);
+				}
+
+				componentNames.put(fieldName, components);
+
+				n = list.next(k);
+			}
+
+		} else {
+			// java.lang.System.out.println("what");
+			// System needs only one list of entities
+			List<String> components = new ArrayList<String>();
+			while (!(k = n.arg(1)).isnil()) {
+				components.add(n.arg(2).tojstring());
+				n = list.next(k);
+			}
+			componentNames.put("entities", components);
 		}
 	}
 
@@ -140,40 +172,42 @@ public abstract class System {
 	 * @param newEntities List of entities of the new scene
 	 */
 	public void setEntities(List<Entity> newEntities) {
-		entities.clear();
-		// Check entities for compatibility with system
-		for (Entity entity : newEntities) {
-			if (entity.hasComponents(componentNames)) {
-				entities.add(entity);
-			}
-		}
+		for (Entry<String, List<String>> entityNames : componentNames.entrySet()) {
 
-		// Build Lua instances of entites for greater ergonomy in lua code
-		LuaTable entitiesTableLua = new LuaTable();
-		for (Entity entity : entities) {
-			// entity
-			LuaTable entityLua = new LuaTable();
-			for (Component component : entity.getComponents().values()) {
-				// entity.component
-				LuaTable componentLua = new LuaTable();
-
-				for (Field field : component.getFields().values()) {
-					// entity.component.field
-					LuaValue fieldLua = CoerceJavaToLua.coerce(field);
-					componentLua.set("_" + field.getName(), fieldLua);
+			List<Entity> entities = new ArrayList<Entity>();
+			
+			// Check entities for compatibility with system
+			for (Entity entity : newEntities) {
+				if (entity.hasComponents(entityNames.getValue())) {
+					entities.add(entity);
 				}
-
-				metatableSetterMethod.call(componentLua);
-				entityLua.set(component.getName(), componentLua);
 			}
-			entitiesTableLua.set(entity.getName(), entityLua);
-			entitiesLua.add(entityLua);
+
+			// Build Lua instances of entites for greater ergonomy in lua code
+			LuaTable entitiesTableLua = new LuaTable();
+			for (Entity entity : entities) {
+				// entity
+				LuaTable entityLua = new LuaTable();
+				for (Component component : entity.getComponents().values()) {
+					// entity.component
+					LuaTable componentLua = new LuaTable();
+
+					for (Field field : component.getFields().values()) {
+						// entity.component.field
+						LuaValue fieldLua = CoerceJavaToLua.coerce(field);
+						componentLua.set("_" + field.getName(), fieldLua);
+					}
+
+					metatableSetterMethod.call(componentLua);
+					entityLua.set(component.getName(), componentLua);
+				}
+				entitiesTableLua.set(entity.getName(), entityLua);
+				entitiesLua.add(entityLua);
+			}
+
+			// Lua code has access to all of these entities via the name of the list
+			globals.set(entityNames.getKey(), entitiesTableLua);
 		}
-
-		// Lua code has access to all of these entites
-		globals.set("entities", entitiesTableLua);
-
-		// TODO: coerce APIs
 	}
 
 }
