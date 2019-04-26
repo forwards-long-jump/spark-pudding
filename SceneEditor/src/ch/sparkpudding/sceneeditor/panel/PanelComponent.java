@@ -1,14 +1,6 @@
 package ch.sparkpudding.sceneeditor.panel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JPanel;
-
-import ch.sparkpudding.coreengine.ecs.component.Component;
-import ch.sparkpudding.coreengine.ecs.component.Field;
-import ch.sparkpudding.coreengine.ecs.component.Field.FieldType;
-import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
 
 /**
  * 
