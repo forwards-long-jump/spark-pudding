@@ -2,7 +2,6 @@ package ch.sparkpudding.coreengine.ecs.system;
 
 import java.io.File;
 
-import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
 import ch.sparkpudding.coreengine.CoreEngine;

@@ -35,7 +35,7 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
 public abstract class System {
 	private String filepath;
 
-	private Map<String, List<String>> componentNames;
+	private Map<String, List<String>> componentGroups;
 
 	private LuaValue metatableSetterMethod;
 	private LuaValue getRequiredComponentsMethod;
@@ -62,7 +62,7 @@ public abstract class System {
 	 */
 	public void reload() {
 		globals = new Globals();
-		componentNames = new HashMap<String, List<String>>();
+		componentGroups = new HashMap<String, List<String>>();
 
 		loadLuaLibs();
 		loadLuaSystem();
@@ -98,20 +98,20 @@ public abstract class System {
 	 * globals
 	 */
 	protected void readMethodsFromLua() {
-		metatableSetterMethod = globals.get("setmt");
+		metatableSetterMethod = globals.get("setMetatable");
 		getRequiredComponentsMethod = globals.get("getRequiredComponents");
 	}
 
 	/**
-	 * Add a setmt lua function to the system globals
+	 * Add a setMetatable lua function to the system globals
 	 * 
-	 * setmt(luaComponent) creates the metatable to get and set component fields
-	 * value easily
+	 * setMetatable(luaComponent) creates the metatable to get and set component
+	 * fields value easily
 	 */
 	private void injectMetatableSetter() {
 		// See the Lua doc about metatables to get a better idea on what's happening
 		// here
-		LuaValue chunk = globals.load("function setmt(component)\n" + "local mt = {}\n"
+		LuaValue chunk = globals.load("function setMetatable(component)\n" + "local mt = {}\n"
 				+ "mt.__index = function (self, key)\n" + "return self[\"_\" .. key]:getValue()\n" + "end\n"
 				+ "mt.__newindex = function (self, key, value)\n" + "self[\"_\" .. key]:setValue(value)\n" + "end\n"
 				+ "setmetatable(component, mt)\n" + "end");
@@ -122,41 +122,45 @@ public abstract class System {
 	 * Updates the component names list according to lua file
 	 */
 	private void loadRequiredComponents() {
-		componentNames.clear();
-		LuaTable list = (LuaTable) getRequiredComponentsMethod.call();
+		componentGroups.clear();
+		LuaTable list = (LuaTable) getRequiredComponentsMethod.call(); // Return { entity = {"comp1", "comp2"}}
 
 		// list iteration in LuaJ
-		LuaValue k = LuaValue.NIL;
-		Varargs n = list.next(k);
+		LuaValue key = LuaValue.NIL;
+		Varargs entry = list.next(key);
 
-		// name: n.arg(1).arg(1).tojstring()
-		// table (?) : n.arg(2).arg(1).tojstring()
-		if (n.arg(2).arg(1).istable()) {
+		// entry.arg(1): key
+		// entry.arg(2): value
+		
+		// entry.arg(2) is either {"comp1", "comp2"} or "comp" depending on the returned value
+		if (entry.arg(2).istable()) {
 			// System needs multiple lists of entities
-			while (!(k = n.arg(1)).isnil()) {
+			while (!(key = entry.arg(1)).isnil()) {
 				List<String> components = new ArrayList<String>();
-				String fieldName = n.arg(1).tojstring();
+				String fieldName = entry.arg(1).tojstring();
 
-				LuaValue j = LuaValue.NIL;
-				Varargs m = n.arg(2).arg(1).next(j);
-				while (!(j = m.arg(1)).isnil()) {
-					components.add(m.arg(2).tojstring());
-					m = n.arg(2).next(j);
+				LuaValue innerKey = LuaValue.NIL;
+				Varargs innerEntry = entry.arg(2).next(innerKey);
+				// Read all strings from the table
+				while (!(innerKey = innerEntry.arg(1)).isnil()) {
+					components.add(innerEntry.arg(2).tojstring());
+					innerEntry = entry.arg(2).next(innerKey);
 				}
 
-				componentNames.put(fieldName, components);
+				componentGroups.put(fieldName, components);
 
-				n = list.next(k);
+				entry = list.next(key);
 			}
 
 		} else {
 			// System needs only one list of entities
 			List<String> components = new ArrayList<String>();
-			while (!(k = n.arg(1)).isnil()) {
-				components.add(n.arg(2).tojstring());
-				n = list.next(k);
+			// Read all strings from the table
+			while (!(key = entry.arg(1)).isnil()) {
+				components.add(entry.arg(2).tojstring());
+				entry = list.next(key);
 			}
-			componentNames.put("entities", components);
+			componentGroups.put("entities", components);
 		}
 	}
 
@@ -166,13 +170,13 @@ public abstract class System {
 	 * @param newEntities List of entities of the new scene
 	 */
 	public void setEntities(List<Entity> newEntities) {
-		for (Entry<String, List<String>> entityNames : componentNames.entrySet()) {
+		for (Entry<String, List<String>> componentList : componentGroups.entrySet()) {
 
 			List<Entity> entities = new ArrayList<Entity>();
-			
+
 			// Check entities for compatibility with system
 			for (Entity entity : newEntities) {
-				if (entity.hasComponents(entityNames.getValue())) {
+				if (entity.hasComponents(componentList.getValue())) {
 					entities.add(entity);
 				}
 			}
@@ -199,7 +203,7 @@ public abstract class System {
 			}
 
 			// Lua code has access to all of these entities via the name of the list
-			globals.set(entityNames.getKey(), entitiesTableLua);
+			globals.set(componentList.getKey(), entitiesTableLua);
 		}
 	}
 
