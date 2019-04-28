@@ -20,6 +20,7 @@ import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JseMathLib;
 
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.api.Core;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
@@ -78,8 +79,11 @@ public abstract class System {
 	 * Load APIs and make them accessible trough the "game" variable
 	 */
 	private void loadApis() {
-		this.apiTable = new LuaTable();
-		globals.set("game", this.apiTable);
+		apiTable = new LuaTable();
+		globals.set("game", apiTable);
+		
+		Core coreApi = new Core(coreEngine);
+		apiTable.set("core", CoerceJavaToLua.coerce(coreApi));
 	}
 
 	/**

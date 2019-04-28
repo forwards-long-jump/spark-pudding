@@ -51,12 +51,15 @@ public class CoreEngine extends JPanel {
 
 	private Dimension renderSize;
 	private Color blackBarColor;
+	
+	private int tick;
 
 	public CoreEngine(String gameFolder) throws Exception {
 		this.input = new Input(this);
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
+		this.tick = 0;
 		
 		this.lelFile = new LelFile(gameFolder);
 		populateComponentTemplates();
@@ -149,6 +152,7 @@ public class CoreEngine extends JPanel {
 
 			if (lag >= msPerUpdate) {
 				do {
+					tick++;
 					update();
 					lag -= msPerUpdate;
 				} while (lag >= msPerUpdate);
@@ -283,10 +287,18 @@ public class CoreEngine extends JPanel {
 			g2d.fillRect(0, 0, getWidth(), translateY);
 			g2d.fillRect(0, translateY + realGameHeight, getWidth() + 1, translateY + 1);
 		}
-		
+
 		g.dispose();
 		// Source:
 		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
 		java.awt.Toolkit.getDefaultToolkit().sync();
+	}
+
+	/**
+	 * Getter for tick. Tick is increased by 1 every update
+	 * @return current tick
+	 */
+	public int getTick() {
+		return tick;
 	}
 }
