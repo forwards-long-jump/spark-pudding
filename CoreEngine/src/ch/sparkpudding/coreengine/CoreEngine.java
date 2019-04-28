@@ -215,10 +215,13 @@ public class CoreEngine extends JPanel {
 	 * Sets scene as current scene, and reloads it if demanded
 	 * 
 	 * @param name  Name of the Scene
-	 * @param reset The scene will be reloaded when set to true
+	 * @param reset The scene will be r	eloaded when set to true
 	 */
 	public void setScene(String name, boolean reset) {
-		// TODO: set current scene
+		setCurrentScene(scenes.get(name));
+		if(reset) {
+			resetScene();
+		}
 	}
 
 	/**
