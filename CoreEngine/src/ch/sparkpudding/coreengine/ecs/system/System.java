@@ -195,7 +195,7 @@ public abstract class System {
 				}
 			}
 
-			// Build Lua instances of entites for greater ergonomy in lua code
+			// Build Lua instances of entities
 			LuaTable entitiesTableLua = new LuaTable();
 			for (int i = 0; i < entities.size(); ++i) {
 				Entity entity = entities.get(i);
@@ -203,17 +203,21 @@ public abstract class System {
 				// entity
 				LuaTable entityLua = new LuaTable();
 				for (Component component : entity.getComponents().values()) {
-					// entity.component
-					LuaTable componentLua = new LuaTable();
+					
+					// We only give access to explicitly required components
+					if (componentList.getValue().contains(component.getName())) {
+						// entity.component
+						LuaTable componentLua = new LuaTable();
 
-					for (Field field : component.getFields().values()) {
-						// entity.component.field
-						LuaValue fieldLua = CoerceJavaToLua.coerce(field);
-						componentLua.set("_" + field.getName(), fieldLua);
+						for (Field field : component.getFields().values()) {
+							// entity.component.field
+							LuaValue fieldLua = CoerceJavaToLua.coerce(field);
+							componentLua.set("_" + field.getName(), fieldLua);
+						}
+
+						metatableSetterMethod.call(componentLua);
+						entityLua.set(component.getName(), componentLua);
 					}
-
-					metatableSetterMethod.call(componentLua);
-					entityLua.set(component.getName(), componentLua);
 				}
 
 				// Lua table starts at 1
