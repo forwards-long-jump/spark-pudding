@@ -1,5 +1,5 @@
 function getRequiredComponents()
-	return {"position"}
+  return {"position"}
 end
 
 function update()

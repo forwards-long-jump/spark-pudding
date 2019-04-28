@@ -5,6 +5,7 @@
 		<component template="color">
 			<field name="r">255</field>
 		</component>
+		<component template="player"/>
 		<component template="position">
 			<field name="y">100</field>
 		</component>
