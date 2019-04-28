@@ -1,5 +1,7 @@
 package ch.sparkpudding.coreengine;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.attribute.Size2DSyntax;
 import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -46,9 +49,15 @@ public class CoreEngine extends JPanel {
 	private List<UpdateSystem> systems;
 	private RenderSystem renderSystem;
 
+	private Dimension renderSize;
+	private Color blackBarColor;
+
 	public CoreEngine(String gameFolder) throws Exception {
 		this.input = new Input(this);
 
+		this.renderSize = new Dimension(1280, 720);
+		this.blackBarColor = Color.BLACK;
+		
 		this.lelFile = new LelFile(gameFolder);
 		populateComponentTemplates();
 		populateEntityTemplates();
@@ -228,15 +237,53 @@ public class CoreEngine extends JPanel {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+
+		// Calculate screen ratio for width / height
+		double scaleRatio = 1.0;
+		double heightScaleRatio = getHeight() / renderSize.getHeight();
+		double widthScaleRatio = getWidth() / renderSize.getWidth();
+
+		// Make sure the whole game is displayed by picking the smallest ratio
+		if (widthScaleRatio > heightScaleRatio) {
+			scaleRatio = heightScaleRatio;
+		} else {
+			scaleRatio = widthScaleRatio;
+		}
+		
+		// Calculate translation to center the game
+		int realGameWidth = (int) (scaleRatio * renderSize.getWidth());
+		int realGameHeight = (int) (scaleRatio * renderSize.getHeight());
+		
+		int translateX = getWidth() / 2 - realGameWidth / 2;
+		int translateY = getHeight() / 2 - realGameHeight / 2;
 
 		Graphics2D g2d = (Graphics2D) g;
 
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
+		
+		g2d.translate(translateX, translateY);
+		g2d.scale(scaleRatio, scaleRatio);
+		
 		renderSystem.render((Graphics2D) g);
+		
+		g2d.scale(1 / scaleRatio, 1 / scaleRatio);
+		g2d.translate(-translateX, -translateY);
 
+		// Draw black bar
+		g2d.setColor(blackBarColor);
+		if(widthScaleRatio > heightScaleRatio) {
+			// Vertical
+			g2d.fillRect(0, 0, translateX, getHeight());
+			g2d.fillRect(translateX + realGameWidth, 0, translateX + 1, getHeight() + 1);
+		}
+		else {
+			// Horizontal
+			g2d.fillRect(0, 0, getWidth(), translateY);
+			g2d.fillRect(0, translateY + realGameHeight, getWidth() + 1, translateY + 1);
+		}
+		
 		g.dispose();
 		// Source:
 		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
