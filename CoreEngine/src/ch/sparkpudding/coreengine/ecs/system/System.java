@@ -183,7 +183,9 @@ public abstract class System {
 
 			// Build Lua instances of entites for greater ergonomy in lua code
 			LuaTable entitiesTableLua = new LuaTable();
-			for (Entity entity : entities) {
+			for (int i = 0; i < entities.size(); ++i) {
+				Entity entity = entities.get(i);
+				
 				// entity
 				LuaTable entityLua = new LuaTable();
 				for (Component component : entity.getComponents().values()) {
@@ -199,7 +201,9 @@ public abstract class System {
 					metatableSetterMethod.call(componentLua);
 					entityLua.set(component.getName(), componentLua);
 				}
-				entitiesTableLua.set(entity.getName(), entityLua);
+				
+				// Lua table starts at 1
+				entitiesTableLua.set(i + 1, entityLua);
 			}
 
 			// Lua code has access to all of these entities via the name of the list
