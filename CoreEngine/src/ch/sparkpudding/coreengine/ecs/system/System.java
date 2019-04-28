@@ -21,8 +21,6 @@ import org.luaj.vm2.lib.jse.JseMathLib;
 
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.api.Core;
-import ch.sparkpudding.coreengine.ecs.component.Component;
-import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
 /**
@@ -38,7 +36,7 @@ public abstract class System {
 
 	private Map<String, List<String>> componentGroups;
 
-	private LuaValue metatableSetterMethod;
+	public static LuaValue metatableSetterMethod;
 	private LuaValue getRequiredComponentsMethod;
 
 	protected LuaValue apiTable;
@@ -81,7 +79,7 @@ public abstract class System {
 	private void loadApis() {
 		apiTable = new LuaTable();
 		globals.set("game", apiTable);
-		
+
 		Core coreApi = new Core(coreEngine);
 		apiTable.set("core", CoerceJavaToLua.coerce(coreApi));
 	}
@@ -200,28 +198,8 @@ public abstract class System {
 			for (int i = 0; i < entities.size(); ++i) {
 				Entity entity = entities.get(i);
 
-				// entity
-				LuaTable entityLua = new LuaTable();
-				for (Component component : entity.getComponents().values()) {
-					
-					// We only give access to explicitly required components
-					if (componentList.getValue().contains(component.getName())) {
-						// entity.component
-						LuaTable componentLua = new LuaTable();
-
-						for (Field field : component.getFields().values()) {
-							// entity.component.field
-							LuaValue fieldLua = CoerceJavaToLua.coerce(field);
-							componentLua.set("_" + field.getName(), fieldLua);
-						}
-
-						metatableSetterMethod.call(componentLua);
-						entityLua.set(component.getName(), componentLua);
-					}
-				}
-
 				// Lua table starts at 1
-				entitiesTableLua.set(i + 1, entityLua);
+				entitiesTableLua.set(i + 1, entity.coerceToLua(metatableSetterMethod, componentList.getValue()));
 			}
 
 			// Lua code has access to all of these entities via the name of the list
@@ -229,4 +207,20 @@ public abstract class System {
 		}
 	}
 
+	/**
+	 * Check if an entity should be handled by this system and add it if it's the
+	 * case
+	 * 
+	 * @param e entity
+	 */
+	public void tryAdd(Entity entity) {
+		for (Entry<String, List<String>> componentList : componentGroups.entrySet()) {
+			// Check entities for compatibility with system
+			if (entity.hasComponents(componentList.getValue())) {
+				LuaTable entityGroup = (LuaTable) globals.get(componentList.getKey());
+				entityGroup.set(entityGroup.keyCount() + 1,
+						entity.coerceToLua(metatableSetterMethod, componentList.getValue()));
+			}
+		}
+	}
 }
