@@ -67,7 +67,7 @@ public class UpdateSystem extends System {
 	}
 
 	/**
-	 * Runs the update function of the Lua script on every entity
+	 * Runs the update function of the Lua script, entities can be accessed using "global" lua variables
 	 */
 	public void update() {
 		updateMethod.call();

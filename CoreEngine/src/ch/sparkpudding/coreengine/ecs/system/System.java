@@ -137,7 +137,7 @@ public abstract class System {
 			// System needs multiple lists of entities
 			while (!(key = entry.arg(1)).isnil()) {
 				List<String> components = new ArrayList<String>();
-				String fieldName = entry.arg(1).tojstring();
+				String groupName = entry.arg(1).tojstring();
 
 				LuaValue innerKey = LuaValue.NIL;
 				Varargs innerEntry = entry.arg(2).next(innerKey);
@@ -147,7 +147,7 @@ public abstract class System {
 					innerEntry = entry.arg(2).next(innerKey);
 				}
 
-				componentGroups.put(fieldName, components);
+				componentGroups.put(groupName, components);
 
 				entry = list.next(key);
 			}
