@@ -7,4 +7,5 @@
 	<component template="size">
 		<field name="width">20</field>
 	</component>
+	<component template="color" />
 </entity-template>

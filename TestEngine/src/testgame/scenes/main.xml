@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene name="main">
 	<entity name="dummy" template="test-entity" z-index="1"/>
+	<entity name="dummy2" template="test-entity" z-index="1">
+		<component template="color">
+			<field name="r">255</field>
+		</component>
+		<component template="position">
+			<field name="y">100</field>
+		</component>
+	</entity>
 </scene>
