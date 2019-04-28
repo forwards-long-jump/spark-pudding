@@ -40,6 +40,7 @@ public abstract class System {
 	private LuaValue metatableSetterMethod;
 	private LuaValue getRequiredComponentsMethod;
 
+	protected LuaValue apiTable;
 	protected Globals globals;
 	protected CoreEngine coreEngine;
 
@@ -68,9 +69,17 @@ public abstract class System {
 		loadLuaSystem();
 		injectMetatableSetter();
 		readMethodsFromLua();
-		// TODO: coerce APIs
+		loadApis();
 
 		loadRequiredComponents();
+	}
+
+	/**
+	 * Load APIs and make them accessible trough the "game" variable
+	 */
+	private void loadApis() {
+		this.apiTable = new LuaTable();
+		globals.set("game", this.apiTable);
 	}
 
 	/**
@@ -131,8 +140,9 @@ public abstract class System {
 
 		// entry.arg(1): key
 		// entry.arg(2): value
-		
-		// entry.arg(2) is either {"comp1", "comp2"} or "comp" depending on the returned value
+
+		// entry.arg(2) is either {"comp1", "comp2"} or "comp" depending on the returned
+		// value
 		if (entry.arg(2).istable()) {
 			// System needs multiple lists of entities
 			while (!(key = entry.arg(1)).isnil()) {
@@ -185,7 +195,7 @@ public abstract class System {
 			LuaTable entitiesTableLua = new LuaTable();
 			for (int i = 0; i < entities.size(); ++i) {
 				Entity entity = entities.get(i);
-				
+
 				// entity
 				LuaTable entityLua = new LuaTable();
 				for (Component component : entity.getComponents().values()) {
@@ -201,7 +211,7 @@ public abstract class System {
 					metatableSetterMethod.call(componentLua);
 					entityLua.set(component.getName(), componentLua);
 				}
-				
+
 				// Lua table starts at 1
 				entitiesTableLua.set(i + 1, entityLua);
 			}
