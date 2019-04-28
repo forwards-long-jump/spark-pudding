@@ -1,4 +1,4 @@
-package ch.sparkpudding.coreengine;
+package ch.sparkpudding.coreengine.api;
 
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
@@ -82,12 +82,12 @@ public class Input {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				keys.put(e.getKeyCode(), true);
+				keys.put(e.getKeyCode(), false);
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				keys.put(e.getKeyCode(), false);
+				keys.put(e.getKeyCode(), true);
 			}
 		});
 
