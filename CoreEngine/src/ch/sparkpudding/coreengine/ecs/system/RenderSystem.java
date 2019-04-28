@@ -3,7 +3,6 @@ package ch.sparkpudding.coreengine.ecs.system;
 import java.awt.Graphics2D;
 import java.io.File;
 
-import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
@@ -43,7 +42,7 @@ public class RenderSystem extends System {
 
 		readMethodsFromLua();
 	}
-	
+
 	/**
 	 * Runs the render function of the Lua script on every entity
 	 * 
@@ -51,8 +50,6 @@ public class RenderSystem extends System {
 	 */
 	public void render(Graphics2D g) {
 		LuaValue luaG = CoerceJavaToLua.coerce(g);
-		for (LuaTable entityLua : entitiesLua) {
-			renderMethod.call(entityLua, luaG);
-		}
+		renderMethod.call(luaG);
 	}
 }
