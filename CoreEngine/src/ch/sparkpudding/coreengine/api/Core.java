@@ -26,4 +26,21 @@ public class Core {
 	public int getTick() {
 		return coreEngine.getTick();
 	}
+	
+	/**
+	 * Change current scene
+	 * @param name of the scene to display
+	 */
+	public void setScene(String name) {
+		coreEngine.setScene(name);
+	}
+	
+	/**
+	 * Change current scene
+	 * @param name of the scene to display
+	 * @param reset or not the new scene
+	 */
+	public void setScene(String name, boolean reset) {
+		coreEngine.setScene(name, reset);
+	}
 }
