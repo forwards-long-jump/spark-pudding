@@ -16,6 +16,10 @@ function update()
     if(game.input:isKeyDown(37)) then
       entity.position.x = entity.position.x - 5
     end
+    if(game.input:isKeyDown(32)) then
+      print(game.core)
+      game.core:setScene("test")
+    end
   end
 end
   
