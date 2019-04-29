@@ -57,6 +57,8 @@ public class Input {
 		keys = new HashMap<Integer, Boolean>();
 		mouseButtons = new HashMap<Integer, Boolean>();
 		mousePosition = new Point();
+		
+		panel.setFocusable(true);
 	}
 
 	/**
@@ -82,24 +84,25 @@ public class Input {
 	 * Update inputs, must be called before system update
 	 */
 	public void update() {
-		// Needed for listening to the keyboard
-		panel.requestFocusInWindow();
-
 		for (Integer key : keysPressed) {
 			keys.put(key, true);
 		}
+		keysPressed.clear();
 
 		for (Integer key : keysReleased) {
 			keys.put(key, false);
 		}
+		keysReleased.clear();
 
 		for (Integer key : mouseButtonsPressed) {
 			mouseButtons.put(key, true);
 		}
+		mouseButtonsPressed.clear();
 
 		for (Integer key : mouseButtonsReleased) {
 			mouseButtons.put(key, false);
 		}
+		mouseButtonsReleased.clear();
 
 		mousePosition = mousePositionBuffer;
 
