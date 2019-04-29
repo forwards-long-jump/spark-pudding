@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="bullet">
+	<component template="bullet" />
+	<component template="position" />
+	<component template="speed">
+		<field name="dx">6</field>
+	</component>
+	<component template="size">
+		<field name="width">20</field>
+		<field name="height">10</field>
+	</component>
+	<component template="color">
+		<field name="r">255</field>
+	</component>
+</entity-template>
