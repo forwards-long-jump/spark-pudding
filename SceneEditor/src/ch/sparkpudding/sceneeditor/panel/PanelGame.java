@@ -1,47 +1,34 @@
 package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 
-import javax.swing.Box;
 import javax.swing.JPanel;
 
 import ch.sparkpudding.sceneeditor.FrameSceneEditor;
 
 /**
+ * The panel which show the game
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ *         Creation Date : 29 avr. 2019
+ *
  */
 @SuppressWarnings("serial")
 public class PanelGame extends JPanel {
 
+	/**
+	 * ctor
+	 */
 	public PanelGame() {
-		init();
 		setupLayout();
 	}
 
-	private void init() {
-		FrameSceneEditor.ce.setSize(1280, 720);
-		FrameSceneEditor.ce.setPreferredSize(new Dimension(1280, 720));
-	}
-
+	/**
+	 * Setup the layout of the panel
+	 */
 	private void setupLayout() {
-		Box vbox = Box.createVerticalBox();
-		Box hbox = Box.createHorizontalBox();
-
-		hbox.add(Box.createHorizontalGlue());
-		hbox.add(FrameSceneEditor.ce);
-		hbox.add(Box.createHorizontalGlue());
-
-		vbox.add(Box.createVerticalGlue());
-		vbox.add(hbox);
-		vbox.add(Box.createVerticalGlue());
-
 		setLayout(new BorderLayout());
-		add(vbox, BorderLayout.CENTER);
 
-		setBackground(Color.GREEN);
+		add(FrameSceneEditor.coreEngine, BorderLayout.CENTER);
 	}
 }

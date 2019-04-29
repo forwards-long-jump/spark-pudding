@@ -12,9 +12,12 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
 
 /**
+ * Main frame containing the SceneEditor and a static reference to the core
+ * engine
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ *         Creation Date : 29 avr. 2019
+ *
  */
 @SuppressWarnings("serial")
 public class FrameSceneEditor extends JFrame {
@@ -29,16 +32,25 @@ public class FrameSceneEditor extends JFrame {
 	private PanelGame panelGame;
 	private BorderLayout borderLayout;
 
-	public static CoreEngine ce;
+	public static CoreEngine coreEngine;
 
+	/**
+	 * ctor
+	 * 
+	 * @param gameFolder the path to the folder containing the current game
+	 * @throws Exception thrown if the coreEngine can't read the gameFolder
+	 */
 	public FrameSceneEditor(String gameFolder) throws Exception {
-		FrameSceneEditor.ce = new CoreEngine(gameFolder);
+		FrameSceneEditor.coreEngine = new CoreEngine(gameFolder);
 
 		init();
 		setupLayout();
 		setupFrame();
 	}
 
+	/**
+	 * Initialize the different element of the frame
+	 */
 	private void init() {
 		borderLayout = new BorderLayout();
 
@@ -49,6 +61,9 @@ public class FrameSceneEditor extends JFrame {
 		panelGame = new PanelGame();
 	}
 
+	/**
+	 * Setup the layout of the frame
+	 */
 	private void setupLayout() {
 		setLayout(borderLayout);
 		setJMenuBar(menuBar);
@@ -62,6 +77,9 @@ public class FrameSceneEditor extends JFrame {
 		panelSidebarRight.setBackground(Color.RED);
 	}
 
+	/**
+	 * Setup the basic value of the Frame
+	 */
 	private void setupFrame() {
 		setSize(WIDTH, HEIGHT);
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);

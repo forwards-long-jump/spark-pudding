@@ -11,9 +11,11 @@ import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.FrameSceneEditor;
 
 /**
+ * The panel which show the different scene
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ *         Creation Date : 29 avr. 2019
+ *
  */
 @SuppressWarnings("serial")
 public class PanelScene extends JPanel {
@@ -22,6 +24,11 @@ public class PanelScene extends JPanel {
 
 	private JComboBox<String> comboBoxScenes;
 
+	/**
+	 * ctor
+	 * 
+	 * @param panelEntityTree the panel which show the entities of a scene
+	 */
 	public PanelScene(PanelEntityTree panelEntityTree) {
 		this.panelEntityTree = panelEntityTree;
 
@@ -30,29 +37,38 @@ public class PanelScene extends JPanel {
 		addListener();
 	}
 
+	/**
+	 * Initialize the different element of the panel
+	 */
 	private void init() {
 		comboBoxScenes = new JComboBox<String>();
 
-		for (Scene scene : FrameSceneEditor.ce.getScenes().values()) {
+		for (Scene scene : FrameSceneEditor.coreEngine.getScenes().values()) {
 			comboBoxScenes.addItem(scene.getName());
 		}
 
-		comboBoxScenes.setSelectedItem(FrameSceneEditor.ce.getCurrentScene().getName());
+		comboBoxScenes.setSelectedItem(FrameSceneEditor.coreEngine.getCurrentScene().getName());
 	}
 
+	/**
+	 * Setup the layout of the panel
+	 */
 	private void setupLayout() {
 		setLayout(new FlowLayout());
 
 		add(comboBoxScenes);
 	}
 
+	/**
+	 * Add the different listener for each element of the panel
+	 */
 	private void addListener() {
 		comboBoxScenes.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				FrameSceneEditor.ce
-						.setCurrentScene(FrameSceneEditor.ce.getScenes().get(comboBoxScenes.getSelectedItem()));
+				FrameSceneEditor.coreEngine
+						.setCurrentScene(FrameSceneEditor.coreEngine.getScenes().get(comboBoxScenes.getSelectedItem()));
 			}
 		});
 	}
