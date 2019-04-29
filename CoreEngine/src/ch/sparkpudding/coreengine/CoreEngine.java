@@ -197,6 +197,11 @@ public class CoreEngine extends JPanel {
 	public void setScene(String name) {
 		setScene(name, false);
 	}
+	
+	public Map<String, Scene> getScenes()
+	{
+		return scenes;
+	}
 
 	/**
 	 * Sets scene as current scene, and reloads it if demanded
