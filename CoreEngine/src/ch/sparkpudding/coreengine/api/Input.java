@@ -14,11 +14,14 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 /**
- * Keeps tabs of all keyboard and mouse inputs for the game. Should be updated once before all systems are.
+ * Keeps tabs of all keyboard and mouse inputs for the game. Should be updated
+ * once before all systems are.
+ * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
 public class Input {
+	private static Input instance;
 
 	// Values read by the panel
 	private List<Integer> keysPressed;
@@ -36,7 +39,12 @@ public class Input {
 
 	private JPanel panel;
 
-	public Input(JPanel panel) {
+	/**
+	 * Handle key and mouse actions
+	 * 
+	 * @param panel
+	 */
+	private Input(JPanel panel) {
 		this.panel = panel;
 		createListeners();
 
@@ -51,32 +59,57 @@ public class Input {
 		mousePosition = new Point();
 	}
 
+	/**
+	 * Get Input API instance
+	 * 
+	 * @return Core
+	 */
+	public static Input getInstance() {
+		return instance;
+	}
+
+	/**
+	 * Init the API. We do not test instance so init must be called before any
+	 * getInstance!
+	 * 
+	 * @param panel
+	 */
+	public static void init(JPanel panel) {
+		instance = new Input(panel);
+	}
+
+	/**
+	 * Update inputs, must be called before system update
+	 */
 	public void update() {
 		// Needed for listening to the keyboard
 		panel.requestFocusInWindow();
-		
+
 		for (Integer key : keysPressed) {
 			keys.put(key, true);
 		}
-		
+
 		for (Integer key : keysReleased) {
 			keys.put(key, false);
 		}
-		
+
 		for (Integer key : mouseButtonsPressed) {
 			mouseButtons.put(key, true);
 		}
-		
+
 		for (Integer key : mouseButtonsReleased) {
 			mouseButtons.put(key, false);
 		}
-		
+
 		mousePosition = mousePositionBuffer;
-		
+
 		mouseClicked = mouseClickedBuffer;
 		mouseClickedBuffer = false;
 	}
 
+	/**
+	 * Add listeners to the panel
+	 */
 	public void createListeners() {
 		panel.addKeyListener(new KeyAdapter() {
 
@@ -108,14 +141,14 @@ public class Input {
 				mouseClickedBuffer = true;
 			}
 		});
-		
+
 		panel.addMouseMotionListener(new MouseMotionAdapter() {
-			
+
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				mousePositionBuffer = e.getPoint();
 			}
-			
+
 			// This stays commented in case we ever want to add it later
 //			@Override
 //			public void mouseDragged(MouseEvent e) {
@@ -125,19 +158,40 @@ public class Input {
 		});
 	}
 
+	/**
+	 * Return the state of specified key
+	 * 
+	 * @param keyCode
+	 * @return the state of specified key
+	 */
 	public boolean isKeyDown(int keyCode) {
 		return keys.getOrDefault(keyCode, false);
 	}
-	
+
+	/**
+	 * Return the state of specified mouse button
+	 * 
+	 * @param keyCode
+	 * @return the state of specified mouse button
+	 */
 	public boolean isMouseButtonDown(int keyCode) {
 		return mouseButtons.getOrDefault(keyCode, false);
 	}
-	
-	public boolean isMouseClicked()
-	{
+
+	/**
+	 * Return true if the mouse was clicked
+	 * 
+	 * @return true if the mouse was clicked
+	 */
+	public boolean isMouseClicked() {
 		return mouseClicked;
 	}
-	
+
+	/**
+	 * Return the mouse position relative to the jpanel
+	 * 
+	 * @return mouse position relative to the jpanel
+	 */
 	public Point getMousePosition() {
 		return mousePosition;
 	}

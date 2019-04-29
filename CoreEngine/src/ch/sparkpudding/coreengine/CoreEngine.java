@@ -17,6 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import ch.sparkpudding.coreengine.api.Core;
 import ch.sparkpudding.coreengine.api.Input;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
@@ -54,14 +55,24 @@ public class CoreEngine extends JPanel {
 
 	private int tick;
 
+	/**
+	 * The heart of the Ludic Engine in Lua
+	 * 
+	 * @param gameFolder Location of the game file
+	 * @throws Exception All kind of things, really. Ranging from thread to lua
+	 *                   errors.
+	 */
 	public CoreEngine(String gameFolder) throws Exception {
-		this.input = new Input(this);
+		initAPIs();
+
+		this.input = Input.getInstance();
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
 		this.tick = 0;
 
 		this.lelFile = new LelFile(gameFolder);
+
 		populateComponentTemplates();
 		populateEntityTemplates();
 		populateScenes();
@@ -72,6 +83,14 @@ public class CoreEngine extends JPanel {
 		new Thread(() -> {
 			startGame();
 		}).start();
+	}
+
+	/**
+	 * Init all singleton APIs
+	 */
+	private void initAPIs() {
+		Core.init(this);
+		Input.init(this);
 	}
 
 	/**
@@ -307,6 +326,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Add an entity to current scene and notify systems
+	 * 
 	 * @param e entity to add
 	 */
 	public void addEntity(Entity e) {

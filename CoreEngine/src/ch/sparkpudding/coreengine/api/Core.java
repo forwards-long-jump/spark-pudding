@@ -14,13 +14,31 @@ import ch.sparkpudding.coreengine.ecs.system.System;
  */
 public class Core {
 	private CoreEngine coreEngine;
-
+	private static Core instance;
+	
 	/**
 	 * ctor
 	 * @param coreEngine
 	 */
-	public Core(CoreEngine coreEngine) {
+	private Core(CoreEngine coreEngine) {
 		this.coreEngine = coreEngine;
+	}
+	
+	/**
+	 * Init the API. We do not test instance so init must be called before any getInstance!
+	 * @param coreEngine
+	 */
+	public static void init(CoreEngine coreEngine) {
+		instance = new Core(coreEngine);
+	}
+	
+	/**
+	 * Get Core API instance
+	 * 
+	 * @return Core
+	 */
+	public static Core getInstance() {
+		return instance;
 	}
 
 	/**
