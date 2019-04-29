@@ -10,7 +10,9 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class PanelEntity extends JPanel {
 
-	public PanelEntity() {
+	private PanelComponent panelComponent;
 
+	public PanelEntity(PanelComponent panelComponent) {
+		this.panelComponent = panelComponent;
 	}
 }

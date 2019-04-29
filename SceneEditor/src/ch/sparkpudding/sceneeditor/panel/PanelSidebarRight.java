@@ -26,10 +26,10 @@ public class PanelSidebarRight extends JPanel {
 	private void init() {
 		layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 
-		panelScene = new PanelScene();
-		panelEntityTree = new PanelEntityTree();
-		panelEntity = new PanelEntity();
 		panelComponent = new PanelComponent();
+		panelEntity = new PanelEntity(panelComponent);
+		panelEntityTree = new PanelEntityTree(panelEntity);
+		panelScene = new PanelScene(panelEntityTree);
 	}
 
 	private void setupLayout() {
