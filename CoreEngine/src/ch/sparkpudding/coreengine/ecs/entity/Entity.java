@@ -190,18 +190,43 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		Entity.templates = templates;
 	}
 
+	/**
+	 * Add an entity to the template list
+	 * 
+	 * @param template
+	 */
 	public static void addTemplate(Entity template) {
 		templates.put(template.getName(), template);
 	}
 
+	/**
+	 * Return true if entity has all specified components
+	 * 
+	 * @param componentNames
+	 * @return true if entity has all specified components
+	 */
 	public boolean hasComponents(List<String> componentNames) {
 		return components.keySet().containsAll(componentNames);
 	}
 
+	/**
+	 * Convert this entity to a LuaTable in the form of entity.component.field
+	 * 
+	 * @param metatableSetterMethod System.metableSetterMethod
+	 * @return
+	 */
 	public LuaTable coerceToLua(LuaValue metatableSetterMethod) {
 		return coerceToLua(metatableSetterMethod, new ArrayList<String>());
 	}
 
+	/**
+	 * Convert this entity to a Luatable in the form of entity.component.field
+	 * Supports filtering. Pass an empty list for no filters
+	 * 
+	 * @param metatableSetterMethod System.metableSetterMethod
+	 * @param componentFilter       List<String>
+	 * @return
+	 */
 	public LuaTable coerceToLua(LuaValue metatableSetterMethod, List<String> componentFilter) {
 		// entity
 		LuaTable entityLua = new LuaTable();
