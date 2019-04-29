@@ -1,14 +1,11 @@
 function getRequiredComponents()
-	return {"position"}
+  return {"position"}
 end
 
-function isPausable()
-	return false
-end
+function update()
+  timer = game.core:getTick()
 
-timer = 0
-
-function update(entity)
-  timer = (timer + 0.07) % 360
-  entity.position.x = 50 + 50 * math.sin(timer)
+  for i, entity in ipairs(entities) do
+    entity.position.x = 50 + 50 * math.sin(timer*0.1)
+  end
 end
