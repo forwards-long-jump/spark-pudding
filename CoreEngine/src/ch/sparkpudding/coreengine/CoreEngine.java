@@ -186,6 +186,15 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * Return all the scenes
+	 * 
+	 * @return Scenes
+	 */
+	public Map<String, Scene> getScenes() {
+		return scenes;
+	}
+
+	/**
 	 * Add scene to scenes list
 	 * 
 	 * @param name Name of the scene
