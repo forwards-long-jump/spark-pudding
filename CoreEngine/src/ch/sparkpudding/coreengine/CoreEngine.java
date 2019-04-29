@@ -187,8 +187,9 @@ public class CoreEngine extends JPanel {
 	 * Runs all systems once
 	 */
 	private void update() {
-		if (pauseAll)
+		if (pauseAll) {
 			return;
+		}
 
 		for (UpdateSystem system : systems) {
 			system.update();
