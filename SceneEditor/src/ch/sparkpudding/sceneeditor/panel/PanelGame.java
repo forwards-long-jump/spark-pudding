@@ -7,7 +7,7 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.JPanel;
 
-import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.sceneeditor.FrameSceneEditor;
 
 /**
  * 
@@ -16,27 +16,23 @@ import ch.sparkpudding.coreengine.CoreEngine;
  */
 @SuppressWarnings("serial")
 public class PanelGame extends JPanel {
-	
-	private CoreEngine ce;
 
-	public PanelGame(CoreEngine ce) throws Exception {
-		this.ce = ce;
-		
+	public PanelGame() {
 		init();
 		setupLayout();
 	}
 
-	private void init() throws Exception {
-		ce.setSize(1280, 720);
-		ce.setPreferredSize(new Dimension(1280, 720));
+	private void init() {
+		FrameSceneEditor.ce.setSize(1280, 720);
+		FrameSceneEditor.ce.setPreferredSize(new Dimension(1280, 720));
 	}
 
-	private void setupLayout() {		
+	private void setupLayout() {
 		Box vbox = Box.createVerticalBox();
 		Box hbox = Box.createHorizontalBox();
 
 		hbox.add(Box.createHorizontalGlue());
-		hbox.add(this.ce);
+		hbox.add(FrameSceneEditor.ce);
 		hbox.add(Box.createHorizontalGlue());
 
 		vbox.add(Box.createVerticalGlue());
@@ -45,7 +41,7 @@ public class PanelGame extends JPanel {
 
 		setLayout(new BorderLayout());
 		add(vbox, BorderLayout.CENTER);
-		
+
 		setBackground(Color.GREEN);
 	}
 }

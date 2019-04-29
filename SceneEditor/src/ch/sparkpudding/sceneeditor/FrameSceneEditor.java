@@ -28,26 +28,25 @@ public class FrameSceneEditor extends JFrame {
 	private PanelSidebarLeft panelSidebarLeft;
 	private PanelGame panelGame;
 	private BorderLayout borderLayout;
-	
-	private CoreEngine ce;
+
+	public static CoreEngine ce;
 
 	public FrameSceneEditor(String gameFolder) throws Exception {
-		init(gameFolder);
+		FrameSceneEditor.ce = new CoreEngine(gameFolder);
+
+		init();
 		setupLayout();
 		setupFrame();
 	}
 
-	private void init(String gameFolder) throws Exception {
+	private void init() {
 		borderLayout = new BorderLayout();
 
 		menuBar = new MenuBar();
 
-		ce = new CoreEngine(gameFolder);
-		ce.togglePauseAll();
-		
-		panelSidebarRight = new PanelSidebarRight(ce);
-		panelSidebarLeft = new PanelSidebarLeft(ce);
-		panelGame = new PanelGame(ce);
+		panelSidebarRight = new PanelSidebarRight();
+		panelSidebarLeft = new PanelSidebarLeft();
+		panelGame = new PanelGame();
 	}
 
 	private void setupLayout() {

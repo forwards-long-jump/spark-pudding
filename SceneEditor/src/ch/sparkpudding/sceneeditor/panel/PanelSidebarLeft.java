@@ -7,7 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.sceneeditor.FrameSceneEditor;
 
 /**
  * 
@@ -22,14 +22,10 @@ public class PanelSidebarLeft extends JPanel {
 
 	private BoxLayout layout;
 
-	private CoreEngine ce;
-	
 	private final String PAUSE_TEXT = "Pause";
 	private final String PLAY_TEXT = "Play";
 
-	public PanelSidebarLeft(CoreEngine ce) {
-		this.ce = ce;
-
+	public PanelSidebarLeft() {
 		init();
 		setupLayout();
 		addListener();
@@ -53,12 +49,12 @@ public class PanelSidebarLeft extends JPanel {
 		btnPausePlay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ce.togglePauseAll();
+				FrameSceneEditor.ce.togglePauseAll();
 				toggleTextPausePlay();
 			}
 		});
 	}
-	
+
 	private void toggleTextPausePlay() {
 		if (btnPausePlay.getText() == PLAY_TEXT)
 			btnPausePlay.setText(PAUSE_TEXT);
