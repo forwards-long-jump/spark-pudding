@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 @SuppressWarnings("serial")
 public abstract class AbstractAction extends javax.swing.AbstractAction {
 
+	private boolean isTracked = true;
+
 	/**
 	 * Creates an Action with the specified name.
 	 *
@@ -19,6 +21,11 @@ public abstract class AbstractAction extends javax.swing.AbstractAction {
 	 */
 	public AbstractAction(String name) {
 		super(name);
+	}
+
+	public AbstractAction(String name, boolean isTracked) {
+		this(name);
+		this.isTracked = isTracked;
 	}
 
 	/**
@@ -38,6 +45,9 @@ public abstract class AbstractAction extends javax.swing.AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		doAction();
+
+		if (isTracked)
+			ActionsHistory.getInstance().insertAction(this);
 	}
 
 }

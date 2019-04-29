@@ -1,17 +1,22 @@
 package ch.sparkpudding.coreengine.ecs.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.sparkpudding.coreengine.ecs.component.Component;
+import ch.sparkpudding.coreengine.ecs.component.Field;
 
 /**
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
@@ -185,11 +190,63 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		Entity.templates = templates;
 	}
 
+	/**
+	 * Add an entity to the template list
+	 * 
+	 * @param template
+	 */
 	public static void addTemplate(Entity template) {
 		templates.put(template.getName(), template);
 	}
 
+	/**
+	 * Return true if entity has all specified components
+	 * 
+	 * @param componentNames
+	 * @return true if entity has all specified components
+	 */
 	public boolean hasComponents(List<String> componentNames) {
 		return components.keySet().containsAll(componentNames);
+	}
+
+	/**
+	 * Convert this entity to a LuaTable in the form of entity.component.field
+	 * 
+	 * @param metatableSetterMethod System.metableSetterMethod
+	 * @return
+	 */
+	public LuaTable coerceToLua(LuaValue metatableSetterMethod) {
+		return coerceToLua(metatableSetterMethod, new ArrayList<String>());
+	}
+
+	/**
+	 * Convert this entity to a Luatable in the form of entity.component.field
+	 * Supports filtering. Pass an empty list for no filters
+	 * 
+	 * @param metatableSetterMethod System.metableSetterMethod
+	 * @param componentFilter       List<String>
+	 * @return
+	 */
+	public LuaTable coerceToLua(LuaValue metatableSetterMethod, List<String> componentFilter) {
+		// entity
+		LuaTable entityLua = new LuaTable();
+		for (Component component : this.getComponents().values()) {
+			// We only give access to explicitly required components
+			if (componentFilter.size() == 0 || componentFilter.contains(component.getName())) {
+				// entity.component
+				LuaTable componentLua = new LuaTable();
+
+				for (Field field : component.getFields().values()) {
+					// entity.component.field
+					LuaValue fieldLua = CoerceJavaToLua.coerce(field);
+					componentLua.set("_" + field.getName(), fieldLua);
+				}
+
+				metatableSetterMethod.call(componentLua);
+				entityLua.set(component.getName(), componentLua);
+			}
+		}
+
+		return entityLua;
 	}
 }
