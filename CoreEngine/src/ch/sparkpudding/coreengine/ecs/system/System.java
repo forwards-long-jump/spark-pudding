@@ -36,7 +36,12 @@ public abstract class System {
 
 	private Map<String, List<String>> componentGroups;
 
+	// Metatable is the same for all systems
 	public static LuaValue metatableSetterMethod;
+	static {
+		createMetableSetter();
+	}
+
 	private LuaValue getRequiredComponentsMethod;
 
 	protected LuaValue apiTable;
@@ -66,7 +71,6 @@ public abstract class System {
 
 		loadLuaLibs();
 		loadLuaSystem();
-		injectMetatableSetter();
 		readMethodsFromLua();
 		loadApis();
 
@@ -80,8 +84,7 @@ public abstract class System {
 		apiTable = new LuaTable();
 		globals.set("game", apiTable);
 
-		Core coreApi = new Core(coreEngine);
-		apiTable.set("core", CoerceJavaToLua.coerce(coreApi));
+		apiTable.set("core", CoerceJavaToLua.coerce(Core.getInstance()));
 	}
 
 	/**
@@ -109,7 +112,6 @@ public abstract class System {
 	 * globals
 	 */
 	protected void readMethodsFromLua() {
-		metatableSetterMethod = globals.get("setMetatable");
 		getRequiredComponentsMethod = globals.get("getRequiredComponents");
 	}
 
@@ -119,14 +121,22 @@ public abstract class System {
 	 * setMetatable(luaComponent) creates the metatable to get and set component
 	 * fields value easily
 	 */
-	private void injectMetatableSetter() {
-		// See the Lua doc about metatables to get a better idea on what's happening
-		// here
-		LuaValue chunk = globals.load("function setMetatable(component)\n" + "local mt = {}\n"
+	private static void createMetableSetter() {
+		Globals metaTableGlobals = new Globals();
+		metaTableGlobals.load(new JseBaseLib());
+		metaTableGlobals.load(new PackageLib());
+		metaTableGlobals.load(new StringLib());
+
+		LoadState.install(metaTableGlobals); // http://luaj.org/luaj/3.0/api/org/luaj/vm2/LoadState.html
+		LuaC.install(metaTableGlobals); // Install the compiler
+
+		LuaValue chunk = metaTableGlobals.load("function setMetatable(component)\n" + "local mt = {}\n"
 				+ "mt.__index = function (self, key)\n" + "return self[\"_\" .. key]:getValue()\n" + "end\n"
 				+ "mt.__newindex = function (self, key, value)\n" + "self[\"_\" .. key]:setValue(value)\n" + "end\n"
 				+ "setmetatable(component, mt)\n" + "end");
 		chunk.call();
+
+		metatableSetterMethod = metaTableGlobals.get("setMetatable");
 	}
 
 	/**
