@@ -1,12 +1,15 @@
 package ch.sparkpudding.sceneeditor.menu;
 
+import java.awt.event.KeyEvent;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import ch.sparkpudding.sceneeditor.action.ActionTest;
-
-import java.awt.event.KeyEvent;
+import ch.sparkpudding.sceneeditor.action.ActionRedo;
+import ch.sparkpudding.sceneeditor.action.ActionUndo;
+import ch.sparkpudding.sceneeditor.action.ActionsHistory;
+import ch.sparkpudding.sceneeditor.action.HistoryEventListener;
 
 /**
  * 
@@ -41,8 +44,26 @@ public class MenuEdit extends JMenu {
 	 */
 	private void addAction() {
 		// TODO: Implement method
-		// FIXME: Remove the test
-		itemUndo.setAction(new ActionTest("Undo"));
+		itemUndo.setAction(new ActionUndo());
+		itemRedo.setAction(new ActionRedo());
+
+		itemUndo.setEnabled(false);
+		itemRedo.setEnabled(false);
+
+		ActionsHistory.getInstance().addHistoryEventListener(new HistoryEventListener() {
+			@Override
+			public void historyEvent(int stackPointer, int stackSize) {
+				if (stackPointer > 0)
+					itemUndo.setEnabled(true);
+				else
+					itemUndo.setEnabled(false);
+
+				if (stackPointer < stackSize - 1)
+					itemRedo.setEnabled(true);
+				else
+					itemRedo.setEnabled(false);
+			}
+		});
 	}
 
 	/**
