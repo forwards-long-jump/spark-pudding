@@ -57,6 +57,8 @@ public class Input {
 		keys = new HashMap<Integer, Boolean>();
 		mouseButtons = new HashMap<Integer, Boolean>();
 		mousePosition = new Point();
+		
+		panel.setFocusable(true);
 	}
 
 	/**
@@ -76,7 +78,6 @@ public class Input {
 	 */
 	public static void init(JPanel panel) {
 		instance = new Input(panel);
-		panel.setFocusable(true);
 	}
 
 	/**
