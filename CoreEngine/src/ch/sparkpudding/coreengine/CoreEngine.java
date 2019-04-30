@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -91,6 +92,7 @@ public class CoreEngine extends JPanel {
 	private void initAPIs() {
 		Core.init(this);
 		Input.init(this);
+		ch.sparkpudding.coreengine.api.Camera.init(this);
 	}
 
 	/**
@@ -289,13 +291,14 @@ public class CoreEngine extends JPanel {
 
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+		AffineTransform transformationState = g2d.getTransform();
 		g2d.translate(translateX, translateY);
 		g2d.scale(scaleRatio, scaleRatio);
+		currentScene.getCamera().applyTransforms(g2d);
 
-		renderSystem.render((Graphics2D) g);
+		renderSystem.render(g2d);
 
-		g2d.scale(1 / scaleRatio, 1 / scaleRatio);
-		g2d.translate(-translateX, -translateY);
+		g2d.setTransform(transformationState);
 
 		// Draw black bar
 		g2d.setColor(blackBarColor);
@@ -322,6 +325,15 @@ public class CoreEngine extends JPanel {
 	 */
 	public int getTick() {
 		return tick;
+	}
+
+	/**
+	 * Get camera
+	 * 
+	 * @return camera
+	 */
+	public Camera getCamera() {
+		return currentScene.getCamera();
 	}
 
 	/**

@@ -20,6 +20,7 @@ import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JseMathLib;
 
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.api.Camera;
 import ch.sparkpudding.coreengine.api.Core;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
@@ -85,6 +86,7 @@ public abstract class System {
 		globals.set("game", apiTable);
 
 		apiTable.set("core", CoerceJavaToLua.coerce(Core.getInstance()));
+		apiTable.set("camera", CoerceJavaToLua.coerce(Camera.getInstance()));
 	}
 
 	/**
