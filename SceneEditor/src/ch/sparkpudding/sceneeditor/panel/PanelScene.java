@@ -48,6 +48,8 @@ public class PanelScene extends JPanel {
 		}
 
 		comboBoxScenes.setSelectedItem(FrameSceneEditor.coreEngine.getCurrentScene().getName());
+		
+		panelEntityTree.updateListEntities(FrameSceneEditor.coreEngine.getCurrentScene());
 	}
 
 	/**
@@ -67,8 +69,9 @@ public class PanelScene extends JPanel {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				FrameSceneEditor.coreEngine
-						.setCurrentScene(FrameSceneEditor.coreEngine.getScenes().get(comboBoxScenes.getSelectedItem()));
+				Scene newScene = FrameSceneEditor.coreEngine.getScenes().get(comboBoxScenes.getSelectedItem());
+				FrameSceneEditor.coreEngine.setCurrentScene(newScene);
+				panelEntityTree.updateListEntities(newScene);
 			}
 		});
 	}
