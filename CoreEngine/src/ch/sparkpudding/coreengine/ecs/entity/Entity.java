@@ -28,14 +28,14 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	}
 
 	private Map<String, Component> components;
-	private String name;
+	private String name, template;
 	private int zIndex;
 
 	/**
 	 * Default constructor
 	 */
 	public Entity() {
-		this("", 0);
+		this("", "", 0);
 	}
 
 	/**
@@ -44,8 +44,9 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * @param name   Name of the entity
 	 * @param zIndex z index, larger numbers imply foreground
 	 */
-	public Entity(String name, int zIndex) {
+	public Entity(String name, String template, int zIndex) {
 		this.name = name;
+		this.template = template;
 		this.setZIndex(zIndex);
 		this.components = new HashMap<String, Component>();
 	}
@@ -57,6 +58,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public Entity(Entity entity) {
 		this.name = entity.name;
+		this.template = entity.template;
 		this.zIndex = entity.zIndex;
 		this.components = new HashMap<String, Component>();
 		for (Component component : entity.getComponents().values()) {
@@ -75,6 +77,8 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		Element entityElement = document.getDocumentElement();
 
 		this.name = entityElement.getAttribute("name");
+		
+		this.template = entityElement.getAttribute("template");
 
 		String zindex = entityElement.getAttribute("z-index");
 		if (zindex.length() > 0) {
@@ -191,5 +195,9 @@ public class Entity implements Iterable<Entry<String, Component>> {
 
 	public boolean hasComponents(List<String> componentNames) {
 		return components.keySet().containsAll(componentNames);
+	}
+
+	public String getTemplate() {
+		return template;
 	}
 }

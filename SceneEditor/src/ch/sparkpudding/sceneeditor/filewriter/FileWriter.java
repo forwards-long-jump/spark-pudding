@@ -3,10 +3,12 @@ package ch.sparkpudding.sceneeditor.filewriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.ecs.component.Component;
+import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 
@@ -20,6 +22,8 @@ public class FileWriter {
 	 * @throws IOException
 	 */
 	public void writeLel(CoreEngine cs, String directory) throws IOException {
+		// TODO : Adapt the code when we have a proper way to deal with default entites values and metadata in core engine.
+		
 		Map<String, Scene> scenes = cs.getScenes();
 		// Check general architecture
 		String[] requiredFiles = { "", "assets", "assets/musics", "assets/sounds", "assets/textures", "components",
@@ -28,11 +32,11 @@ public class FileWriter {
 			new File(directory + fileName).mkdir();
 		}
 		new File(directory + "metadata.xml").createNewFile();
+		Files.write(Paths.get(directory + "metadata.xml"), "TODO".getBytes());
 
 		// Overwrite Scenes
 		for (Map.Entry<String, Scene> sceneEntry : scenes.entrySet()) {
 			File fScene = new File(directory + "/scenes/" + sceneEntry.getKey() + ".xml");
-			fScene.createNewFile();
 			String xmlScene = xmlFromScene(sceneEntry.getValue());
 			Files.write(fScene.toPath(), xmlScene.getBytes());
 		}
@@ -40,7 +44,6 @@ public class FileWriter {
 		// Overwrite EntityTemplates
 		for (Map.Entry<String, Entity> templateEntry : Entity.getTemplates().entrySet()) {
 			File fTemplate = new File(directory + "/scenes/" + templateEntry.getKey() + ".xml");
-			fTemplate.createNewFile();
 			String xmlScene = xmlFromEntityTemplate(templateEntry.getValue());
 			Files.write(fTemplate.toPath(), xmlScene.getBytes());
 		}
@@ -48,7 +51,6 @@ public class FileWriter {
 		// Overwrite Components
 		for (Map.Entry<String, Component> componentEntry : Component.getTemplates().entrySet()) {
 			File fComponent = new File(directory + "/scenes/" + componentEntry.getKey() + ".xml");
-			fComponent.createNewFile();
 			String xmlScene = xmlFromComponent(componentEntry.getValue());
 			Files.write(fComponent.toPath(), xmlScene.getBytes());
 		}
@@ -62,7 +64,24 @@ public class FileWriter {
 	 * @return String to write in the xml file of the scene
 	 */
 	private String xmlFromScene(Scene scene) {
-		return null;
+		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+		xml += "<scene name=\"" + scene.getName() + "\">\n";
+		for (Entity entity : scene.getEntities()) {
+			xml += "\t<entity name=\"" + entity.getName() + "\" template=\"" + entity.getTemplate()
+					+ "\" z-index=\"1\">\n";
+			for(Component component : entity.getComponents().values())
+			{
+				xml += "\t\t<component template=\"" + component.getTemplate() + "\">\n";
+				for(Field field : component.getFields().values())
+				{
+					xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
+				}
+				xml +="</component>";
+			}
+			xml += "</entity";
+		}
+		xml += "</scene>";
+		return xml;
 	}
 
 	/**
@@ -72,7 +91,19 @@ public class FileWriter {
 	 * @return String to write in the xml file of the entity template
 	 */
 	private String xmlFromEntityTemplate(Entity entity) {
-		return null;
+		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+		xml += "<entity-template name=" + entity.getName() + ">)\n";
+		for(Component component : entity.getComponents().values())
+		{
+			xml += "<component template=" + component.getName() + ">\n";
+			for(Field field : component.getFields().values())
+			{
+				xml += "<field name=" + field.getName() + ">" + field.getValue() + "</field>\n";
+			}
+			xml += "</component>\n";
+		}
+		xml += "</entity-template>";
+		return xml;
 	}
 
 	/**
@@ -82,6 +113,13 @@ public class FileWriter {
 	 * @return String to write in the xml file of the component
 	 */
 	private String xmlFromComponent(Component component) {
-		return null;
+		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		xml += "<component name=\"" + component.getName() + "\">\n";
+		for(Field field : component.getFields().values())
+		{
+			xml += "<field  type=\"" + field.getType() +"\" name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
+		}
+		xml += "</component>";
+		return xml;	
 	}
 }
