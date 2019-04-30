@@ -48,6 +48,6 @@ public class Camera {
 	 * @param y
 	 */
 	public void setTargetPosition(float x, float y) {
-		// TODO
+		this.coreEngine.getCamera().setTargetPosition(x, y);
 	}
 }

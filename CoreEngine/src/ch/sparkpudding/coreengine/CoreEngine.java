@@ -189,6 +189,7 @@ public class CoreEngine extends JPanel {
 		for (UpdateSystem system : systems) {
 			system.update();
 		}
+		currentScene.getCamera().update();
 		// TODO : give priority to certain system, i.e. the input systems
 	}
 
