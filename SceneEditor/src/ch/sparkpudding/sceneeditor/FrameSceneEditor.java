@@ -42,6 +42,7 @@ public class FrameSceneEditor extends JFrame {
 	 */
 	public FrameSceneEditor(String gameFolder) throws Exception {
 		FrameSceneEditor.coreEngine = new CoreEngine(gameFolder);
+		FrameSceneEditor.coreEngine.togglePauseAll();
 
 		init();
 		setupLayout();
