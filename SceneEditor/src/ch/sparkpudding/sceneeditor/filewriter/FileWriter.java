@@ -44,15 +44,15 @@ public class FileWriter {
 		// Overwrite EntityTemplates
 		for (Map.Entry<String, Entity> templateEntry : Entity.getTemplates().entrySet()) {
 			File fTemplate = new File(directory + "/scenes/" + templateEntry.getKey() + ".xml");
-			String xmlScene = xmlFromEntityTemplate(templateEntry.getValue());
-			Files.write(fTemplate.toPath(), xmlScene.getBytes());
+			String xmlEntity = xmlFromEntityTemplate(templateEntry.getValue());
+			Files.write(fTemplate.toPath(), xmlEntity.getBytes());
 		}
 
 		// Overwrite Components
 		for (Map.Entry<String, Component> componentEntry : Component.getTemplates().entrySet()) {
 			File fComponent = new File(directory + "/scenes/" + componentEntry.getKey() + ".xml");
-			String xmlScene = xmlFromComponent(componentEntry.getValue());
-			Files.write(fComponent.toPath(), xmlScene.getBytes());
+			String xmlComponent = xmlFromComponent(componentEntry.getValue());
+			Files.write(fComponent.toPath(), xmlComponent.getBytes());
 		}
 
 	}
@@ -92,13 +92,13 @@ public class FileWriter {
 	 */
 	private String xmlFromEntityTemplate(Entity entity) {
 		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-		xml += "<entity-template name=" + entity.getName() + ">)\n";
+		xml += "<entity-template name=\"" + entity.getName() + "\">)\n";
 		for(Component component : entity.getComponents().values())
 		{
-			xml += "<component template=" + component.getName() + ">\n";
+			xml += "<component template=\"" + component.getName() + "\">\n";
 			for(Field field : component.getFields().values())
 			{
-				xml += "<field name=" + field.getName() + ">" + field.getValue() + "</field>\n";
+				xml += "<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
 			}
 			xml += "</component>\n";
 		}
