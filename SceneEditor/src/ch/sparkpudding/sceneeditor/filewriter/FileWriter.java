@@ -43,14 +43,14 @@ public class FileWriter {
 
 		// Overwrite EntityTemplates
 		for (Map.Entry<String, Entity> templateEntry : Entity.getTemplates().entrySet()) {
-			File fTemplate = new File(directory + "/scenes/" + templateEntry.getKey() + ".xml");
+			File fTemplate = new File(directory + "/entities/" + templateEntry.getKey() + ".xml");
 			String xmlEntity = xmlFromEntityTemplate(templateEntry.getValue());
 			Files.write(fTemplate.toPath(), xmlEntity.getBytes());
 		}
 
 		// Overwrite Components
 		for (Map.Entry<String, Component> componentEntry : Component.getTemplates().entrySet()) {
-			File fComponent = new File(directory + "/scenes/" + componentEntry.getKey() + ".xml");
+			File fComponent = new File(directory + "/components/" + componentEntry.getKey() + ".xml");
 			String xmlComponent = xmlFromComponent(componentEntry.getValue());
 			Files.write(fComponent.toPath(), xmlComponent.getBytes());
 		}
@@ -76,9 +76,9 @@ public class FileWriter {
 				{
 					xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
 				}
-				xml +="</component>";
+				xml +="</component>\n";
 			}
-			xml += "</entity";
+			xml += "</entity>\n";
 		}
 		xml += "</scene>";
 		return xml;
@@ -92,15 +92,15 @@ public class FileWriter {
 	 */
 	private String xmlFromEntityTemplate(Entity entity) {
 		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-		xml += "<entity-template name=\"" + entity.getName() + "\">)\n";
+		xml += "<entity-template name=\"" + entity.getName() + "\">\n";
 		for(Component component : entity.getComponents().values())
 		{
-			xml += "<component template=\"" + component.getName() + "\">\n";
+			xml += "\t<component template=\"" + component.getName() + "\">\n";
 			for(Field field : component.getFields().values())
 			{
-				xml += "<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
+				xml += "\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
 			}
-			xml += "</component>\n";
+			xml += "\t</component>\n";
 		}
 		xml += "</entity-template>";
 		return xml;
@@ -117,7 +117,7 @@ public class FileWriter {
 		xml += "<component name=\"" + component.getName() + "\">\n";
 		for(Field field : component.getFields().values())
 		{
-			xml += "<field  type=\"" + field.getType() +"\" name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
+			xml += "\t<field  type=\"" + field.getType() +"\" name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
 		}
 		xml += "</component>";
 		return xml;	
