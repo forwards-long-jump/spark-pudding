@@ -1,7 +1,7 @@
 package ch.sparkpudding.coreengine.api;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
 import ch.sparkpudding.coreengine.Camera.Mode;
@@ -36,7 +36,6 @@ public class Camera {
 		instance = new Camera(coreEngine);
 	}
 
-
 	/**
 	 * Apply translate and scale to the context. Context must be saved and restaured
 	 * manually
@@ -56,7 +55,7 @@ public class Camera {
 	public void resetTransforms(Graphics2D g2d) {
 		this.coreEngine.getCamera().resetTransforms(g2d);
 	}
-	
+
 	/**
 	 * Teleport the camera to the specified position, cancel all momentum
 	 * 
@@ -76,7 +75,7 @@ public class Camera {
 	public void setTargetScaling(float s) {
 		this.coreEngine.getCamera().setTargetScaling(s);
 	}
-	
+
 	/**
 	 * Center the target of the camera at the specified location. Center of entity
 	 * is calculated automatically if width and height are given
@@ -143,12 +142,19 @@ public class Camera {
 	public void setTranslateMode(Mode mode) {
 		this.coreEngine.getCamera().setTranslateMode(mode);
 	}
-	
+
+	/**
+	 * Clear current boundary
+	 */
+	public void clearBoundary() {
+		this.coreEngine.getCamera().setBoundary(null);
+	}
+
 	/**
 	 * @param boundary the boundary to set
 	 */
-	public void setBoundary(Dimension boundary) {
-		this.coreEngine.getCamera().setBoundary(boundary);
+	public void setBoundary(float x, float y, float w, float h) {
+		this.coreEngine.getCamera().setBoundary(new Rectangle((int) x, (int) y, (int) w, (int) h));
 	}
 
 	/**
@@ -186,14 +192,13 @@ public class Camera {
 		this.coreEngine.getCamera().setLinearSpeedDelta(linearSpeedDelta);
 	}
 
-
 	/**
 	 * @param smoothScaleSpeedCoeff the smoothScaleSpeedCoeff to set
 	 */
 	public void setSmoothScaleSpeedCoeff(float smoothScaleSpeedCoeff) {
 		this.coreEngine.getCamera().setSmoothScaleSpeedCoeff(smoothScaleSpeedCoeff);
 	}
-	
+
 	/**
 	 * @param scalingPoint the scalingPoint to set
 	 */

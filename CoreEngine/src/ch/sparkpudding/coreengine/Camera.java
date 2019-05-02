@@ -1,7 +1,7 @@
 package ch.sparkpudding.coreengine;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
@@ -26,7 +26,7 @@ public class Camera {
 
 	private Mode translateMode;
 
-	private Dimension boundary;
+	private Rectangle boundary;
 
 	// Position
 	private Point2D position;
@@ -152,10 +152,31 @@ public class Camera {
 		float newTargetScaling = scaling + (targetScaling - scaling) * smoothScaleSpeedCoeff;
 		float relativeScaling = newTargetScaling / scaling;
 
-		// TODO: Use core engine for screen width
 		// Scaling point is the coordinate to zoom in in "real" coordinates
-		position.setLocation(x * relativeScaling + scalingPoint.getX() * (relativeScaling - 1),
-				y * relativeScaling + scalingPoint.getY() * (relativeScaling - 1));
+		x = x * relativeScaling + scalingPoint.getX() * (relativeScaling - 1);
+		y = y * relativeScaling + scalingPoint.getY() * (relativeScaling - 1);
+
+		if (boundary != null) {
+			if (boundary.getWidth() * scaling >= 1280) {
+				x = Math.max(x, boundary.getX() * scaling);
+				x = Math.min(x, (boundary.getWidth() + boundary.getX()) * scaling - 1280);
+			}
+			else {
+				x = -1280 / 2 + scaling * (boundary.getWidth()) / 2  + boundary.getX() * scaling;
+			}
+
+			if (boundary.getHeight() * scaling >= 720) {
+				y = Math.max(y, boundary.getY() * scaling);
+				y = Math.min(y, (boundary.getHeight() + boundary.getY()) * scaling - 720);
+			}
+			else {
+				y = -720 / 2 + scaling * (boundary.getHeight()) / 2 +  + boundary.getY() * scaling;
+			}
+
+			// TODO: lel.coreEngine...
+		}
+
+		position.setLocation(x, y);
 
 		scaling = newTargetScaling;
 	}
@@ -284,7 +305,7 @@ public class Camera {
 	/**
 	 * @param boundary the boundary to set
 	 */
-	public void setBoundary(Dimension boundary) {
+	public void setBoundary(Rectangle boundary) {
 		this.boundary = boundary;
 	}
 
@@ -329,7 +350,7 @@ public class Camera {
 	public void setSmoothScaleSpeedCoeff(float smoothScaleSpeedCoeff) {
 		this.smoothScaleSpeedCoeff = smoothScaleSpeedCoeff;
 	}
-	
+
 	/**
 	 * @param scalingPoint the scalingPoint to set
 	 */
