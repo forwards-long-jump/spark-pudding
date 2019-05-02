@@ -56,7 +56,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 * Create a component from a parsed XML Document and populate its fields.
 	 * 
 	 * Note that if a document is to describe a component, then this component must
-	 * be a template
+	 * be a template.
 	 * 
 	 * @param document A properly formated Document to get fields from
 	 */
