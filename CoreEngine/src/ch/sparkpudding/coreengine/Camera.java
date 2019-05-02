@@ -14,6 +14,7 @@ import java.awt.geom.Point2D;
 public class Camera {
 	private static final double SPRING_MIN_FORCE_REQUIRED = 0.001;
 	private AffineTransform transformationState;
+
 	/**
 	 * Linear = constant speed Smooth = the further it is from the target, the
 	 * faster it goes Spring = spring effect that overshoot the target and goes back
@@ -24,7 +25,6 @@ public class Camera {
 	}
 
 	private Mode translateMode;
-	private Mode scaleMode;
 
 	private Dimension boundary;
 
@@ -44,18 +44,17 @@ public class Camera {
 	// Scaling
 	private float scaling;
 	private float targetScaling;
+	// Smooth
+	private float smoothScaleSpeedCoeff;
 
-	private float scalingSpringConstant;
-	private float scalingForce;
-	private float scalingCoeff;
-	private float scalingSpeed;
+	// Zoom
+	private Point2D scalingPoint;
 
 	/**
 	 * ctor
 	 */
 	public Camera() {
 		translateMode = Mode.SPRING;
-		scaleMode = Mode.SMOOTH;
 
 		// Position
 		position = new Point2D.Double(0.0, 0.0);
@@ -67,16 +66,17 @@ public class Camera {
 
 		smoothSpeedCoeff = new Point2D.Double(0.1, 0.1);
 
-		linearSpeedDelta = new Point2D.Double(3, 3);
+		linearSpeedDelta = new Point2D.Double(15, 15);
 
 		// Scaling
-		scaling = 1;
-		targetScaling = 1;
+		scaling = 1f;
+		targetScaling = 1f;
+		// Smooth
+		smoothScaleSpeedCoeff = 0.1f;
 
-		scalingSpringConstant = 1;
-		scalingForce = 0;
-		scalingCoeff = 1;
-		scalingSpeed = 1;
+		// Zoom
+		// TODO: Use lel.core...
+		scalingPoint = new Point2D.Float(1280 / 2, 720 / 2);
 
 	}
 
@@ -87,6 +87,7 @@ public class Camera {
 		double x = position.getX();
 		double y = position.getY();
 
+		// Translation
 		switch (translateMode) {
 		case LINEAR:
 			// x
@@ -132,14 +133,14 @@ public class Camera {
 
 			forceX /= springTranslateConstant.getX();
 			forceY /= springTranslateConstant.getY();
-			
+
 			if (Math.abs(forceX) < SPRING_MIN_FORCE_REQUIRED) {
 				forceX = 0;
 			}
 			if (Math.abs(forceY) < SPRING_MIN_FORCE_REQUIRED) {
 				forceY = 0;
 			}
-			
+
 			x += forceX;
 			y += forceY;
 
@@ -147,11 +148,27 @@ public class Camera {
 			break;
 		}
 
-		position.setLocation(x, y);
+		// Scaling (smooth)
+		float newTargetScaling = scaling + (targetScaling - scaling) * smoothScaleSpeedCoeff;
+		float relativeScaling = newTargetScaling / scaling;
+
+		// TODO: Use core engine for screen width
+		// Scaling point is the coordinate to zoom in in "real" coordinates
+		position.setLocation(x * relativeScaling + scalingPoint.getX() * (relativeScaling - 1),
+				y * relativeScaling + scalingPoint.getY() * (relativeScaling - 1));
+
+		scaling = newTargetScaling;
 	}
 
 	/**
-	 * Apply translate and scale to the context. Context must be saved and restaured
+	 * Reset current forces applied to the camera to 0
+	 */
+	private void resetForces() {
+		springTranslateForce = new Point2D.Double(0.0, 0.0);
+	}
+
+	/**
+	 * Apply translate and scale to the context. Context must be saved and restored
 	 * manually
 	 * 
 	 * @param g2d
@@ -164,7 +181,7 @@ public class Camera {
 	}
 
 	/**
-	 * Apply translate and scale to the context. Context must be saved and restaured
+	 * Apply translate and scale to the context. Context must be saved and restored
 	 * manually
 	 * 
 	 * @param g2d
@@ -172,7 +189,7 @@ public class Camera {
 	public void resetTransforms(Graphics2D g2d) {
 		g2d.setTransform(transformationState);
 	}
-	
+
 	/**
 	 * Teleport the camera to the specified position, cancel all momentum
 	 * 
@@ -180,8 +197,59 @@ public class Camera {
 	 * @param y
 	 */
 	public void setPosition(float x, float y) {
-		position.setLocation(x, y);
+		position.setLocation(x * scaling, y * scaling);
 		resetForces();
+	}
+
+	/**
+	 * Center the target of the camera at the specified location. Center of entity
+	 * is calculated automatically if width and height are given
+	 * 
+	 * @param x top-left position
+	 * @param y top-left position
+	 * @param w width of the entity
+	 * @param h height of the entity
+	 */
+	public void centerTargetAt(float x, float y, float w, float h) {
+		// TODO: Use lel.coreengine.getWidth..
+		targetPosition.setLocation(x * scaling + (w * scaling - 1280) / 2, y * scaling + (h * scaling - 720) / 2);
+	}
+
+	/**
+	 * Center the camera at the specified location. Center of entity is calculated
+	 * automatically if width and height are given
+	 * 
+	 * @param x top-left position
+	 * @param y top-left position
+	 * @param w width of the entity
+	 * @param h height of the entity
+	 */
+	public void centerAt(float x, float y, float w, float h) {
+		// TODO: Use lel.coreengine...
+		position.setLocation(x * scaling + (w * scaling - 1280) / 2, y * scaling + (h * scaling - 720) / 2);
+		resetForces();
+	}
+
+	/**
+	 * Center the camera at the specified location. Center of entity is calculated
+	 * automatically if width and height are given
+	 * 
+	 * @param x top-left position
+	 * @param y top-left position
+	 */
+	public void centerAt(float x, float y) {
+		centerAt(x, y, 0, 0);
+	}
+
+	/**
+	 * Center the target of camera at the specified location. Center of entity is
+	 * calculated automatically if width and height are given
+	 * 
+	 * @param x top-left position
+	 * @param y top-left position
+	 */
+	public void centerTargetAt(float x, float y) {
+		centerTargetAt(x, y, 0, 0);
 	}
 
 	/**
@@ -195,6 +263,16 @@ public class Camera {
 	}
 
 	/**
+	 * Set the target position for the camera to move to
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void setTargetScaling(float s) {
+		targetScaling = s;
+	}
+
+	/**
 	 * Change translate mode
 	 * 
 	 * @param mode
@@ -204,19 +282,58 @@ public class Camera {
 	}
 
 	/**
-	 * Change scale mode
-	 * 
-	 * @param mode
+	 * @param boundary the boundary to set
 	 */
-	public void setScaleMode(Mode mode) {
-		scaleMode = mode;
+	public void setBoundary(Dimension boundary) {
+		this.boundary = boundary;
 	}
 
 	/**
-	 * Reset current forces applied to the camera to 0
+	 * @param springTranslateForce the springTranslateForce to set
 	 */
-	private void resetForces() {
-		springTranslateForce = new Point2D.Double(0.0, 0.0);
-		scalingForce = 0;
+	public void setSpringTranslateForce(Point2D springTranslateForce) {
+		this.springTranslateForce = springTranslateForce;
+	}
+
+	/**
+	 * @param springTranslateConstant the springTranslateConstant to set
+	 */
+	public void setSpringTranslateConstant(Point2D springTranslateConstant) {
+		this.springTranslateConstant = springTranslateConstant;
+	}
+
+	/**
+	 * @param springTranslateSpeedCoeff the springTranslateSpeedCoeff to set
+	 */
+	public void setSpringTranslateSpeedCoeff(Point2D springTranslateSpeedCoeff) {
+		this.springTranslateSpeedCoeff = springTranslateSpeedCoeff;
+	}
+
+	/**
+	 * @param smoothSpeedCoeff the smoothSpeedCoeff to set
+	 */
+	public void setSmoothSpeedCoeff(Point2D smoothSpeedCoeff) {
+		this.smoothSpeedCoeff = smoothSpeedCoeff;
+	}
+
+	/**
+	 * @param linearSpeedDelta the linearSpeedDelta to set
+	 */
+	public void setLinearSpeedDelta(Point2D linearSpeedDelta) {
+		this.linearSpeedDelta = linearSpeedDelta;
+	}
+
+	/**
+	 * @param smoothScaleSpeedCoeff the smoothScaleSpeedCoeff to set
+	 */
+	public void setSmoothScaleSpeedCoeff(float smoothScaleSpeedCoeff) {
+		this.smoothScaleSpeedCoeff = smoothScaleSpeedCoeff;
+	}
+	
+	/**
+	 * @param scalingPoint the scalingPoint to set
+	 */
+	public void setScalingPoint(Point2D scalingPoint) {
+		this.scalingPoint = scalingPoint;
 	}
 }
