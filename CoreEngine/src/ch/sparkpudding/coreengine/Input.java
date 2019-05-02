@@ -16,9 +16,9 @@ import javax.swing.JPanel;
 /**
  * Keeps tabs of all keyboard and mouse inputs for the game. Should be updated
  * once before all systems are.
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
+ *
  */
 public class Input {
 
@@ -40,7 +40,7 @@ public class Input {
 
 	/**
 	 * Handle key and mouse actions
-	 * 
+	 *
 	 * @param panel
 	 */
 	public Input(JPanel panel) {
@@ -57,6 +57,8 @@ public class Input {
 		keys = new HashMap<Integer, Boolean>();
 		mouseButtons = new HashMap<Integer, Boolean>();
 		mousePosition = new Point();
+
+		panel.setFocusable(true);
 	}
 
 	/**
@@ -135,14 +137,14 @@ public class Input {
 //			@Override
 //			public void mouseDragged(MouseEvent e) {
 //				// TODO Auto-generated method stub
-//				
+//
 //			}
 		});
 	}
 
 	/**
 	 * Return the state of specified key
-	 * 
+	 *
 	 * @param keyCode
 	 * @return the state of specified key
 	 */
@@ -152,7 +154,7 @@ public class Input {
 
 	/**
 	 * Return the state of specified mouse button
-	 * 
+	 *
 	 * @param keyCode
 	 * @return the state of specified mouse button
 	 */
@@ -162,7 +164,7 @@ public class Input {
 
 	/**
 	 * Return true if the mouse was clicked
-	 * 
+	 *
 	 * @return true if the mouse was clicked
 	 */
 	public boolean isMouseClicked() {
@@ -171,7 +173,7 @@ public class Input {
 
 	/**
 	 * Return the mouse position relative to the jpanel
-	 * 
+	 *
 	 * @return mouse position relative to the jpanel
 	 */
 	public Point getMousePosition() {

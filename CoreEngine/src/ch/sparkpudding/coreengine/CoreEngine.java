@@ -48,6 +48,9 @@ public class CoreEngine extends JPanel {
 	private List<UpdateSystem> systems;
 	private RenderSystem renderSystem;
 
+	private boolean pause = false;
+	private boolean pauseAll = false;
+
 	private Dimension renderSize;
 	private Color blackBarColor;
 
@@ -174,6 +177,10 @@ public class CoreEngine extends JPanel {
 	 * Runs all systems once
 	 */
 	private void update() {
+		if (pauseAll) {
+			return;
+		}
+
 		for (UpdateSystem system : systems) {
 			system.update();
 		}
@@ -192,15 +199,24 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Pauses all systems indescriminately
 	 */
-	public void pauseAll() {
-		// TODO: pause
+	public void togglePauseAll() {
+		pauseAll = !pauseAll;
 	}
 
 	/**
 	 * Pauses all systems which are labelled "pausable"
 	 */
-	public void pause() {
-		// TODO: pause (toggle)
+	public void togglePause() {
+		pause = !pause;
+	}
+
+	/**
+	 * Return all the scenes
+	 * 
+	 * @return Scenes
+	 */
+	public Map<String, Scene> getScenes() {
+		return scenes;
 	}
 
 	/**
