@@ -17,16 +17,16 @@ public class LelWriter {
 	/**
 	 * Save all the specified CoreEngine in the specified directory
 	 * 
-	 * @param cs
-	 * @param directory
+	 * @param coreEngine : The core engine who will be saved in the Lel folder.
+	 * @param directory : The Lel directory path
 	 * @throws IOException
 	 */
-	public void write(CoreEngine cs, String directory) throws IOException {
+	public void write(CoreEngine coreEngine, String directory) throws IOException {
 		// TODO : Adapt the code when we have a proper way to deal with default entities values and metadata in core engine.
 		
-		Map<String, Scene> scenes = cs.getScenes();
+		Map<String, Scene> scenes = coreEngine.getScenes();
 		// Check general architecture
-		String[] requiredFiles = { "", "assets", "assets/musics", "assets/sounds", "assets/textures", "components",
+		String[] requiredFiles = { "", "assets", "assets/music", "assets/sounds", "assets/textures", "components",
 				"entitytemplates", "scenes", "systems" };
 		for (String fileName : requiredFiles) {
 			new File(directory + fileName).mkdir();
