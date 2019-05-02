@@ -17,8 +17,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import ch.sparkpudding.coreengine.api.Core;
-import ch.sparkpudding.coreengine.api.Input;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
@@ -40,7 +38,7 @@ public class CoreEngine extends JPanel {
 	private double msPerUpdate = (1000 / 60);
 	private boolean exit = false;
 
-	public Input input;
+	private Input input;
 
 	private LelFile lelFile;
 
@@ -54,6 +52,7 @@ public class CoreEngine extends JPanel {
 	private Color blackBarColor;
 
 	private int tick;
+	private List<Entity> entitesToDeleteAfterUpdate;
 
 	/**
 	 * The heart of the Ludic Engine in Lua
@@ -63,9 +62,10 @@ public class CoreEngine extends JPanel {
 	 *                   errors.
 	 */
 	public CoreEngine(String gameFolder) throws Exception {
-		initAPIs();
+		Lel.coreEngine = this;
+		this.input = new Input(this);
 
-		this.input = Input.getInstance();
+		entitesToDeleteAfterUpdate = new ArrayList<Entity>();
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
@@ -83,14 +83,6 @@ public class CoreEngine extends JPanel {
 		new Thread(() -> {
 			startGame();
 		}).start();
-	}
-
-	/**
-	 * Init all singleton APIs
-	 */
-	private void initAPIs() {
-		Core.init(this);
-		Input.init(this);
 	}
 
 	/**
@@ -169,14 +161,12 @@ public class CoreEngine extends JPanel {
 
 			input.update();
 
-			if (lag >= msPerUpdate) {
-				do {
-					tick++;
-					update();
-					lag -= msPerUpdate;
-				} while (lag >= msPerUpdate);
-				render();
+			while (lag > msPerUpdate) {
+				tick++;
+				update();
+				lag -= msPerUpdate;
 			}
+			render();
 		}
 	}
 
@@ -187,7 +177,9 @@ public class CoreEngine extends JPanel {
 		for (UpdateSystem system : systems) {
 			system.update();
 		}
-		// TODO : give priority to certain system, i.e. the input systems
+		for (Entity entity : entitesToDeleteAfterUpdate) {
+			deleteEntity(entity);
+		}
 	}
 
 	/**
@@ -325,6 +317,15 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * Getter for input.
+	 * 
+	 * @return
+	 */
+	public Input getInput() {
+		return input;
+	}
+
+	/**
 	 * Add an entity to current scene and notify systems
 	 * 
 	 * @param e entity to add
@@ -336,5 +337,22 @@ public class CoreEngine extends JPanel {
 		}
 
 		getCurrentScene().add(e);
+	}
+
+	/**
+	 * Delete an entity and removes it from the scene and systems
+	 * 
+	 * @param entity Entity to be deleted
+	 */
+	public void deleteEntity(Entity entity) {
+		for (UpdateSystem system : systems) {
+			system.tryRemove(entity);
+		}
+		renderSystem.tryRemove(entity);
+		currentScene.remove(entity);
+	}
+
+	public void deleteEntityAfterUpdate(Entity entity) {
+		entitesToDeleteAfterUpdate.add(entity);
 	}
 }
