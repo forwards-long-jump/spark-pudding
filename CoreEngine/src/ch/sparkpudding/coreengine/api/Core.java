@@ -61,7 +61,7 @@ public class Core {
 	 * @return current tick
 	 */
 	public int getFPS() {
-		return coreEngine.getFPS();
+		return Lel.coreEngine.getFPS();
 	}
 	
 	/**

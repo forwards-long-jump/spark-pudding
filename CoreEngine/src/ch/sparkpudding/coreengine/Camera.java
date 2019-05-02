@@ -79,8 +79,7 @@ public class Camera {
 		smoothScaleSpeedCoeff = 0.1f;
 
 		// Zoom
-		// TODO: Use lel.core...
-		scalingPoint = new Point2D.Float(1280 / 2, 720 / 2);
+		scalingPoint = new Point2D.Float(Lel.coreEngine.getWidth() / 2, Lel.coreEngine.getHeight() / 2);
 
 		shakeDurationLeft = 0;
 		shakeIntensity = 1.0f;
@@ -164,21 +163,19 @@ public class Camera {
 		y = y * relativeScaling + scalingPoint.getY() * (relativeScaling - 1);
 
 		if (boundary != null) {
-			if (boundary.getWidth() * scaling >= 1280) {
+			if (boundary.getWidth() * scaling >= Lel.coreEngine.getWidth()) {
 				x = Math.max(x, boundary.getX() * scaling);
-				x = Math.min(x, (boundary.getWidth() + boundary.getX()) * scaling - 1280);
+				x = Math.min(x, (boundary.getWidth() + boundary.getX()) * scaling - Lel.coreEngine.getWidth());
 			} else {
-				x = -1280 / 2 + scaling * (boundary.getWidth()) / 2 + boundary.getX() * scaling;
+				x = -Lel.coreEngine.getWidth() / 2 + scaling * (boundary.getWidth()) / 2 + boundary.getX() * scaling;
 			}
 
-			if (boundary.getHeight() * scaling >= 720) {
+			if (boundary.getHeight() * scaling >= Lel.coreEngine.getHeight()) {
 				y = Math.max(y, boundary.getY() * scaling);
-				y = Math.min(y, (boundary.getHeight() + boundary.getY()) * scaling - 720);
+				y = Math.min(y, (boundary.getHeight() + boundary.getY()) * scaling - Lel.coreEngine.getHeight());
 			} else {
-				y = -720 / 2 + scaling * (boundary.getHeight()) / 2 + +boundary.getY() * scaling;
+				y = -Lel.coreEngine.getHeight() / 2 + scaling * (boundary.getHeight()) / 2 + +boundary.getY() * scaling;
 			}
-
-			// TODO: lel.coreEngine...
 		}
 
 		// Shaking
@@ -244,8 +241,7 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerTargetAt(float x, float y, float w, float h) {
-		// TODO: Use lel.coreengine.getWidth..
-		targetPosition.setLocation(x * scaling + (w * scaling - 1280) / 2, y * scaling + (h * scaling - 720) / 2);
+		targetPosition.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getHeight()) / 2);
 	}
 
 	/**
@@ -258,8 +254,7 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerAt(float x, float y, float w, float h) {
-		// TODO: Use lel.coreengine...
-		position.setLocation(x * scaling + (w * scaling - 1280) / 2, y * scaling + (h * scaling - 720) / 2);
+		position.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getHeight()) / 2);
 		resetForces();
 	}
 
