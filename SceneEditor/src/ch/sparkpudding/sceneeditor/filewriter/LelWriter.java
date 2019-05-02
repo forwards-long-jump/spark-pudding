@@ -18,8 +18,8 @@ public class LelWriter {
 	/**
 	 * Save all the specified CoreEngine in the specified directory
 	 * 
-	 * @param coreEngine : The core engine who will be saved in the Lel folder.
-	 * @param directory  : The Lel directory path
+	 * @param coreEngine is the core engine who will be saved in the Lel folder.
+	 * @param directory is the Lel directory path
 	 * @throws IOException
 	 */
 	public void write(CoreEngine coreEngine, String directory) throws IOException {
