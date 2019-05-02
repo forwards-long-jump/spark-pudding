@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="enemySpawner">
+	<field type="DOUBLE" name="spawnChance">0.30</field>
+	<field type="INTEGER" name="spawnHeight">800</field>
+</component>

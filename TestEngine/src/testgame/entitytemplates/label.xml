@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="label">
+	<component template="position">
+		<field name="x">0</field>
+		<field name="y">0</field>
+	</component>
+	<component template="color" />
+	<component template="text" />
+</entity-template>

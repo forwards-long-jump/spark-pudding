@@ -2,10 +2,11 @@ package ch.sparkpudding.coreengine.ecs.system;
 
 import java.io.File;
 
-import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.api.InputAPI;
 
 /**
  * Handle systems that will be updated. These systems can also be paused
@@ -50,7 +51,20 @@ public class UpdateSystem extends System {
 
 		readMethodsFromLua();
 
-		pausable = isPausableMethod.call().toboolean();
+		if (isPausableMethod.isnil()) {
+			pausable = false;
+		} else {
+			pausable = isPausableMethod.call().toboolean();
+		}
+
+		loadUpdateApis();
+	}
+
+	/**
+	 * Load update related APIs
+	 */
+	private void loadUpdateApis() {
+		apiTable.set("input", CoerceJavaToLua.coerce(InputAPI.getInstance()));
 	}
 
 	/**
@@ -63,11 +77,10 @@ public class UpdateSystem extends System {
 	}
 
 	/**
-	 * Runs the update function of the Lua script on every entity
+	 * Runs the update function of the Lua script, entities can be accessed using
+	 * "global" lua variables
 	 */
 	public void update() {
-		for (LuaTable entityLua : entitiesLua) {
-			updateMethod.call(entityLua);
-		}
+		updateMethod.call();
 	}
 }

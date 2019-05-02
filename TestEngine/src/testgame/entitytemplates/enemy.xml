@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="enemy">
+	<component template="position" />
+	<component template="size">
+		<field name="width">40</field>
+		<field name="height">20</field>
+	</component>
+	<component template="speed" />
+	<component template="enemy" />
+	<component template="shooter">
+		<field type="INTEGER" name="currentShootingDelay">0</field>
+		<field type="INTEGER" name="shootingDelay">100</field>
+		<field type="INTEGER" name="speedX">-6</field>
+	</component>
+	<component template="color">
+		<field name="r">255</field>
+		<field name="b">105</field>
+	</component>
+</entity-template>

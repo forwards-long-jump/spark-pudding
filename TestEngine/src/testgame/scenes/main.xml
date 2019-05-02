@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene name="main">
-	<entity name="dummy" template="test-entity" z-index="1"/>
+	<entity name="press-start" template="label" z-index="1">
+		<component template="position">
+			<field name="x">580</field>
+			<field name="y">360</field>
+		</component>
+		<component template="color" />
+		<component template="text">
+			<field name="value">Press SPACE to play</field>		
+		</component>
+	</entity>
 </scene>
