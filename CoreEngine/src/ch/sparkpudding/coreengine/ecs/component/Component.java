@@ -11,7 +11,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Represents settings (key values pairs) that can be attached to an entity
+ * Represents settings (key-value pairs) that can be attached to an entity
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
