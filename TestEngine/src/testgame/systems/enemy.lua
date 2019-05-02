@@ -25,8 +25,8 @@ function update()
     for i, enemy in ipairs(enemies) do
       if (bullet.position.x < enemy.position.x + enemy.size.width and bullet.position.x + bullet.size.width > enemy.position.x) then
         if (bullet.position.y < enemy.position.y + enemy.size.height and bullet.position.y + bullet.size.height > enemy.position.y) then
-          bullet.position.y = -100
-          enemy.position.y = -100
+          bullet._meta:delete()
+          enemy._meta:delete()
         end
       end
     end
