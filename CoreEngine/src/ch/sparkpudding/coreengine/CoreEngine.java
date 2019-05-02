@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,8 +54,11 @@ public class CoreEngine extends JPanel {
 
 	private Dimension renderSize;
 	private Color blackBarColor;
+	private Semaphore renderLock;
 
 	private int tick;
+	private int fpsCount;
+	private int fps;
 
 	/**
 	 * The heart of the Ludic Engine in Lua
@@ -71,6 +75,8 @@ public class CoreEngine extends JPanel {
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
 		this.tick = 0;
+		this.fps = 0;
+		this.fpsCount = 0;
 
 		this.lelFile = new LelFile(gameFolder);
 
@@ -81,8 +87,14 @@ public class CoreEngine extends JPanel {
 
 		setCurrentScene(scenes.get("main"));
 
+		renderLock = new Semaphore(0);
+
 		new Thread(() -> {
-			startGame();
+			try {
+				startGame();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}).start();
 	}
 
@@ -157,10 +169,14 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Runs update and render loops
+	 * 
+	 * @throws InterruptedException
 	 */
-	private void startGame() {
+	private void startGame() throws InterruptedException {
 		double previous = java.lang.System.currentTimeMillis();
 		double lag = 0.0;
+
+		double lastFpsTime = java.lang.System.currentTimeMillis();
 
 		while (!exit) {
 			double current = java.lang.System.currentTimeMillis();
@@ -171,13 +187,19 @@ public class CoreEngine extends JPanel {
 
 			input.update();
 
-			if (lag >= msPerUpdate) {
-				do {
-					tick++;
-					update();
-					lag -= msPerUpdate;
-				} while (lag >= msPerUpdate);
-				render();
+			while (lag >= msPerUpdate) {
+				tick++;
+				update();
+				lag -= msPerUpdate;
+			}
+
+			render();
+			renderLock.acquire();
+
+			if (java.lang.System.currentTimeMillis() - lastFpsTime >= 1000) {
+				lastFpsTime = java.lang.System.currentTimeMillis();
+				fpsCount = fps;
+				fps = 0;
 			}
 		}
 	}
@@ -253,20 +275,28 @@ public class CoreEngine extends JPanel {
 		// TODO: reset current scene
 	}
 
+	/**
+	 * Get the current scene
+	 * @return the current scene
+	 */
 	public Scene getCurrentScene() {
 		return currentScene;
 	}
 
-	public void setCurrentScene(Scene currentScene) {
-		this.currentScene = currentScene;
+	/**
+	 * Change current scene to new scene
+	 * @param newScene
+	 */
+	public void setCurrentScene(Scene newScene) {
+		this.currentScene = newScene;
 		for (UpdateSystem system : systems) {
-			system.setEntities(currentScene.getEntities());
+			system.setEntities(newScene.getEntities());
 		}
-		renderSystem.setEntities(currentScene.getEntities());
+		renderSystem.setEntities(newScene.getEntities());
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		// Calculate screen ratio for width / height
@@ -295,8 +325,8 @@ public class CoreEngine extends JPanel {
 		AffineTransform transformationState = g2d.getTransform();
 		g2d.translate(translateX, translateY);
 		g2d.scale(scaleRatio, scaleRatio);
-		currentScene.getCamera().applyTransforms(g2d);
 
+		fps++;
 		renderSystem.render(g2d);
 
 		g2d.setTransform(transformationState);
@@ -313,10 +343,12 @@ public class CoreEngine extends JPanel {
 			g2d.fillRect(0, translateY + realGameHeight, getWidth() + 1, translateY + 1);
 		}
 
-		g.dispose();
 		// Source:
 		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
 		java.awt.Toolkit.getDefaultToolkit().sync();
+		g.dispose();
+
+		renderLock.release();
 	}
 
 	/**
@@ -349,5 +381,14 @@ public class CoreEngine extends JPanel {
 		}
 
 		getCurrentScene().add(e);
+	}
+
+	/**
+	 * Get current framerate of the game
+	 * 
+	 * @return
+	 */
+	public int getFPS() {
+		return fpsCount;
 	}
 }

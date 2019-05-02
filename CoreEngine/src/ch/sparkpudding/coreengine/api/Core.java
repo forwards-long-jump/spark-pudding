@@ -50,6 +50,14 @@ public class Core {
 	}
 	
 	/**
+	 * Get current frameRate
+	 * @return current tick
+	 */
+	public int getFPS() {
+		return coreEngine.getFPS();
+	}
+	
+	/**
 	 * Change current scene
 	 * @param name of the scene to display
 	 */
