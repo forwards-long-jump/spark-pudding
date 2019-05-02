@@ -43,7 +43,7 @@ public class LelWriter {
 
 		// Overwrite EntityTemplates
 		for (Map.Entry<String, Entity> templateEntry : Entity.getTemplates().entrySet()) {
-			File fTemplate = new File(directory + "/entities/" + templateEntry.getKey() + ".xml");
+			File fTemplate = new File(directory + "/entitytemplates/" + templateEntry.getKey() + ".xml");
 			String xmlEntity = xmlFromEntityTemplate(templateEntry.getValue());
 			Files.write(fTemplate.toPath(), xmlEntity.getBytes());
 		}

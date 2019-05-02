@@ -44,7 +44,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * Default constructor
 	 */
 	public Entity() {
-		this("","", 0, new HashMap<String, Component>());
+		this("", "", 0, new HashMap<String, Component>());
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 
 		this.name = entityElement.getAttribute("name");
 		this.template = null;
-		
+
 		String zindex = entityElement.getAttribute("z-index");
 		if (zindex.length() > 0) {
 			this.setZIndex(Integer.parseInt(zindex));
@@ -238,9 +238,8 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	public static void addTemplate(Entity template) {
 		templates.put(template.getName(), template);
 	}
-	
-	public String getTemplate()
-	{
+
+	public String getTemplate() {
 		return template;
 	}
 
