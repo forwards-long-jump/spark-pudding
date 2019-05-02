@@ -8,7 +8,7 @@ function update()
   if(game.input:isKeyDown(32)) then
     game.core:setScene("game")
   end
-  
+
   for i, entity in ipairs(entities) do
 
     -- Move player
@@ -24,19 +24,15 @@ function update()
     if(game.input:isKeyDown(37)) then
       entity.position.x = entity.position.x - 5
     end
-    
+
     if(game.input:isKeyDown(48)) then
       game.camera:clearBoundary()
     end
-    
+
      if(game.input:isKeyDown(57)) then
-      game.camera:setBoundary(0, 0, 1280, 720)
+      game.camera:setBoundary(0, 0, game.core:getGameWidth(), game.core:getGameHeight())
     end
-    
-     if(game.input:isKeyDown(56)) then
-      game.camera:setBoundary(200, 200, 880, 320)
-    end
-    
+
     if(game.input:isKeyDown(107)) then
       scaling = scaling * 1.1
       game.camera:setTargetScaling(scaling)
@@ -78,4 +74,3 @@ function update()
     entity.shooter.currentShootingDelay = entity.shooter.currentShootingDelay - 1
   end
 end
-    
