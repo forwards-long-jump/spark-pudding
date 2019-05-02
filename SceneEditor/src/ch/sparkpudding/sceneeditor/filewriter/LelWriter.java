@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.ecs.component.Component;
@@ -37,7 +38,7 @@ public class LelWriter {
 		// Overwrite Scenes
 		for (Map.Entry<String, Scene> sceneEntry : scenes.entrySet()) {
 			File fScene = new File(directory + "/scenes/" + sceneEntry.getKey() + ".xml");
-			String xmlScene = xmlFromScene(sceneEntry.getValue());
+			String xmlScene = xmlFromScene(sceneEntry.getValue(), coreEngine);
 			Files.write(fScene.toPath(), xmlScene.getBytes());
 		}
 
@@ -63,7 +64,7 @@ public class LelWriter {
 	 * @param Scene to serialize
 	 * @return String to write in the xml file of the scene
 	 */
-	private String xmlFromScene(Scene scene) {
+	private String xmlFromScene(Scene scene, CoreEngine coreEngine) {
 		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 		xml += "<scene name=\"" + scene.getName() + "\">\n";
 		for (Entity entity : scene.getEntities()) {
@@ -77,6 +78,11 @@ public class LelWriter {
 					xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
 				}
 				xml +="</component>\n";
+			}
+			for (Entry<String, Component> component : Entity.getTemplates().get(entity.getTemplate())) {
+			    if (!entity.getComponents().keySet().contains(component.getValue().getName())) {
+			        xml += "<component name=\"" + component.getValue().getName() + "\" deleted=\"true\"/>";
+			    }
 			}
 			xml += "</entity>\n";
 		}
