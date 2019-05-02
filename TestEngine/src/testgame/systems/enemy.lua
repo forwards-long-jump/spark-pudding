@@ -26,7 +26,8 @@ function update()
       if (bullet.position.x < enemy.position.x + enemy.size.width and bullet.position.x + bullet.size.width > enemy.position.x) then
         if (bullet.position.y < enemy.position.y + enemy.size.height and bullet.position.y + bullet.size.height > enemy.position.y) then
           bullet._meta:delete()
-          enemy._meta:delete()
+          enemy = enemy._meta:addComponent("gravity")
+          enemy = enemy._meta:deleteComponent("enemy")
         end
       end
     end
