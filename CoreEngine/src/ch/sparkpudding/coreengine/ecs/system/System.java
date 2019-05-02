@@ -249,4 +249,44 @@ public abstract class System {
 			}
 		}
 	}
+
+	/**
+	 * Receives an entity and the name of a newly removed component of it, and
+	 * checks if it should be forgotten from this system
+	 * 
+	 * @param entity        Entity which has had its component removed
+	 * @param componentName Name of the component which was removed
+	 */
+	public void notifyRemovedComponent(Entity entity, String componentName) {
+		for (Entry<String, List<Entity>> entityList : entityGroups.entrySet()) {
+			if (componentGroups.get(entityList.getKey()).contains(componentName)) {
+				// any system which requires the removed component will remove the entity
+				entityList.getValue().remove(entity);
+				addEntityGroupToGlobals(entityList.getKey());
+			}
+		}
+	}
+
+	/**
+	 * Receives an entity and the name of a newly added component of it, and checks
+	 * if it should be added to this system
+	 * 
+	 * @param entity        Entity which has had its component added
+	 * @param componentName Name of the component which was removed
+	 */
+	public void notifyNewComponent(Entity entity, String componentName) {
+		for (String listName : entityGroups.keySet()) {
+			// we must first check if the list needs the new component, lest we add the
+			// entity twice to the system
+			List<String> componentList = componentGroups.get(listName);
+			if (componentList.contains(componentName) && entity.hasComponents(componentGroups.get(listName))){
+				entityGroups.get(listName).add(entity);
+
+				addEntityGroupToGlobals(listName);
+				//LuaTable entityGroup = (LuaTable) globals.get(entityList.getKey());
+				// TODO prevent accessing all components
+				//entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
+			}
+		}
+	}
 }
