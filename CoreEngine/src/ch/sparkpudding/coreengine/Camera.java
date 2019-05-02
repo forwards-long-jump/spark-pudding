@@ -50,6 +50,10 @@ public class Camera {
 	// Zoom
 	private Point2D scalingPoint;
 
+	// Shaking
+	private float shakeIntensity;
+	private int shakeDurationLeft;
+
 	/**
 	 * ctor
 	 */
@@ -77,6 +81,9 @@ public class Camera {
 		// Zoom
 		// TODO: Use lel.core...
 		scalingPoint = new Point2D.Float(1280 / 2, 720 / 2);
+
+		shakeDurationLeft = 0;
+		shakeIntensity = 1.0f;
 
 	}
 
@@ -160,20 +167,25 @@ public class Camera {
 			if (boundary.getWidth() * scaling >= 1280) {
 				x = Math.max(x, boundary.getX() * scaling);
 				x = Math.min(x, (boundary.getWidth() + boundary.getX()) * scaling - 1280);
-			}
-			else {
-				x = -1280 / 2 + scaling * (boundary.getWidth()) / 2  + boundary.getX() * scaling;
+			} else {
+				x = -1280 / 2 + scaling * (boundary.getWidth()) / 2 + boundary.getX() * scaling;
 			}
 
 			if (boundary.getHeight() * scaling >= 720) {
 				y = Math.max(y, boundary.getY() * scaling);
 				y = Math.min(y, (boundary.getHeight() + boundary.getY()) * scaling - 720);
-			}
-			else {
-				y = -720 / 2 + scaling * (boundary.getHeight()) / 2 +  + boundary.getY() * scaling;
+			} else {
+				y = -720 / 2 + scaling * (boundary.getHeight()) / 2 + +boundary.getY() * scaling;
 			}
 
 			// TODO: lel.coreEngine...
+		}
+
+		// Shaking
+		if (shakeDurationLeft > 0) {
+			shakeDurationLeft--;
+			x += 2 * (Math.random() - 0.5) * shakeIntensity;
+			y += 2 * (Math.random() - 0.5) * shakeIntensity;
 		}
 
 		position.setLocation(x, y);
@@ -356,5 +368,16 @@ public class Camera {
 	 */
 	public void setScalingPoint(Point2D scalingPoint) {
 		this.scalingPoint = scalingPoint;
+	}
+
+	/**
+	 * Make the camera shake
+	 * 
+	 * @param intensity in pixel
+	 * @param duration in tick
+	 */
+	public void shake(float intensity, int duration) {
+		this.shakeIntensity = intensity;
+		this.shakeDurationLeft = duration;
 	}
 }

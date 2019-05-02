@@ -205,4 +205,14 @@ public class Camera {
 	public void setScalingPoint(Point2D scalingPoint) {
 		this.coreEngine.getCamera().setScalingPoint(scalingPoint);
 	}
+	
+	/**
+	 * Make the camera shake
+	 * 
+	 * @param intensity in pixel
+	 * @param duration in tick
+	 */
+	public void shake(float intensity, int duration) {
+		this.coreEngine.getCamera().shake(intensity, duration);
+	}
 }
