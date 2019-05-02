@@ -12,7 +12,7 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 
-public class FileWriter {
+public class LelWriter {
 
 	/**
 	 * Save all the specified CoreEngine in the specified directory
@@ -21,8 +21,8 @@ public class FileWriter {
 	 * @param directory
 	 * @throws IOException
 	 */
-	public void writeLel(CoreEngine cs, String directory) throws IOException {
-		// TODO : Adapt the code when we have a proper way to deal with default entites values and metadata in core engine.
+	public void write(CoreEngine cs, String directory) throws IOException {
+		// TODO : Adapt the code when we have a proper way to deal with default entities values and metadata in core engine.
 		
 		Map<String, Scene> scenes = cs.getScenes();
 		// Check general architecture
