@@ -23,7 +23,8 @@ public class Component implements Iterable<Entry<String, Field>> {
 		templates = new HashMap<String, Component>();
 	}
 
-	private String name, template;
+	private String name;
+	private String template;
 	private Map<String, Field> fields;
 
 	/**
