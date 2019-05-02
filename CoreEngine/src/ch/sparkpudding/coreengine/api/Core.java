@@ -1,7 +1,5 @@
 package ch.sparkpudding.coreengine.api;
 
-import java.awt.Dimension;
-
 import org.luaj.vm2.LuaValue;
 
 import ch.sparkpudding.coreengine.Lel;
@@ -19,6 +17,11 @@ public class Core {
 	private Core() {
 	}
 
+	/**
+	 * Singleton design pattern
+	 * 
+	 * @return instance
+	 */
 	public static Core getInstance() {
 		if (instance == null) {
 			instance = new Core();
@@ -76,7 +79,7 @@ public class Core {
 	 * Create a new entity and adds it to the scene. Also returns the LuaValue of it
 	 * 
 	 * @param templateName Name of the entity template
-	 * @return
+	 * @return Lua entity
 	 */
 	public LuaValue createEntity(String templateName) {
 		Entity e = new Entity(Entity.getTemplates().get(templateName));

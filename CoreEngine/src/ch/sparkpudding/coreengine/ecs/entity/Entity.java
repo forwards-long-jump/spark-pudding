@@ -139,6 +139,9 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		createLuaEntity();
 	}
 
+	/**
+	 * Instanciate the Lua entity
+	 */
 	private void createLuaEntity() {
 		this.luaEntity = coerceToLua();
 	}
@@ -153,7 +156,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	}
 
 	/**
-	 * Removes a component to the entity
+	 * Removes a component from the entity
 	 * 
 	 * @param name Name of the component to be removed
 	 */
@@ -170,18 +173,36 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		return name;
 	}
 
+	/**
+	 * Gets the z index
+	 * 
+	 * @return z index
+	 */
 	public int getZIndex() {
 		return zIndex;
 	}
 
+	/**
+	 * Sets the z index
+	 * 
+	 * @param zIndex
+	 */
 	public void setZIndex(int zIndex) {
 		this.zIndex = zIndex;
 	}
 
+	/**
+	 * Gets components
+	 * 
+	 * @return components
+	 */
 	public Map<String, Component> getComponents() {
 		return components;
 	}
 
+	/**
+	 * Gets iterator on the components
+	 */
 	@Override
 	public Iterator<Entry<String, Component>> iterator() {
 		return components.entrySet().iterator();
@@ -255,6 +276,11 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		return entityLua;
 	}
 
+	/**
+	 * Gets the Lua entity
+	 * 
+	 * @return Lua entity
+	 */
 	public LuaTable getLuaEntity() {
 		return luaEntity;
 	}

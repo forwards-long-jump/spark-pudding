@@ -5,6 +5,13 @@ import java.awt.Point;
 import ch.sparkpudding.coreengine.Input;
 import ch.sparkpudding.coreengine.Lel;
 
+/**
+ * API that wraps the Input class in order to only give access to input
+ * consultation from Lua systems
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * 
+ */
 public class InputAPI {
 	private static InputAPI instance;
 

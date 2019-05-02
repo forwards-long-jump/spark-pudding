@@ -22,7 +22,6 @@ import org.luaj.vm2.lib.jse.JseMathLib;
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.api.Core;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
-import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
  * Read components required by a lua script, builds a list of entities affected
@@ -177,7 +176,7 @@ public abstract class System {
 	 * Create entityList from given entities.
 	 * 
 	 * @param newEntities Entities to insert into lists
-	 * @param listName Name of the entity list
+	 * @param listName    Name of the entity list
 	 */
 	private void setEntityList(List<Entity> newEntities, String listName) {
 		List<String> componentList = componentGroups.get(listName);
@@ -191,16 +190,22 @@ public abstract class System {
 		}
 		entityGroups.put(listName, entities);
 	}
-	
+
+	/**
+	 * Once the entity groups are built, call this function to add them to the Lua
+	 * gloabls
+	 * 
+	 * @param listName name of an entityGroup
+	 */
 	private void addEntityGroupToGlobals(String listName) {
-		
+
 		List<Entity> entities = entityGroups.get(listName);
-		
+
 		// Build Lua instances of entities
 		LuaTable entitiesTableLua = new LuaTable();
 		for (int i = 0; i < entities.size(); ++i) {
+			// TODO prevent accessing all components
 			// Lua table starts at 1
-			//TODO prevent accessing all components
 			entitiesTableLua.set(i + 1, entities.get(i).getLuaEntity());
 		}
 
@@ -217,16 +222,16 @@ public abstract class System {
 	public void tryAdd(Entity entity) {
 		for (Entry<String, List<String>> componentList : componentGroups.entrySet()) {
 			// Check entities for compatibility with system
-			if (entity.hasComponents(componentList.getValue())) {			
+			if (entity.hasComponents(componentList.getValue())) {
 				entityGroups.get(componentList.getKey()).add(entity);
-				
+
 				LuaTable entityGroup = (LuaTable) globals.get(componentList.getKey());
-				//TODO prevent accessing all components
+				// TODO prevent accessing all components
 				entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
 			}
 		}
 	}
-	
+
 	/**
 	 * Finds whether the entity is in the system's list and removes it if found
 	 * 
