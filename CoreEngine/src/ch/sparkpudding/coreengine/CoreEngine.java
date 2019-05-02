@@ -314,7 +314,7 @@ public class CoreEngine extends JPanel {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		// Calculate screen ratio for width / height
