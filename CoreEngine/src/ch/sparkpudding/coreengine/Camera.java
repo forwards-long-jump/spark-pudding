@@ -79,7 +79,7 @@ public class Camera {
 		smoothScaleSpeedCoeff = 0.1f;
 
 		// Zoom
-		scalingPoint = new Point2D.Float(Lel.coreEngine.getWidth() / 2, Lel.coreEngine.getHeight() / 2);
+		scalingPoint = new Point2D.Double(Lel.coreEngine.getGameWidth() / 2, Lel.coreEngine.getGameHeight() / 2);
 
 		shakeDurationLeft = 0;
 		shakeIntensity = 1.0f;
@@ -163,18 +163,18 @@ public class Camera {
 		y = y * relativeScaling + scalingPoint.getY() * (relativeScaling - 1);
 
 		if (boundary != null) {
-			if (boundary.getWidth() * scaling >= Lel.coreEngine.getWidth()) {
+			if (boundary.getWidth() * scaling >= Lel.coreEngine.getGameWidth()) {
 				x = Math.max(x, boundary.getX() * scaling);
-				x = Math.min(x, (boundary.getWidth() + boundary.getX()) * scaling - Lel.coreEngine.getWidth());
+				x = Math.min(x, (boundary.getWidth() + boundary.getX()) * scaling - Lel.coreEngine.getGameWidth());
 			} else {
-				x = -Lel.coreEngine.getWidth() / 2 + scaling * (boundary.getWidth()) / 2 + boundary.getX() * scaling;
+				x = -Lel.coreEngine.getGameWidth() / 2 + scaling * (boundary.getWidth()) / 2 + boundary.getX() * scaling;
 			}
 
-			if (boundary.getHeight() * scaling >= Lel.coreEngine.getHeight()) {
+			if (boundary.getHeight() * scaling >= Lel.coreEngine.getGameHeight()) {
 				y = Math.max(y, boundary.getY() * scaling);
-				y = Math.min(y, (boundary.getHeight() + boundary.getY()) * scaling - Lel.coreEngine.getHeight());
+				y = Math.min(y, (boundary.getHeight() + boundary.getY()) * scaling - Lel.coreEngine.getGameHeight());
 			} else {
-				y = -Lel.coreEngine.getHeight() / 2 + scaling * (boundary.getHeight()) / 2 + +boundary.getY() * scaling;
+				y = -Lel.coreEngine.getGameHeight() / 2 + scaling * (boundary.getHeight()) / 2 + +boundary.getY() * scaling;
 			}
 		}
 
@@ -241,7 +241,7 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerTargetAt(float x, float y, float w, float h) {
-		targetPosition.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getHeight()) / 2);
+		targetPosition.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerAt(float x, float y, float w, float h) {
-		position.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getHeight()) / 2);
+		position.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
 		resetForces();
 	}
 

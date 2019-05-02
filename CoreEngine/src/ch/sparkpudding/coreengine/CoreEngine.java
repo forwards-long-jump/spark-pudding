@@ -295,6 +295,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Get the current scene
+	 * 
 	 * @return the current scene
 	 */
 	public Scene getCurrentScene() {
@@ -303,6 +304,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Change current scene to new scene
+	 * 
 	 * @param newScene
 	 */
 	public void setCurrentScene(Scene newScene) {
@@ -386,7 +388,7 @@ public class CoreEngine extends JPanel {
 	public Camera getCamera() {
 		return currentScene.getCamera();
 	}
-	
+
 	/**
 	 * Getter for input.
 	 * 
@@ -418,7 +420,7 @@ public class CoreEngine extends JPanel {
 	public int getFPS() {
 		return fpsCount;
 	}
-	
+
 	/**
 	 * Delete an entity and removes it from the scene and systems
 	 * 
@@ -479,5 +481,23 @@ public class CoreEngine extends JPanel {
 	 */
 	public void deleteEntityAfterUpdate(Entity entity) {
 		entitesToDeleteAfterUpdate.add(entity);
+	}
+
+	/**
+	 * Get game height (not jpanel height)
+	 * 
+	 * @return
+	 */
+	public double getGameHeight() {
+		return this.renderSize.getHeight();
+	}
+
+	/**
+	 * Get game width (not jpanel height)
+	 * 
+	 * @return
+	 */
+	public double getGameWidth() {
+		return this.renderSize.getWidth();
 	}
 }
