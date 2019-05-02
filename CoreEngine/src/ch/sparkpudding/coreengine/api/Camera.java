@@ -1,5 +1,7 @@
 package ch.sparkpudding.coreengine.api;
 
+import java.awt.Graphics2D;
+
 import ch.sparkpudding.coreengine.CoreEngine;
 
 /**
@@ -49,5 +51,25 @@ public class Camera {
 	 */
 	public void setTargetPosition(float x, float y) {
 		this.coreEngine.getCamera().setTargetPosition(x, y);
+	}
+
+	/**
+	 * Apply translate and scale to the context. Context must be saved and restaured
+	 * manually
+	 * 
+	 * @param g2d
+	 */
+	public void applyTransforms(Graphics2D g2d) {
+		this.coreEngine.getCamera().applyTransforms(g2d);
+	}
+
+	/**
+	 * Apply translate and scale to the context. Context must be saved and restaured
+	 * manually
+	 * 
+	 * @param g2d
+	 */
+	public void resetTransforms(Graphics2D g2d) {
+		this.coreEngine.getCamera().resetTransforms(g2d);
 	}
 }

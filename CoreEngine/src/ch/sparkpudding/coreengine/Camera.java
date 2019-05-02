@@ -2,6 +2,7 @@ package ch.sparkpudding.coreengine;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 /**
@@ -12,7 +13,7 @@ import java.awt.geom.Point2D;
  */
 public class Camera {
 	private static final double SPRING_MIN_FORCE_REQUIRED = 0.001;
-
+	private AffineTransform transformationState;
 	/**
 	 * Linear = constant speed Smooth = the further it is from the target, the
 	 * faster it goes Spring = spring effect that overshoot the target and goes back
@@ -156,10 +157,22 @@ public class Camera {
 	 * @param g2d
 	 */
 	public void applyTransforms(Graphics2D g2d) {
+		transformationState = g2d.getTransform();
+
 		g2d.translate(-position.getX(), -position.getY());
 		g2d.scale(scaling, scaling);
 	}
 
+	/**
+	 * Apply translate and scale to the context. Context must be saved and restaured
+	 * manually
+	 * 
+	 * @param g2d
+	 */
+	public void resetTransforms(Graphics2D g2d) {
+		g2d.setTransform(transformationState);
+	}
+	
 	/**
 	 * Teleport the camera to the specified position, cancel all momentum
 	 * 
