@@ -1,4 +1,4 @@
-package ch.sparkpudding.coreengine.api;
+package ch.sparkpudding.coreengine;
 
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
@@ -21,7 +21,6 @@ import javax.swing.JPanel;
  * 
  */
 public class Input {
-	private static Input instance;
 
 	// Values read by the panel
 	private List<Integer> keysPressed;
@@ -44,8 +43,9 @@ public class Input {
 	 * 
 	 * @param panel
 	 */
-	private Input(JPanel panel) {
+	public Input(JPanel panel) {
 		this.panel = panel;
+		this.panel.setFocusable(true);
 		createListeners();
 
 		keysPressed = new ArrayList<Integer>();
@@ -57,26 +57,6 @@ public class Input {
 		keys = new HashMap<Integer, Boolean>();
 		mouseButtons = new HashMap<Integer, Boolean>();
 		mousePosition = new Point();
-	}
-
-	/**
-	 * Get Input API instance
-	 * 
-	 * @return Core
-	 */
-	public static Input getInstance() {
-		return instance;
-	}
-
-	/**
-	 * Init the API. We do not test instance so init must be called before any
-	 * getInstance!
-	 * 
-	 * @param panel
-	 */
-	public static void init(JPanel panel) {
-		instance = new Input(panel);
-		panel.setFocusable(true);
 	}
 
 	/**
