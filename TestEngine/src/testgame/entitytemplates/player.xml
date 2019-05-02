@@ -11,7 +11,7 @@
 	<component template="player" />
 	<component template="shooter">
 		<field type="INTEGER" name="currentShootingDelay">0</field>
-		<field type="INTEGER" name="shootingDelay">10</field>
+		<field type="INTEGER" name="shootingDelay">1</field>
 		<field type="INTEGER" name="speedX">6</field>
 	</component>
 	<component template="color">

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="size">
+	<field type="INTEGER" name="width">10</field>
+	<field type="INTEGER" name="height">10</field>
+</component>

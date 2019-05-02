@@ -35,13 +35,10 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
 public abstract class System {
 	private String filepath;
 
+	// named lists of required components
 	private Map<String, List<String>> componentGroups;
-
-	// Metatable is the same for all systems
-	public static LuaValue metatableSetterMethod;
-	static {
-		createMetableSetter();
-	}
+	// named lists of entities having the above required components
+	private Map<String, List<Entity>> entityGroups;
 
 	private LuaValue getRequiredComponentsMethod;
 
@@ -69,6 +66,7 @@ public abstract class System {
 	public void reload() {
 		globals = new Globals();
 		componentGroups = new HashMap<String, List<String>>();
+		entityGroups = new HashMap<String, List<Entity>>();
 
 		loadLuaLibs();
 		loadLuaSystem();
@@ -115,30 +113,6 @@ public abstract class System {
 	 */
 	protected void readMethodsFromLua() {
 		getRequiredComponentsMethod = globals.get("getRequiredComponents");
-	}
-
-	/**
-	 * Add a setMetatable lua function to the system globals
-	 * 
-	 * setMetatable(luaComponent) creates the metatable to get and set component
-	 * fields value easily
-	 */
-	private static void createMetableSetter() {
-		Globals metaTableGlobals = new Globals();
-		metaTableGlobals.load(new JseBaseLib());
-		metaTableGlobals.load(new PackageLib());
-		metaTableGlobals.load(new StringLib());
-
-		LoadState.install(metaTableGlobals); // http://luaj.org/luaj/3.0/api/org/luaj/vm2/LoadState.html
-		LuaC.install(metaTableGlobals); // Install the compiler
-
-		LuaValue chunk = metaTableGlobals.load("function setMetatable(component)\n" + "local mt = {}\n"
-				+ "mt.__index = function (self, key)\n" + "return self[\"_\" .. key]:getValue()\n" + "end\n"
-				+ "mt.__newindex = function (self, key, value)\n" + "self[\"_\" .. key]:setValue(value)\n" + "end\n"
-				+ "setmetatable(component, mt)\n" + "end");
-		chunk.call();
-
-		metatableSetterMethod = metaTableGlobals.get("setMetatable");
 	}
 
 	/**
@@ -194,29 +168,51 @@ public abstract class System {
 	 * @param newEntities List of entities of the new scene
 	 */
 	public void setEntities(List<Entity> newEntities) {
-		for (Entry<String, List<String>> componentList : componentGroups.entrySet()) {
-
-			List<Entity> entities = new ArrayList<Entity>();
-
-			// Check entities for compatibility with system
-			for (Entity entity : newEntities) {
-				if (entity.hasComponents(componentList.getValue())) {
-					entities.add(entity);
-				}
-			}
-
-			// Build Lua instances of entities
-			LuaTable entitiesTableLua = new LuaTable();
-			for (int i = 0; i < entities.size(); ++i) {
-				Entity entity = entities.get(i);
-
-				// Lua table starts at 1
-				entitiesTableLua.set(i + 1, entity.coerceToLua(metatableSetterMethod, componentList.getValue()));
-			}
-
-			// Lua code has access to all of these entities via the name of the list
-			globals.set(componentList.getKey(), entitiesTableLua);
+		for (String listName : componentGroups.keySet()) {
+			setEntityList(newEntities, listName);
+			addEntityGroupToGlobals(listName);
 		}
+	}
+
+	/**
+	 * Create entityList from given entities.
+	 * 
+	 * @param newEntities Entities to insert into lists
+	 * @param listName    Name of the entity list
+	 */
+	private void setEntityList(List<Entity> newEntities, String listName) {
+		List<String> componentList = componentGroups.get(listName);
+		List<Entity> entities = new ArrayList<Entity>();
+
+		// Check entities for compatibility with system
+		for (Entity entity : newEntities) {
+			if (entity.hasComponents(componentList)) {
+				entities.add(entity);
+			}
+		}
+		entityGroups.put(listName, entities);
+	}
+
+	/**
+	 * Once the entity groups are built, call this function to add them to the Lua
+	 * gloabls
+	 * 
+	 * @param listName name of an entityGroup
+	 */
+	private void addEntityGroupToGlobals(String listName) {
+
+		List<Entity> entities = entityGroups.get(listName);
+
+		// Build Lua instances of entities
+		LuaTable entitiesTableLua = new LuaTable();
+		for (int i = 0; i < entities.size(); ++i) {
+			// TODO prevent accessing all components
+			// Lua table starts at 1
+			entitiesTableLua.set(i + 1, entities.get(i).getLuaEntity());
+		}
+
+		// Lua code has access to all of these entities via the name of the list
+		globals.set(listName, entitiesTableLua);
 	}
 
 	/**
@@ -229,9 +225,69 @@ public abstract class System {
 		for (Entry<String, List<String>> componentList : componentGroups.entrySet()) {
 			// Check entities for compatibility with system
 			if (entity.hasComponents(componentList.getValue())) {
+				entityGroups.get(componentList.getKey()).add(entity);
+
 				LuaTable entityGroup = (LuaTable) globals.get(componentList.getKey());
-				entityGroup.set(entityGroup.keyCount() + 1,
-						entity.coerceToLua(metatableSetterMethod, componentList.getValue()));
+				// TODO prevent accessing all components
+				entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
+			}
+		}
+	}
+
+	/**
+	 * Finds whether the entity is in the system's list and removes it if found
+	 * 
+	 * @param entity
+	 */
+	public void tryRemove(Entity entity) {
+		for (Entry<String, List<Entity>> entityList : entityGroups.entrySet()) {
+			List<Entity> entities = entityList.getValue();
+			for (int i = 0; i < entities.size(); i++) {
+				if (entities.get(i) == entity) {
+					entities.remove(i);
+					addEntityGroupToGlobals(entityList.getKey());
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Receives an entity and the name of a newly removed component of it, and
+	 * checks if it should be forgotten from this system
+	 * 
+	 * @param entity        Entity which has had its component removed
+	 * @param componentName Name of the component which was removed
+	 */
+	public void notifyRemovedComponent(Entity entity, String componentName) {
+		for (Entry<String, List<Entity>> entityList : entityGroups.entrySet()) {
+			if (componentGroups.get(entityList.getKey()).contains(componentName)) {
+				// any system which requires the removed component will remove the entity
+				entityList.getValue().remove(entity);
+				addEntityGroupToGlobals(entityList.getKey());
+			}
+		}
+	}
+
+	/**
+	 * Receives an entity and the name of a newly added component of it, and checks
+	 * if it should be added to this system
+	 * 
+	 * @param entity        Entity which has had its component added
+	 * @param componentName Name of the component which was removed
+	 */
+	public void notifyNewComponent(Entity entity, String componentName) {
+		for (String listName : entityGroups.keySet()) {
+			// we must first check if the list needs the new component, lest we add the
+			// entity twice to the system
+			List<String> componentList = componentGroups.get(listName);
+			if (componentList.contains(componentName) && entity.hasComponents(componentGroups.get(listName))){
+				entityGroups.get(listName).add(entity);
+
+				addEntityGroupToGlobals(listName);
+				//LuaTable entityGroup = (LuaTable) globals.get(entityList.getKey());
+				// TODO prevent accessing all components
+				//entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
 			}
 		}
 	}

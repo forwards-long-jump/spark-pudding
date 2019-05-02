@@ -19,15 +19,14 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import ch.sparkpudding.coreengine.api.Core;
-import ch.sparkpudding.coreengine.api.Input;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.coreengine.ecs.system.RenderSystem;
 import ch.sparkpudding.coreengine.ecs.system.UpdateSystem;
-import ch.sparkpudding.coreengine.filereader.LelFile;
+import ch.sparkpudding.coreengine.filereader.LelReader;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
+import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
  * Class keeping track of all the elements of the ECS, and responsible of
@@ -42,15 +41,18 @@ public class CoreEngine extends JPanel {
 	private double msPerUpdate = (1000 / 60);
 	private boolean exit = false;
 
-	public Input input;
+	private Input input;
 
-	private LelFile lelFile;
+	private LelReader lelFile;
 
 	private Map<String, Scene> scenes;
 	private Scene currentScene;
 
 	private List<UpdateSystem> systems;
 	private RenderSystem renderSystem;
+
+	private boolean pause = false;
+	private boolean pauseAll = false;
 
 	private Dimension renderSize;
 	private Color blackBarColor;
@@ -60,6 +62,9 @@ public class CoreEngine extends JPanel {
 	private int fpsCount;
 	private int fps;
 
+	private List<Entity> entitesToDeleteAfterUpdate;
+	private List<Pair<Entity, String>> componentsToRemoveAfterUpdate;
+
 	/**
 	 * The heart of the Ludic Engine in Lua
 	 * 
@@ -68,9 +73,11 @@ public class CoreEngine extends JPanel {
 	 *                   errors.
 	 */
 	public CoreEngine(String gameFolder) throws Exception {
-		initAPIs();
+		Lel.coreEngine = this;
+		this.input = new Input(this);
 
-		this.input = Input.getInstance();
+		entitesToDeleteAfterUpdate = new ArrayList<Entity>();
+		componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
@@ -78,7 +85,7 @@ public class CoreEngine extends JPanel {
 		this.fps = 0;
 		this.fpsCount = 0;
 
-		this.lelFile = new LelFile(gameFolder);
+		this.lelFile = new LelReader(gameFolder);
 
 		populateComponentTemplates();
 		populateEntityTemplates();
@@ -96,15 +103,6 @@ public class CoreEngine extends JPanel {
 				e.printStackTrace();
 			}
 		}).start();
-	}
-
-	/**
-	 * Init all singleton APIs
-	 */
-	private void initAPIs() {
-		Core.init(this);
-		Input.init(this);
-		ch.sparkpudding.coreengine.api.Camera.init(this);
 	}
 
 	/**
@@ -208,11 +206,22 @@ public class CoreEngine extends JPanel {
 	 * Runs all systems once
 	 */
 	private void update() {
+		if (pauseAll) {
+			return;
+		}
+
 		for (UpdateSystem system : systems) {
 			system.update();
 		}
+
 		currentScene.getCamera().update();
-		// TODO : give priority to certain system, i.e. the input systems
+
+		for (Pair<Entity, String> pair : componentsToRemoveAfterUpdate) {
+			removeComponent(pair.first(), pair.second());
+		}
+		for (Entity entity : entitesToDeleteAfterUpdate) {
+			deleteEntity(entity);
+		}
 	}
 
 	/**
@@ -225,15 +234,24 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Pauses all systems indescriminately
 	 */
-	public void pauseAll() {
-		// TODO: pause
+	public void togglePauseAll() {
+		pauseAll = !pauseAll;
 	}
 
 	/**
 	 * Pauses all systems which are labelled "pausable"
 	 */
-	public void pause() {
-		// TODO: pause (toggle)
+	public void togglePause() {
+		pause = !pause;
+	}
+
+	/**
+	 * Return all the scenes
+	 * 
+	 * @return Scenes
+	 */
+	public Map<String, Scene> getScenes() {
+		return scenes;
 	}
 
 	/**
@@ -361,12 +379,21 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Get camera
+	 * Getter for camera.
 	 * 
 	 * @return camera
 	 */
 	public Camera getCamera() {
 		return currentScene.getCamera();
+	}
+	
+	/**
+	 * Getter for input.
+	 * 
+	 * @return
+	 */
+	public Input getInput() {
+		return input;
 	}
 
 	/**
@@ -390,5 +417,67 @@ public class CoreEngine extends JPanel {
 	 */
 	public int getFPS() {
 		return fpsCount;
+	}
+	
+	/**
+	 * Delete an entity and removes it from the scene and systems
+	 * 
+	 * @param entity Entity to be deleted
+	 */
+	public void deleteEntity(Entity entity) {
+		for (UpdateSystem system : systems) {
+			system.tryRemove(entity);
+		}
+		renderSystem.tryRemove(entity);
+		currentScene.remove(entity);
+	}
+
+	/**
+	 * Removes the named component from the entity, and removes the entity from
+	 * systems where it is no longer needed
+	 * 
+	 * @param entity        Entity to work on
+	 * @param componentName Name of the component to remove
+	 */
+	public void removeComponent(Entity entity, String componentName) {
+		entity.remove(componentName);
+		for (UpdateSystem system : systems) {
+			system.notifyRemovedComponent(entity, componentName);
+		}
+		renderSystem.notifyRemovedComponent(entity, componentName);
+	}
+
+	/**
+	 * Adds the given entity to have the given component removed from it after the
+	 * update
+	 * 
+	 * @param entity        Entity to work on
+	 * @param componentName Name of the component to remove
+	 */
+	public void removeComponentAfterUpdate(Entity entity, String componentName) {
+		componentsToRemoveAfterUpdate.add(new Pair<Entity, String>(entity, componentName));
+	}
+
+	/**
+	 * When an entity receives a new component, notify the systems of this in case
+	 * they now need it
+	 * 
+	 * @param entity        Entity which has received a component
+	 * @param componentName Name of the new component
+	 */
+	public void notifySystemsOfNewComponent(Entity entity, String componentName) {
+		for (UpdateSystem system : systems) {
+			system.notifyNewComponent(entity, componentName);
+		}
+		renderSystem.notifyNewComponent(entity, componentName);
+	}
+
+	/**
+	 * Adds the given entity to the list of deletable entities
+	 * 
+	 * @param entity
+	 */
+	public void deleteEntityAfterUpdate(Entity entity) {
+		entitesToDeleteAfterUpdate.add(entity);
 	}
 }
