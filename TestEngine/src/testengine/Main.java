@@ -13,9 +13,9 @@ public class Main {
 	public static void main(String[] args) {
 		JFrame jframe = new JFrame();
         jframe.setTitle("SparkPudding - TestEngine");
-        jframe.setLocationRelativeTo(null);
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jframe.setSize(1280, 800);
+        jframe.setLocationRelativeTo(null);
         
         CoreEngine ce = null;
 
