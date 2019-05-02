@@ -368,6 +368,11 @@ public class CoreEngine extends JPanel {
 		currentScene.remove(entity);
 	}
 
+	/**
+	 * Adds the given entity to the list of deletable entities
+	 * 
+	 * @param entity
+	 */
 	public void deleteEntityAfterUpdate(Entity entity) {
 		entitesToDeleteAfterUpdate.add(entity);
 	}
