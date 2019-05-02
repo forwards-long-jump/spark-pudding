@@ -35,6 +35,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 
 	private Map<String, Component> components;
 	private String name;
+	private String template;
 	private int zIndex;
 
 	private LuaTable luaEntity;
@@ -43,7 +44,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * Default constructor
 	 */
 	public Entity() {
-		this("", 0, new HashMap<String, Component>());
+		this("", "", 0, new HashMap<String, Component>());
 	}
 
 	/**
@@ -52,8 +53,9 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * @param name   Name of the entity
 	 * @param zIndex z index, larger numbers imply foreground
 	 */
-	public Entity(String name, int zIndex, HashMap<String, Component> components) {
+	public Entity(String name, String template, int zIndex, HashMap<String, Component> components) {
 		this.name = name;
+		this.template = template;
 		this.setZIndex(zIndex);
 		this.components = components;
 
@@ -66,7 +68,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * @param entity
 	 */
 	public Entity(Entity entity) {
-		this(entity.name, entity.zIndex, new HashMap<String, Component>());
+		this(entity.name, entity.template, entity.zIndex, new HashMap<String, Component>());
 		// copy components
 		this.components = new HashMap<String, Component>();
 		for (Component component : entity.getComponents().values()) {
@@ -87,6 +89,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		Element entityElement = document.getDocumentElement();
 
 		this.name = entityElement.getAttribute("name");
+		this.template = null;
 
 		String zindex = entityElement.getAttribute("z-index");
 		if (zindex.length() > 0) {
@@ -112,11 +115,12 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * Creates an entity from a template, and adds changes described in the XML
 	 * element
 	 * 
-	 * @param element A properly formated XML element describing the entitiy
+	 * @param element A properly formated XML element describing the entity
 	 */
 	public Entity(Element element) {
 		this(templates.get(element.getAttribute("template")));
 		this.name = element.getAttribute("name");
+		this.template = element.getAttribute("template");
 		this.zIndex = Integer.parseInt(element.getAttribute("z-index"));
 
 		NodeList components = element.getChildNodes();
@@ -140,7 +144,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	}
 
 	/**
-	 * Instanciate the Lua entity
+	 * Instantiate the Lua entity
 	 */
 	private void createLuaEntity() {
 		this.luaEntity = coerceToLua();
@@ -233,6 +237,10 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public static void addTemplate(Entity template) {
 		templates.put(template.getName(), template);
+	}
+
+	public String getTemplate() {
+		return template;
 	}
 
 	/**

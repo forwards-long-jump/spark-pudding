@@ -10,7 +10,7 @@ import java.util.Map;
  * Manages Ludic Engine in Lua game files, supports reading from folder and from .lel
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  */
-public class LelFile {
+public class LelReader {
 	private String directory;
 
 	private Map<String, File> mapComponents;
@@ -30,7 +30,7 @@ public class LelFile {
 	 * @param directory The path to the directory or LEL file
 	 * @throws Exception
 	 */
-	public LelFile(String directory) throws Exception {
+	public LelReader(String directory) throws Exception {
 		this.directory = directory;
 
 		if (!isValidLel())

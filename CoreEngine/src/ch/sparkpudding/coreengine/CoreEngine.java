@@ -22,7 +22,7 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.coreengine.ecs.system.RenderSystem;
 import ch.sparkpudding.coreengine.ecs.system.UpdateSystem;
-import ch.sparkpudding.coreengine.filereader.LelFile;
+import ch.sparkpudding.coreengine.filereader.LelReader;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
 
 /**
@@ -40,7 +40,7 @@ public class CoreEngine extends JPanel {
 
 	private Input input;
 
-	private LelFile lelFile;
+	private LelReader lelFile;
 
 	private Map<String, Scene> scenes;
 	private Scene currentScene;
@@ -74,7 +74,7 @@ public class CoreEngine extends JPanel {
 		this.blackBarColor = Color.BLACK;
 		this.tick = 0;
 
-		this.lelFile = new LelFile(gameFolder);
+		this.lelFile = new LelReader(gameFolder);
 
 		populateComponentTemplates();
 		populateEntityTemplates();
