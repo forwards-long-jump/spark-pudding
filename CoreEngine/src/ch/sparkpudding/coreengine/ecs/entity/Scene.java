@@ -8,6 +8,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.sparkpudding.coreengine.Camera;
+
 /**
  * Scene of the game, described by the entities it contains.
  * 
@@ -18,6 +20,7 @@ public class Scene {
 
 	private List<Entity> entities;
 	private String name;
+	private Camera camera;
 
 	/**
 	 * Default constructor
@@ -25,6 +28,7 @@ public class Scene {
 	public Scene() {
 		this.name = "DEFAULT NAME";
 		this.entities = new ArrayList<Entity>();
+		this.camera = new Camera();
 	}
 
 	/**
@@ -46,6 +50,8 @@ public class Scene {
 				this.add(new Entity(entityElement));
 			}
 		}
+
+		this.camera = new Camera();
 	}
 
 	/**
@@ -57,6 +63,11 @@ public class Scene {
 		entities.add(e);
 	}
 
+	/**
+	 * Get all entities present on this scene
+	 * 
+	 * @return
+	 */
 	public List<Entity> getEntities() {
 		return entities;
 	}
@@ -70,11 +81,30 @@ public class Scene {
 		entities.remove(e);
 	}
 
+	/**
+	 * Return the name of this scene
+	 * 
+	 * @return name of this scene
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Return true if this scene is the main scene
+	 * 
+	 * @return true if this scene is the main scene
+	 */
 	public boolean isStartScene() {
 		return name.equals("main");
+	}
+
+	/**
+	 * Get camera
+	 * 
+	 * @return camera associated to the scene
+	 */
+	public Camera getCamera() {
+		return camera;
 	}
 }

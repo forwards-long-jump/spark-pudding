@@ -43,8 +43,8 @@ public class Core {
 	 * 
 	 * @return game width
 	 */
-	public int getGameWidth() {
-		return Lel.coreEngine.getWidth();
+	public double getGameWidth() {
+		return Lel.coreEngine.getGameWidth();
 	}
 
 	/**
@@ -52,10 +52,18 @@ public class Core {
 	 * 
 	 * @return game height
 	 */
-	public int getGameHeight() {
-		return Lel.coreEngine.getHeight();
+	public double getGameHeight() {
+		return Lel.coreEngine.getGameHeight();
 	}
 
+	/**
+	 * Get current frameRate
+	 * @return current tick
+	 */
+	public int getFPS() {
+		return Lel.coreEngine.getFPS();
+	}
+	
 	/**
 	 * Change current scene
 	 * 
