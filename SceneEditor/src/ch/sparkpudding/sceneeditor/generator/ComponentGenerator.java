@@ -1,7 +1,7 @@
 package ch.sparkpudding.sceneeditor.generator;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -24,10 +24,10 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 @SuppressWarnings("serial")
 public class ComponentGenerator extends JComponent {
 
-	public ComponentGenerator(List<Component> components) {
+	public ComponentGenerator(Collection<Component> collection) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		for (Component component : components) {
+		for (Component component : collection) {
 			Box titleBar = new Box(BoxLayout.X_AXIS);
 			titleBar.add(new JLabel(component.getName()));
 			titleBar.add(new JButton("Delete"));
