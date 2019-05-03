@@ -134,11 +134,10 @@ public class Input {
 			}
 
 			// This stays commented in case we ever want to add it later
-//			@Override
-//			public void mouseDragged(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//
-//			}
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				mouseMoved(e);
+			}
 		});
 	}
 
