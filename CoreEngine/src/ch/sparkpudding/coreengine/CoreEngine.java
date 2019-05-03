@@ -28,6 +28,7 @@ import ch.sparkpudding.coreengine.ecs.system.RenderSystem;
 import ch.sparkpudding.coreengine.ecs.system.UpdateSystem;
 import ch.sparkpudding.coreengine.filereader.LelReader;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
+import ch.sparkpudding.coreengine.utils.Collision;
 import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
@@ -576,5 +577,34 @@ public class CoreEngine extends JPanel {
 		y /= currentScene.getCamera().getScaling();
 
 		return new Point2D.Double(x, y);
+	}
+
+	/**
+	 * Get all entities intersecting given point. Note that the point should usually
+	 * be converted manually into world coordinates
+	 * 
+	 * @param p
+	 * @return
+	 */
+	public List<Entity> getEntitiesAt(Point2D p) {
+		List<Entity> entities = new ArrayList<Entity>();
+		List<String> requiredComponents = new ArrayList<String>();
+		requiredComponents.add("position");
+		requiredComponents.add("size");
+
+		for (Entity entity : currentScene.getEntities()) {
+			if (entity.hasComponents(requiredComponents)) {
+				Map<String, Component> components = entity.getComponents(); 
+				
+				if (Collision.intersectRect(p.getX(), p.getY(),
+						Float.parseFloat(components.get("position").getField("x").getValue().toString()),
+						Float.parseFloat(components.get("position").getField("y").getValue().toString()),
+						Float.parseFloat(components.get("size").getField("width").getValue().toString()),
+						Float.parseFloat(components.get("size").getField("height").getValue().toString()))) {
+					entities.add(entity);
+				}
+			}
+		}
+		return entities;
 	}
 }
