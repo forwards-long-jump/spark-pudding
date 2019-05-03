@@ -319,7 +319,8 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Return the translation of the game (the one that keep it centered in the middle of black bars)
+	 * Return the translation of the game (the one that keep it centered in the
+	 * middle of black bars)
 	 * 
 	 * @return
 	 */
@@ -394,7 +395,7 @@ public class CoreEngine extends JPanel {
 	 * Draw black bars hiding the game
 	 * 
 	 * @param g2d
-	 * @param scaleRatio current scale ratio used for the game
+	 * @param scaleRatio  current scale ratio used for the game
 	 * @param translation translation used for the game
 	 */
 	private void drawBlackBars(Graphics2D g2d, double scaleRatio, Point translation) {
@@ -439,7 +440,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Getter for input.
 	 * 
-	 * @return
+	 * @return input
 	 */
 	public Input getInput() {
 		return input;
@@ -462,7 +463,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Get current framerate of the game
 	 * 
-	 * @return
+	 * @return current framerate
 	 */
 	public int getFPS() {
 		return fpsCount;
@@ -533,7 +534,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Get game height (not jpanel height)
 	 * 
-	 * @return
+	 * @return game height
 	 */
 	public double getGameHeight() {
 		return this.renderSize.getHeight();
@@ -542,7 +543,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Get game width (not jpanel height)
 	 * 
-	 * @return
+	 * @return game width
 	 */
 	public double getGameWidth() {
 		return this.renderSize.getWidth();
@@ -551,8 +552,8 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Convert a panel position to the game (UI) position
 	 * 
-	 * @param p
-	 * @return Point2D
+	 * @param p position to convert
+	 * @return Point2D new position
 	 */
 	public Point2D panelPositionToGame(Point2D p) {
 		double x = p.getX();
@@ -574,8 +575,8 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Convert a panel position to the game world position
 	 * 
-	 * @param p
-	 * @return Point2D
+	 * @param p point to convert
+	 * @return Point2D point converted
 	 */
 	public Point2D panelPositionToWorld(Point2D p) {
 		Point2D gamePosition = panelPositionToGame(p);
@@ -595,8 +596,8 @@ public class CoreEngine extends JPanel {
 	 * Get all entities intersecting given point. Note that the point should usually
 	 * be converted manually into world coordinates
 	 * 
-	 * @param p
-	 * @return
+	 * @param p point to get entities at
+	 * @return List<Entity> all entities below the mouse
 	 */
 	public List<Entity> getEntitiesAt(Point2D p) {
 		List<Entity> entities = new ArrayList<Entity>();

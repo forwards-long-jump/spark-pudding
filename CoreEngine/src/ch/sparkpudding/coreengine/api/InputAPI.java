@@ -58,9 +58,9 @@ public class InputAPI {
 	}
 
 	/**
-	 * Return the mouse position relative to the game
+	 * Return the mouse position relative to the ui
 	 * 
-	 * @return mouse position relative to the jpanel
+	 * @return mouse position relative to the ui
 	 */
 	public Point2D getUIMousePosition() {
 		return Lel.coreEngine.panelPositionToGame(input.getMousePosition());
@@ -69,25 +69,25 @@ public class InputAPI {
 	/**
 	 * Return the mouse position relative to the world
 	 * 
-	 * @return mouse position relative to the jpanel
+	 * @return mouse position relative to the world
 	 */
 	public Point2D getMousePosition() {
 		return Lel.coreEngine.panelPositionToWorld(input.getMousePosition());
 	}
 
 	/**
-	 * Return the X mouse position in game coordinates
+	 * Return the X mouse position in ui coordinates
 	 * 
-	 * @return X mouse position in game coordinates
+	 * @return X mouse position in ui coordinates
 	 */
 	public double getUIMouseX() {
 		return getUIMousePosition().getX();
 	}
 
 	/**
-	 * Return the Y mouse position in game coordinates
+	 * Return the Y mouse position in ui coordinates
 	 * 
-	 * @return Y mouse position in game coordinates
+	 * @return Y mouse position in ui coordinates
 	 */
 	public double getUIMouseY() {
 		return getUIMousePosition().getY();
@@ -96,7 +96,7 @@ public class InputAPI {
 	/**
 	 * Return the X mouse position in world coordinates
 	 * 
-	 * @return X mouse position in game coordinates
+	 * @return X mouse position in world coordinates
 	 */
 	public double getMouseX() {
 		return getMousePosition().getX();
@@ -105,7 +105,7 @@ public class InputAPI {
 	/**
 	 * Return the Y mouse position in world coordinates
 	 * 
-	 * @return Y mouse position in game coordinates
+	 * @return Y mouse position in world coordinates
 	 */
 	public double getMouseY() {
 		return getMousePosition().getY();
