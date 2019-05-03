@@ -318,6 +318,11 @@ public class CoreEngine extends JPanel {
 		renderSystem.setEntities(newScene.getEntities());
 	}
 
+	/**
+	 * Return the translation of the game (the one that keep it centered in the middle of black bars)
+	 * 
+	 * @return
+	 */
 	private Point getGameTranslation() {
 		double scaleRatio = getScaleRatio();
 		// Calculate translation to center the game
@@ -385,6 +390,13 @@ public class CoreEngine extends JPanel {
 		renderLock.release();
 	}
 
+	/**
+	 * Draw black bars hiding the game
+	 * 
+	 * @param g2d
+	 * @param scaleRatio current scale ratio used for the game
+	 * @param translation translation used for the game
+	 */
 	private void drawBlackBars(Graphics2D g2d, double scaleRatio, Point translation) {
 		// Draw black bar
 		g2d.setColor(blackBarColor);
@@ -594,8 +606,8 @@ public class CoreEngine extends JPanel {
 
 		for (Entity entity : currentScene.getEntities()) {
 			if (entity.hasComponents(requiredComponents)) {
-				Map<String, Component> components = entity.getComponents(); 
-				
+				Map<String, Component> components = entity.getComponents();
+
 				if (Collision.intersectRect(p.getX(), p.getY(),
 						Float.parseFloat(components.get("position").getField("x").getValue().toString()),
 						Float.parseFloat(components.get("position").getField("y").getValue().toString()),

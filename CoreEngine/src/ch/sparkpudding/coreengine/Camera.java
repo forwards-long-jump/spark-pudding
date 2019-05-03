@@ -402,6 +402,9 @@ public class Camera {
 		return scaling;
 	}
 
+	/**
+	 * Reset forces and set target position to current position
+	 */
 	public void setTargetToPosition() {
 		targetPosition.setLocation(position.getX(), position.getY());
 		resetForces();
