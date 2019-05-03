@@ -1,8 +1,11 @@
 package ch.sparkpudding.sceneeditor.panel;
 
+import java.awt.Component;
 import java.awt.FlowLayout;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -25,8 +28,8 @@ public class PanelEntityTree extends JPanel {
 
 	private PanelEntity panelEntity;
 
-	private DefaultListModel<String> listModelEntities;
-	private JList<String> jListEntities;
+	private DefaultListModel<Entity> listModelEntities;
+	private JList<Entity> jListEntities;
 	private JScrollPane listScroller;
 
 	/**
@@ -47,12 +50,24 @@ public class PanelEntityTree extends JPanel {
 	 * Initialize the different element of the panel
 	 */
 	private void init() {
-		listModelEntities = new DefaultListModel<String>();
+		listModelEntities = new DefaultListModel<Entity>();
 
-		jListEntities = new JList<String>(listModelEntities);
+		jListEntities = new JList<Entity>(listModelEntities);
 		jListEntities.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		jListEntities.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		jListEntities.setVisibleRowCount(-1);
+		jListEntities.setCellRenderer(new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (renderer instanceof JLabel && value instanceof Entity) {
+					// Here value will be of the Type 'CD'
+					((JLabel) renderer).setText(((Entity) value).getName());
+				}
+				return renderer;
+			}
+		});
 
 		listScroller = new JScrollPane(jListEntities);
 	}
@@ -64,6 +79,7 @@ public class PanelEntityTree extends JPanel {
 		setLayout(new FlowLayout());
 
 		add(listScroller);
+		add(panelEntity);
 	}
 
 	/**
@@ -74,8 +90,9 @@ public class PanelEntityTree extends JPanel {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting()) {
-					System.out.println("Salut " + ((JList<String>) e.getSource()).getSelectedValue());
+				if (!e.getValueIsAdjusting() && e.getSource() instanceof JList<?>
+						&& ((JList<?>) e.getSource()).getSelectedValue() instanceof Entity) {
+					panelEntity.setEntity((Entity) ((JList<?>) e.getSource()).getSelectedValue());
 				}
 			}
 		});
@@ -90,7 +107,7 @@ public class PanelEntityTree extends JPanel {
 		listModelEntities.removeAllElements();
 
 		for (Entity entity : scene.getEntities()) {
-			listModelEntities.addElement(entity.getName());
+			listModelEntities.addElement(entity);
 		}
 	}
 
