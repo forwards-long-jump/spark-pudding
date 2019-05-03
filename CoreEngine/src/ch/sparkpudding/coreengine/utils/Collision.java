@@ -12,12 +12,12 @@ public class Collision {
 	 * Return true if point specified by x and y intersects rectangle given by rx ry
 	 * rw and rh
 	 * 
-	 * @param x
-	 * @param y
-	 * @param rx
-	 * @param ry
-	 * @param rw
-	 * @param rh
+	 * @param x  x position of the point
+	 * @param y  y position of the point
+	 * @param rx x position of the rectangle
+	 * @param ry y position of the rectangle
+	 * @param rw width of the rectangle
+	 * @param rh height of the rectangle
 	 * @return true if point specified by x and y intersects rectangle given by rx
 	 *         ry rw and rh
 	 */
