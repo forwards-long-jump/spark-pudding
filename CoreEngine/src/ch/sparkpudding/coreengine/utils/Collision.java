@@ -24,4 +24,22 @@ public class Collision {
 	public static boolean intersectRect(double x, double y, double rx, double ry, double rw, double rh) {
 		return (x > rx && y > ry) && (x < rx + rw && y < ry + rh);
 	}
+
+	/**
+	 * Return true if first rect intersects second rect
+	 * 
+	 * @param x  of rect1
+	 * @param y  of rect1
+	 * @param w  of rect1
+	 * @param h  of rect1
+	 * @param x2 of rect2
+	 * @param y2 of rect2
+	 * @param w2 of rect2
+	 * @param h2 of rect2
+	 * @return true if first rect intersects second rect
+	 */
+	public static boolean rectIntersectRect(double x, double y, double w, double h, double x2, double y2, double w2,
+			double h2) {
+		return (x + w > x2 && y + h > y2 && x < x2 + w2 && y < y2 + h2);
+	}
 }
