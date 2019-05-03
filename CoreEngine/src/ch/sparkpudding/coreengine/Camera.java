@@ -21,7 +21,7 @@ public class Camera {
 	 * to it
 	 */
 	public enum Mode {
-		LINEAR, SMOOTH, SPRING;
+		NO_FOLLOW, LINEAR, SMOOTH, SPRING;
 	}
 
 	private Mode translateMode;
@@ -95,6 +95,8 @@ public class Camera {
 
 		// Translation
 		switch (translateMode) {
+		case NO_FOLLOW:
+			break;
 		case LINEAR:
 			// x
 			if (Math.abs(targetPosition.getX() - x) > 1) {
@@ -230,6 +232,7 @@ public class Camera {
 	 */
 	public void setPosition(float x, float y) {
 		position.setLocation(x * scaling, y * scaling);
+		targetPosition.setLocation(position.getX(), position.getY());
 		resetForces();
 	}
 
@@ -259,6 +262,7 @@ public class Camera {
 	public void centerAt(float x, float y, float w, float h) {
 		position.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2,
 				y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
+		targetPosition.setLocation(position.getX(), position.getY());
 		resetForces();
 	}
 
@@ -396,5 +400,10 @@ public class Camera {
 	 */
 	public double getScaling() {
 		return scaling;
+	}
+
+	public void setTargetToPosition() {
+		targetPosition.setLocation(position.getX(), position.getY());
+		resetForces();
 	}
 }
