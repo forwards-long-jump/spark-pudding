@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import ch.sparkpudding.coreengine.ecs.system.RenderSystem;
 import ch.sparkpudding.coreengine.ecs.system.UpdateSystem;
 import ch.sparkpudding.coreengine.filereader.LelReader;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
+import ch.sparkpudding.coreengine.utils.Collision;
 import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
@@ -315,10 +318,30 @@ public class CoreEngine extends JPanel {
 		renderSystem.setEntities(newScene.getEntities());
 	}
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+	/**
+	 * Return the translation of the game (the one that keep it centered in the
+	 * middle of black bars)
+	 * 
+	 * @return
+	 */
+	private Point getGameTranslation() {
+		double scaleRatio = getScaleRatio();
+		// Calculate translation to center the game
+		int realGameWidth = (int) (scaleRatio * renderSize.getWidth());
+		int realGameHeight = (int) (scaleRatio * renderSize.getHeight());
 
+		int translateX = getWidth() / 2 - realGameWidth / 2;
+		int translateY = getHeight() / 2 - realGameHeight / 2;
+
+		return new Point(translateX, translateY);
+	}
+
+	/**
+	 * Calculate height
+	 * 
+	 * @return
+	 */
+	private double getScaleRatio() {
 		// Calculate screen ratio for width / height
 		double scaleRatio = 1.0;
 		double heightScaleRatio = getHeight() / renderSize.getHeight();
@@ -331,19 +354,25 @@ public class CoreEngine extends JPanel {
 			scaleRatio = widthScaleRatio;
 		}
 
-		// Calculate translation to center the game
-		int realGameWidth = (int) (scaleRatio * renderSize.getWidth());
-		int realGameHeight = (int) (scaleRatio * renderSize.getHeight());
+		return scaleRatio;
+	}
 
-		int translateX = getWidth() / 2 - realGameWidth / 2;
-		int translateY = getHeight() / 2 - realGameHeight / 2;
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
 		Graphics2D g2d = (Graphics2D) g;
+		AffineTransform transformationState = g2d.getTransform();
 
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		AffineTransform transformationState = g2d.getTransform();
-		g2d.translate(translateX, translateY);
+		// Calculate screen ratio for width / height
+		double scaleRatio = getScaleRatio();
+		// Calculate translation to center the game
+		Point translation = getGameTranslation();
+
+		// Apply transforms
+		g2d.translate(translation.getX(), translation.getY());
 		g2d.scale(scaleRatio, scaleRatio);
 
 		fps++;
@@ -351,8 +380,34 @@ public class CoreEngine extends JPanel {
 
 		g2d.setTransform(transformationState);
 
+		// Draw black bars
+		drawBlackBars(g2d, scaleRatio, translation);
+
+		// Source:
+		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
+		java.awt.Toolkit.getDefaultToolkit().sync();
+		g.dispose();
+
+		renderLock.release();
+	}
+
+	/**
+	 * Draw black bars hiding the game
+	 * 
+	 * @param g2d
+	 * @param scaleRatio  current scale ratio used for the game
+	 * @param translation translation used for the game
+	 */
+	private void drawBlackBars(Graphics2D g2d, double scaleRatio, Point translation) {
 		// Draw black bar
 		g2d.setColor(blackBarColor);
+		double heightScaleRatio = getHeight() / renderSize.getHeight();
+		double widthScaleRatio = getWidth() / renderSize.getWidth();
+		int realGameWidth = (int) (scaleRatio * renderSize.getWidth());
+		int realGameHeight = (int) (scaleRatio * renderSize.getHeight());
+		int translateX = (int) translation.getX();
+		int translateY = (int) translation.getY();
+
 		if (widthScaleRatio > heightScaleRatio) {
 			// Vertical
 			g2d.fillRect(0, 0, translateX, getHeight());
@@ -362,13 +417,6 @@ public class CoreEngine extends JPanel {
 			g2d.fillRect(0, 0, getWidth(), translateY);
 			g2d.fillRect(0, translateY + realGameHeight, getWidth() + 1, translateY + 1);
 		}
-
-		// Source:
-		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
-		java.awt.Toolkit.getDefaultToolkit().sync();
-		g.dispose();
-
-		renderLock.release();
 	}
 
 	/**
@@ -392,7 +440,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Getter for input.
 	 * 
-	 * @return
+	 * @return input
 	 */
 	public Input getInput() {
 		return input;
@@ -415,7 +463,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Get current framerate of the game
 	 * 
-	 * @return
+	 * @return current framerate
 	 */
 	public int getFPS() {
 		return fpsCount;
@@ -486,7 +534,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Get game height (not jpanel height)
 	 * 
-	 * @return
+	 * @return game height
 	 */
 	public double getGameHeight() {
 		return this.renderSize.getHeight();
@@ -495,9 +543,81 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Get game width (not jpanel height)
 	 * 
-	 * @return
+	 * @return game width
 	 */
 	public double getGameWidth() {
 		return this.renderSize.getWidth();
+	}
+
+	/**
+	 * Convert a panel position to the game (UI) position
+	 * 
+	 * @param p position to convert
+	 * @return Point2D new position
+	 */
+	public Point2D panelPositionToGame(Point2D p) {
+		double x = p.getX();
+		double y = p.getY();
+
+		double scaleRatio = getScaleRatio();
+		Point translation = getGameTranslation();
+
+		x -= translation.getX();
+		y -= translation.getY();
+
+		// Game ratio scaling
+		x /= scaleRatio;
+		y /= scaleRatio;
+
+		return new Point2D.Double(x, y);
+	}
+
+	/**
+	 * Convert a panel position to the game world position
+	 * 
+	 * @param p point to convert
+	 * @return Point2D point converted
+	 */
+	public Point2D panelPositionToWorld(Point2D p) {
+		Point2D gamePosition = panelPositionToGame(p);
+		double x = gamePosition.getX();
+		double y = gamePosition.getY();
+
+		x += currentScene.getCamera().getPosition().getX();
+		y += currentScene.getCamera().getPosition().getY();
+
+		x /= currentScene.getCamera().getScaling();
+		y /= currentScene.getCamera().getScaling();
+
+		return new Point2D.Double(x, y);
+	}
+
+	/**
+	 * Get all entities intersecting given point. Note that the point should usually
+	 * be converted manually into world coordinates
+	 * 
+	 * @param p point to get entities at
+	 * @return List<Entity> all entities below the mouse
+	 */
+	public List<Entity> getEntitiesAt(Point2D p) {
+		List<Entity> entities = new ArrayList<Entity>();
+		List<String> requiredComponents = new ArrayList<String>();
+		requiredComponents.add("position");
+		requiredComponents.add("size");
+
+		for (Entity entity : currentScene.getEntities()) {
+			if (entity.hasComponents(requiredComponents)) {
+				Map<String, Component> components = entity.getComponents();
+
+				if (Collision.intersectRect(p.getX(), p.getY(),
+						Float.parseFloat(components.get("position").getField("x").getValue().toString()),
+						Float.parseFloat(components.get("position").getField("y").getValue().toString()),
+						Float.parseFloat(components.get("size").getField("width").getValue().toString()),
+						Float.parseFloat(components.get("size").getField("height").getValue().toString()))) {
+					entities.add(entity);
+				}
+			}
+		}
+		return entities;
 	}
 }

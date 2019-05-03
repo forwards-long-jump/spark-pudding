@@ -8,6 +8,11 @@ import org.luaj.vm2.lib.PackageLib;
 import org.luaj.vm2.lib.StringLib;
 import org.luaj.vm2.lib.jse.JseBaseLib;
 
+/**
+ * Utils class storing lua related helpers
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ */
 public class Lua {
 	// Metatable is the same for all systems
 	private static LuaValue metatableSetterMethod;

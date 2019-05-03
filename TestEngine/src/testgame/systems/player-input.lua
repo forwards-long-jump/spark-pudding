@@ -1,12 +1,20 @@
 function getRequiredComponents()
-  return {"position", "size", "player", "shooter"}
+  return {entities = {"position", "size", "player", "shooter"}, mice = {"position", "mouse"}}
 end
 
+-- NOTE: NEVER do that outside of a test, it breaks one of ECS most important principle
 local scaling = 1
+local following = true
+
 function update()
   -- Change scene when splace is pressed
   if(game.input:isKeyDown(32)) then
     game.core:setScene("game")
+  end
+
+  for i, entity in ipairs(mice) do
+    entity.position.x = game.input:getMouseX()
+    entity.position.y = game.input:getMouseY()
   end
 
   for i, entity in ipairs(entities) do
@@ -25,19 +33,29 @@ function update()
       entity.position.x = entity.position.x - 5
     end
 
+    -- Remove boundary with 0
     if(game.input:isKeyDown(48)) then
       game.camera:clearBoundary()
     end
 
-     if(game.input:isKeyDown(57)) then
+    -- Change game boundary with 9 or 8
+    if(game.input:isKeyDown(57)) then
       game.camera:setBoundary(0, 0, game.core:getGameWidth(), game.core:getGameHeight())
     end
 
+    -- Make the camera stop following with enter (use it to test zoom)
+    if(game.input:isKeyDown(10)) then
+      game.camera:setMode("NO_FOLLOW")
+    end
+
     if(game.input:isKeyDown(107)) then
+      game.camera:setScalingPoint(game.input:getUIMouseX(), game.input:getUIMouseY())
       scaling = scaling * 1.1
       game.camera:setTargetScaling(scaling)
     end
+
     if(game.input:isKeyDown(109)) then
+      game.camera:setScalingPoint(game.input:getUIMouseX(), game.input:getUIMouseY())
       scaling = scaling / 1.1
       game.camera:setTargetScaling(scaling)
     end

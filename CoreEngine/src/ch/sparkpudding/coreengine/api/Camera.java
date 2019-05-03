@@ -81,6 +81,13 @@ public class Camera {
 	}
 
 	/**
+	 * Set the target position to the current position
+	 */
+	public void setTargetToPosition() {
+		this.coreEngine.getCamera().setTargetToPosition();
+	}
+
+	/**
 	 * Center the target of the camera at the specified location. Center of entity
 	 * is calculated automatically if width and height are given
 	 *
@@ -143,8 +150,8 @@ public class Camera {
 	 *
 	 * @param mode
 	 */
-	public void setTranslateMode(Mode mode) {
-		this.coreEngine.getCamera().setTranslateMode(mode);
+	public void setMode(String mode) {
+		this.coreEngine.getCamera().setTranslateMode(Mode.valueOf(mode));
 	}
 
 	/**
@@ -206,17 +213,30 @@ public class Camera {
 	/**
 	 * @param scalingPoint the scalingPoint to set
 	 */
-	public void setScalingPoint(Point2D scalingPoint) {
-		this.coreEngine.getCamera().setScalingPoint(scalingPoint);
+	public void setScalingPoint(double x, double y) {
+		this.coreEngine.getCamera().setScalingPoint(new Point2D.Double(x, y));
 	}
 
 	/**
 	 * Make the camera shake
 	 *
 	 * @param intensity in pixel
-	 * @param duration in tick
+	 * @param duration  in tick
 	 */
 	public void shake(float intensity, int duration) {
 		this.coreEngine.getCamera().shake(intensity, duration);
+	}
+
+	/**
+	 * Return true if the given rectangle is visible
+	 *
+	 * @param x      coordinates of the rectangle
+	 * @param y      coordinates of the rectangle
+	 * @param width  of the rectangle
+	 * @param height of the rectangle
+	 * @return true if the given rectangle is visible
+	 */
+	public boolean isInView(float x, float y, float width, float height) {
+		return this.coreEngine.getCamera().isInView(x, y, width, height);
 	}
 }

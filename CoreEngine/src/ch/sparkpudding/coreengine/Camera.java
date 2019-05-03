@@ -5,6 +5,8 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
+import ch.sparkpudding.coreengine.utils.Collision;
+
 /**
  * Class controlling screen position
  * 
@@ -21,7 +23,7 @@ public class Camera {
 	 * to it
 	 */
 	public enum Mode {
-		LINEAR, SMOOTH, SPRING;
+		NO_FOLLOW, LINEAR, SMOOTH, SPRING;
 	}
 
 	private Mode translateMode;
@@ -95,6 +97,8 @@ public class Camera {
 
 		// Translation
 		switch (translateMode) {
+		case NO_FOLLOW:
+			break;
 		case LINEAR:
 			// x
 			if (Math.abs(targetPosition.getX() - x) > 1) {
@@ -167,14 +171,16 @@ public class Camera {
 				x = Math.max(x, boundary.getX() * scaling);
 				x = Math.min(x, (boundary.getWidth() + boundary.getX()) * scaling - Lel.coreEngine.getGameWidth());
 			} else {
-				x = -Lel.coreEngine.getGameWidth() / 2 + scaling * (boundary.getWidth()) / 2 + boundary.getX() * scaling;
+				x = -Lel.coreEngine.getGameWidth() / 2 + scaling * (boundary.getWidth()) / 2
+						+ boundary.getX() * scaling;
 			}
 
 			if (boundary.getHeight() * scaling >= Lel.coreEngine.getGameHeight()) {
 				y = Math.max(y, boundary.getY() * scaling);
 				y = Math.min(y, (boundary.getHeight() + boundary.getY()) * scaling - Lel.coreEngine.getGameHeight());
 			} else {
-				y = -Lel.coreEngine.getGameHeight() / 2 + scaling * (boundary.getHeight()) / 2 + +boundary.getY() * scaling;
+				y = -Lel.coreEngine.getGameHeight() / 2 + scaling * (boundary.getHeight()) / 2
+						+ boundary.getY() * scaling;
 			}
 		}
 
@@ -228,6 +234,7 @@ public class Camera {
 	 */
 	public void setPosition(float x, float y) {
 		position.setLocation(x * scaling, y * scaling);
+		targetPosition.setLocation(position.getX(), position.getY());
 		resetForces();
 	}
 
@@ -241,7 +248,8 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerTargetAt(float x, float y, float w, float h) {
-		targetPosition.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
+		targetPosition.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2,
+				y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
 	}
 
 	/**
@@ -254,7 +262,9 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerAt(float x, float y, float w, float h) {
-		position.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
+		position.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2,
+				y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
+		targetPosition.setLocation(position.getX(), position.getY());
 		resetForces();
 	}
 
@@ -369,10 +379,53 @@ public class Camera {
 	 * Make the camera shake
 	 * 
 	 * @param intensity in pixel
-	 * @param duration in tick
+	 * @param duration  in tick
 	 */
 	public void shake(float intensity, int duration) {
 		this.shakeIntensity = intensity;
 		this.shakeDurationLeft = duration;
+	}
+
+	/**
+	 * Get current position of the camera
+	 * 
+	 * @return
+	 */
+	public Point2D getPosition() {
+		return position;
+	}
+
+	/**
+	 * Get current scaling of the camera
+	 * 
+	 * @return
+	 */
+	public double getScaling() {
+		return scaling;
+	}
+
+	/**
+	 * Reset forces and set target position to current position
+	 */
+	public void setTargetToPosition() {
+		targetPosition.setLocation(position.getX(), position.getY());
+		resetForces();
+	}
+
+	/**
+	 * Return true if the given rectangle is visible
+	 * 
+	 * @param x      coordinates of the rectangle
+	 * @param y      coordinates of the rectangle
+	 * @param width  of the rectangle
+	 * @param height of the rectangle
+	 * @return
+	 */
+	public boolean isInView(double x, double y, double width, double height) {
+		double cx = this.position.getX() / this.scaling;
+		double cy = this.position.getY() / this.scaling;
+		double cw = Lel.coreEngine.getGameWidth() / this.scaling;
+		double ch = Lel.coreEngine.getGameHeight() / this.scaling;
+		return Collision.rectIntersectRect(x, y, width, height, cx, cy, cw, ch);
 	}
 }
