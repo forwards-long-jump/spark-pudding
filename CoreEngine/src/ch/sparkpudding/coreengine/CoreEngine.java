@@ -174,7 +174,6 @@ public class CoreEngine extends JPanel {
 
 			if (lag >= msPerUpdate) {
 				do {
-					tick++;
 					update();
 					lag -= msPerUpdate;
 				} while (lag >= msPerUpdate);
@@ -190,7 +189,8 @@ public class CoreEngine extends JPanel {
 		if (pauseAll) {
 			return;
 		}
-
+		
+		tick++;
 		for (UpdateSystem system : systems) {
 			system.update();
 		}
