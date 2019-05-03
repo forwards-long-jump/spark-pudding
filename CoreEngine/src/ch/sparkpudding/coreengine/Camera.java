@@ -5,6 +5,8 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
+import ch.sparkpudding.coreengine.utils.Collision;
+
 /**
  * Class controlling screen position
  * 
@@ -178,7 +180,7 @@ public class Camera {
 				y = Math.min(y, (boundary.getHeight() + boundary.getY()) * scaling - Lel.coreEngine.getGameHeight());
 			} else {
 				y = -Lel.coreEngine.getGameHeight() / 2 + scaling * (boundary.getHeight()) / 2
-						+ +boundary.getY() * scaling;
+						+ boundary.getY() * scaling;
 			}
 		}
 
@@ -408,5 +410,22 @@ public class Camera {
 	public void setTargetToPosition() {
 		targetPosition.setLocation(position.getX(), position.getY());
 		resetForces();
+	}
+
+	/**
+	 * Return true if the given rectangle is visible
+	 * 
+	 * @param x      coordinates of the rectangle
+	 * @param y      coordinates of the rectangle
+	 * @param width  of the rectangle
+	 * @param height of the rectangle
+	 * @return
+	 */
+	public boolean isInView(double x, double y, double width, double height) {
+		double cx = this.position.getX() / this.scaling;
+		double cy = this.position.getY() / this.scaling;
+		double cw = Lel.coreEngine.getGameWidth() / this.scaling;
+		double ch = Lel.coreEngine.getGameHeight() / this.scaling;
+		return Collision.rectIntersectRect(x, y, width, height, cx, cy, cw, ch);
 	}
 }

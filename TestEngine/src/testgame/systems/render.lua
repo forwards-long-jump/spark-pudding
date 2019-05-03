@@ -4,13 +4,16 @@ end
 
 function render(g)
   game.camera:applyTransforms(g)
+  local renderCount = 0
   for i, entity in ipairs(players) do
     pos = entity.position
     size = entity.size
     color = entity.color
-
-    g:setColor(game.color:fromRGB(color.r, color.g, color.b))
-    g:fillRect(pos.x, pos.y, size.width, size.height)
+    if game.camera:isInView(pos.x, pos.y, size.width, size.height) then
+      renderCount = renderCount + 1
+      g:setColor(game.color:fromRGB(color.r, color.g, color.b))
+      g:fillRect(pos.x, pos.y, size.width, size.height)
+    end
   end
 
   g:setColor(game.color:fromRGBA(0, 0, 208, 5))
