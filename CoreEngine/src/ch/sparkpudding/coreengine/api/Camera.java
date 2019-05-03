@@ -17,7 +17,7 @@ import ch.sparkpudding.coreengine.Lel;
 public class Camera {
 	private CoreEngine coreEngine;
 	private static Camera instance;
-
+	
 	/**
 	 * Get Camera API instance
 	 *
@@ -78,6 +78,13 @@ public class Camera {
 	 */
 	public void setTargetScaling(float s) {
 		this.coreEngine.getCamera().setTargetScaling(s);
+	}
+	
+	/**
+	 * Set the target position to the current position
+	 */
+	public void setTargetToPosition() {
+		this.coreEngine.getCamera().setTargetToPosition();
 	}
 
 	/**
@@ -143,8 +150,8 @@ public class Camera {
 	 *
 	 * @param mode
 	 */
-	public void setTranslateMode(Mode mode) {
-		this.coreEngine.getCamera().setTranslateMode(mode);
+	public void setMode(String mode) {
+		this.coreEngine.getCamera().setTranslateMode(Mode.valueOf(mode));
 	}
 
 	/**
@@ -206,8 +213,8 @@ public class Camera {
 	/**
 	 * @param scalingPoint the scalingPoint to set
 	 */
-	public void setScalingPoint(Point2D scalingPoint) {
-		this.coreEngine.getCamera().setScalingPoint(scalingPoint);
+	public void setScalingPoint(double x, double y) {
+		this.coreEngine.getCamera().setScalingPoint(new Point2D.Double(x, y));
 	}
 
 	/**
