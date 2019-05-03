@@ -167,14 +167,16 @@ public class Camera {
 				x = Math.max(x, boundary.getX() * scaling);
 				x = Math.min(x, (boundary.getWidth() + boundary.getX()) * scaling - Lel.coreEngine.getGameWidth());
 			} else {
-				x = -Lel.coreEngine.getGameWidth() / 2 + scaling * (boundary.getWidth()) / 2 + boundary.getX() * scaling;
+				x = -Lel.coreEngine.getGameWidth() / 2 + scaling * (boundary.getWidth()) / 2
+						+ boundary.getX() * scaling;
 			}
 
 			if (boundary.getHeight() * scaling >= Lel.coreEngine.getGameHeight()) {
 				y = Math.max(y, boundary.getY() * scaling);
 				y = Math.min(y, (boundary.getHeight() + boundary.getY()) * scaling - Lel.coreEngine.getGameHeight());
 			} else {
-				y = -Lel.coreEngine.getGameHeight() / 2 + scaling * (boundary.getHeight()) / 2 + +boundary.getY() * scaling;
+				y = -Lel.coreEngine.getGameHeight() / 2 + scaling * (boundary.getHeight()) / 2
+						+ +boundary.getY() * scaling;
 			}
 		}
 
@@ -241,7 +243,8 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerTargetAt(float x, float y, float w, float h) {
-		targetPosition.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
+		targetPosition.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2,
+				y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
 	}
 
 	/**
@@ -254,7 +257,8 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerAt(float x, float y, float w, float h) {
-		position.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2, y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
+		position.setLocation(x * scaling + (w * scaling - Lel.coreEngine.getGameWidth()) / 2,
+				y * scaling + (h * scaling - Lel.coreEngine.getGameHeight()) / 2);
 		resetForces();
 	}
 
@@ -369,10 +373,28 @@ public class Camera {
 	 * Make the camera shake
 	 * 
 	 * @param intensity in pixel
-	 * @param duration in tick
+	 * @param duration  in tick
 	 */
 	public void shake(float intensity, int duration) {
 		this.shakeIntensity = intensity;
 		this.shakeDurationLeft = duration;
+	}
+
+	/**
+	 * Get current position of the camera
+	 * 
+	 * @return
+	 */
+	public Point2D getPosition() {
+		return position;
+	}
+
+	/**
+	 * Get current scaling of the camera
+	 * 
+	 * @return
+	 */
+	public double getScaling() {
+		return scaling;
 	}
 }
