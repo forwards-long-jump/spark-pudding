@@ -40,6 +40,8 @@ function render(g)
   end
 
   game.camera:resetTransforms(g)
+  g:setColor(game.color:fromRGB(0, 0, 0))
   g:drawString("FPS: " .. game.core:getFPS(), 20, 20)
+  g:drawString("EC : " .. renderCount, 20, 40)
 
 end
