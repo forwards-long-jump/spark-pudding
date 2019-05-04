@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
@@ -49,6 +51,11 @@ public abstract class System {
 	protected CoreEngine coreEngine;
 
 	protected boolean loadingFailed;
+	
+	// Systems should use this to execute their lua in a safe manner
+	Thread sandboxThread;
+	protected ExecutorService executor;
+	protected static final int MAX_EXECUTION_TIME_IN_SECONDS = 1;
 
 	/**
 	 * Constructs the system from the Lua file
@@ -59,6 +66,7 @@ public abstract class System {
 	public System(File file, CoreEngine coreEngine) {
 		this.filepath = file.getAbsolutePath();
 		this.coreEngine = coreEngine;
+		executor = Executors.newFixedThreadPool(1);
 
 		// (re)Load this system
 		reload();
