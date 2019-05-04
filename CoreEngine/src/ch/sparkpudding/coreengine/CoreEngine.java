@@ -234,10 +234,12 @@ public class CoreEngine extends JPanel {
 			// Try to continue 
 			if(input.isKeyDown(KeyEvent.VK_SPACE)) {
 				luaError = null;
+				input.resetAllKeys();
 				togglePauseAll();
 			}
 			else if(input.isKeyDown(KeyEvent.VK_ENTER)) {
 				luaError = null;
+				input.resetAllKeys();
 				reloadSystemsFromDisk();
 				togglePauseAll();
 			}
