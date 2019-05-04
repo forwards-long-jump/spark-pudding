@@ -51,7 +51,7 @@ public abstract class System {
 	protected CoreEngine coreEngine;
 
 	protected boolean loadingFailed;
-	
+
 	// Systems should use this to execute their lua in a safe manner
 	Thread sandboxThread;
 	protected ExecutorService executor;
@@ -143,8 +143,15 @@ public abstract class System {
 	 */
 	private void loadRequiredComponents() {
 		componentGroups.clear();
-		LuaTable list = (LuaTable) getRequiredComponentsMethod.call(); // Return { entity = {"comp1", "comp2"}}
+		LuaTable list = null;
 
+		try {
+			list = (LuaTable) getRequiredComponentsMethod.call(); // Return { entity = {"comp1", "comp2"}}
+		} catch (ClassCastException error) {
+			Lel.coreEngine.notifyLuaError(new LuaError(filepath + ": could not parse required components."));
+			loadingFailed = true;
+			return;
+		}
 		// list iteration in LuaJ
 		LuaValue key = LuaValue.NIL;
 		Varargs entry = list.next(key);
