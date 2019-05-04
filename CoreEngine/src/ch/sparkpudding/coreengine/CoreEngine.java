@@ -223,6 +223,10 @@ public class CoreEngine extends JPanel {
 	private void handleSystemsReloading() {
 		if (systemReloadScheduled) {
 			systemReloadScheduled = false;
+			if(luaError != null) {
+				luaError = null; // Let's remove the error as reloading systems may fix it
+				pauseAll = false;
+			}
 			reloadSystemsFromDisk();
 		}
 	}
