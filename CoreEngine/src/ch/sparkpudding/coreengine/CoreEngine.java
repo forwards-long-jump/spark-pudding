@@ -60,7 +60,7 @@ public class CoreEngine extends JPanel {
 
 	private boolean pause = false;
 	private boolean pauseAll = false;
-	
+
 	private boolean systemReloadScheduled;
 
 	private Dimension renderSize;
@@ -95,7 +95,7 @@ public class CoreEngine extends JPanel {
 		this.fpsCount = 0;
 
 		this.systemReloadScheduled = false;
-		
+
 		this.lelFile = new LelReader(gameFolder);
 
 		populateComponentTemplates();
@@ -189,8 +189,7 @@ public class CoreEngine extends JPanel {
 
 		while (!exit) {
 			handleSystemsReloading();
-			handleLuaErrors();
-			
+
 			double current = java.lang.System.currentTimeMillis();
 			double elapsed = current - previous;
 
@@ -200,6 +199,8 @@ public class CoreEngine extends JPanel {
 			input.update();
 
 			while (lag >= msPerUpdate) {
+				handleLuaErrors();
+				
 				currentScene.incrementTick();
 				update();
 				lag -= msPerUpdate;
@@ -220,7 +221,7 @@ public class CoreEngine extends JPanel {
 	 * To be called before updating, check if systems should be reloaded
 	 */
 	private void handleSystemsReloading() {
-		if(systemReloadScheduled) {
+		if (systemReloadScheduled) {
 			systemReloadScheduled = false;
 			reloadSystemsFromDisk();
 		}
@@ -230,14 +231,13 @@ public class CoreEngine extends JPanel {
 	 * To be called before upading, handle lua error actions
 	 */
 	private void handleLuaErrors() {
-		if(luaError != null) {
-			// Try to continue 
-			if(input.isKeyDown(KeyEvent.VK_SPACE)) {
+		if (luaError != null) {
+			// Try to continue
+			if (input.isKeyDown(KeyEvent.VK_SPACE)) {
 				luaError = null;
 				input.resetAllKeys();
 				togglePauseAll();
-			}
-			else if(input.isKeyDown(KeyEvent.VK_ENTER)) {
+			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
 				luaError = null;
 				input.resetAllKeys();
 				reloadSystemsFromDisk();
@@ -245,7 +245,7 @@ public class CoreEngine extends JPanel {
 			}
 		}
 	}
-	
+
 	/**
 	 * Reload systems from disk, live
 	 */
@@ -253,7 +253,7 @@ public class CoreEngine extends JPanel {
 		loadSystems();
 		setCurrentScene(getCurrentScene());
 	}
-	
+
 	/**
 	 * Reload system from disk at the start of next update
 	 */
@@ -458,14 +458,14 @@ public class CoreEngine extends JPanel {
 			// Make it look like the game is paused
 			g2d.setColor(new Color(0, 0, 0, 150));
 			g2d.fillRect(0, 0, getWidth(), getHeight());
-			
+
 			g2d.setColor(new Color(0, 0, 0, 255));
 			g2d.fillRect(0, 0, getWidth(), 170); // Estimated error size
 
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font(Font.DIALOG, Font.BOLD, bigFontSize));
 			y = Drawing.drawWrappedString("Something went wrong", x, y, maxWidth, g2d);
-			
+
 			g2d.setColor(Color.RED);
 			g2d.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, smallFontSize));
 
@@ -473,7 +473,8 @@ public class CoreEngine extends JPanel {
 			y += smallFontSize;
 
 			g2d.setColor(Color.LIGHT_GRAY);
-			y = Drawing.drawWrappedString("Press [SPACE] to ignore this error and attempt to continue.", x, y, maxWidth, g2d);
+			y = Drawing.drawWrappedString("Press [SPACE] to ignore this error and attempt to continue.", x, y, maxWidth,
+					g2d);
 			Drawing.drawWrappedString("Press [ENTER] to reload systems from disk.", x, y, maxWidth, g2d);
 		}
 	}
@@ -706,10 +707,13 @@ public class CoreEngine extends JPanel {
 	 * @param error
 	 */
 	public void notifyLuaError(LuaError error) {
-		if(!pauseAll) {			
-			togglePauseAll();
+		// We only display the first error encountered so we can fix it first
+		if (this.luaError == null) {
+			if (!pauseAll) {
+				togglePauseAll();
+			}
+
+			this.luaError = error;
 		}
-		
-		this.luaError = error;
 	}
 }
