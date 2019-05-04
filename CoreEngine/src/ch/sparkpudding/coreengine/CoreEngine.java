@@ -61,7 +61,6 @@ public class CoreEngine extends JPanel {
 	private Color blackBarColor;
 	private Semaphore renderLock;
 
-	private int tick;
 	private int fpsCount;
 	private int fps;
 
@@ -84,7 +83,6 @@ public class CoreEngine extends JPanel {
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
-		this.tick = 0;
 		this.fps = 0;
 		this.fpsCount = 0;
 
@@ -189,7 +187,7 @@ public class CoreEngine extends JPanel {
 			input.update();
 
 			while (lag >= msPerUpdate) {
-				tick++;
+				currentScene.incrementTick();
 				update();
 				lag -= msPerUpdate;
 			}
@@ -410,15 +408,6 @@ public class CoreEngine extends JPanel {
 			g2d.fillRect(0, 0, getWidth(), translateY);
 			g2d.fillRect(0, translateY + realGameHeight, getWidth() + 1, translateY + 1);
 		}
-	}
-
-	/**
-	 * Getter for tick. Tick is increased by 1 every update
-	 *
-	 * @return current tick
-	 */
-	public int getTick() {
-		return tick;
 	}
 
 	/**

@@ -22,6 +22,7 @@ public class Scene {
 	private List<Entity> defaultEntities;
 	private String name;
 	private Camera camera;
+	private int tick;
 
 	/**
 	 * Default constructor
@@ -31,6 +32,7 @@ public class Scene {
 		this.entities = new ArrayList<Entity>();
 		this.defaultEntities = new ArrayList<Entity>();
 		this.camera = new Camera();
+		this.tick = 0;
 	}
 
 	/**
@@ -42,7 +44,7 @@ public class Scene {
 		Element sceneElement = document.getDocumentElement();
 
 		this.name = sceneElement.getAttribute("name");
-
+		this.tick = 0;
 		this.entities = new ArrayList<Entity>();
 		this.defaultEntities = new ArrayList<Entity>();
 		NodeList entities = sceneElement.getChildNodes();
@@ -81,6 +83,7 @@ public class Scene {
 	 */
 	public void reset() {
 		entities.clear();
+		this.tick = 0;
 		// Clone entities into the "live" list
 		for(Entity entity : defaultEntities) {
 			entities.add(new Entity(entity));
@@ -139,5 +142,20 @@ public class Scene {
 	 */
 	public Camera getCamera() {
 		return camera;
+	}
+	
+	/**
+	 * Increment game tick
+	 */
+	public void incrementTick() {
+		this.tick++;
+	}
+	
+	/**
+	 * Get tick
+	 * @return tick
+	 */
+	public int getTick() {
+		return tick;
 	}
 }
