@@ -2,10 +2,12 @@ package ch.sparkpudding.coreengine.ecs.system;
 
 import java.io.File;
 
+import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.InputAPI;
 
 /**
@@ -81,6 +83,12 @@ public class UpdateSystem extends System {
 	 * "global" lua variables
 	 */
 	public void update() {
-		updateMethod.call();
+		try {
+			updateMethod.call();			
+		}
+		catch(LuaError error) {
+			Lel.coreEngine.notifyLuaError(error);
+			error.printStackTrace();
+ 		}
 	}
 }
