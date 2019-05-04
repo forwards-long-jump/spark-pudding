@@ -43,9 +43,9 @@ public class RenderSystem extends System {
 	public void reload() {
 		super.reload();
 
-		if(!loadingFailed) {
+		if (!loadingFailed) {
 			readMethodsFromLua();
-			loadRenderApis();			
+			loadRenderApis();
 		}
 	}
 
@@ -68,6 +68,9 @@ public class RenderSystem extends System {
 				renderMethod.call(luaG);
 			} catch (LuaError error) {
 				Lel.coreEngine.notifyLuaError(error);
+			} catch (StackOverflowError error) {
+				Lel.coreEngine.notifyLuaError(new LuaError(
+						"Stack overflow in the renderer system. This sometimes happens when trying to read an inexisting field from a component."));
 			}
 		}
 	}

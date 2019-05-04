@@ -51,15 +51,15 @@ public class UpdateSystem extends System {
 	public void reload() {
 		super.reload();
 
-		if(!loadingFailed) {
+		if (!loadingFailed) {
 			readMethodsFromLua();
-	
+
 			if (isPausableMethod.isnil()) {
 				pausable = false;
 			} else {
 				pausable = isPausableMethod.call().toboolean();
 			}
-	
+
 			loadUpdateApis();
 		}
 	}
@@ -85,12 +85,15 @@ public class UpdateSystem extends System {
 	 * "global" lua variables
 	 */
 	public void update() {
-		if(!loadingFailed) {
+		if (!loadingFailed) {
 			try {
 				updateMethod.call();
 			} catch (LuaError error) {
 				Lel.coreEngine.notifyLuaError(error);
 				error.printStackTrace();
+			} catch (StackOverflowError error) {
+				Lel.coreEngine.notifyLuaError(new LuaError(
+						"Stack overflow in " + filepath +". This sometimes happens when trying to read an inexisting field from a component."));
 			}
 		}
 	}

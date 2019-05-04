@@ -35,7 +35,7 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
  * 
  */
 public abstract class System {
-	private String filepath;
+	protected String filepath;
 
 	// named lists of required components
 	private Map<String, List<String>> componentGroups;
