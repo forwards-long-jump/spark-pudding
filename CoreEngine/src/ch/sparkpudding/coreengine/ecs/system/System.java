@@ -152,6 +152,11 @@ public abstract class System {
 			loadingFailed = true;
 			return;
 		}
+		catch (LuaError error) {
+			Lel.coreEngine.notifyLuaError(new LuaError(filepath + ": missing function getRequiredComponents."));
+			loadingFailed = true;
+			return;
+		}
 		// list iteration in LuaJ
 		LuaValue key = LuaValue.NIL;
 		Varargs entry = list.next(key);
