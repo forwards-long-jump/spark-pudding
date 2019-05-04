@@ -283,17 +283,10 @@ public class CoreEngine extends JPanel {
 	 * @param reset The scene will be reloaded when set to true
 	 */
 	public void setScene(String name, boolean reset) {
-		setCurrentScene(scenes.get(name));
-		if (reset) {
-			resetScene();
+		if(reset) {			
+			scenes.get(name).reset();
 		}
-	}
-
-	/**
-	 * Resets current scene
-	 */
-	public void resetScene() {
-		// TODO: reset current scene
+		setCurrentScene(scenes.get(name));
 	}
 
 	/**

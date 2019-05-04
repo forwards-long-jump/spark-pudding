@@ -9,7 +9,7 @@ local following = true
 function update()
   -- Change scene when splace is pressed
   if(game.input:isKeyDown(32)) then
-    game.core:setScene("game")
+    game.core:setScene("game", true)
   end
 
   for i, entity in ipairs(mice) do

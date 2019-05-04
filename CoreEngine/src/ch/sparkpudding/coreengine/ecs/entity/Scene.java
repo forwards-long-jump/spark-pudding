@@ -19,6 +19,7 @@ import ch.sparkpudding.coreengine.Camera;
 public class Scene {
 
 	private List<Entity> entities;
+	private List<Entity> defaultEntities;
 	private String name;
 	private Camera camera;
 
@@ -28,6 +29,7 @@ public class Scene {
 	public Scene() {
 		this.name = "DEFAULT NAME";
 		this.entities = new ArrayList<Entity>();
+		this.defaultEntities = new ArrayList<Entity>();
 		this.camera = new Camera();
 	}
 
@@ -42,12 +44,14 @@ public class Scene {
 		this.name = sceneElement.getAttribute("name");
 
 		this.entities = new ArrayList<Entity>();
+		this.defaultEntities = new ArrayList<Entity>();
 		NodeList entities = sceneElement.getChildNodes();
 		for (int i = 0; i < entities.getLength(); i++) {
 			Node node = entities.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element entityElement = (Element) entities.item(i);
 				this.add(new Entity(entityElement));
+				this.addDefault(new Entity(entityElement));
 			}
 		}
 
@@ -62,7 +66,27 @@ public class Scene {
 	public void add(Entity e) {
 		entities.add(e);
 	}
+	
+	/**
+	 * Adds a default entity to the scene
+	 * 
+	 * @param e Entity to add
+	 */
+	public void addDefault(Entity e) {
+		defaultEntities.add(e);
+	}
 
+	/**
+	 * Reset the current scene using its default entities
+	 */
+	public void reset() {
+		entities.clear();
+		// Clone entities into the "live" list
+		for(Entity entity : defaultEntities) {
+			entities.add(new Entity(entity));
+		}
+	}
+	
 	/**
 	 * Get all entities present on this scene
 	 * 
@@ -72,6 +96,15 @@ public class Scene {
 		return entities;
 	}
 
+	/**
+	 * Get all default entities present on this scene
+	 * 
+	 * @return
+	 */
+	public List<Entity> getDefaultEntities() {
+		return defaultEntities;
+	}
+	
 	/**
 	 * Removes an entity from the scene
 	 * 
