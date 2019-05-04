@@ -234,15 +234,14 @@ public class CoreEngine extends JPanel {
 		if (luaError != null) {
 			// Try to continue
 			if (input.isKeyDown(KeyEvent.VK_SPACE)) {
+				pauseAll = false;
 				luaError = null;
-				input.resetAllKeys();
-				togglePauseAll();
 			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
+				pauseAll = false;
 				luaError = null;
-				input.resetAllKeys();
 				reloadSystemsFromDisk();
-				togglePauseAll();
 			}
+			input.resetAllKeys();
 		}
 	}
 
@@ -709,10 +708,7 @@ public class CoreEngine extends JPanel {
 	public void notifyLuaError(LuaError error) {
 		// We only display the first error encountered so we can fix it first
 		if (this.luaError == null) {
-			if (!pauseAll) {
-				togglePauseAll();
-			}
-
+			pauseAll = true;
 			this.luaError = error;
 		}
 	}
