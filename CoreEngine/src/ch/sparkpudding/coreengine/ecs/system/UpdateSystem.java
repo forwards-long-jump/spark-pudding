@@ -51,15 +51,17 @@ public class UpdateSystem extends System {
 	public void reload() {
 		super.reload();
 
-		readMethodsFromLua();
-
-		if (isPausableMethod.isnil()) {
-			pausable = false;
-		} else {
-			pausable = isPausableMethod.call().toboolean();
+		if(!loadingFailed) {
+			readMethodsFromLua();
+	
+			if (isPausableMethod.isnil()) {
+				pausable = false;
+			} else {
+				pausable = isPausableMethod.call().toboolean();
+			}
+	
+			loadUpdateApis();
 		}
-
-		loadUpdateApis();
 	}
 
 	/**
@@ -83,12 +85,13 @@ public class UpdateSystem extends System {
 	 * "global" lua variables
 	 */
 	public void update() {
-		try {
-			updateMethod.call();			
+		if(!loadingFailed) {
+			try {
+				updateMethod.call();
+			} catch (LuaError error) {
+				Lel.coreEngine.notifyLuaError(error);
+				error.printStackTrace();
+			}
 		}
-		catch(LuaError error) {
-			Lel.coreEngine.notifyLuaError(error);
-			error.printStackTrace();
- 		}
 	}
 }
