@@ -162,45 +162,65 @@ public class Camera {
 	}
 
 	/**
-	 * @param boundary the boundary to set
+	 * Change the camera boundary
+	 * 
+	 * @param x      of the boundary
+	 * @param y      of the boundary
+	 * @param width
+	 * @param height
 	 */
 	public void setBoundary(float x, float y, float w, float h) {
 		this.coreEngine.getCamera().setBoundary(new Rectangle((int) x, (int) y, (int) w, (int) h));
 	}
 
 	/**
-	 * @param springTranslateForce the springTranslateForce to set
+	 * Set spring force for translate camera
+	 * 
+	 * @param x force
+	 * @param y force
 	 */
-	public void setSpringTranslateForce(Point2D springTranslateForce) {
-		this.coreEngine.getCamera().setSpringTranslateForce(springTranslateForce);
+	public void setSpringTranslateForce(float x, float y) {
+		this.coreEngine.getCamera().setSpringTranslateForce(new Point2D.Double(x, y));
 	}
 
 	/**
-	 * @param springTranslateConstant the springTranslateConstant to set
+	 * Set spring constant for translate camera
+	 * 
+	 * @param x constant
+	 * @param y constant
 	 */
-	public void setSpringTranslateConstant(Point2D springTranslateConstant) {
-		this.coreEngine.getCamera().setSpringTranslateConstant(springTranslateConstant);
+	public void setSpringTranslateConstant(float x, float y) {
+		this.coreEngine.getCamera().setSpringTranslateConstant(new Point2D.Double(x, y));
 	}
 
 	/**
-	 * @param springTranslateSpeedCoeff the springTranslateSpeedCoeff to set
+	 * Set spring speed coeff for translate camera
+	 * 
+	 * @param x speed coeff
+	 * @param y speed coeff
 	 */
-	public void setSpringTranslateSpeedCoeff(Point2D springTranslateSpeedCoeff) {
-		this.coreEngine.getCamera().setSpringTranslateSpeedCoeff(springTranslateSpeedCoeff);
+	public void setSpringTranslateSpeedCoeff(float x, float y) {
+		this.coreEngine.getCamera().setSpringTranslateSpeedCoeff(new Point2D.Double(x, y));
 	}
 
 	/**
-	 * @param smoothSpeedCoeff the smoothSpeedCoeff to set
+	 * Set smooth speed coeff for translate camera
+	 * 
+	 * @param x speed coeff
+	 * @param y speed coeff
 	 */
-	public void setSmoothSpeedCoeff(Point2D smoothSpeedCoeff) {
-		this.coreEngine.getCamera().setSmoothSpeedCoeff(smoothSpeedCoeff);
+	public void setSmoothSpeedCoeff(float x, float y) {
+		this.coreEngine.getCamera().setSmoothSpeedCoeff(new Point2D.Double(x, y));
 	}
 
 	/**
-	 * @param linearSpeedDelta the linearSpeedDelta to set
+	 * Set speed delta for linear translate camera
+	 * 
+	 * @param x speed delta
+	 * @param y speed delta
 	 */
-	public void setLinearSpeedDelta(Point2D linearSpeedDelta) {
-		this.coreEngine.getCamera().setLinearSpeedDelta(linearSpeedDelta);
+	public void setLinearSpeedDelta(float x, float y) {
+		this.coreEngine.getCamera().setLinearSpeedDelta(new Point2D.Double(x, y));
 	}
 
 	/**
@@ -211,7 +231,10 @@ public class Camera {
 	}
 
 	/**
-	 * @param scalingPoint the scalingPoint to set
+	 * Set the scaling point of the camera in UI coordinates
+	 * 
+	 * @param x coordinate
+	 * @param y coordinate
 	 */
 	public void setScalingPoint(double x, double y) {
 		this.coreEngine.getCamera().setScalingPoint(new Point2D.Double(x, y));
