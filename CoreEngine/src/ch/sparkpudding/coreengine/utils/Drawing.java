@@ -4,6 +4,12 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utils class containing drawing related methods
+ *
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ *
+ */
 public class Drawing {
 	// We don't really want to create these new items every time something is
 	// rendered
@@ -12,9 +18,11 @@ public class Drawing {
 	private static List<String> lines = new ArrayList<String>();
 
 	/**
-	 * Render a string making sure it's not longer than maxWidth by adding new lines
+	 * Render a string making sure it's not longer than maxWidth by breaking it into multiple lines
 	 * 
 	 * @param s        string to write
+	 * @param x        x coordinate of the string to render
+	 * @param y        y coordinate of the string to render
 	 * @param maxWidth maximum width available in pixel
 	 * @param g2d      context to render on
 	 * 
