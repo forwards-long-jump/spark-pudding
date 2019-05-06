@@ -24,6 +24,8 @@ public class ResourceLocator {
 	private LelReader lelReader;
 
 	private Map<String, Image> textures;
+	// FIXME: We must find another solution, because using Clips prevents us from
+	// playing the same sound multiple times in quick succession
 	private Map<String, Clip> sounds;
 	private Map<String, Clip> musics;
 
@@ -34,13 +36,12 @@ public class ResourceLocator {
 	 */
 	public ResourceLocator(LelReader lelReader) {
 		this.lelReader = lelReader;
-		
+
 		try {
 			loadTextures();
 			loadSounds();
 			loadMusics();
 		} catch (Exception e) {
-			// TODO try again ? error message ?
 			e.printStackTrace();
 		}
 	}
@@ -57,7 +58,7 @@ public class ResourceLocator {
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-			
+
 			textures.put(file.getName(), ImageIO.read(file));
 		}
 	}
@@ -76,9 +77,7 @@ public class ResourceLocator {
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-			
-			System.out.println(file.getName());
-			
+
 			AudioInputStream audio = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
 			clip.open(audio);
@@ -99,7 +98,7 @@ public class ResourceLocator {
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-			
+
 			AudioInputStream audio = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
 			clip.open(audio);
