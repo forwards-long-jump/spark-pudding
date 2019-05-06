@@ -201,7 +201,6 @@ public class CoreEngine extends JPanel {
 			while (lag >= msPerUpdate) {
 				handleLuaErrors();
 				
-				currentScene.incrementTick();
 				update();
 				lag -= msPerUpdate;
 			}
@@ -272,6 +271,8 @@ public class CoreEngine extends JPanel {
 			return;
 		}
 
+		currentScene.incrementTick();
+		
 		for (UpdateSystem system : systems) {
 			system.update();
 		}
