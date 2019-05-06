@@ -1,7 +1,6 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 
 import javax.swing.JFrame;
 
@@ -42,6 +41,7 @@ public class FrameSceneEditor extends JFrame {
 	 */
 	public FrameSceneEditor(String gameFolder) throws Exception {
 		FrameSceneEditor.coreEngine = new CoreEngine(gameFolder);
+		FrameSceneEditor.coreEngine.togglePauseAll();
 
 		init();
 		setupLayout();
@@ -71,10 +71,6 @@ public class FrameSceneEditor extends JFrame {
 		add(panelSidebarRight, BorderLayout.EAST);
 		add(panelSidebarLeft, BorderLayout.WEST);
 		add(panelGame, BorderLayout.CENTER);
-
-		// FIXME Remove color
-		panelSidebarLeft.setBackground(Color.BLUE);
-		panelSidebarRight.setBackground(Color.RED);
 	}
 
 	/**

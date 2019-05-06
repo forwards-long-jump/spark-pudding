@@ -1,5 +1,6 @@
 package ch.sparkpudding.sceneeditor.panel;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
@@ -17,6 +18,10 @@ public class PanelSidebarRight extends JPanel {
 	private PanelScene panelScene;
 	private PanelEntityTree panelEntityTree;
 	private PanelEntity panelEntity;
+	
+	public static final int BASIC_ELEMENT_WIDTH = 275;
+	public static final int BASIC_ELEMENT_HEIGHT = 275;
+	public static final int BASIC_ELEMENT_MARGIN = 5;
 
 	private BoxLayout layout;
 
@@ -48,5 +53,7 @@ public class PanelSidebarRight extends JPanel {
 		add(panelScene);
 		add(panelEntityTree);
 		add(panelEntity);
+		
+		setBorder(BorderFactory.createEtchedBorder());
 	}
 }

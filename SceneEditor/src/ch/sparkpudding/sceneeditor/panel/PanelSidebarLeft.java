@@ -2,12 +2,18 @@ package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 
 import ch.sparkpudding.sceneeditor.FrameSceneEditor;
+import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
 /**
  * The panel which contains the commands to control the state of the game
@@ -24,9 +30,6 @@ public class PanelSidebarLeft extends JPanel {
 
 	private BoxLayout layout;
 
-	private final String PAUSE_TEXT = "Pause";
-	private final String PLAY_TEXT = "Play";
-
 	/**
 	 * ctor
 	 */
@@ -42,8 +45,20 @@ public class PanelSidebarLeft extends JPanel {
 	private void init() {
 		layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 
-		btnPausePlay = new JButton(PLAY_TEXT);
-		btnReset = new JButton("Reset");
+		btnPausePlay = new JButton();
+		btnReset = new JButton();
+
+		btnPausePlay.setIcon(ImageStorage.PLAY);
+		btnReset.setIcon(ImageStorage.STOP_DISABLED);
+
+		btnReset.setEnabled(false);
+
+		btnPausePlay.setOpaque(false);
+		btnPausePlay.setContentAreaFilled(false);
+		btnPausePlay.setBorderPainted(false);
+		btnReset.setOpaque(false);
+		btnReset.setContentAreaFilled(false);
+		btnReset.setBorderPainted(false);
 	}
 
 	/**
@@ -54,6 +69,8 @@ public class PanelSidebarLeft extends JPanel {
 
 		add(btnPausePlay);
 		add(btnReset);
+
+		setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(), new EmptyBorder(10, 10, 10, 10)));
 	}
 
 	/**
@@ -67,16 +84,39 @@ public class PanelSidebarLeft extends JPanel {
 				toggleTextPausePlay();
 			}
 		});
+
+		btnReset.addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (btnReset.isEnabled()) {
+					btnReset.setIcon(ImageStorage.STOP);
+				} else {
+					btnReset.setIcon(ImageStorage.STOP_DISABLED);
+				}
+			}
+		});
+
+		btnReset.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Add reset scene
+				btnReset.setEnabled(false);
+			}
+		});
 	}
 
 	/**
-	 * Toggle the text shown on the button PlayPause
+	 * Toggle the icon shown on the button PlayPause
 	 */
 	private void toggleTextPausePlay() {
-		if (btnPausePlay.getText() == PLAY_TEXT)
-			btnPausePlay.setText(PAUSE_TEXT);
-		else
-			btnPausePlay.setText(PLAY_TEXT);
+		if (btnPausePlay.getIcon() == ImageStorage.PLAY) {
+			btnPausePlay.setIcon(ImageStorage.PAUSE);
+			btnReset.setEnabled(true);
+		} else {
+			btnPausePlay.setIcon(ImageStorage.PLAY);
+		}
 	}
 
 }
