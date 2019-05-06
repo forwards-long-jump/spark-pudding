@@ -2,11 +2,17 @@ package ch.sparkpudding.coreengine.ecs.system;
 
 import java.awt.Graphics2D;
 import java.io.File;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.ColorFactory;
 
 public class RenderSystem extends System {
@@ -41,8 +47,10 @@ public class RenderSystem extends System {
 	public void reload() {
 		super.reload();
 
-		readMethodsFromLua();
-		loadRenderApis();
+		if (!loadingFailed) {
+			readMethodsFromLua();
+			loadRenderApis();
+		}
 	}
 
 	/**
@@ -58,7 +66,42 @@ public class RenderSystem extends System {
 	 * @param g Graphics2D context
 	 */
 	public void render(Graphics2D g) {
+		if (!loadingFailed) {
+			Future<?> future = executor.submit(() -> {
+				sandboxedRender(g);
+			});
+
+			try {
+				// Join the "thread"
+				future.get(MAX_EXECUTION_TIME_IN_SECONDS, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				java.lang.System.out.println(e.getCause());
+				Lel.coreEngine.notifyLuaError(new LuaError("A LEL internal error occured."));
+			} catch (ExecutionException e) {
+				java.lang.System.out.println(e.getCause());
+				Lel.coreEngine.notifyLuaError(new LuaError("A LEL internal error occured."));
+			} catch (TimeoutException e) {
+				// Interrupt our thread
+				loadingFailed = true;
+				future.cancel(true);
+				Lel.coreEngine.notifyLuaError(new LuaError("renderer system took more than the "
+						+ MAX_EXECUTION_TIME_IN_SECONDS + " seconds allowed to render."));
+			}
+		}
+	}
+
+	/**
+	 * Update the lua system in a new thread to prevent lua crashing the main app
+	 */
+	private void sandboxedRender(Graphics2D g) {
 		LuaValue luaG = CoerceJavaToLua.coerce(g);
-		renderMethod.call(luaG);
+		try {
+			renderMethod.call(luaG);
+		} catch (LuaError error) {
+			Lel.coreEngine.notifyLuaError(error);
+		} catch (StackOverflowError error) {
+			Lel.coreEngine.notifyLuaError(new LuaError(
+					"Stack overflow in the renderer system. This sometimes happens when trying to read an inexisting field from a component."));
+		}
 	}
 }

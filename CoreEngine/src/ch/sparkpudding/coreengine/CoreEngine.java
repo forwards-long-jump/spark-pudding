@@ -2,30 +2,38 @@ package ch.sparkpudding.coreengine;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.luaj.vm2.LuaError;
 import org.xml.sax.SAXException;
 
-import ch.sparkpudding.coreengine.api.Core;
-import ch.sparkpudding.coreengine.api.Input;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.coreengine.ecs.system.RenderSystem;
 import ch.sparkpudding.coreengine.ecs.system.UpdateSystem;
-import ch.sparkpudding.coreengine.filereader.LelFile;
+import ch.sparkpudding.coreengine.filereader.LelReader;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
+import ch.sparkpudding.coreengine.utils.Collision;
+import ch.sparkpudding.coreengine.utils.Drawing;
+import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
  * Class keeping track of all the elements of the ECS, and responsible of
@@ -40,9 +48,9 @@ public class CoreEngine extends JPanel {
 	private double msPerUpdate = (1000 / 60);
 	private boolean exit = false;
 
-	public Input input;
+	private Input input;
 
-	private LelFile lelFile;
+	private LelReader lelFile;
 
 	private Map<String, Scene> scenes;
 	private Scene currentScene;
@@ -53,10 +61,19 @@ public class CoreEngine extends JPanel {
 	private boolean pause = false;
 	private boolean pauseAll = false;
 
+	private boolean systemReloadScheduled;
+
 	private Dimension renderSize;
 	private Color blackBarColor;
+	private Semaphore renderLock;
 
-	private int tick;
+	private int fpsCount;
+	private int fps;
+
+	private List<Entity> entitesToDeleteAfterUpdate;
+	private List<Pair<Entity, String>> componentsToRemoveAfterUpdate;
+
+	private LuaError luaError;
 
 	/**
 	 * The heart of the Ludic Engine in Lua
@@ -66,15 +83,20 @@ public class CoreEngine extends JPanel {
 	 *                   errors.
 	 */
 	public CoreEngine(String gameFolder) throws Exception {
-		initAPIs();
+		Lel.coreEngine = this;
+		this.input = new Input(this);
 
-		this.input = Input.getInstance();
+		entitesToDeleteAfterUpdate = new ArrayList<Entity>();
+		componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
-		this.tick = 0;
+		this.fps = 0;
+		this.fpsCount = 0;
 
-		this.lelFile = new LelFile(gameFolder);
+		this.systemReloadScheduled = false;
+
+		this.lelFile = new LelReader(gameFolder);
 
 		populateComponentTemplates();
 		populateEntityTemplates();
@@ -83,17 +105,15 @@ public class CoreEngine extends JPanel {
 
 		setCurrentScene(scenes.get("main"));
 
-		new Thread(() -> {
-			startGame();
-		}).start();
-	}
+		renderLock = new Semaphore(0);
 
-	/**
-	 * Init all singleton APIs
-	 */
-	private void initAPIs() {
-		Core.init(this);
-		Input.init(this);
+		new Thread(() -> {
+			try {
+				startGame();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}).start();
 	}
 
 	/**
@@ -158,12 +178,18 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Runs update and render loops
+	 * 
+	 * @throws InterruptedException
 	 */
-	private void startGame() {
+	private void startGame() throws InterruptedException {
 		double previous = java.lang.System.currentTimeMillis();
 		double lag = 0.0;
 
+		double lastFpsTime = java.lang.System.currentTimeMillis();
+
 		while (!exit) {
+			handleSystemsReloading();
+
 			double current = java.lang.System.currentTimeMillis();
 			double elapsed = current - previous;
 
@@ -172,14 +198,70 @@ public class CoreEngine extends JPanel {
 
 			input.update();
 
-			if (lag >= msPerUpdate) {
-				do {
-					update();
-					lag -= msPerUpdate;
-				} while (lag >= msPerUpdate);
-				render();
+			while (lag >= msPerUpdate) {
+				handleLuaErrors();
+				
+				currentScene.incrementTick();
+				update();
+				lag -= msPerUpdate;
+			}
+
+			render();
+			renderLock.acquire();
+
+			if (java.lang.System.currentTimeMillis() - lastFpsTime >= 1000) {
+				lastFpsTime = java.lang.System.currentTimeMillis();
+				fpsCount = fps;
+				fps = 0;
 			}
 		}
+	}
+
+	/**
+	 * To be called before updating, check if systems should be reloaded
+	 */
+	private void handleSystemsReloading() {
+		if (systemReloadScheduled) {
+			systemReloadScheduled = false;
+			if(luaError != null) {
+				luaError = null; // Let's remove the error as reloading systems may fix it
+				pauseAll = false;
+			}
+			reloadSystemsFromDisk();
+		}
+	}
+
+	/**
+	 * To be called before upading, handle lua error actions
+	 */
+	private void handleLuaErrors() {
+		if (luaError != null) {
+			// Try to continue
+			if (input.isKeyDown(KeyEvent.VK_SPACE)) {
+				pauseAll = false;
+				luaError = null;
+			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
+				pauseAll = false;
+				luaError = null;
+				reloadSystemsFromDisk();
+			}
+			input.resetAllKeys();
+		}
+	}
+
+	/**
+	 * Reload systems from disk, live
+	 */
+	private void reloadSystemsFromDisk() {
+		loadSystems();
+		setCurrentScene(getCurrentScene());
+	}
+
+	/**
+	 * Reload system from disk at the start of next update
+	 */
+	public void scheduleSystemReloadFromDisk() {
+		systemReloadScheduled = true;
 	}
 
 	/**
@@ -189,12 +271,19 @@ public class CoreEngine extends JPanel {
 		if (pauseAll) {
 			return;
 		}
-		
-		tick++;
+
 		for (UpdateSystem system : systems) {
 			system.update();
 		}
-		// TODO : give priority to certain system, i.e. the input systems
+
+		currentScene.getCamera().update();
+
+		for (Pair<Entity, String> pair : componentsToRemoveAfterUpdate) {
+			removeComponent(pair.first(), pair.second());
+		}
+		for (Entity entity : entitesToDeleteAfterUpdate) {
+			deleteEntity(entity);
+		}
 	}
 
 	/**
@@ -253,35 +342,58 @@ public class CoreEngine extends JPanel {
 	 * @param reset The scene will be reloaded when set to true
 	 */
 	public void setScene(String name, boolean reset) {
-		setCurrentScene(scenes.get(name));
 		if (reset) {
-			resetScene();
+			scenes.get(name).reset();
 		}
+		setCurrentScene(scenes.get(name));
 	}
 
 	/**
-	 * Resets current scene
+	 * Get the current scene
+	 * 
+	 * @return the current scene
 	 */
-	public void resetScene() {
-		// TODO: reset current scene
-	}
-
 	public Scene getCurrentScene() {
 		return currentScene;
 	}
 
-	public void setCurrentScene(Scene currentScene) {
-		this.currentScene = currentScene;
+	/**
+	 * Change current scene to new scene
+	 * 
+	 * @param newScene
+	 */
+	public void setCurrentScene(Scene newScene) {
+		this.currentScene = newScene;
 		for (UpdateSystem system : systems) {
-			system.setEntities(currentScene.getEntities());
+			system.setEntities(newScene.getEntities());
 		}
-		renderSystem.setEntities(currentScene.getEntities());
+		renderSystem.setEntities(newScene.getEntities());
 	}
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+	/**
+	 * Return the translation of the game (the one that keep it centered in the
+	 * middle of black bars)
+	 * 
+	 * @return
+	 */
+	private Point getGameTranslation() {
+		double scaleRatio = getScaleRatio();
+		// Calculate translation to center the game
+		int realGameWidth = (int) (scaleRatio * renderSize.getWidth());
+		int realGameHeight = (int) (scaleRatio * renderSize.getHeight());
 
+		int translateX = getWidth() / 2 - realGameWidth / 2;
+		int translateY = getHeight() / 2 - realGameHeight / 2;
+
+		return new Point(translateX, translateY);
+	}
+
+	/**
+	 * Calculate height
+	 * 
+	 * @return
+	 */
+	private double getScaleRatio() {
 		// Calculate screen ratio for width / height
 		double scaleRatio = 1.0;
 		double heightScaleRatio = getHeight() / renderSize.getHeight();
@@ -294,27 +406,99 @@ public class CoreEngine extends JPanel {
 			scaleRatio = widthScaleRatio;
 		}
 
-		// Calculate translation to center the game
-		int realGameWidth = (int) (scaleRatio * renderSize.getWidth());
-		int realGameHeight = (int) (scaleRatio * renderSize.getHeight());
+		return scaleRatio;
+	}
 
-		int translateX = getWidth() / 2 - realGameWidth / 2;
-		int translateY = getHeight() / 2 - realGameHeight / 2;
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
 		Graphics2D g2d = (Graphics2D) g;
+		AffineTransform transformationState = g2d.getTransform();
 
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g2d.translate(translateX, translateY);
+		// Calculate screen ratio for width / height
+		double scaleRatio = getScaleRatio();
+		// Calculate translation to center the game
+		Point translation = getGameTranslation();
+
+		// Apply transforms
+		g2d.translate(translation.getX(), translation.getY());
 		g2d.scale(scaleRatio, scaleRatio);
 
-		renderSystem.render((Graphics2D) g);
+		fps++;
+		renderSystem.render(g2d);
 
-		g2d.scale(1 / scaleRatio, 1 / scaleRatio);
-		g2d.translate(-translateX, -translateY);
+		g2d.setTransform(transformationState);
 
+		// Draw black bars
+		drawBlackBars(g2d, scaleRatio, translation);
+
+		// Render info about any lua error if any
+		renderLuaError(g2d);
+		// Source:
+		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
+		java.awt.Toolkit.getDefaultToolkit().sync();
+		g.dispose();
+
+		renderLock.release();
+	}
+
+	/**
+	 * Render an overlay giving help about a lua error that could've occurer
+	 * 
+	 * @param g2d
+	 */
+	private void renderLuaError(Graphics2D g2d) {
+		if (luaError != null) {
+			int x = 20;
+			int y = 40;
+			int maxWidth = getWidth() - x;
+			int smallFontSize = 15;
+			int bigFontSize = 30;
+
+			// Make it look like the game is paused
+			g2d.setColor(new Color(0, 0, 0, 150));
+			g2d.fillRect(0, 0, getWidth(), getHeight());
+
+			g2d.setColor(new Color(0, 0, 0, 255));
+			g2d.fillRect(0, 0, getWidth(), 170); // Estimated error size
+
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(new Font(Font.DIALOG, Font.BOLD, bigFontSize));
+			y = Drawing.drawWrappedString("Something went wrong", x, y, maxWidth, g2d);
+
+			g2d.setColor(Color.RED);
+			g2d.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, smallFontSize));
+
+			y = Drawing.drawWrappedString(luaError.getMessage(), x, y, maxWidth, g2d);
+			y += smallFontSize;
+
+			g2d.setColor(Color.LIGHT_GRAY);
+			y = Drawing.drawWrappedString("Press [SPACE] to ignore this error and attempt to continue.", x, y, maxWidth,
+					g2d);
+			Drawing.drawWrappedString("Press [ENTER] to reload systems from disk.", x, y, maxWidth, g2d);
+		}
+	}
+
+	/**
+	 * Draw black bars hiding the game
+	 * 
+	 * @param g2d
+	 * @param scaleRatio  current scale ratio used for the game
+	 * @param translation translation used for the game
+	 */
+	private void drawBlackBars(Graphics2D g2d, double scaleRatio, Point translation) {
 		// Draw black bar
 		g2d.setColor(blackBarColor);
+		double heightScaleRatio = getHeight() / renderSize.getHeight();
+		double widthScaleRatio = getWidth() / renderSize.getWidth();
+		int realGameWidth = (int) (scaleRatio * renderSize.getWidth());
+		int realGameHeight = (int) (scaleRatio * renderSize.getHeight());
+		int translateX = (int) translation.getX();
+		int translateY = (int) translation.getY();
+
 		if (widthScaleRatio > heightScaleRatio) {
 			// Vertical
 			g2d.fillRect(0, 0, translateX, getHeight());
@@ -324,20 +508,24 @@ public class CoreEngine extends JPanel {
 			g2d.fillRect(0, 0, getWidth(), translateY);
 			g2d.fillRect(0, translateY + realGameHeight, getWidth() + 1, translateY + 1);
 		}
-
-		g.dispose();
-		// Source:
-		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
-		java.awt.Toolkit.getDefaultToolkit().sync();
 	}
 
 	/**
-	 * Getter for tick. Tick is increased by 1 every update
-	 *
-	 * @return current tick
+	 * Getter for camera.
+	 * 
+	 * @return camera
 	 */
-	public int getTick() {
-		return tick;
+	public Camera getCamera() {
+		return currentScene.getCamera();
+	}
+
+	/**
+	 * Getter for input.
+	 * 
+	 * @return input
+	 */
+	public Input getInput() {
+		return input;
 	}
 
 	/**
@@ -352,5 +540,180 @@ public class CoreEngine extends JPanel {
 		}
 
 		getCurrentScene().add(e);
+	}
+
+	/**
+	 * Get current framerate of the game
+	 * 
+	 * @return current framerate
+	 */
+	public int getFPS() {
+		return fpsCount;
+	}
+
+	/**
+	 * Delete an entity and removes it from the scene and systems
+	 * 
+	 * @param entity Entity to be deleted
+	 */
+	public void deleteEntity(Entity entity) {
+		for (UpdateSystem system : systems) {
+			system.tryRemove(entity);
+		}
+		renderSystem.tryRemove(entity);
+		currentScene.remove(entity);
+	}
+
+	/**
+	 * Removes the named component from the entity, and removes the entity from
+	 * systems where it is no longer needed
+	 * 
+	 * @param entity        Entity to work on
+	 * @param componentName Name of the component to remove
+	 */
+	public void removeComponent(Entity entity, String componentName) {
+		entity.remove(componentName);
+		for (UpdateSystem system : systems) {
+			system.notifyRemovedComponent(entity, componentName);
+		}
+		renderSystem.notifyRemovedComponent(entity, componentName);
+	}
+
+	/**
+	 * Adds the given entity to have the given component removed from it after the
+	 * update
+	 * 
+	 * @param entity        Entity to work on
+	 * @param componentName Name of the component to remove
+	 */
+	public void removeComponentAfterUpdate(Entity entity, String componentName) {
+		componentsToRemoveAfterUpdate.add(new Pair<Entity, String>(entity, componentName));
+	}
+
+	/**
+	 * When an entity receives a new component, notify the systems of this in case
+	 * they now need it
+	 * 
+	 * @param entity        Entity which has received a component
+	 * @param componentName Name of the new component
+	 */
+	public void notifySystemsOfNewComponent(Entity entity, String componentName) {
+		for (UpdateSystem system : systems) {
+			system.notifyNewComponent(entity, componentName);
+		}
+		renderSystem.notifyNewComponent(entity, componentName);
+	}
+
+	/**
+	 * Adds the given entity to the list of deletable entities
+	 * 
+	 * @param entity
+	 */
+	public void deleteEntityAfterUpdate(Entity entity) {
+		entitesToDeleteAfterUpdate.add(entity);
+	}
+
+	/**
+	 * Get game height (not jpanel height)
+	 * 
+	 * @return game height
+	 */
+	public double getGameHeight() {
+		return this.renderSize.getHeight();
+	}
+
+	/**
+	 * Get game width (not jpanel height)
+	 * 
+	 * @return game width
+	 */
+	public double getGameWidth() {
+		return this.renderSize.getWidth();
+	}
+
+	/**
+	 * Convert a panel position to the game (UI) position
+	 * 
+	 * @param p position to convert
+	 * @return Point2D new position
+	 */
+	public Point2D panelPositionToGame(Point2D p) {
+		double x = p.getX();
+		double y = p.getY();
+
+		double scaleRatio = getScaleRatio();
+		Point translation = getGameTranslation();
+
+		x -= translation.getX();
+		y -= translation.getY();
+
+		// Game ratio scaling
+		x /= scaleRatio;
+		y /= scaleRatio;
+
+		return new Point2D.Double(x, y);
+	}
+
+	/**
+	 * Convert a panel position to the game world position
+	 * 
+	 * @param p point to convert
+	 * @return Point2D point converted
+	 */
+	public Point2D panelPositionToWorld(Point2D p) {
+		Point2D gamePosition = panelPositionToGame(p);
+		double x = gamePosition.getX();
+		double y = gamePosition.getY();
+
+		x += currentScene.getCamera().getPosition().getX();
+		y += currentScene.getCamera().getPosition().getY();
+
+		x /= currentScene.getCamera().getScaling();
+		y /= currentScene.getCamera().getScaling();
+
+		return new Point2D.Double(x, y);
+	}
+
+	/**
+	 * Get all entities intersecting given point. Note that the point should usually
+	 * be converted manually into world coordinates
+	 * 
+	 * @param p point to get entities at
+	 * @return List<Entity> all entities below the mouse
+	 */
+	public List<Entity> getEntitiesAt(Point2D p) {
+		List<Entity> entities = new ArrayList<Entity>();
+		List<String> requiredComponents = new ArrayList<String>();
+		requiredComponents.add("position");
+		requiredComponents.add("size");
+
+		for (Entity entity : currentScene.getEntities()) {
+			if (entity.hasComponents(requiredComponents)) {
+				Map<String, Component> components = entity.getComponents();
+
+				if (Collision.intersectRect(p.getX(), p.getY(),
+						Float.parseFloat(components.get("position").getField("x").getValue().toString()),
+						Float.parseFloat(components.get("position").getField("y").getValue().toString()),
+						Float.parseFloat(components.get("size").getField("width").getValue().toString()),
+						Float.parseFloat(components.get("size").getField("height").getValue().toString()))) {
+					entities.add(entity);
+				}
+			}
+		}
+		return entities;
+	}
+
+	/**
+	 * Notify the engine that a lua error occured. Pause the game and display the
+	 * error
+	 * 
+	 * @param error
+	 */
+	public void notifyLuaError(LuaError error) {
+		// We only display the first error encountered so we can fix it first
+		if (this.luaError == null) {
+			pauseAll = true;
+			this.luaError = error;
+		}
 	}
 }

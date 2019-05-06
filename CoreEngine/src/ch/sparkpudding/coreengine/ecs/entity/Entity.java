@@ -1,6 +1,5 @@
 package ch.sparkpudding.coreengine.ecs.entity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,8 +14,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.sparkpudding.coreengine.api.MetaEntity;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.coreengine.utils.Lua;
 
 /**
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
@@ -34,13 +35,16 @@ public class Entity implements Iterable<Entry<String, Component>> {
 
 	private Map<String, Component> components;
 	private String name;
+	private String template;
 	private int zIndex;
+
+	private LuaTable luaEntity;
 
 	/**
 	 * Default constructor
 	 */
 	public Entity() {
-		this("", 0);
+		this("", "", 0, new HashMap<String, Component>());
 	}
 
 	/**
@@ -49,10 +53,13 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * @param name   Name of the entity
 	 * @param zIndex z index, larger numbers imply foreground
 	 */
-	public Entity(String name, int zIndex) {
+	public Entity(String name, String template, int zIndex, HashMap<String, Component> components) {
 		this.name = name;
+		this.template = template;
 		this.setZIndex(zIndex);
-		this.components = new HashMap<String, Component>();
+		this.components = components;
+
+		createLuaEntity();
 	}
 
 	/**
@@ -61,12 +68,14 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * @param entity
 	 */
 	public Entity(Entity entity) {
-		this.name = entity.name;
-		this.zIndex = entity.zIndex;
+		this(entity.name, entity.template, entity.zIndex, new HashMap<String, Component>());
+		// copy components
 		this.components = new HashMap<String, Component>();
 		for (Component component : entity.getComponents().values()) {
-			this.add(new Component(component));
+			this.components.put(component.getName(), new Component(component));
 		}
+
+		createLuaEntity();
 	}
 
 	/**
@@ -80,6 +89,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		Element entityElement = document.getDocumentElement();
 
 		this.name = entityElement.getAttribute("name");
+		this.template = null;
 
 		String zindex = entityElement.getAttribute("z-index");
 		if (zindex.length() > 0) {
@@ -89,25 +99,28 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		}
 
 		this.components = new HashMap<String, Component>();
-		NodeList components = entityElement.getChildNodes();
-		for (int i = 0; i < components.getLength(); i++) {
-			Node node = components.item(i);
+		NodeList componentsXML = entityElement.getChildNodes();
+		for (int i = 0; i < componentsXML.getLength(); i++) {
+			Node node = componentsXML.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element componentElement = (Element) components.item(i);
+				Element componentElement = (Element) componentsXML.item(i);
 				this.add(new Component(componentElement));
 			}
 		}
+
+		createLuaEntity();
 	}
 
 	/**
 	 * Creates an entity from a template, and adds changes described in the XML
 	 * element
 	 * 
-	 * @param element A properly formated XML element describing the entitiy
+	 * @param element A properly formated XML element describing the entity
 	 */
 	public Entity(Element element) {
 		this(templates.get(element.getAttribute("template")));
 		this.name = element.getAttribute("name");
+		this.template = element.getAttribute("template");
 		this.zIndex = Integer.parseInt(element.getAttribute("z-index"));
 
 		NodeList components = element.getChildNodes();
@@ -126,6 +139,15 @@ public class Entity implements Iterable<Entry<String, Component>> {
 				}
 			}
 		}
+
+		createLuaEntity();
+	}
+
+	/**
+	 * Instantiate the Lua entity
+	 */
+	private void createLuaEntity() {
+		this.luaEntity = coerceToLua();
 	}
 
 	/**
@@ -136,14 +158,34 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	public void add(Component c) {
 		components.put(c.getName(), c);
 	}
+	
+	/**
+	 * Adds a component from the templates to the entity.
+	 * This method is intended to be called by the Lua systems,
+	 * and as such needs to update the Lua entity
+	 * 
+	 * @param componentName
+	 */
+	public void add(String componentName) {
+		Component component = Component.getTemplates().get(componentName);
+		if (component != null) {
+			add(component);
+			
+			// update luaEntity
+			createLuaEntity();			
+		}
+	}
 
 	/**
-	 * Removes a component to the entity
+	 * Removes a component from the entity
 	 * 
 	 * @param name Name of the component to be removed
 	 */
 	public void remove(String name) {
 		components.remove(name);
+		
+		// update luaEntity
+		createLuaEntity();
 	}
 
 	/**
@@ -155,18 +197,36 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		return name;
 	}
 
+	/**
+	 * Gets the z index
+	 * 
+	 * @return z index
+	 */
 	public int getZIndex() {
 		return zIndex;
 	}
 
+	/**
+	 * Sets the z index
+	 * 
+	 * @param zIndex
+	 */
 	public void setZIndex(int zIndex) {
 		this.zIndex = zIndex;
 	}
 
+	/**
+	 * Gets components
+	 * 
+	 * @return components
+	 */
 	public Map<String, Component> getComponents() {
 		return components;
 	}
 
+	/**
+	 * Gets iterator on the components
+	 */
 	@Override
 	public Iterator<Entry<String, Component>> iterator() {
 		return components.entrySet().iterator();
@@ -199,6 +259,10 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		templates.put(template.getName(), template);
 	}
 
+	public String getTemplate() {
+		return template;
+	}
+
 	/**
 	 * Return true if entity has all specified components
 	 * 
@@ -210,43 +274,41 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	}
 
 	/**
-	 * Convert this entity to a LuaTable in the form of entity.component.field
-	 * 
-	 * @param metatableSetterMethod System.metableSetterMethod
-	 * @return
-	 */
-	public LuaTable coerceToLua(LuaValue metatableSetterMethod) {
-		return coerceToLua(metatableSetterMethod, new ArrayList<String>());
-	}
-
-	/**
 	 * Convert this entity to a Luatable in the form of entity.component.field
-	 * Supports filtering. Pass an empty list for no filters
 	 * 
 	 * @param metatableSetterMethod System.metableSetterMethod
 	 * @param componentFilter       List<String>
 	 * @return
 	 */
-	public LuaTable coerceToLua(LuaValue metatableSetterMethod, List<String> componentFilter) {
+	private LuaTable coerceToLua() {
 		// entity
 		LuaTable entityLua = new LuaTable();
+		LuaValue metatableSetterMethod = Lua.getMetatableSetterMethod();
 		for (Component component : this.getComponents().values()) {
 			// We only give access to explicitly required components
-			if (componentFilter.size() == 0 || componentFilter.contains(component.getName())) {
-				// entity.component
-				LuaTable componentLua = new LuaTable();
 
-				for (Field field : component.getFields().values()) {
-					// entity.component.field
-					LuaValue fieldLua = CoerceJavaToLua.coerce(field);
-					componentLua.set("_" + field.getName(), fieldLua);
-				}
+			// entity.component
+			LuaTable componentLua = new LuaTable();
 
-				metatableSetterMethod.call(componentLua);
-				entityLua.set(component.getName(), componentLua);
+			for (Field field : component.getFields().values()) {
+				// entity.component.field
+				LuaValue fieldLua = CoerceJavaToLua.coerce(field);
+				componentLua.set("_" + field.getName(), fieldLua);
 			}
-		}
 
+			metatableSetterMethod.call(componentLua);
+			entityLua.set(component.getName(), componentLua);
+		}
+		entityLua.set("_meta", CoerceJavaToLua.coerce(new MetaEntity(this)));
 		return entityLua;
+	}
+
+	/**
+	 * Gets the Lua entity
+	 * 
+	 * @return Lua entity
+	 */
+	public LuaTable getLuaEntity() {
+		return luaEntity;
 	}
 }

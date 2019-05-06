@@ -11,7 +11,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Represents settings (key values pairs) that can be attached to an entity
+ * Represents settings (key-value pairs) that can be attached to an entity
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
@@ -24,6 +24,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	}
 
 	private String name;
+	private String template;
 	private Map<String, Field> fields;
 
 	/**
@@ -31,8 +32,9 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 * 
 	 * @param name A unique name per component
 	 */
-	public Component(String name) {
+	public Component(String name, String template) {
 		this.name = name;
+		this.template = template;
 		this.fields = new HashMap<String, Field>();
 	}
 
@@ -43,6 +45,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 */
 	public Component(Component component) {
 		this.name = component.name;
+		this.template = component.template;
 		this.fields = new HashMap<String, Field>();
 		for (Field field : component.fields.values()) {
 			addField(new Field(field));
@@ -53,13 +56,14 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 * Create a component from a parsed XML Document and populate its fields.
 	 * 
 	 * Note that if a document is to describe a component, then this component must
-	 * be a template
+	 * be a template.
 	 * 
 	 * @param document A properly formated Document to get fields from
 	 */
 	public Component(Document document) {
 		this.fields = new HashMap<String, Field>();
 		this.name = document.getDocumentElement().getAttribute("name");
+		this.template = null;
 
 		NodeList fields = document.getDocumentElement().getChildNodes();
 		for (int i = 0; i < fields.getLength(); i++) {
@@ -80,7 +84,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 */
 	public Component(Element element) {
 		this(templates.get(element.getAttribute("template")));
-
+		this.template = element.getAttribute("template");
 		NodeList fields = element.getChildNodes();
 		for (int i = 0; i < fields.getLength(); i++) {
 			Node node = fields.item(i);
@@ -143,5 +147,9 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 */
 	public static void addTemplate(Component template) {
 		templates.put(template.getName(), template);
+	}
+
+	public String getTemplate() {
+		return template;
 	}
 }

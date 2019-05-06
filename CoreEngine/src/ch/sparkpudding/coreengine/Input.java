@@ -1,4 +1,4 @@
-package ch.sparkpudding.coreengine.api;
+package ch.sparkpudding.coreengine;
 
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
@@ -16,12 +16,11 @@ import javax.swing.JPanel;
 /**
  * Keeps tabs of all keyboard and mouse inputs for the game. Should be updated
  * once before all systems are.
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
+ *
  */
 public class Input {
-	private static Input instance;
 
 	// Values read by the panel
 	private List<Integer> keysPressed;
@@ -41,11 +40,12 @@ public class Input {
 
 	/**
 	 * Handle key and mouse actions
-	 * 
+	 *
 	 * @param panel
 	 */
-	private Input(JPanel panel) {
+	public Input(JPanel panel) {
 		this.panel = panel;
+		this.panel.setFocusable(true);
 		createListeners();
 
 		keysPressed = new ArrayList<Integer>();
@@ -57,27 +57,8 @@ public class Input {
 		keys = new HashMap<Integer, Boolean>();
 		mouseButtons = new HashMap<Integer, Boolean>();
 		mousePosition = new Point();
-		
+
 		panel.setFocusable(true);
-	}
-
-	/**
-	 * Get Input API instance
-	 * 
-	 * @return Core
-	 */
-	public static Input getInstance() {
-		return instance;
-	}
-
-	/**
-	 * Init the API. We do not test instance so init must be called before any
-	 * getInstance!
-	 * 
-	 * @param panel
-	 */
-	public static void init(JPanel panel) {
-		instance = new Input(panel);
 	}
 
 	/**
@@ -110,6 +91,17 @@ public class Input {
 		mouseClickedBuffer = false;
 	}
 
+	/**
+	 * Mark all keys as up
+	 */
+	public void resetAllKeys() {
+		keys.clear();
+		mouseButtons.clear();
+		keysPressed.clear();
+		keysReleased.clear();
+		mouseButtonsPressed.clear();
+	}
+	
 	/**
 	 * Add listeners to the panel
 	 */
@@ -153,17 +145,16 @@ public class Input {
 			}
 
 			// This stays commented in case we ever want to add it later
-//			@Override
-//			public void mouseDragged(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				mouseMoved(e);
+			}
 		});
 	}
 
 	/**
 	 * Return the state of specified key
-	 * 
+	 *
 	 * @param keyCode
 	 * @return the state of specified key
 	 */
@@ -173,7 +164,7 @@ public class Input {
 
 	/**
 	 * Return the state of specified mouse button
-	 * 
+	 *
 	 * @param keyCode
 	 * @return the state of specified mouse button
 	 */
@@ -183,7 +174,7 @@ public class Input {
 
 	/**
 	 * Return true if the mouse was clicked
-	 * 
+	 *
 	 * @return true if the mouse was clicked
 	 */
 	public boolean isMouseClicked() {
@@ -192,7 +183,7 @@ public class Input {
 
 	/**
 	 * Return the mouse position relative to the jpanel
-	 * 
+	 *
 	 * @return mouse position relative to the jpanel
 	 */
 	public Point getMousePosition() {
