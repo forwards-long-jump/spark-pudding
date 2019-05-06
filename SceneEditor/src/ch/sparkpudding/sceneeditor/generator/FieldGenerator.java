@@ -1,6 +1,6 @@
 package ch.sparkpudding.sceneeditor.generator;
 
-import java.awt.GridLayout;
+import java.awt.Color;
 import java.text.NumberFormat;
 import java.util.List;
 
@@ -9,8 +9,10 @@ import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 
 import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
 
 /**
  * 
@@ -25,19 +27,27 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 public class FieldGenerator extends JComponent {
 
 	public FieldGenerator(List<Field> fields) {
-		setLayout(new GridLayout(0, 2));
+		setLayout(new SpringLayout());
 
 		for (Field field : fields) {
-			add(new JLabel(field.getName()));
-			add(createValueField(field));
+			JLabel labelField = new JLabel(field.getName());
+			add(labelField);
+			add(createValueField(field, labelField));
 		}
+		
+		setBackground(Color.RED);
+
+		SpringUtilities.makeGrid(this, fields.size(), 2, 5, 5, 5, 5);
 	}
 
-	/*
+	/**
 	 * Generate the right JComponent and it's parameters following the type of the
 	 * field.
+	 * 
+	 * @param field
+	 * @return
 	 */
-	private JComponent createValueField(Field field) {
+	private JComponent createValueField(Field field, JLabel labelField) {
 		JComponent input;
 
 		switch (field.getType()) {
@@ -64,6 +74,7 @@ public class FieldGenerator extends JComponent {
 			input = new JCheckBox("", (boolean) field.getValue());
 			break;
 		}
+		labelField.setLabelFor(input);
 		return input;
 	}
 }

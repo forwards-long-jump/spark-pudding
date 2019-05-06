@@ -1,8 +1,10 @@
 package ch.sparkpudding.sceneeditor.panel;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
@@ -32,6 +34,8 @@ public class PanelEntityTree extends JPanel {
 	private JList<Entity> jListEntities;
 	private JScrollPane listScroller;
 
+	private static final String TITLE = "Entity list";
+
 	/**
 	 * ctor
 	 * 
@@ -54,7 +58,7 @@ public class PanelEntityTree extends JPanel {
 
 		jListEntities = new JList<Entity>(listModelEntities);
 		jListEntities.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		jListEntities.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		jListEntities.setLayoutOrientation(JList.VERTICAL);
 		jListEntities.setVisibleRowCount(-1);
 		jListEntities.setCellRenderer(new DefaultListCellRenderer() {
 			@Override
@@ -70,16 +74,21 @@ public class PanelEntityTree extends JPanel {
 		});
 
 		listScroller = new JScrollPane(jListEntities);
+		listScroller.setPreferredSize(
+				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
+		listScroller.setMaximumSize(
+				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
 	}
 
 	/**
 	 * Setup the layout of the panel
 	 */
 	private void setupLayout() {
-		setLayout(new FlowLayout());
+		setLayout(new BorderLayout());
 
-		add(listScroller);
-		add(panelEntity);
+		add(listScroller, BorderLayout.CENTER);
+
+		setBorder(BorderFactory.createTitledBorder(TITLE));
 	}
 
 	/**

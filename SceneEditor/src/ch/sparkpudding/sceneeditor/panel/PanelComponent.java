@@ -1,5 +1,6 @@
 package ch.sparkpudding.sceneeditor.panel;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,27 +27,31 @@ public class PanelComponent extends JPanel {
 	public PanelComponent() {
 		init();
 		setupLayout();
-		addListener();
 	}
 
+	/**
+	 * Initialize the different element of the panel
+	 */
 	private void init() {
 		fieldList = new ArrayList<ComponentGenerator>();
 	}
 
+	/**
+	 * Setup the layout of the panel
+	 */
 	private void setupLayout() {
-		// TODO Auto-generated method stub
-
+		setLayout(new BorderLayout());
 	}
 
-	private void addListener() {
-		// TODO Auto-generated method stub
-
-	}
-
+	/**
+	 * Set the games entity represented by this panel
+	 * 
+	 * @param entity The entity represented by this panel
+	 */
 	public void setEntity(Entity entity) {
 		fieldList.clear();
 		removeAll();
-		add(new ComponentGenerator(entity.getComponents().values()));
+		add(new ComponentGenerator(entity.getComponents().values()), BorderLayout.CENTER);
 		revalidate();
 	}
 }

@@ -1,9 +1,11 @@
 package ch.sparkpudding.sceneeditor.panel;
 
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
@@ -23,6 +25,8 @@ public class PanelScene extends JPanel {
 	private PanelEntityTree panelEntityTree;
 
 	private JComboBox<String> comboBoxScenes;
+
+	private static final String TITLE = "Scenes";
 
 	/**
 	 * ctor
@@ -48,7 +52,14 @@ public class PanelScene extends JPanel {
 		}
 
 		comboBoxScenes.setSelectedItem(FrameSceneEditor.coreEngine.getCurrentScene().getName());
-		
+		comboBoxScenes.setPreferredSize(
+				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
+		comboBoxScenes.setMaximumSize(
+				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
+
+		// TODO Implement editable to add scene
+		// comboBoxScenes.setEditable(true);
+
 		panelEntityTree.updateListEntities(FrameSceneEditor.coreEngine.getCurrentScene());
 	}
 
@@ -56,9 +67,11 @@ public class PanelScene extends JPanel {
 	 * Setup the layout of the panel
 	 */
 	private void setupLayout() {
-		setLayout(new FlowLayout());
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 		add(comboBoxScenes);
+
+		setBorder(BorderFactory.createTitledBorder(TITLE));
 	}
 
 	/**
