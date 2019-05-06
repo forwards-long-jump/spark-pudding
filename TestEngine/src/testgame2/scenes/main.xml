@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene name="main">
+	<entity name="player" template="rectangle" z-index="1">
+		<component template="acceleration" />
+		<component template="camera" />
+		<component template="speed" />
+		<component template="direction" />
+		<component template="shooter" />
+		<component template="shoot-controller" />
+		<component template="acceleration-controller" />
+		<component template="hitbox">
+			<field name="type">WALLREACTOR</field>
+		</component>
+		<component template="health" />
+		<component template="position">
+			<field name="x">100</field>
+			<field name="y">100</field>
+		</component>
+		<component template="size">
+			<field name="width">100</field>
+			<field name="height">100</field>
+		</component>
+		<component template="color">
+			<field name="r">55</field>
+			<field name="g">100</field>
+			<field name="b">225</field>
+		</component>
+	</entity>
+	<entity name="anchor1" template="rectangle" z-index="1">
+		<component template="camera-anchor" />
+		<component template="camera" />
+		<component template="position">
+			<field name="x">-500</field>
+			<field name="y">-500</field>
+		</component>
+		<component template="size">
+			<field name="width">1000</field>
+			<field name="height">1000</field>
+		</component>
+		<component template="color">
+			<field name="r">220</field>
+			<field name="g">220</field>
+			<field name="b">220</field>
+		</component>
+	</entity>
+	<entity name="anchor1" template="rectangle" z-index="1">
+		<component template="camera-anchor" />
+		<component template="camera" />
+		<component template="position">
+			<field name="x">-1500</field>
+			<field name="y">-500</field>
+		</component>
+		<component template="size">
+			<field name="width">1000</field>
+			<field name="height">1000</field>
+		</component>
+		<component template="color">
+			<field name="r">180</field>
+			<field name="g">220</field>
+			<field name="b">220</field>
+		</component>
+	</entity>
+
+	<entity name="anchor1" template="rectangle" z-index="1">
+		<component template="camera-anchor" />
+		<component template="camera" />
+		<component template="position">
+			<field name="x">500</field>
+			<field name="y">-500</field>
+		</component>
+		<component template="size">
+			<field name="width">1000</field>
+			<field name="height">1000</field>
+		</component>
+		<component template="color">
+			<field name="r">180</field>
+			<field name="g">180</field>
+			<field name="b">220</field>
+		</component>
+	</entity>
+	<entity name="anchor1" template="rectangle" z-index="1">
+		<component template="camera-anchor">
+			<field name="scale">0.4</field>
+		</component>
+		<component template="camera" />
+		<component template="position">
+			<field name="x">1500</field>
+			<field name="y">0</field>
+		</component>
+		<component template="size">
+			<field name="width">2000</field>
+			<field name="height">1000</field>
+		</component>
+		<component template="color">
+			<field name="r">180</field>
+			<field name="g">180</field>
+			<field name="b">250</field>
+		</component>
+	</entity>
+	<entity name="anchor1" template="rectangle" z-index="1">
+		<component template="camera-anchor" />
+		<component template="camera" />
+		<component template="position">
+			<field name="x">1500</field>
+			<field name="y">-1000</field>
+		</component>
+		<component template="size">
+			<field name="width">1000</field>
+			<field name="height">1000</field>
+		</component>
+		<component template="color">
+			<field name="r">250</field>
+			<field name="g">180</field>
+			<field name="b">250</field>
+		</component>
+	</entity>
+	<entity name="anchor1" template="rectangle" z-index="1">
+		<component template="acceleration-sine" />
+		<component template="speed" />
+		<component template="camera-anchor" />
+		<component template="camera" />
+		<component template="position">
+			<field name="x">1500</field>
+			<field name="y">500</field>
+		</component>
+		<component template="size">
+			<field name="width">1000</field>
+			<field name="height">500</field>
+		</component>
+		<component template="color">
+			<field name="r">220</field>
+			<field name="g">250</field>
+			<field name="b">220</field>
+		</component>
+	</entity>
+	<entity name="sine-wall" template="rectangle" z-index="1">
+		<component template="acceleration-sine" />
+		<component template="acceleration" />
+		<component template="hitbox" />
+		<component template="speed" />
+		<component template="position">
+			<field name="x">1500</field>
+			<field name="y">500</field>
+		</component>
+		<component template="size">
+			<field name="width">1000</field>
+			<field name="height">50</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">1500</field>
+			<field name="y">0</field>
+		</component>
+		<component template="size">
+			<field name="width">2000</field>
+			<field name="height">50</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">2500</field>
+			<field name="y">1000</field>
+		</component>
+		<component template="size">
+			<field name="width">1000</field>
+			<field name="height">50</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">1500</field>
+			<field name="y">-1000</field>
+		</component>
+		<component template="size">
+			<field name="width">1000</field>
+			<field name="height">50</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">1475</field>
+			<field name="y">-1000</field>
+		</component>
+		<component template="size">
+			<field name="width">50</field>
+			<field name="height">550</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">2500</field>
+			<field name="y">-1000</field>
+		</component>
+		<component template="size">
+			<field name="width">50</field>
+			<field name="height">1050</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="sine-wall" template="rectangle" z-index="1">
+		<component template="acceleration-sine" />
+		<component template="acceleration" />
+		<component template="hitbox" />
+		<component template="speed" />
+		<component template="position">
+			<field name="x">1500</field>
+			<field name="y">1000</field>
+		</component>
+		<component template="size">
+			<field name="width">1000</field>
+			<field name="height">50</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="anchor1" template="rectangle" z-index="1">
+		<component template="camera-anchor">
+			<field name="speed">0.03</field>
+			<field name="scale">0.2</field>
+		</component>
+		<component template="camera" />
+		<component template="position">
+			<field name="x">-1500</field>
+			<field name="y">500</field>
+		</component>
+		<component template="size">
+			<field name="width">3000</field>
+			<field name="height">3000</field>
+		</component>
+		<component template="color">
+			<field name="r">250</field>
+			<field name="g">150</field>
+			<field name="b">150</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">-1550</field>
+			<field name="y">-500</field>
+		</component>
+		<component template="size">
+			<field name="width">50</field>
+			<field name="height">4000</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">-1550</field>
+			<field name="y">3500</field>
+		</component>
+		<component template="size">
+			<field name="width">3050</field>
+			<field name="height">50</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">1475</field>
+			<field name="y">500</field>
+		</component>
+		<component template="size">
+			<field name="width">50</field>
+			<field name="height">2050</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">2475</field>
+			<field name="y">1000</field>
+		</component>
+		<component template="size">
+			<field name="width">50</field>
+			<field name="height">2050</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">1475</field>
+			<field name="y">3000</field>
+		</component>
+		<component template="size">
+			<field name="width">50</field>
+			<field name="height">550</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="sine-wall" template="rectangle" z-index="1">
+		<component template="acceleration-sine" />
+		<component template="acceleration" />
+		<component template="hitbox" />
+		<component template="speed" />
+		<component template="position">
+			<field name="x">1475</field>
+			<field name="y">1000</field>
+		</component>
+		<component template="size">
+			<field name="width">50</field>
+			<field name="height">4000</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">-1500</field>
+			<field name="y">-500</field>
+		</component>
+		<component template="size">
+			<field name="width">3000</field>
+			<field name="height">50</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">-1500</field>
+			<field name="y">475</field>
+		</component>
+		<component template="size">
+			<field name="width">400</field>
+			<field name="height">50</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">-900</field>
+			<field name="y">475</field>
+		</component>
+		<component template="size">
+			<field name="width">2400</field>
+			<field name="height">50</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+	<entity name="wall" template="rectangle" z-index="1">
+		<component template="hitbox" />
+		<component template="position">
+			<field name="x">1475</field>
+			<field name="y">-175</field>
+		</component>
+		<component template="size">
+			<field name="width">50</field>
+			<field name="height">700</field>
+		</component>
+		<component template="color">
+			<field name="r">40</field>
+			<field name="g">40</field>
+			<field name="b">40</field>
+		</component>
+	</entity>
+</scene>
