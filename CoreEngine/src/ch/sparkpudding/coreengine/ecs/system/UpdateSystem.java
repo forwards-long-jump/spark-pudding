@@ -1,11 +1,17 @@
 package ch.sparkpudding.coreengine.ecs.system;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.InputAPI;
 
 /**
@@ -27,6 +33,10 @@ public class UpdateSystem extends System {
 	 */
 	public UpdateSystem(File file, CoreEngine coreEngine) {
 		super(file, coreEngine);
+
+		sandboxThread = new Thread(() -> {
+			sandboxedUpdate();
+		});
 		// (re)Load system from filepath
 		reload();
 	}
@@ -49,15 +59,17 @@ public class UpdateSystem extends System {
 	public void reload() {
 		super.reload();
 
-		readMethodsFromLua();
+		if (!loadingFailed) {
+			readMethodsFromLua();
 
-		if (isPausableMethod.isnil()) {
-			pausable = false;
-		} else {
-			pausable = isPausableMethod.call().toboolean();
+			if (isPausableMethod.isnil()) {
+				pausable = false;
+			} else {
+				pausable = isPausableMethod.call().toboolean();
+			}
+
+			loadUpdateApis();
 		}
-
-		loadUpdateApis();
 	}
 
 	/**
@@ -77,10 +89,43 @@ public class UpdateSystem extends System {
 	}
 
 	/**
+	 * Update the lua system in a new thread to prevent lua crashing the main app
+	 */
+	private void sandboxedUpdate() {
+		try {
+			updateMethod.call();
+		} catch (LuaError error) {
+			Lel.coreEngine.notifyLuaError(error);
+			error.printStackTrace();
+		} catch (StackOverflowError error) {
+			Lel.coreEngine.notifyLuaError(new LuaError("Stack overflow in " + filepath
+					+ ". This sometimes happens when trying to read an inexisting field from a component."));
+		}
+	}
+
+	/**
 	 * Runs the update function of the Lua script, entities can be accessed using
 	 * "global" lua variables
 	 */
 	public void update() {
-		updateMethod.call();
+		if (!loadingFailed) {
+			Future<?> future = executor.submit(sandboxThread);
+
+			try {
+				// Join the "thread"
+				future.get(MAX_EXECUTION_TIME_IN_SECONDS, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				java.lang.System.out.println(e.getCause());
+				Lel.coreEngine.notifyLuaError(new LuaError("A LEL internal error occured."));
+			} catch (ExecutionException e) {
+				java.lang.System.out.println(e.getCause());
+				Lel.coreEngine.notifyLuaError(new LuaError("A LEL internal error occured."));
+			} catch (TimeoutException e) {
+				// Interrupt our thread
+				future.cancel(true);
+				Lel.coreEngine.notifyLuaError(new LuaError(filepath + " took more than the "
+						+ MAX_EXECUTION_TIME_IN_SECONDS + " seconds allowed to update."));
+			}
+		}
 	}
 }

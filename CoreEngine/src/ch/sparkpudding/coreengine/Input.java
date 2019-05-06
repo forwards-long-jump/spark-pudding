@@ -92,6 +92,17 @@ public class Input {
 	}
 
 	/**
+	 * Mark all keys as up
+	 */
+	public void resetAllKeys() {
+		keys.clear();
+		mouseButtons.clear();
+		keysPressed.clear();
+		keysReleased.clear();
+		mouseButtonsPressed.clear();
+	}
+	
+	/**
 	 * Add listeners to the panel
 	 */
 	public void createListeners() {

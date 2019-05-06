@@ -1,43 +1,71 @@
 package ch.sparkpudding.sceneeditor.generator;
 
-import java.awt.GridLayout;
 import java.text.NumberFormat;
-import java.util.List;
+import java.util.Collection;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 
 import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
 
 /**
+ * Generate the interface for the fields passed in arguments. Since it inherits
+ * JComponent, it can be used as one.
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 8 avr. 2019
- *
- *         Generate the interface for the fields passed in arguments. Since it
- *         inherits JComponent, it can be used as one.
  * 
  */
 @SuppressWarnings("serial")
 public class FieldGenerator extends JComponent {
 
-	public FieldGenerator(List<Field> fields) {
-		setLayout(new GridLayout(0, 2));
+	private Collection<Field> fields;
 
+	/**
+	 * ctor
+	 * 
+	 * @param fields Collection of all the components of an entity
+	 */
+	public FieldGenerator(Collection<Field> fields) {
+		this.fields = fields;
+
+		createFields();
+		setupLayout();
+	}
+
+	/**
+	 * Setup the layout of the panel
+	 */
+	private void setupLayout() {
+		setLayout(new SpringLayout());
+		SpringUtilities.makeGrid(this, fields.size(), 2, 5, 5, 5, 5);
+	}
+
+	/**
+	 * Create and recreate all the representation of the fields stored in
+	 * <code>this.fields</code>
+	 */
+	private void createFields() {
 		for (Field field : fields) {
-			add(new JLabel(field.getName()));
-			add(createValueField(field));
+			JLabel labelField = new JLabel(field.getName());
+			add(labelField);
+			add(createValueField(field, labelField));
 		}
 	}
 
-	/*
+	/**
 	 * Generate the right JComponent and it's parameters following the type of the
 	 * field.
+	 * 
+	 * @param field The field to consider
+	 * @return The input generated
 	 */
-	private JComponent createValueField(Field field) {
+	private JComponent createValueField(Field field, JLabel labelField) {
 		JComponent input;
 
 		switch (field.getType()) {
@@ -64,6 +92,7 @@ public class FieldGenerator extends JComponent {
 			input = new JCheckBox("", (boolean) field.getValue());
 			break;
 		}
+		labelField.setLabelFor(input);
 		return input;
 	}
 }

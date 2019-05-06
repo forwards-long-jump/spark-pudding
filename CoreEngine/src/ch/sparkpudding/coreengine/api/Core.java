@@ -35,7 +35,7 @@ public class Core {
 	 * @return current tick
 	 */
 	public int getTick() {
-		return Lel.coreEngine.getTick();
+		return Lel.coreEngine.getCurrentScene().getTick();
 	}
 
 	/**
