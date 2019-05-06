@@ -78,7 +78,7 @@ public class ComponentGenerator extends JPanel {
 	/**
 	 * Create the representation of a component
 	 * 
-	 * @param component
+	 * @param component The component to consider
 	 */
 	private void setupComponentsLayout(Component component) {
 		Box titleBar = new Box(BoxLayout.X_AXIS);
