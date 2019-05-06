@@ -60,9 +60,9 @@ public class LelReader {
 
 		mapMusic = new HashMap<String, File>();
 		populateMaps(new File(directory + "/assets/music"), mapMusic);
-
-		mapSounds = new HashMap<String, File>();
-		populateMaps(new File(directory + "/assets/sounds"), mapSounds);
+		
+		mapTextures = new HashMap<String, File>();
+		populateMaps(new File(directory + "/assets/textures"), mapTextures);
 	}
 
 	private void sortSystem(List<File> list) {

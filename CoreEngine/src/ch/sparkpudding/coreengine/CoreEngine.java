@@ -49,6 +49,7 @@ public class CoreEngine extends JPanel {
 	private boolean exit;
 
 	private Input input;
+	private ResourceLocator resourceLocator;
 
 	private LelReader lelFile;
 
@@ -107,6 +108,7 @@ public class CoreEngine extends JPanel {
 		this.renderLock = new Semaphore(0);
 
 		this.lelFile = new LelReader(gameFolder);
+		this.resourceLocator = new ResourceLocator(this.lelFile);
 		populateComponentTemplates();
 		populateEntityTemplates();
 		populateScenes();
@@ -558,6 +560,15 @@ public class CoreEngine extends JPanel {
 	 */
 	public Input getInput() {
 		return input;
+	}
+	
+	/**
+	 * Getter for resourceLocator
+	 * 
+	 * @return resourceLocator
+	 */
+	public ResourceLocator getResourceLocator() {
+		return resourceLocator;
 	}
 
 	/**

@@ -28,7 +28,8 @@ function update()
           game.camera:shake(8, 10)
           bullet._meta:delete()
           enemy = enemy._meta:addComponent("gravity")
-          enemy = enemy._meta:deleteComponent("enemy")
+          enemy._meta:deleteComponent("enemy")
+          game.sound:play("slap.wav")
         end
       end
     end
