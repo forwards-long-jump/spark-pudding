@@ -101,7 +101,10 @@ public class PanelSidebarLeft extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Add reset scene
+				FrameSceneEditor.coreEngine.scheduleResetCurrentScene(true);
+				if (btnPausePlay.getIcon() == ImageStorage.PAUSE) {
+					toggleTextPausePlay();
+				}
 				btnReset.setEnabled(false);
 			}
 		});

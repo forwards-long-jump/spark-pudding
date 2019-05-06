@@ -11,7 +11,6 @@ import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
-import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.ColorFactory;
 
@@ -22,11 +21,10 @@ public class RenderSystem extends System {
 	/**
 	 * Constructs the render system from its lua file
 	 *
-	 * @param file
-	 * @param coreEngine
+	 * @param file The system
 	 */
-	public RenderSystem(File file, CoreEngine coreEngine) {
-		super(file, coreEngine);
+	public RenderSystem(File file) {
+		super(file);
 		reload();
 	}
 

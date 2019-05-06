@@ -76,7 +76,7 @@ public class Field {
 		this.type = FieldType.valueOf(type);
 		this.setValueFromString(value);
 	}
-	
+
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new Field(this);

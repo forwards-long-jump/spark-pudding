@@ -68,7 +68,7 @@ public class Scene {
 	public void add(Entity e) {
 		entities.add(e);
 	}
-	
+
 	/**
 	 * Adds a default entity to the scene
 	 * 
@@ -85,11 +85,11 @@ public class Scene {
 		entities.clear();
 		this.tick = 0;
 		// Clone entities into the "live" list
-		for(Entity entity : defaultEntities) {
+		for (Entity entity : defaultEntities) {
 			entities.add(new Entity(entity));
 		}
 	}
-	
+
 	/**
 	 * Get all entities present on this scene
 	 * 
@@ -107,7 +107,7 @@ public class Scene {
 	public List<Entity> getDefaultEntities() {
 		return defaultEntities;
 	}
-	
+
 	/**
 	 * Removes an entity from the scene
 	 * 
@@ -143,16 +143,17 @@ public class Scene {
 	public Camera getCamera() {
 		return camera;
 	}
-	
+
 	/**
 	 * Increment game tick
 	 */
 	public void incrementTick() {
 		this.tick++;
 	}
-	
+
 	/**
 	 * Get tick
+	 * 
 	 * @return tick
 	 */
 	public int getTick() {

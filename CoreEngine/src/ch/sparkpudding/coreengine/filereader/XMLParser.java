@@ -12,13 +12,15 @@ import org.xml.sax.SAXException;
 
 /**
  * Tool for handling XML files.
+ * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
 public class XMLParser {
-	
+
 	/**
 	 * Parse XML from file
+	 * 
 	 * @param xmlFile
 	 * @return XML Document
 	 * @throws ParserConfigurationException

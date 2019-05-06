@@ -58,12 +58,13 @@ public class Core {
 
 	/**
 	 * Get current frameRate
+	 * 
 	 * @return current tick
 	 */
 	public int getFPS() {
 		return Lel.coreEngine.getFPS();
 	}
-	
+
 	/**
 	 * Change current scene
 	 * 

@@ -45,8 +45,8 @@ import ch.sparkpudding.coreengine.utils.Pair;
 @SuppressWarnings("serial")
 public class CoreEngine extends JPanel {
 
-	private double msPerUpdate = (1000 / 60);
-	private boolean exit = false;
+	private double msPerUpdate;
+	private boolean exit;
 
 	private Input input;
 	private ResourceLocator resourceLocator;
@@ -59,10 +59,11 @@ public class CoreEngine extends JPanel {
 	private List<UpdateSystem> systems;
 	private RenderSystem renderSystem;
 
-	private boolean pause = false;
-	private boolean pauseAll = false;
+	private boolean pause;
+	private boolean pauseAll;
 
 	private boolean systemReloadScheduled;
+	private boolean sceneReloadScheduled;
 
 	private Dimension renderSize;
 	private Color blackBarColor;
@@ -87,27 +88,33 @@ public class CoreEngine extends JPanel {
 		Lel.coreEngine = this;
 		this.input = new Input(this);
 
-		entitesToDeleteAfterUpdate = new ArrayList<Entity>();
-		componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
+		this.fps = 0;
+		this.fpsCount = 0;
+		this.msPerUpdate = (1000 / 60);
+		this.exit = false;
+
+		this.pause = false;
+		this.pauseAll = false;
+
+		this.entitesToDeleteAfterUpdate = new ArrayList<Entity>();
+		this.componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
-		this.fps = 0;
-		this.fpsCount = 0;
 
 		this.systemReloadScheduled = false;
+		this.sceneReloadScheduled = false;
+
+		this.renderLock = new Semaphore(0);
 
 		this.lelFile = new LelReader(gameFolder);
-		this.resourceLocator = new ResourceLocator(lelFile);
-
+		this.resourceLocator = new ResourceLocator(this.lelFile);
 		populateComponentTemplates();
 		populateEntityTemplates();
 		populateScenes();
 		loadSystems();
 
 		setCurrentScene(scenes.get("main"));
-
-		renderLock = new Semaphore(0);
 
 		new Thread(() -> {
 			try {
@@ -127,9 +134,9 @@ public class CoreEngine extends JPanel {
 
 		for (File systemFile : lelFile.getSystems()) {
 			if (systemFile.getName().equals(RenderSystem.LUA_FILE_NAME)) {
-				renderSystem = new RenderSystem(systemFile, this);
+				renderSystem = new RenderSystem(systemFile);
 			} else {
-				systems.add(new UpdateSystem(systemFile, this));
+				systems.add(new UpdateSystem(systemFile));
 			}
 		}
 	}
@@ -191,6 +198,7 @@ public class CoreEngine extends JPanel {
 
 		while (!exit) {
 			handleSystemsReloading();
+			handleSceneReloading();
 
 			double current = java.lang.System.currentTimeMillis();
 			double elapsed = current - previous;
@@ -202,7 +210,7 @@ public class CoreEngine extends JPanel {
 
 			while (lag >= msPerUpdate) {
 				handleLuaErrors();
-				
+
 				update();
 				lag -= msPerUpdate;
 			}
@@ -219,12 +227,23 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * To be called before updating, check if scene should be reloaded
+	 */
+	private void handleSceneReloading() {
+		if (sceneReloadScheduled) {
+			sceneReloadScheduled = false;
+			currentScene.reset();
+			setCurrentScene(currentScene);
+		}
+	}
+
+	/**
 	 * To be called before updating, check if systems should be reloaded
 	 */
 	private void handleSystemsReloading() {
 		if (systemReloadScheduled) {
 			systemReloadScheduled = false;
-			if(luaError != null) {
+			if (luaError != null) {
 				luaError = null; // Let's remove the error as reloading systems may fix it
 				pauseAll = false;
 			}
@@ -274,7 +293,7 @@ public class CoreEngine extends JPanel {
 		}
 
 		currentScene.incrementTick();
-		
+
 		for (UpdateSystem system : systems) {
 			system.update();
 		}
@@ -349,6 +368,18 @@ public class CoreEngine extends JPanel {
 			scenes.get(name).reset();
 		}
 		setCurrentScene(scenes.get(name));
+	}
+
+	/**
+	 * Reset the current scene and notify engine
+	 * 
+	 * @param pause If the game need to be paused after the reset
+	 */
+	public void scheduleResetCurrentScene(boolean pause) {
+		if (pause && !pauseAll) {
+			togglePauseAll();
+		}
+		sceneReloadScheduled = true;
 	}
 
 	/**
