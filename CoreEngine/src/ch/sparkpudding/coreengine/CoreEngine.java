@@ -62,6 +62,7 @@ public class CoreEngine extends JPanel {
 	private boolean pauseAll = false;
 
 	private boolean systemReloadScheduled;
+	private boolean sceneReloadScheduled;
 
 	private Dimension renderSize;
 	private Color blackBarColor;
@@ -189,6 +190,7 @@ public class CoreEngine extends JPanel {
 
 		while (!exit) {
 			handleSystemsReloading();
+			handleSceneReloading();
 
 			double current = java.lang.System.currentTimeMillis();
 			double elapsed = current - previous;
@@ -213,6 +215,17 @@ public class CoreEngine extends JPanel {
 				fpsCount = fps;
 				fps = 0;
 			}
+		}
+	}
+
+	/**
+	 * To be called before updating, check if scene should be reloaded
+	 */
+	private void handleSceneReloading() {
+		if (sceneReloadScheduled) {
+			sceneReloadScheduled = false;
+			currentScene.reset();
+			setCurrentScene(currentScene);
 		}
 	}
 
@@ -347,6 +360,18 @@ public class CoreEngine extends JPanel {
 			scenes.get(name).reset();
 		}
 		setCurrentScene(scenes.get(name));
+	}
+
+	/**
+	 * Reset the current scene and notify engine
+	 * 
+	 * @param pause If the game need to be paused after the reset
+	 */
+	public void scheduleResetCurrentScene(boolean pause) {
+		if (pause && !pauseAll) {
+			togglePauseAll();
+		}
+		sceneReloadScheduled = true;
 	}
 
 	/**
