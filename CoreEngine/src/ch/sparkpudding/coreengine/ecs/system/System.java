@@ -6,9 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
+import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -20,6 +23,7 @@ import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JseMathLib;
 
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.Camera;
 import ch.sparkpudding.coreengine.api.Core;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
@@ -33,7 +37,7 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
  * 
  */
 public abstract class System {
-	private String filepath;
+	protected String filepath;
 
 	// named lists of required components
 	private Map<String, List<String>> componentGroups;
@@ -46,6 +50,13 @@ public abstract class System {
 	protected Globals globals;
 	protected CoreEngine coreEngine;
 
+	protected boolean loadingFailed;
+
+	// Systems should use this to execute their lua in a safe manner
+	Thread sandboxThread;
+	protected ExecutorService executor;
+	protected static final int MAX_EXECUTION_TIME_IN_SECONDS = 1;
+
 	/**
 	 * Constructs the system from the Lua file
 	 * 
@@ -55,6 +66,7 @@ public abstract class System {
 	public System(File file, CoreEngine coreEngine) {
 		this.filepath = file.getAbsolutePath();
 		this.coreEngine = coreEngine;
+		executor = Executors.newFixedThreadPool(1);
 
 		// (re)Load this system
 		reload();
@@ -67,13 +79,17 @@ public abstract class System {
 		globals = new Globals();
 		componentGroups = new HashMap<String, List<String>>();
 		entityGroups = new HashMap<String, List<Entity>>();
+		loadingFailed = false;
 
 		loadLuaLibs();
-		loadLuaSystem();
-		readMethodsFromLua();
-		loadApis();
-
-		loadRequiredComponents();
+		// Compilation error, do not load this system
+		if (!loadLuaSystem()) {
+			loadingFailed = true;
+		} else {
+			readMethodsFromLua();
+			loadApis();
+			loadRequiredComponents();
+		}
 	}
 
 	/**
@@ -103,8 +119,15 @@ public abstract class System {
 	/**
 	 * Load the system from the specified filepath
 	 */
-	private void loadLuaSystem() {
-		globals.get("dofile").call(LuaValue.valueOf(filepath));
+	private boolean loadLuaSystem() {
+		try {
+			globals.get("dofile").call(LuaValue.valueOf(filepath));
+			return true;
+		} catch (LuaError error) {
+			Lel.coreEngine.notifyLuaError(error);
+		}
+
+		return false;
 	}
 
 	/**
@@ -120,8 +143,20 @@ public abstract class System {
 	 */
 	private void loadRequiredComponents() {
 		componentGroups.clear();
-		LuaTable list = (LuaTable) getRequiredComponentsMethod.call(); // Return { entity = {"comp1", "comp2"}}
+		LuaTable list = null;
 
+		try {
+			list = (LuaTable) getRequiredComponentsMethod.call(); // Return { entity = {"comp1", "comp2"}}
+		} catch (ClassCastException error) {
+			Lel.coreEngine.notifyLuaError(new LuaError(filepath + ": could not parse required components."));
+			loadingFailed = true;
+			return;
+		}
+		catch (LuaError error) {
+			Lel.coreEngine.notifyLuaError(new LuaError(filepath + ": missing function getRequiredComponents."));
+			loadingFailed = true;
+			return;
+		}
 		// list iteration in LuaJ
 		LuaValue key = LuaValue.NIL;
 		Varargs entry = list.next(key);
@@ -281,13 +316,13 @@ public abstract class System {
 			// we must first check if the list needs the new component, lest we add the
 			// entity twice to the system
 			List<String> componentList = componentGroups.get(listName);
-			if (componentList.contains(componentName) && entity.hasComponents(componentGroups.get(listName))){
+			if (componentList.contains(componentName) && entity.hasComponents(componentGroups.get(listName))) {
 				entityGroups.get(listName).add(entity);
 
 				addEntityGroupToGlobals(listName);
-				//LuaTable entityGroup = (LuaTable) globals.get(entityList.getKey());
+				// LuaTable entityGroup = (LuaTable) globals.get(entityList.getKey());
 				// TODO prevent accessing all components
-				//entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
+				// entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
 			}
 		}
 	}

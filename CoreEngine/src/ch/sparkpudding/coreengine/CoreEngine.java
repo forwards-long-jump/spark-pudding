@@ -2,10 +2,12 @@ package ch.sparkpudding.coreengine;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.File;
@@ -19,6 +21,7 @@ import java.util.concurrent.Semaphore;
 import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.luaj.vm2.LuaError;
 import org.xml.sax.SAXException;
 
 import ch.sparkpudding.coreengine.ecs.component.Component;
@@ -29,6 +32,7 @@ import ch.sparkpudding.coreengine.ecs.system.UpdateSystem;
 import ch.sparkpudding.coreengine.filereader.LelReader;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
 import ch.sparkpudding.coreengine.utils.Collision;
+import ch.sparkpudding.coreengine.utils.Drawing;
 import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
@@ -57,16 +61,19 @@ public class CoreEngine extends JPanel {
 	private boolean pause = false;
 	private boolean pauseAll = false;
 
+	private boolean systemReloadScheduled;
+
 	private Dimension renderSize;
 	private Color blackBarColor;
 	private Semaphore renderLock;
 
-	private int tick;
 	private int fpsCount;
 	private int fps;
 
 	private List<Entity> entitesToDeleteAfterUpdate;
 	private List<Pair<Entity, String>> componentsToRemoveAfterUpdate;
+
+	private LuaError luaError;
 
 	/**
 	 * The heart of the Ludic Engine in Lua
@@ -84,9 +91,10 @@ public class CoreEngine extends JPanel {
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
-		this.tick = 0;
 		this.fps = 0;
 		this.fpsCount = 0;
+
+		this.systemReloadScheduled = false;
 
 		this.lelFile = new LelReader(gameFolder);
 
@@ -180,6 +188,8 @@ public class CoreEngine extends JPanel {
 		double lastFpsTime = java.lang.System.currentTimeMillis();
 
 		while (!exit) {
+			handleSystemsReloading();
+
 			double current = java.lang.System.currentTimeMillis();
 			double elapsed = current - previous;
 
@@ -189,7 +199,9 @@ public class CoreEngine extends JPanel {
 			input.update();
 
 			while (lag >= msPerUpdate) {
-				tick++;
+				handleLuaErrors();
+				
+				currentScene.incrementTick();
 				update();
 				lag -= msPerUpdate;
 			}
@@ -203,6 +215,53 @@ public class CoreEngine extends JPanel {
 				fps = 0;
 			}
 		}
+	}
+
+	/**
+	 * To be called before updating, check if systems should be reloaded
+	 */
+	private void handleSystemsReloading() {
+		if (systemReloadScheduled) {
+			systemReloadScheduled = false;
+			if(luaError != null) {
+				luaError = null; // Let's remove the error as reloading systems may fix it
+				pauseAll = false;
+			}
+			reloadSystemsFromDisk();
+		}
+	}
+
+	/**
+	 * To be called before upading, handle lua error actions
+	 */
+	private void handleLuaErrors() {
+		if (luaError != null) {
+			// Try to continue
+			if (input.isKeyDown(KeyEvent.VK_SPACE)) {
+				pauseAll = false;
+				luaError = null;
+			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
+				pauseAll = false;
+				luaError = null;
+				reloadSystemsFromDisk();
+			}
+			input.resetAllKeys();
+		}
+	}
+
+	/**
+	 * Reload systems from disk, live
+	 */
+	private void reloadSystemsFromDisk() {
+		loadSystems();
+		setCurrentScene(getCurrentScene());
+	}
+
+	/**
+	 * Reload system from disk at the start of next update
+	 */
+	public void scheduleSystemReloadFromDisk() {
+		systemReloadScheduled = true;
 	}
 
 	/**
@@ -283,17 +342,10 @@ public class CoreEngine extends JPanel {
 	 * @param reset The scene will be reloaded when set to true
 	 */
 	public void setScene(String name, boolean reset) {
-		setCurrentScene(scenes.get(name));
 		if (reset) {
-			resetScene();
+			scenes.get(name).reset();
 		}
-	}
-
-	/**
-	 * Resets current scene
-	 */
-	public void resetScene() {
-		// TODO: reset current scene
+		setCurrentScene(scenes.get(name));
 	}
 
 	/**
@@ -383,12 +435,51 @@ public class CoreEngine extends JPanel {
 		// Draw black bars
 		drawBlackBars(g2d, scaleRatio, translation);
 
+		// Render info about any lua error if any
+		renderLuaError(g2d);
 		// Source:
 		// https://stackoverflow.com/questions/33257540/java-window-lagging-on-ubuntu-but-not-windows-when-code-isnt-lagging
 		java.awt.Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 
 		renderLock.release();
+	}
+
+	/**
+	 * Render an overlay giving help about a lua error that could've occurer
+	 * 
+	 * @param g2d
+	 */
+	private void renderLuaError(Graphics2D g2d) {
+		if (luaError != null) {
+			int x = 20;
+			int y = 40;
+			int maxWidth = getWidth() - x;
+			int smallFontSize = 15;
+			int bigFontSize = 30;
+
+			// Make it look like the game is paused
+			g2d.setColor(new Color(0, 0, 0, 150));
+			g2d.fillRect(0, 0, getWidth(), getHeight());
+
+			g2d.setColor(new Color(0, 0, 0, 255));
+			g2d.fillRect(0, 0, getWidth(), 170); // Estimated error size
+
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(new Font(Font.DIALOG, Font.BOLD, bigFontSize));
+			y = Drawing.drawWrappedString("Something went wrong", x, y, maxWidth, g2d);
+
+			g2d.setColor(Color.RED);
+			g2d.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, smallFontSize));
+
+			y = Drawing.drawWrappedString(luaError.getMessage(), x, y, maxWidth, g2d);
+			y += smallFontSize;
+
+			g2d.setColor(Color.LIGHT_GRAY);
+			y = Drawing.drawWrappedString("Press [SPACE] to ignore this error and attempt to continue.", x, y, maxWidth,
+					g2d);
+			Drawing.drawWrappedString("Press [ENTER] to reload systems from disk.", x, y, maxWidth, g2d);
+		}
 	}
 
 	/**
@@ -417,15 +508,6 @@ public class CoreEngine extends JPanel {
 			g2d.fillRect(0, 0, getWidth(), translateY);
 			g2d.fillRect(0, translateY + realGameHeight, getWidth() + 1, translateY + 1);
 		}
-	}
-
-	/**
-	 * Getter for tick. Tick is increased by 1 every update
-	 *
-	 * @return current tick
-	 */
-	public int getTick() {
-		return tick;
 	}
 
 	/**
@@ -619,5 +701,19 @@ public class CoreEngine extends JPanel {
 			}
 		}
 		return entities;
+	}
+
+	/**
+	 * Notify the engine that a lua error occured. Pause the game and display the
+	 * error
+	 * 
+	 * @param error
+	 */
+	public void notifyLuaError(LuaError error) {
+		// We only display the first error encountered so we can fix it first
+		if (this.luaError == null) {
+			pauseAll = true;
+			this.luaError = error;
+		}
 	}
 }
