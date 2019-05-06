@@ -125,9 +125,9 @@ public class CoreEngine extends JPanel {
 
 		for (File systemFile : lelFile.getSystems()) {
 			if (systemFile.getName().equals(RenderSystem.LUA_FILE_NAME)) {
-				renderSystem = new RenderSystem(systemFile, this);
+				renderSystem = new RenderSystem(systemFile);
 			} else {
-				systems.add(new UpdateSystem(systemFile, this));
+				systems.add(new UpdateSystem(systemFile));
 			}
 		}
 	}
@@ -200,7 +200,7 @@ public class CoreEngine extends JPanel {
 
 			while (lag >= msPerUpdate) {
 				handleLuaErrors();
-				
+
 				update();
 				lag -= msPerUpdate;
 			}
@@ -222,7 +222,7 @@ public class CoreEngine extends JPanel {
 	private void handleSystemsReloading() {
 		if (systemReloadScheduled) {
 			systemReloadScheduled = false;
-			if(luaError != null) {
+			if (luaError != null) {
 				luaError = null; // Let's remove the error as reloading systems may fix it
 				pauseAll = false;
 			}
@@ -272,7 +272,7 @@ public class CoreEngine extends JPanel {
 		}
 
 		currentScene.incrementTick();
-		
+
 		for (UpdateSystem system : systems) {
 			system.update();
 		}

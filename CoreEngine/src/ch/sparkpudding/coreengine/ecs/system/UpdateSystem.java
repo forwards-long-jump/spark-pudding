@@ -10,7 +10,6 @@ import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
-import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.InputAPI;
 
@@ -28,11 +27,10 @@ public class UpdateSystem extends System {
 	/**
 	 * Constructs the update system from its lua file
 	 * 
-	 * @param file
-	 * @param coreEngine
+	 * @param file The system
 	 */
-	public UpdateSystem(File file, CoreEngine coreEngine) {
-		super(file, coreEngine);
+	public UpdateSystem(File file) {
+		super(file);
 
 		sandboxThread = new Thread(() -> {
 			sandboxedUpdate();

@@ -22,7 +22,6 @@ import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JseMathLib;
 
-import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.Camera;
 import ch.sparkpudding.coreengine.api.Core;
@@ -48,7 +47,6 @@ public abstract class System {
 
 	protected LuaValue apiTable;
 	protected Globals globals;
-	protected CoreEngine coreEngine;
 
 	protected boolean loadingFailed;
 
@@ -60,12 +58,10 @@ public abstract class System {
 	/**
 	 * Constructs the system from the Lua file
 	 * 
-	 * @param file       Lua script file
-	 * @param coreEngine Reference to the CoreEngine for API access
+	 * @param file Lua script file
 	 */
-	public System(File file, CoreEngine coreEngine) {
+	public System(File file) {
 		this.filepath = file.getAbsolutePath();
-		this.coreEngine = coreEngine;
 		executor = Executors.newFixedThreadPool(1);
 
 		// (re)Load this system
@@ -151,8 +147,7 @@ public abstract class System {
 			Lel.coreEngine.notifyLuaError(new LuaError(filepath + ": could not parse required components."));
 			loadingFailed = true;
 			return;
-		}
-		catch (LuaError error) {
+		} catch (LuaError error) {
 			Lel.coreEngine.notifyLuaError(new LuaError(filepath + ": missing function getRequiredComponents."));
 			loadingFailed = true;
 			return;
