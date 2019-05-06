@@ -14,7 +14,7 @@
 		<field type="INTEGER" name="shootingDelay">1</field>
 		<field type="INTEGER" name="speedX">6</field>
 	</component>
-	<component template="color">
-		<field name="b">255</field>
+	<component template="texture">
+		<field name="filename">player.png</field>
 	</component>
 </entity-template>
