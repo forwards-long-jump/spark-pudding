@@ -11,7 +11,7 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import ch.sparkpudding.coreengine.Lel;
-import ch.sparkpudding.coreengine.api.InputAPI;
+import ch.sparkpudding.coreengine.api.Input;
 
 /**
  * Handle systems that will be updated. These systems can also be paused
@@ -74,7 +74,7 @@ public class UpdateSystem extends System {
 	 * Load update related APIs
 	 */
 	private void loadUpdateApis() {
-		apiTable.set("input", CoerceJavaToLua.coerce(InputAPI.getInstance()));
+		apiTable.set("input", CoerceJavaToLua.coerce(Input.getInstance()));
 	}
 
 	/**

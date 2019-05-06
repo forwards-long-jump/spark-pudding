@@ -25,7 +25,7 @@ import org.luaj.vm2.lib.jse.JseMathLib;
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.Camera;
 import ch.sparkpudding.coreengine.api.Core;
-import ch.sparkpudding.coreengine.api.ResourceAPI;
+import ch.sparkpudding.coreengine.api.Resource;
 import ch.sparkpudding.coreengine.api.Sound;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
@@ -99,7 +99,7 @@ public abstract class System {
 
 		apiTable.set("core", CoerceJavaToLua.coerce(Core.getInstance()));
 		apiTable.set("camera", CoerceJavaToLua.coerce(Camera.getInstance()));
-		apiTable.set("resources", CoerceJavaToLua.coerce(ResourceAPI.getInstance()));
+		apiTable.set("resources", CoerceJavaToLua.coerce(Resource.getInstance()));
 		apiTable.set("sound", CoerceJavaToLua.coerce(Sound.getInstance()));
 	}
 

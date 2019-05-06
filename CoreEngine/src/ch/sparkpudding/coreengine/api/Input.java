@@ -2,7 +2,6 @@ package ch.sparkpudding.coreengine.api;
 
 import java.awt.geom.Point2D;
 
-import ch.sparkpudding.coreengine.Input;
 import ch.sparkpudding.coreengine.Lel;
 
 /**
@@ -12,18 +11,18 @@ import ch.sparkpudding.coreengine.Lel;
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
-public class InputAPI {
-	private static InputAPI instance;
+public class Input {
+	private static Input instance;
 
-	private Input input;
+	private ch.sparkpudding.coreengine.Input input;
 
-	private InputAPI() {
+	private Input() {
 		this.input = Lel.coreEngine.getInput();
 	}
 
-	public static InputAPI getInstance() {
+	public static Input getInstance() {
 		if (instance == null) {
-			instance = new InputAPI();
+			instance = new Input();
 		}
 		return instance;
 	}
