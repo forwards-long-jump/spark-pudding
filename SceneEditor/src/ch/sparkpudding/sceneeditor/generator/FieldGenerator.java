@@ -1,8 +1,7 @@
 package ch.sparkpudding.sceneeditor.generator;
 
-import java.awt.Color;
 import java.text.NumberFormat;
-import java.util.List;
+import java.util.Collection;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -15,37 +14,56 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
 
 /**
+ * Generate the interface for the fields passed in arguments. Since it inherits
+ * JComponent, it can be used as one.
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 8 avr. 2019
- *
- *         Generate the interface for the fields passed in arguments. Since it
- *         inherits JComponent, it can be used as one.
  * 
  */
 @SuppressWarnings("serial")
 public class FieldGenerator extends JComponent {
 
-	public FieldGenerator(List<Field> fields) {
-		setLayout(new SpringLayout());
+	private Collection<Field> fields;
 
+	/**
+	 * ctor
+	 * 
+	 * @param fields Collection of all the components of an entity
+	 */
+	public FieldGenerator(Collection<Field> fields) {
+		this.fields = fields;
+
+		createFields();
+		setupLayout();
+	}
+
+	/**
+	 * Setup the layout of the panel
+	 */
+	private void setupLayout() {
+		setLayout(new SpringLayout());
+		SpringUtilities.makeGrid(this, fields.size(), 2, 5, 5, 5, 5);
+	}
+
+	/**
+	 * Create and recreate all the representation of the fields stored in
+	 * <code>this.fields</code>
+	 */
+	private void createFields() {
 		for (Field field : fields) {
 			JLabel labelField = new JLabel(field.getName());
 			add(labelField);
 			add(createValueField(field, labelField));
 		}
-		
-		setBackground(Color.RED);
-
-		SpringUtilities.makeGrid(this, fields.size(), 2, 5, 5, 5, 5);
 	}
 
 	/**
 	 * Generate the right JComponent and it's parameters following the type of the
 	 * field.
 	 * 
-	 * @param field
-	 * @return
+	 * @param field The field to consider
+	 * @return The input generated
 	 */
 	private JComponent createValueField(Field field, JLabel labelField) {
 		JComponent input;
