@@ -45,8 +45,8 @@ import ch.sparkpudding.coreengine.utils.Pair;
 @SuppressWarnings("serial")
 public class CoreEngine extends JPanel {
 
-	private double msPerUpdate = (1000 / 60);
-	private boolean exit = false;
+	private double msPerUpdate;
+	private boolean exit;
 
 	private Input input;
 
@@ -58,8 +58,8 @@ public class CoreEngine extends JPanel {
 	private List<UpdateSystem> systems;
 	private RenderSystem renderSystem;
 
-	private boolean pause = false;
-	private boolean pauseAll = false;
+	private boolean pause;
+	private boolean pauseAll;
 
 	private boolean systemReloadScheduled;
 	private boolean sceneReloadScheduled;
@@ -87,26 +87,32 @@ public class CoreEngine extends JPanel {
 		Lel.coreEngine = this;
 		this.input = new Input(this);
 
-		entitesToDeleteAfterUpdate = new ArrayList<Entity>();
-		componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
+		this.fps = 0;
+		this.fpsCount = 0;
+		this.msPerUpdate = (1000 / 60);
+		this.exit = false;
+
+		this.pause = false;
+		this.pauseAll = false;
+
+		this.entitesToDeleteAfterUpdate = new ArrayList<Entity>();
+		this.componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
-		this.fps = 0;
-		this.fpsCount = 0;
 
 		this.systemReloadScheduled = false;
+		this.sceneReloadScheduled = false;
+
+		this.renderLock = new Semaphore(0);
 
 		this.lelFile = new LelReader(gameFolder);
-
 		populateComponentTemplates();
 		populateEntityTemplates();
 		populateScenes();
 		loadSystems();
 
 		setCurrentScene(scenes.get("main"));
-
-		renderLock = new Semaphore(0);
 
 		new Thread(() -> {
 			try {
