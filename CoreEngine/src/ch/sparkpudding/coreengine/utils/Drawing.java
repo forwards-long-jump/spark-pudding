@@ -18,7 +18,8 @@ public class Drawing {
 	private static List<String> lines = new ArrayList<String>();
 
 	/**
-	 * Render a string making sure it's not longer than maxWidth by breaking it into multiple lines
+	 * Render a string making sure it's not longer than maxWidth by breaking it into
+	 * multiple lines
 	 * 
 	 * @param s        string to write
 	 * @param x        x coordinate of the string to render

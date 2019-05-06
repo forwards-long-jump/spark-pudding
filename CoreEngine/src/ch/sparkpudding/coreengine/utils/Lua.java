@@ -19,7 +19,7 @@ public class Lua {
 	static {
 		createMetableSetter();
 	}
-	
+
 	public static LuaValue getMetatableSetterMethod() {
 		return metatableSetterMethod;
 	}
