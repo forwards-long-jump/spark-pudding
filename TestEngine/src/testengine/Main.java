@@ -3,6 +3,8 @@ package testengine;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,7 +28,7 @@ public class Main {
 		jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		try {
-			ce = new CoreEngine(Main.class.getResource("/testgame2").getPath());
+			ce = new CoreEngine(ClassLoader.getSystemResource("testgame2").getPath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,7 +53,7 @@ public class Main {
 		try {
 			watchService = FileSystems.getDefault().newWatchService();
 			
-			Path path = Paths.get(Main.class.getResource("/testgame2/systems").getPath());
+			Path path = Paths.get(new URI(ClassLoader.getSystemResource("testgame2/systems/").toString()));
 			path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE,
 					StandardWatchEventKinds.ENTRY_MODIFY);
 
@@ -65,6 +67,8 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 	}
