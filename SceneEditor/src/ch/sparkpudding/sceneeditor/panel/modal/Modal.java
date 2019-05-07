@@ -18,7 +18,6 @@ public class Modal extends JFrame {
 
 	public Modal() {
 		super();
-		this.setSize(300, 500);
 		this.setLayout(new BorderLayout());
 		
 		this.mainPanel = new JPanel();

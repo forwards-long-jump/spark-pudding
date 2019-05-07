@@ -37,6 +37,12 @@ public class Component implements Iterable<Entry<String, Field>> {
 		this.template = template;
 		this.fields = new HashMap<String, Field>();
 	}
+	
+	public Component(String name, Map<String, Field> fields)
+	{
+		this.name = name;
+		this.fields = new HashMap<String,Field>(fields);
+	}
 
 	/**
 	 * Copy constructor
