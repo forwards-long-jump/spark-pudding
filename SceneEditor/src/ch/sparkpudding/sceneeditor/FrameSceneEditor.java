@@ -83,7 +83,7 @@ public class FrameSceneEditor extends JFrame {
 			}
 		});
 		
-		FrameSceneEditor.coreEngine.addKeyListener(new KeyAdapter() {
+		SceneEditor.coreEngine.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyChar() == 'c')
