@@ -22,17 +22,22 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
  */
 @SuppressWarnings("serial")
 public class FrameSceneEditor extends JFrame {
-
+	public enum EDITOR_STATE {
+		PLAY, PAUSE, STOP;
+	}
+	
 	private static final String TITLE = "Scene Editor";
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 
 	private MenuBar menuBar;
 	private PanelSidebarRight panelSidebarRight;
-	private PanelSidebarLeft panelSidebarLeft;
+	private static PanelSidebarLeft panelSidebarLeft;
 	private PanelGame panelGame;
 	private BorderLayout borderLayout;
 
+	private static EDITOR_STATE gameState;
+	
 	public static CoreEngine coreEngine;
 
 	/**
@@ -44,6 +49,8 @@ public class FrameSceneEditor extends JFrame {
 	public FrameSceneEditor(String gameFolder) throws Exception {
 		FrameSceneEditor.coreEngine = new CoreEngine(gameFolder);
 		FrameSceneEditor.coreEngine.togglePauseAll();
+		
+		gameState = EDITOR_STATE.PAUSE;
 
 		init();
 		setupLayout();
@@ -100,5 +107,36 @@ public class FrameSceneEditor extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
+
+	/**
+	 * Get current editor state
+	 * @return current editor state
+	 */
+	public static EDITOR_STATE getGameState() {
+		return gameState;
+	}
+	
+	/**
+	 *  Change editor state
+	 */
+	public static void setGameState(EDITOR_STATE state) {
+		gameState = state;
+		switch(state) {
+		case PAUSE:
+			FrameSceneEditor.coreEngine.togglePauseAll();
+			break;
+		case PLAY:
+			FrameSceneEditor.coreEngine.togglePauseAll();
+			break;
+		case STOP:
+			FrameSceneEditor.coreEngine.scheduleResetCurrentScene(true);
+			break;
+		default:
+			break;
+		
+		}
+		panelSidebarLeft.notifyStateChange(state);
+	}
+
 
 }
