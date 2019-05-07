@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 
-import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.sceneeditor.menu.MenuBar;
 import ch.sparkpudding.sceneeditor.panel.PanelGame;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
@@ -22,10 +21,6 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
  */
 @SuppressWarnings("serial")
 public class FrameSceneEditor extends JFrame {
-	public enum EDITOR_STATE {
-		PLAY, PAUSE, STOP;
-	}
-	
 	private final String TITLE = "Scene Editor";
 	private final int WIDTH = 1280;
 	private final int HEIGHT = 720;
@@ -36,21 +31,13 @@ public class FrameSceneEditor extends JFrame {
 	private PanelGame panelGame;
 	private BorderLayout borderLayout;
 
-	private EDITOR_STATE gameState;
-
 	/**
 	 * ctor
 	 * 
 	 * @param gameFolder the path to the folder containing the current game
 	 * @throws Exception thrown if the coreEngine can't read the gameFolder
 	 */
-	public FrameSceneEditor(String gameFolder) throws Exception {
-		Lel.frameSceneEditor = this;
-		Lel.coreEngine = new CoreEngine(gameFolder);
-		Lel.coreEngine.togglePauseAll();
-		
-		gameState = EDITOR_STATE.PAUSE;
-
+	public FrameSceneEditor() {
 		init();
 		setupLayout();
 		setupFrame();
@@ -86,10 +73,10 @@ public class FrameSceneEditor extends JFrame {
 	 * Add the different listener for each element of the panel
 	 */
 	private void addListener() {
-		Lel.coreEngine.addMouseListener(new MouseAdapter() {
+		SceneEditor.coreEngine.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				Lel.coreEngine.requestFocus();
+				SceneEditor.coreEngine.requestFocus();
 			}
 		});
 	}
@@ -108,34 +95,11 @@ public class FrameSceneEditor extends JFrame {
 	}
 
 	/**
-	 * Get current editor state
-	 * @return current editor state
+	 * Get the left sidebar panel
+	 * 
+	 * @return the left sidebar panel
 	 */
-	public EDITOR_STATE getGameState() {
-		return gameState;
+	public PanelSidebarLeft getPanelSidebarLeft() {
+		return panelSidebarLeft;
 	}
-	
-	/**
-	 *  Change editor state
-	 */
-	public void setGameState(EDITOR_STATE state) {
-		gameState = state;
-		switch(state) {
-		case PAUSE:
-			Lel.coreEngine.togglePauseAll();
-			break;
-		case PLAY:
-			Lel.coreEngine.togglePauseAll();
-			break;
-		case STOP:
-			Lel.coreEngine.scheduleResetCurrentScene(true);
-			break;
-		default:
-			break;
-		
-		}
-		panelSidebarLeft.notifyStateChange(state);
-	}
-
-
 }

@@ -28,12 +28,7 @@ public class Main {
 			e1.printStackTrace();
 		}
 
-		try {
-			new FrameSceneEditor(Main.class.getResource("/emptygame").getPath());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		SceneEditor.frameSceneEditor = new FrameSceneEditor();
 	}
 
 }
