@@ -9,16 +9,19 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.coreengine.ecs.component.Field.FieldType;
 
 /**
  * 
@@ -29,7 +32,7 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 public class ModalComponent extends Modal {
 	JLabel lblCompName;
 	JTextField fiCompName;
-
+	JComboBox<FieldType> cmbFieldType;
 	JTable tblCompFields;
 	DefaultTableModel tblModel;
 	JPanel pnlFields;
@@ -52,16 +55,23 @@ public class ModalComponent extends Modal {
 		this.btnValidate = new JButton("OK");
 		this.btnAddField = new JButton("+");
 		this.btnRemoveField = new JButton("-");
+		this.cmbFieldType = new JComboBox<FieldType>();
 		
+		cmbFieldType.addItem(FieldType.BOOLEAN);
+		cmbFieldType.addItem(FieldType.DOUBLE);
+		cmbFieldType.addItem(FieldType.FILE_PATH);
+		cmbFieldType.addItem(FieldType.INTEGER);
+		cmbFieldType.addItem(FieldType.STRING);
 
 		String[] tableHeaders = { "Name", "Type", "Default value" };
 		this.tblModel = new DefaultTableModel(tableHeaders, 2);
 		this.tblCompFields = new JTable(tblModel);
-
+		TableColumn cm = tblCompFields.getColumnModel().getColumn(1);
+		cm.setCellEditor(new DefaultCellEditor(cmbFieldType));
 	}
 
 	private void setupLayout() {
-		
+
 		mainPanel.setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
@@ -81,13 +91,13 @@ public class ModalComponent extends Modal {
 		pnlFields.setLayout(new BorderLayout());
 		pnlFields.add(tblCompFields.getTableHeader(), BorderLayout.PAGE_START);
 		pnlFields.add(tblCompFields, BorderLayout.CENTER);
-		
+
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 3;
 		c.insets = new Insets(20, 0, 0, 0);
 		mainPanel.add(pnlFields, c);
-		
+
 		c.gridy = 2;
 		c.gridx = 1;
 		c.gridwidth = 1;
@@ -95,7 +105,7 @@ public class ModalComponent extends Modal {
 		c.anchor = GridBagConstraints.EAST;
 		c.insets = new Insets(5, 0, 0, 0);
 		mainPanel.add(btnRemoveField, c);
-		
+
 		c.gridx = 2;
 		mainPanel.add(btnAddField, c);
 
@@ -120,7 +130,7 @@ public class ModalComponent extends Modal {
 				pack();
 			}
 		});
-		
+
 		btnAddField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -147,8 +157,8 @@ public class ModalComponent extends Modal {
 				}
 
 				Component component = new Component(fiCompName.getText(), fields);
-				// TODO : pass this component to the current entity				
-				
+				// TODO : pass this component to the current entity
+
 				// TODO : maybe handle better the closing of the window
 				dispose();
 			}
