@@ -2,8 +2,8 @@ function getRequiredComponents()
   return {squares = {"size", "position", "color"}, directions = {"size", "position", "color", "direction"}}
 end
 
-function render(g)
-  game.camera:applyTransforms(g)
+function render()
+  game.camera:applyTransforms(g:getContext())
   -- Squares
   for i, square in ipairs(squares) do
     g:setColor(game.color:fromRGB(square.color.r, square.color.g, square.color.b))
@@ -30,5 +30,5 @@ function render(g)
 
     g:fillRect(square.position.x, square.position.y, square.size.width, square.size.height)
   end
-  game.camera:resetTransforms(g)
+  game.camera:resetTransforms(g:getContext())
 end
