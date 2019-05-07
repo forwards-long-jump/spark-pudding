@@ -1,6 +1,6 @@
 package ch.sparkpudding.sceneeditor.panel.modal;
 
-import javax.swing.JPanel;
+import javax.swing.JFrame;
 
 /**
  * 
@@ -8,6 +8,6 @@ import javax.swing.JPanel;
  * 
  */
 @SuppressWarnings("serial")
-public class Modal extends JPanel {
+public class Modal extends JFrame {
 
 }

@@ -7,5 +7,5 @@ package ch.sparkpudding.sceneeditor.panel.modal;
  */
 @SuppressWarnings("serial")
 public class ModalFile extends Modal {
-
+	
 }
