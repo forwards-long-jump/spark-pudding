@@ -92,6 +92,8 @@ public class RenderSystem extends System {
 
 	/**
 	 * Update the lua system in a new thread to prevent lua crashing the main app
+	 * 
+	 * @param g Graphics2D context
 	 */
 	private void sandboxedRender(Graphics2D g) {
 		try {
