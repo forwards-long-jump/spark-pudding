@@ -833,13 +833,15 @@ public class CoreEngine extends JPanel {
 		for (Entity entity : currentScene.getEntities()) {
 			if (entity.hasComponents(requiredComponents)) {
 				Map<String, Component> components = entity.getComponents();
-
-				if (Collision.intersectRect(p.getX(), p.getY(),
-						(double) (int) components.get("position").getField("x").getValue(),
-						(double) (int) components.get("position").getField("y").getValue(),
-						(double) (int) components.get("size").getField("width").getValue(),
-						(double) (int) components.get("size").getField("height").getValue())) {
-					entities.add(entity);
+				// warning: this does not check that x y width and height exists.
+				if (components.get("position") != null && components.get("size") != null) {
+					if (Collision.intersectRect(p.getX(), p.getY(),
+							components.get("position").getField("x").getDouble(),
+							components.get("position").getField("y").getDouble(),
+							components.get("size").getField("width").getDouble(),
+							components.get("size").getField("height").getDouble())) {
+						entities.add(entity);
+					}
 				}
 			}
 		}
