@@ -2,6 +2,8 @@ package ch.sparkpudding.sceneeditor.action;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.Action;
+
 /**
  * Basic class for action in the scene editor
  * 
@@ -12,7 +14,7 @@ import java.awt.event.ActionEvent;
 @SuppressWarnings("serial")
 public abstract class AbstractAction extends javax.swing.AbstractAction {
 
-	private boolean isTracked = true;
+	private boolean isTracked;
 
 	/**
 	 * Creates an Action with the specified name.
@@ -21,8 +23,16 @@ public abstract class AbstractAction extends javax.swing.AbstractAction {
 	 */
 	public AbstractAction(String name) {
 		super(name);
+		this.isTracked = true;
 	}
 
+	/**
+	 * Creates an Action with the specified name and specify if the action is
+	 * tracked
+	 * 
+	 * @param name      the name for the action; a value of {@code null} is ignored
+	 * @param isTracked if the action is tracked by the history
+	 */
 	public AbstractAction(String name, boolean isTracked) {
 		this(name);
 		this.isTracked = isTracked;
@@ -40,6 +50,15 @@ public abstract class AbstractAction extends javax.swing.AbstractAction {
 	 */
 	public void undoAction() {
 		throw new UnsupportedOperationException("Please override this method");
+	}
+
+	/**
+	 * Get the name of the Action
+	 * 
+	 * @return The name of the action
+	 */
+	public String getName() {
+		return (String) this.getValue(Action.NAME);
 	}
 
 	@Override
