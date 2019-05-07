@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Stack;
 
 /**
+ * This class is a singleton who handle the differents actions to allow basic
+ * undo and redo management
+ * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 16 avr. 2019
- * 
- *         This class is a singleton who handle the differents actions to allow
- *         basic undo and redo management
  * 
  */
 public class ActionsHistory {
@@ -55,10 +55,16 @@ public class ActionsHistory {
 
 	}
 
+	public AbstractAction getActionAt(int index) {
+		return actionsStack.get(index);
+	}
+
 	/**
 	 * Undo the action at the pointer without deleting it to allow redo
+	 * 
+	 * @return the action undoed
 	 */
-	public void undo() {
+	public AbstractAction undo() {
 
 		AbstractAction action = actionsStack.get(stackPointer);
 		action.undoAction();
@@ -66,15 +72,19 @@ public class ActionsHistory {
 		stackPointer--;
 
 		fireHistoryEvent();
+
+		return action;
 	}
 
 	/**
 	 * Redo the last undoed action
+	 * 
+	 * @return The action redoed
 	 */
-	public void redo() {
+	public AbstractAction redo() {
 
-		if (stackPointer == actionsStack.size() - 1)
-			return;
+		if (stackPointer != actionsStack.size() - 1)
+			return null;
 
 		stackPointer++;
 
@@ -82,6 +92,8 @@ public class ActionsHistory {
 		action.doAction();
 
 		fireHistoryEvent();
+
+		return action;
 	}
 
 	/**

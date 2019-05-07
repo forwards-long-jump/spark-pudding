@@ -6,6 +6,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import ch.sparkpudding.sceneeditor.action.AbstractAction;
 import ch.sparkpudding.sceneeditor.action.ActionRedo;
 import ch.sparkpudding.sceneeditor.action.ActionUndo;
 import ch.sparkpudding.sceneeditor.action.ActionsHistory;
@@ -22,6 +23,9 @@ public class MenuEdit extends JMenu {
 	private JMenuItem itemUndo;
 	private JMenuItem itemRedo;
 
+	/**
+	 * ctor
+	 */
 	public MenuEdit() {
 		init();
 		addAction();
@@ -43,7 +47,6 @@ public class MenuEdit extends JMenu {
 	 * Add the shortcut to the different item
 	 */
 	private void addAction() {
-		// TODO: Implement method
 		itemUndo.setAction(new ActionUndo());
 		itemRedo.setAction(new ActionRedo());
 
@@ -53,15 +56,19 @@ public class MenuEdit extends JMenu {
 		ActionsHistory.getInstance().addHistoryEventListener(new HistoryEventListener() {
 			@Override
 			public void historyEvent(int stackPointer, int stackSize) {
-				if (stackPointer > 0)
+				if (stackPointer >= 0) {
 					itemUndo.setEnabled(true);
-				else
+				} else {
 					itemUndo.setEnabled(false);
+				}
 
-				if (stackPointer < stackSize - 1)
+				if (stackPointer < stackSize - 1) {
 					itemRedo.setEnabled(true);
-				else
+				} else {
 					itemRedo.setEnabled(false);
+				}
+
+				updateActionsHistory(stackPointer, stackSize);
 			}
 		});
 	}
@@ -80,5 +87,33 @@ public class MenuEdit extends JMenu {
 	private void addItem() {
 		add(itemUndo);
 		add(itemRedo);
+		addSeparator();
+	}
+
+	/**
+	 * Rebuild and show the ActionsHistory
+	 * 
+	 * @param stackPointer The point position of the stack
+	 * @param stackSize    The size of the stack
+	 */
+	private void updateActionsHistory(int stackPointer, int stackSize) {
+		removeAll();
+		addItem();
+
+		for (int i = stackSize - 1; i >= stackSize - 5 && i >= 0; i--) {
+			AbstractAction action = ActionsHistory.getInstance().getActionAt(i);
+			JMenuItem jMenuItem = new JMenuItem(new ActionUndo(action));
+
+			if (i > stackPointer) {
+				jMenuItem.setEnabled(false);
+			}
+
+			add(jMenuItem);
+		}
+
+		if (stackSize > 5) {
+			// TODO Allow to see all the history
+			add("...");
+		}
 	}
 }
