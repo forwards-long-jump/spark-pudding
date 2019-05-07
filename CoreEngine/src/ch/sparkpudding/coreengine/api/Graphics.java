@@ -113,7 +113,7 @@ public class Graphics {
 	public void fillRect(LuaTable lpos, LuaTable lsize) {
 		Pair<Integer, Integer> pos = fromLuaTable(lpos);
 		Pair<Integer, Integer> size = fromLuaTable(lsize);
-		fillRect(pos.first(), pos.second(), size.first(), size.second());
+		g2d.fillRect(pos.first(), pos.second(), size.first(), size.second());
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class Graphics {
 	 */
 	public void drawString(String text, LuaTable lpos) {
 		Pair<Integer, Integer> pos = fromLuaTable(lpos);
-		drawString(text, pos.first(), pos.second());
+		g2d.drawString(text, pos.first(), pos.second());
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class Graphics {
 	public void clearRect(LuaTable lpos, LuaTable lsize) {
 		Pair<Integer, Integer> pos = fromLuaTable(lpos);
 		Pair<Integer, Integer> size = fromLuaTable(lsize);
-		clearRect(pos.first(), pos.second(), size.first(), size.second());
+		g2d.clearRect(pos.first(), pos.second(), size.first(), size.second());
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class Graphics {
 	public void drawArc(LuaTable lpos, LuaTable lsize, int startAngle, int arcAngle) {
 		Pair<Integer, Integer> pos = fromLuaTable(lpos);
 		Pair<Integer, Integer> size = fromLuaTable(lsize);
-		drawArc(pos.first(), pos.second(), size.first(), size.second(), startAngle, arcAngle);
+		g2d.drawArc(pos.first(), pos.second(), size.first(), size.second(), startAngle, arcAngle);
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class Graphics {
 	public void drawLine(LuaTable lp1, LuaTable lp2) {
 		Pair<Integer, Integer> p1 = fromLuaTable(lp1);
 		Pair<Integer, Integer> p2 = fromLuaTable(lp2);
-		drawLine(p1.first(), p1.second(), p2.first(), p2.second());
+		g2d.drawLine(p1.first(), p1.second(), p2.first(), p2.second());
 	}
 
 	/**
