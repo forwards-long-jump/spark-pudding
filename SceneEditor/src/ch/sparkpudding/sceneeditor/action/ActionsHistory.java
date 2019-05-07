@@ -89,7 +89,7 @@ public class ActionsHistory {
 	 */
 	public AbstractAction redo() {
 
-		if (stackPointer != actionsStack.size() - 1)
+		if (stackPointer == actionsStack.size() - 1)
 			return null;
 
 		stackPointer++;
