@@ -735,10 +735,10 @@ public class CoreEngine extends JPanel {
 				Map<String, Component> components = entity.getComponents();
 
 				if (Collision.intersectRect(p.getX(), p.getY(),
-						Float.parseFloat(components.get("position").getField("x").getValue().toString()),
-						Float.parseFloat(components.get("position").getField("y").getValue().toString()),
-						Float.parseFloat(components.get("size").getField("width").getValue().toString()),
-						Float.parseFloat(components.get("size").getField("height").getValue().toString()))) {
+						(double)(int)components.get("position").getField("x").getValue(),
+						(double)(int)components.get("position").getField("y").getValue(),
+						(double)(int)components.get("size").getField("width").getValue(),
+						(double)(int)components.get("size").getField("height").getValue())) {
 					entities.add(entity);
 				}
 			}
