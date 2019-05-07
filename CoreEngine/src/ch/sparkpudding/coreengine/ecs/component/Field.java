@@ -101,11 +101,19 @@ public class Field {
 	}
 
 	/**
-	 * Get field value
+	 * Get field value. Note that the Lua execution may have turned an int into a
+	 * double, so we must check for compatibility with the type.
 	 * 
 	 * @return Field value
 	 */
 	public Object getValue() {
+		if (type == FieldType.INTEGER) {
+			try {
+				return (int) value;
+			} catch (ClassCastException e) {
+				return Math.round((double) value);
+			}
+		}
 		return value;
 	}
 

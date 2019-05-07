@@ -453,8 +453,8 @@ public class Graphics {
 	 * @return Pair of coordinates (x, y) of integer components
 	 */
 	private Pair<Integer, Integer> fromLuaPoint(LuaTable lpoint) {
-		return new Pair<Integer, Integer>((int) ((Field) lpoint.get("_x").touserdata()).getValue(),
-				(int) ((Field) lpoint.get("_y").touserdata()).getValue());
+		return new Pair<Integer, Integer>((int)((Field) lpoint.get("_x").touserdata()).getValue(),
+				(int)((Field) lpoint.get("_y").touserdata()).getValue());
 	}
 
 	/**
