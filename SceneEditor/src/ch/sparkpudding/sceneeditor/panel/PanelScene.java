@@ -10,7 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
-import ch.sparkpudding.sceneeditor.FrameSceneEditor;
+import ch.sparkpudding.sceneeditor.Lel;
 
 /**
  * The panel which show the different scene
@@ -47,11 +47,11 @@ public class PanelScene extends JPanel {
 	private void init() {
 		comboBoxScenes = new JComboBox<String>();
 
-		for (Scene scene : FrameSceneEditor.coreEngine.getScenes().values()) {
+		for (Scene scene : Lel.coreEngine.getScenes().values()) {
 			comboBoxScenes.addItem(scene.getName());
 		}
 
-		comboBoxScenes.setSelectedItem(FrameSceneEditor.coreEngine.getCurrentScene().getName());
+		comboBoxScenes.setSelectedItem(Lel.coreEngine.getCurrentScene().getName());
 		comboBoxScenes.setPreferredSize(
 				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
 		comboBoxScenes.setMaximumSize(
@@ -60,7 +60,7 @@ public class PanelScene extends JPanel {
 		// TODO Implement editable to add scene
 		// comboBoxScenes.setEditable(true);
 
-		panelEntityTree.updateListEntities(FrameSceneEditor.coreEngine.getCurrentScene());
+		panelEntityTree.updateListEntities(Lel.coreEngine.getCurrentScene());
 	}
 
 	/**
@@ -82,8 +82,8 @@ public class PanelScene extends JPanel {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				Scene newScene = FrameSceneEditor.coreEngine.getScenes().get(comboBoxScenes.getSelectedItem());
-				FrameSceneEditor.coreEngine.setCurrentScene(newScene);
+				Scene newScene = Lel.coreEngine.getScenes().get(comboBoxScenes.getSelectedItem());
+				Lel.coreEngine.setCurrentScene(newScene);
 				panelEntityTree.updateListEntities(newScene);
 			}
 		});

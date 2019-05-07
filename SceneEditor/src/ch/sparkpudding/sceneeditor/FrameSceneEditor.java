@@ -26,19 +26,17 @@ public class FrameSceneEditor extends JFrame {
 		PLAY, PAUSE, STOP;
 	}
 	
-	private static final String TITLE = "Scene Editor";
-	private static final int WIDTH = 1280;
-	private static final int HEIGHT = 720;
+	private final String TITLE = "Scene Editor";
+	private final int WIDTH = 1280;
+	private final int HEIGHT = 720;
 
 	private MenuBar menuBar;
 	private PanelSidebarRight panelSidebarRight;
-	private static PanelSidebarLeft panelSidebarLeft;
+	private PanelSidebarLeft panelSidebarLeft;
 	private PanelGame panelGame;
 	private BorderLayout borderLayout;
 
-	private static EDITOR_STATE gameState;
-	
-	public static CoreEngine coreEngine;
+	private EDITOR_STATE gameState;
 
 	/**
 	 * ctor
@@ -47,8 +45,9 @@ public class FrameSceneEditor extends JFrame {
 	 * @throws Exception thrown if the coreEngine can't read the gameFolder
 	 */
 	public FrameSceneEditor(String gameFolder) throws Exception {
-		FrameSceneEditor.coreEngine = new CoreEngine(gameFolder);
-		FrameSceneEditor.coreEngine.togglePauseAll();
+		Lel.frameSceneEditor = this;
+		Lel.coreEngine = new CoreEngine(gameFolder);
+		Lel.coreEngine.togglePauseAll();
 		
 		gameState = EDITOR_STATE.PAUSE;
 
@@ -87,10 +86,10 @@ public class FrameSceneEditor extends JFrame {
 	 * Add the different listener for each element of the panel
 	 */
 	private void addListener() {
-		FrameSceneEditor.coreEngine.addMouseListener(new MouseAdapter() {
+		Lel.coreEngine.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				FrameSceneEditor.coreEngine.requestFocus();
+				Lel.coreEngine.requestFocus();
 			}
 		});
 	}
@@ -112,24 +111,24 @@ public class FrameSceneEditor extends JFrame {
 	 * Get current editor state
 	 * @return current editor state
 	 */
-	public static EDITOR_STATE getGameState() {
+	public EDITOR_STATE getGameState() {
 		return gameState;
 	}
 	
 	/**
 	 *  Change editor state
 	 */
-	public static void setGameState(EDITOR_STATE state) {
+	public void setGameState(EDITOR_STATE state) {
 		gameState = state;
 		switch(state) {
 		case PAUSE:
-			FrameSceneEditor.coreEngine.togglePauseAll();
+			Lel.coreEngine.togglePauseAll();
 			break;
 		case PLAY:
-			FrameSceneEditor.coreEngine.togglePauseAll();
+			Lel.coreEngine.togglePauseAll();
 			break;
 		case STOP:
-			FrameSceneEditor.coreEngine.scheduleResetCurrentScene(true);
+			Lel.coreEngine.scheduleResetCurrentScene(true);
 			break;
 		default:
 			break;

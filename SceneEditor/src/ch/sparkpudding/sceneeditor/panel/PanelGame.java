@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import ch.sparkpudding.sceneeditor.FrameSceneEditor;
+import ch.sparkpudding.sceneeditor.Lel;
 
 /**
  * The panel which show the game
@@ -29,6 +29,6 @@ public class PanelGame extends JPanel {
 	private void setupLayout() {
 		setLayout(new BorderLayout());
 
-		add(FrameSceneEditor.coreEngine, BorderLayout.CENTER);
+		add(Lel.coreEngine, BorderLayout.CENTER);
 	}
 }

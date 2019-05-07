@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
-import ch.sparkpudding.sceneeditor.FrameSceneEditor;
 import ch.sparkpudding.sceneeditor.FrameSceneEditor.EDITOR_STATE;
+import ch.sparkpudding.sceneeditor.Lel;
 import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
 /**
@@ -79,10 +79,10 @@ public class PanelSidebarLeft extends JPanel {
 		btnPausePlay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (FrameSceneEditor.getGameState() == EDITOR_STATE.PLAY) {
-					FrameSceneEditor.setGameState(EDITOR_STATE.PAUSE);
+				if (Lel.frameSceneEditor.getGameState() == EDITOR_STATE.PLAY) {
+					Lel.frameSceneEditor.setGameState(EDITOR_STATE.PAUSE);
 				} else {
-					FrameSceneEditor.setGameState(EDITOR_STATE.PLAY);
+					Lel.frameSceneEditor.setGameState(EDITOR_STATE.PLAY);
 				}
 			}
 		});
@@ -91,7 +91,7 @@ public class PanelSidebarLeft extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FrameSceneEditor.setGameState(EDITOR_STATE.STOP);
+				Lel.frameSceneEditor.setGameState(EDITOR_STATE.STOP);
 			}
 		});
 	}
