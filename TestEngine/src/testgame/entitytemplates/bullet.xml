@@ -9,6 +9,7 @@
 		<field name="width">20</field>
 		<field name="height">10</field>
 	</component>
+	<component template="triangle"/>
 	<component template="color">
 		<field name="r">255</field>
 	</component>

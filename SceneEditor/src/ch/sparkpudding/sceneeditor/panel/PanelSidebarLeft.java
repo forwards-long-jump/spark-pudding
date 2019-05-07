@@ -2,8 +2,6 @@ package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -12,7 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
-import ch.sparkpudding.sceneeditor.FrameSceneEditor;
+import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.SceneEditor.EDITOR_STATE;
 import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
 /**
@@ -80,19 +79,10 @@ public class PanelSidebarLeft extends JPanel {
 		btnPausePlay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FrameSceneEditor.coreEngine.togglePauseAll();
-				toggleTextPausePlay();
-			}
-		});
-
-		btnReset.addPropertyChangeListener(new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (btnReset.isEnabled()) {
-					btnReset.setIcon(ImageStorage.STOP);
+				if (SceneEditor.getGameState() == EDITOR_STATE.PLAY) {
+					SceneEditor.setGameState(EDITOR_STATE.PAUSE);
 				} else {
-					btnReset.setIcon(ImageStorage.STOP_DISABLED);
+					SceneEditor.setGameState(EDITOR_STATE.PLAY);
 				}
 			}
 		});
@@ -101,25 +91,35 @@ public class PanelSidebarLeft extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FrameSceneEditor.coreEngine.scheduleResetCurrentScene(true);
-				if (btnPausePlay.getIcon() == ImageStorage.PAUSE) {
-					toggleTextPausePlay();
-				}
-				btnReset.setEnabled(false);
+				SceneEditor.setGameState(EDITOR_STATE.STOP);
 			}
 		});
 	}
 
 	/**
-	 * Toggle the icon shown on the button PlayPause
+	 * To be called when the editor state is changed, update buttons
+	 * 
+	 * @param newState
 	 */
-	private void toggleTextPausePlay() {
-		if (btnPausePlay.getIcon() == ImageStorage.PLAY) {
+	public void notifyStateChange(EDITOR_STATE newState) {
+		switch (newState) {
+		case PAUSE:
+			btnReset.setIcon(ImageStorage.STOP);
+			btnPausePlay.setIcon(ImageStorage.PLAY);
+			break;
+		case PLAY:
+			btnReset.setIcon(ImageStorage.STOP);
 			btnPausePlay.setIcon(ImageStorage.PAUSE);
 			btnReset.setEnabled(true);
-		} else {
+			break;
+		case STOP:
+			btnReset.setIcon(ImageStorage.STOP_DISABLED);
 			btnPausePlay.setIcon(ImageStorage.PLAY);
+			btnReset.setEnabled(false);
+			break;
+		default:
+			break;
+
 		}
 	}
-
 }

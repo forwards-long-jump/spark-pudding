@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="triangle">
+	<field type="INTEGER" name="dx1">0</field>
+	<field type="INTEGER" name="dy1">0</field>
+	<field type="INTEGER" name="dx2">0</field>
+	<field type="INTEGER" name="dy2">10</field>
+	<field type="INTEGER" name="dx3">20</field>
+	<field type="INTEGER" name="dy3">5</field>
+</component>
