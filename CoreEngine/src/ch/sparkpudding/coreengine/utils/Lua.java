@@ -39,9 +39,13 @@ public class Lua {
 		LoadState.install(metaTableGlobals); // http://luaj.org/luaj/3.0/api/org/luaj/vm2/LoadState.html
 		LuaC.install(metaTableGlobals); // Install the compiler
 
-		LuaValue chunk = metaTableGlobals.load("function setMetatable(component)\n" + "local mt = {}\n"
-				+ "mt.__index = function (self, key)\n" + "return self[\"_\" .. key]:getValue()\n" + "end\n"
-				+ "mt.__newindex = function (self, key, value)\n" + "self[\"_\" .. key]:setValue(value)\n" + "end\n"
+		LuaValue chunk = metaTableGlobals.load("function setMetatable(component)\n"
+				+ "local mt = {}\n"
+					+ "mt.__index = function (self, key)\n"
+						+ "return self[\"_\" .. key]:getValue()\n"
+					+ "end\n"
+					+ "mt.__newindex = function (self, key, value)\n" + "self[\"_\" .. key]:setValue(value)\n"
+				+ "end\n"
 				+ "setmetatable(component, mt)\n" + "end");
 		chunk.call();
 
