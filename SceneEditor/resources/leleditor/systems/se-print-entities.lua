@@ -3,6 +3,6 @@ function getRequiredComponents()
 end
 
 function update()
-  
+  -- print(#entities)
 end
 
