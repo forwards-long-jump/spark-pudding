@@ -55,6 +55,12 @@ public class ActionsHistory {
 
 	}
 
+	/**
+	 * Get an Action at a specified index of the stack
+	 * 
+	 * @param index The index of the Action
+	 * @return The Action at the index
+	 */
 	public AbstractAction getActionAt(int index) {
 		return actionsStack.get(index);
 	}
