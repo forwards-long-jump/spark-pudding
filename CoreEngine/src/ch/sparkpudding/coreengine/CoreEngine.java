@@ -85,6 +85,31 @@ public class CoreEngine extends JPanel {
 	 *                   errors.
 	 */
 	public CoreEngine(String gameFolder) throws Exception {
+		init(gameFolder);
+		startGame();
+	}
+
+	/**
+	 * Create a CoreEngine which goal is to be run inside of scene editor
+	 * 
+	 * @param gameFolder         Location of the game file
+	 * @param editingToolsFolder The path to a folder containing "editing" systems
+	 *                           and components
+	 * @throws Exception
+	 */
+	public CoreEngine(String gameFolder, String editingToolsFolder) throws Exception {
+		init(gameFolder);
+
+		startGame();
+	}
+
+	/**
+	 * Shared constructor
+	 * 
+	 * @param gameFolder Location of the game file
+	 * @throws Exception
+	 */
+	private void init(String gameFolder) throws Exception {
 		Lel.coreEngine = this;
 		this.input = new Input(this);
 
@@ -109,20 +134,13 @@ public class CoreEngine extends JPanel {
 
 		this.lelFile = new LelReader(gameFolder);
 		this.resourceLocator = new ResourceLocator(this.lelFile);
+
 		populateComponentTemplates();
 		populateEntityTemplates();
 		populateScenes();
 		loadSystems();
 
 		setCurrentScene(scenes.get("main"));
-
-		new Thread(() -> {
-			try {
-				startGame();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}).start();
 	}
 
 	/**
@@ -191,6 +209,21 @@ public class CoreEngine extends JPanel {
 	 * @throws InterruptedException
 	 */
 	private void startGame() throws InterruptedException {
+		new Thread(() -> {
+			try {
+				runGameLoop();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}).start();
+	}
+
+	/**
+	 * Run the game loop until the game ends
+	 * 
+	 * @throws InterruptedException
+	 */
+	private void runGameLoop() throws InterruptedException {
 		double previous = java.lang.System.currentTimeMillis();
 		double lag = 0.0;
 
@@ -561,7 +594,7 @@ public class CoreEngine extends JPanel {
 	public Input getInput() {
 		return input;
 	}
-	
+
 	/**
 	 * Getter for resourceLocator
 	 * 
@@ -735,10 +768,10 @@ public class CoreEngine extends JPanel {
 				Map<String, Component> components = entity.getComponents();
 
 				if (Collision.intersectRect(p.getX(), p.getY(),
-						(double)(int)components.get("position").getField("x").getValue(),
-						(double)(int)components.get("position").getField("y").getValue(),
-						(double)(int)components.get("size").getField("width").getValue(),
-						(double)(int)components.get("size").getField("height").getValue())) {
+						(double) (int) components.get("position").getField("x").getValue(),
+						(double) (int) components.get("position").getField("y").getValue(),
+						(double) (int) components.get("size").getField("width").getValue(),
+						(double) (int) components.get("size").getField("height").getValue())) {
 					entities.add(entity);
 				}
 			}
