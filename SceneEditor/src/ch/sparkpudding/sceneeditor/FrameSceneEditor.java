@@ -1,6 +1,9 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
@@ -9,6 +12,7 @@ import ch.sparkpudding.sceneeditor.menu.MenuBar;
 import ch.sparkpudding.sceneeditor.panel.PanelGame;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
+import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
 
 /**
  * Main frame containing the SceneEditor and a static reference to the core
@@ -59,6 +63,18 @@ public class FrameSceneEditor extends JFrame {
 		panelSidebarRight = new PanelSidebarRight();
 		panelSidebarLeft = new PanelSidebarLeft();
 		panelGame = new PanelGame();
+		
+		this.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				System.out.println("lala");
+				if(e.getKeyChar() == 'c')
+				{					
+					ModalComponent mc = new ModalComponent();
+					mc.setVisible(true);
+				}		
+			}
+		});
 	}
 
 	/**
@@ -85,5 +101,4 @@ public class FrameSceneEditor extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-
 }
