@@ -27,6 +27,8 @@ public class ActionRedo extends AbstractAction {
 	/**
 	 * Create a new action ActionRedo with a specified index (number of redo action)
 	 * and prevent it storage in the ActionHistory
+	 * 
+	 * @param rollback The Action to rollbackReverse to
 	 */
 	public ActionRedo(AbstractAction rollback) {
 		super(NAME, false);
