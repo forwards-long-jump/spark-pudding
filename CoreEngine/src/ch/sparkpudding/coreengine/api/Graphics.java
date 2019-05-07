@@ -43,7 +43,6 @@ public class Graphics {
 	 * To be called after the render system, disposes of the g2d graphical context
 	 */
 	public void dispose() {
-		g2d.dispose();
 		g2d = null;
 	}
 
