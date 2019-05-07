@@ -8,7 +8,7 @@ public class ActionTest extends AbstractAction {
 	public ActionTest(String name) {
 		super(name);
 	}
-	
+
 	@Override
 	public void undoAction() {
 		System.out.println("Undo dummy action");

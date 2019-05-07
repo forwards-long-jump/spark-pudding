@@ -101,7 +101,7 @@ public class Input {
 		keysReleased.clear();
 		mouseButtonsPressed.clear();
 	}
-	
+
 	/**
 	 * Add listeners to the panel
 	 */

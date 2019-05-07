@@ -7,22 +7,30 @@ import javax.sound.sampled.Clip;
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
 
-public class ResourceAPI {
-	private static ResourceAPI instance;
-	
+/**
+ * API that wraps the ResourceLocator class in order to only give access to
+ * resources consultation from Lua systems
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ *         Creation Date : 6 mai 2019
+ *
+ */
+public class Resource {
+	private static Resource instance;
+
 	private ResourceLocator resourceLocator;
-	
-	private ResourceAPI() {
+
+	private Resource() {
 		this.resourceLocator = Lel.coreEngine.getResourceLocator();
 	}
-	
-	public static ResourceAPI getInstance() {
+
+	public static Resource getInstance() {
 		if (instance == null) {
-			instance = new ResourceAPI();
+			instance = new Resource();
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Gets the texture by name
 	 * 

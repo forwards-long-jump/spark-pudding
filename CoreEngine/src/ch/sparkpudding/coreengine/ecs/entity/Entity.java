@@ -158,11 +158,10 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	public void add(Component c) {
 		components.put(c.getName(), c);
 	}
-	
+
 	/**
-	 * Adds a component from the templates to the entity.
-	 * This method is intended to be called by the Lua systems,
-	 * and as such needs to update the Lua entity
+	 * Adds a component from the templates to the entity. This method is intended to
+	 * be called by the Lua systems, and as such needs to update the Lua entity
 	 * 
 	 * @param componentName
 	 */
@@ -170,9 +169,9 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		Component component = Component.getTemplates().get(componentName);
 		if (component != null) {
 			add(component);
-			
+
 			// update luaEntity
-			createLuaEntity();			
+			createLuaEntity();
 		}
 	}
 
@@ -183,7 +182,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public void remove(String name) {
 		components.remove(name);
-		
+
 		// update luaEntity
 		createLuaEntity();
 	}

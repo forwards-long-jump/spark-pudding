@@ -9,7 +9,7 @@ package ch.sparkpudding.sceneeditor.action;
  */
 @SuppressWarnings("serial")
 public class ActionRedo extends AbstractAction {
-	
+
 	private static final String NAME = "Redo";
 
 	private ActionsHistory actionsHistory;

@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 
@@ -50,6 +52,7 @@ public class FrameSceneEditor extends JFrame {
 		init();
 		setupLayout();
 		setupFrame();
+		addListener();
 	}
 
 	/**
@@ -87,6 +90,18 @@ public class FrameSceneEditor extends JFrame {
 		add(panelSidebarRight, BorderLayout.EAST);
 		add(panelSidebarLeft, BorderLayout.WEST);
 		add(panelGame, BorderLayout.CENTER);
+	}
+
+	/**
+	 * Add the different listener for each element of the panel
+	 */
+	private void addListener() {
+		FrameSceneEditor.coreEngine.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				FrameSceneEditor.coreEngine.requestFocus();
+			}
+		});
 	}
 
 	/**
