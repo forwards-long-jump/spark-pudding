@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -52,7 +51,6 @@ public class ModalComponent extends Modal {
 		this.btnValidate = new JButton("OK");
 		this.btnAddField = new JButton("+");
 		this.btnRemoveField = new JButton("-");
-		
 
 		String[] tableHeaders = { "Name", "Type", "Default value" };
 		this.tblModel = new DefaultTableModel(tableHeaders, 2);
@@ -61,7 +59,7 @@ public class ModalComponent extends Modal {
 	}
 
 	private void setupLayout() {
-		
+
 		mainPanel.setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
@@ -81,13 +79,13 @@ public class ModalComponent extends Modal {
 		pnlFields.setLayout(new BorderLayout());
 		pnlFields.add(tblCompFields.getTableHeader(), BorderLayout.PAGE_START);
 		pnlFields.add(tblCompFields, BorderLayout.CENTER);
-		
+
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 3;
 		c.insets = new Insets(20, 0, 0, 0);
 		mainPanel.add(pnlFields, c);
-		
+
 		c.gridy = 2;
 		c.gridx = 1;
 		c.gridwidth = 1;
@@ -95,7 +93,7 @@ public class ModalComponent extends Modal {
 		c.anchor = GridBagConstraints.EAST;
 		c.insets = new Insets(5, 0, 0, 0);
 		mainPanel.add(btnRemoveField, c);
-		
+
 		c.gridx = 2;
 		mainPanel.add(btnAddField, c);
 
@@ -120,7 +118,7 @@ public class ModalComponent extends Modal {
 				pack();
 			}
 		});
-		
+
 		btnAddField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -147,8 +145,8 @@ public class ModalComponent extends Modal {
 				}
 
 				Component component = new Component(fiCompName.getText(), fields);
-				// TODO : pass this component to the current entity				
-				
+				// TODO : pass this component to the current entity
+
 				// TODO : maybe handle better the closing of the window
 				dispose();
 			}
