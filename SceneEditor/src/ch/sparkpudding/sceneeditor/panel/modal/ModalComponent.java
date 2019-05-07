@@ -24,6 +24,7 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.component.Field.FieldType;
 
 /**
+ * Create a new component for the current entity with the input in this modal
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
