@@ -7,13 +7,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -119,12 +116,11 @@ public class ModalComponent extends Modal {
 			public void actionPerformed(ActionEvent e) {
 				// TODO : create new component and add it where it belongs
 				Map<String, Field> fields = new HashMap<String, Field>();
-				for(int i = 0; i < tblCompFields.getRowCount(); i++)
-				{
+				for (int i = 0; i < tblCompFields.getRowCount(); i++) {
 					String fieldName = tblCompFields.getModel().getValueAt(1, 0).toString();
-					FieldType fieldType = (FieldType)tblCompFields.getModel().getValueAt(1, 1);
+					FieldType fieldType = (FieldType) tblCompFields.getModel().getValueAt(1, 1);
 					Object value = null;
-					
+
 					switch (fieldType) {
 					case INTEGER:
 						value = (Integer) tblCompFields.getModel().getValueAt(1, 2);
@@ -142,12 +138,12 @@ public class ModalComponent extends Modal {
 						value = (Boolean) tblCompFields.getModel().getValueAt(1, 2);
 						break;
 					}
-					
+
 					fields.put(fieldName, new Field(fieldName, fieldType, value));
 				}
-				
+
 				Component c = new Component(fiCompName.getText(), fields);
-				
+
 				// TODO : maybe handle better the closing of the window
 				dispose();
 			}
