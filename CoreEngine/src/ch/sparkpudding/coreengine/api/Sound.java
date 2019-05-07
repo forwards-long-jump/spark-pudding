@@ -1,6 +1,7 @@
 package ch.sparkpudding.coreengine.api;
 
-import javax.sound.sampled.Clip;
+import java.applet.Applet;
+import java.applet.AudioClip;
 
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
@@ -9,7 +10,7 @@ public class Sound {
 	private static Sound instance;
 	private ResourceLocator resourceLocator;
 	
-	private Clip currentMusic;
+	private AudioClip currentMusic;
 	
 	private Sound() {
 		this.resourceLocator = Lel.coreEngine.getResourceLocator();
@@ -28,12 +29,12 @@ public class Sound {
 	 * @param clip Music (intended to be aquired via the resource locator)
 	 */
 	public void playMusic(String name) {
-		Clip clip = resourceLocator.getMusic(name);
+		AudioClip clip = resourceLocator.getMusic(name);
 		if (clip == null) {
 			return;
 		}
 		currentMusic = clip;
-		currentMusic.loop(Clip.LOOP_CONTINUOUSLY);
+		currentMusic.loop();
 	}
 	
 	/**
@@ -50,7 +51,7 @@ public class Sound {
 	 */
 	public void resumeMusic() {
 		if (currentMusic != null) {
-			currentMusic.loop(Clip.LOOP_CONTINUOUSLY);
+			currentMusic.loop();
 		}
 	}
 	
@@ -60,11 +61,10 @@ public class Sound {
 	 * @param clip
 	 */
 	public void play(String name) {
-		Clip clip = resourceLocator.getSound(name);
+		AudioClip clip = resourceLocator.getSound(name);
 		if (clip == null) {
 			return;
 		}
-		clip.setFramePosition(0);
-		clip.start();
+		clip.play();
 	}
 }

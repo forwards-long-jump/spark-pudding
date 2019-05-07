@@ -1,8 +1,11 @@
 package ch.sparkpudding.coreengine;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,8 +29,8 @@ public class ResourceLocator {
 	private Map<String, Image> textures;
 	// FIXME: We must find another solution, because using Clips prevents us from
 	// playing the same sound multiple times in quick succession
-	private Map<String, Clip> sounds;
-	private Map<String, Clip> musics;
+	private Map<String, AudioClip> sounds;
+	private Map<String, AudioClip> musics;
 
 	/**
 	 * ctor
@@ -71,17 +74,14 @@ public class ResourceLocator {
 	 * @throws LineUnavailableException
 	 */
 	private void loadSounds() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		sounds = new HashMap<String, Clip>();
+		sounds = new HashMap<String, AudioClip>();
 		for (File file : lelReader.getSounds()) {
 			// TODO : remove as soon as .keep files are removed
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-
-			AudioInputStream audio = AudioSystem.getAudioInputStream(file);
-			Clip clip = AudioSystem.getClip();
-			clip.open(audio);
-			sounds.put(file.getName(), clip);
+			AudioClip audioClip = Applet.newAudioClip(new URL(file.getAbsolutePath()));
+			sounds.put(file.getName(), audioClip);
 		}
 	}
 
@@ -92,17 +92,15 @@ public class ResourceLocator {
 	 * @throws LineUnavailableException
 	 */
 	private void loadMusics() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		musics = new HashMap<String, Clip>();
+		musics = new HashMap<String, AudioClip>();
 		for (File file : lelReader.getMusics()) {
 			// TODO : remove as soon as .keep files are removed
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
 
-			AudioInputStream audio = AudioSystem.getAudioInputStream(file);
-			Clip clip = AudioSystem.getClip();
-			clip.open(audio);
-			musics.put(file.getName(), clip);
+			AudioClip audioClip = Applet.newAudioClip(new URL(file.getAbsolutePath()));
+			sounds.put(file.getName(), audioClip);
 		}
 	}
 
@@ -122,7 +120,7 @@ public class ResourceLocator {
 	 * @param name Name of the sound
 	 * @return Clip, or null when nothing is found
 	 */
-	public Clip getSound(String name) {
+	public AudioClip getSound(String name) {
 		return sounds.get(name);
 	}
 
@@ -132,7 +130,7 @@ public class ResourceLocator {
 	 * @param name Name of the music
 	 * @return Clip, or null when nothing is found
 	 */
-	public Clip getMusic(String name) {
+	public AudioClip getMusic(String name) {
 		return musics.get(name);
 	}
 }
