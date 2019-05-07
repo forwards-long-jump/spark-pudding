@@ -57,7 +57,9 @@ public class CoreEngine extends JPanel {
 	private Scene currentScene;
 
 	private List<UpdateSystem> systems;
+	private List<UpdateSystem> editingSystems;
 	private RenderSystem renderSystem;
+	private RenderSystem editingRenderSystem;
 
 	private boolean pause;
 	private boolean pauseAll;
@@ -99,6 +101,10 @@ public class CoreEngine extends JPanel {
 	 */
 	public CoreEngine(String gameFolder, String editingToolsFolder) throws Exception {
 		init(gameFolder);
+		this.lelFile.loadEditingTools(editingToolsFolder);
+
+		populateEditingComponentTemplates();
+		loadEditingToolsSystems();
 
 		startGame();
 	}
@@ -160,6 +166,22 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * Load editing tools systems if provided
+	 */
+	private void loadEditingToolsSystems() {
+		editingSystems = new ArrayList<UpdateSystem>();
+		editingRenderSystem = null;
+
+		for (File systemFile : lelFile.getEditingSystems()) {
+			if (systemFile.getName().equals(RenderSystem.LUA_FILE_NAME)) {
+				editingRenderSystem = new RenderSystem(systemFile);
+			} else {
+				editingSystems.add(new UpdateSystem(systemFile));
+			}
+		}
+	}
+
+	/**
 	 * Populates scenes list with scene files
 	 *
 	 * @throws IOException
@@ -198,6 +220,20 @@ public class CoreEngine extends JPanel {
 	 */
 	private void populateComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
 		for (File xmlFile : lelFile.getComponentsXML()) {
+			Component c = new Component(XMLParser.parse(xmlFile));
+			Component.addTemplate(c);
+		}
+	}
+
+	/**
+	 * Populates component templates list with component template files
+	 *
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	private void populateEditingComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
+		for (File xmlFile : lelFile.getEditingComponentsXML()) {
 			Component c = new Component(XMLParser.parse(xmlFile));
 			Component.addTemplate(c);
 		}
@@ -243,8 +279,9 @@ public class CoreEngine extends JPanel {
 
 			while (lag >= msPerUpdate) {
 				handleLuaErrors();
-
+				System.out.println(pauseAll);
 				update();
+				
 				lag -= msPerUpdate;
 			}
 
@@ -321,21 +358,24 @@ public class CoreEngine extends JPanel {
 	 * Runs all systems once
 	 */
 	private void update() {
-		if (pauseAll) {
-			return;
-		}
-
-		currentScene.incrementTick();
-
-		for (UpdateSystem system : systems) {
-			system.update();
-		}
-
 		currentScene.getCamera().update();
+		if(pauseAll) return;
+		if (false) {
+			for (UpdateSystem system : editingSystems) {
+				system.update();
+			}
+		} else {
+			currentScene.incrementTick();
+
+			for (UpdateSystem system : systems) {
+				system.update();
+			}
+		}
 
 		for (Pair<Entity, String> pair : componentsToRemoveAfterUpdate) {
 			removeComponent(pair.first(), pair.second());
 		}
+
 		for (Entity entity : entitesToDeleteAfterUpdate) {
 			deleteEntity(entity);
 		}
@@ -434,7 +474,18 @@ public class CoreEngine extends JPanel {
 		for (UpdateSystem system : systems) {
 			system.setEntities(newScene.getEntities());
 		}
+		
 		renderSystem.setEntities(newScene.getEntities());
+		
+		if(editingSystems != null) { 
+			for (UpdateSystem system : editingSystems) {
+				system.setEntities(newScene.getEntities());
+			}
+		}
+		
+		if(editingRenderSystem != null) {
+			editingRenderSystem.setEntities(newScene.getEntities());
+		}
 	}
 
 	/**
@@ -496,6 +547,10 @@ public class CoreEngine extends JPanel {
 
 		fps++;
 		renderSystem.render(g2d);
+
+		/*if (pauseAll && editingRenderSystem != null) {
+			editingRenderSystem.render(g2d);
+		}*/
 
 		g2d.setTransform(transformationState);
 

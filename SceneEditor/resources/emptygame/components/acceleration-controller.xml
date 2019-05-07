@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="acceleration-controller">
+	<field type="INTEGER" name="KEY_TOP">38</field>
+	<field type="INTEGER" name="KEY_LEFT">37</field>
+	<field type="INTEGER" name="KEY_RIGHT">39</field>
+	<field type="INTEGER" name="KEY_BOTTOM">40</field>
+</component>

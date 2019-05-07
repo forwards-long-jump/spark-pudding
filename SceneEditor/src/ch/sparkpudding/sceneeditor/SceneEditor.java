@@ -22,7 +22,7 @@ public class SceneEditor {
 		gameState = EDITOR_STATE.PAUSE;
 
 		try {
-			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath());
+			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(), Main.class.getResource("/leleditor").getPath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

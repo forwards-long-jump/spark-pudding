@@ -27,6 +27,10 @@ public class LelReader {
 	private Map<String, File> mapMusic;
 	private Map<String, File> mapTextures;
 
+	// Editing tools
+	private List<File> listEditingSystems;
+	private Map<String, File> mapEditingComponents;
+
 	final String[] requiredSubFolders = { "components", "assets/textures", "assets/sounds", "assets/music", "scenes",
 			"entitytemplates", "systems" };
 
@@ -60,14 +64,34 @@ public class LelReader {
 
 		mapMusic = new HashMap<String, File>();
 		populateMaps(new File(directory + "/assets/music"), mapMusic);
-		
+
 		mapTextures = new HashMap<String, File>();
 		populateMaps(new File(directory + "/assets/textures"), mapTextures);
 	}
 
+	/**
+	 * Sort systems according to their name
+	 * 
+	 * @param list
+	 */
 	private void sortSystem(List<File> list) {
 		// TODO Better sort of the systems
 		Collections.sort(list);
+	}
+
+	/**
+	 * Load editing systems and components from folder (editing folder must have
+	 * /components and /systems)
+	 * 
+	 * @param directory Path to the directory
+	 */
+	public void loadEditingTools(String directory) {
+		mapEditingComponents = new HashMap<String, File>();
+		populateMaps(new File(directory + "/components"), mapEditingComponents);
+
+		listEditingSystems = new ArrayList<File>();
+		populateList(new File(directory + "/systems"), listEditingSystems);
+		sortSystem(listEditingSystems);
 	}
 
 	/**
@@ -121,6 +145,15 @@ public class LelReader {
 	}
 
 	/**
+	 * Get components files
+	 * 
+	 * @return component files
+	 */
+	public Collection<File> getEditingComponentsXML() {
+		return mapEditingComponents.values();
+	}
+	
+	/**
 	 * Get scenes files
 	 * 
 	 * @return scenes files
@@ -172,5 +205,14 @@ public class LelReader {
 	 */
 	public Collection<File> getSystems() {
 		return listSystems;
+	}
+	
+	/**
+	 * Get editing system files
+	 * 
+	 * @return
+	 */
+	public Collection<File> getEditingSystems() {
+		return listEditingSystems;
 	}
 }

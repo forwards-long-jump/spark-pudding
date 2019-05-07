@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="bullet">
+	<component template="color">
+		<field name="r">255</field>
+	</component>
+	<component template="size">
+		<field name="width">20</field>
+		<field name="height">20</field>
+	</component>
+		<component template="hitbox">
+			<field name="type">WALLREACTOR</field>
+		</component>
+	<component template="position" />
+	<component template="speed" />
+	<component template="lifetime" />
+</entity-template>
