@@ -107,8 +107,6 @@ public class Entity implements Iterable<Entry<String, Component>> {
 				this.add(new Component(componentElement));
 			}
 		}
-
-		createLuaEntity();
 	}
 
 	/**
