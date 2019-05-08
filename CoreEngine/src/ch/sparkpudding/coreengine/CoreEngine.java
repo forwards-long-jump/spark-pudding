@@ -64,6 +64,8 @@ public class CoreEngine extends JPanel {
 
 	private boolean systemReloadScheduled;
 	private boolean sceneReloadScheduled;
+	
+	private Runnable callbackSceneReload;
 
 	private Dimension renderSize;
 	private Color blackBarColor;
@@ -234,6 +236,7 @@ public class CoreEngine extends JPanel {
 			sceneReloadScheduled = false;
 			currentScene.reset();
 			setCurrentScene(currentScene);
+			callbackSceneReload.run();
 		}
 	}
 
@@ -374,12 +377,14 @@ public class CoreEngine extends JPanel {
 	 * Reset the current scene and notify engine
 	 * 
 	 * @param pause If the game need to be paused after the reset
+	 * @param callback 
 	 */
-	public void scheduleResetCurrentScene(boolean pause) {
+	public void scheduleResetCurrentScene(boolean pause, Runnable callback) {
 		if (pause && !pauseAll) {
 			togglePauseAll();
 		}
 		sceneReloadScheduled = true;
+		callbackSceneReload = callback;
 	}
 
 	/**
