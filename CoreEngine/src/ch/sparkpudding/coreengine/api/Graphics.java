@@ -1,5 +1,6 @@
 package ch.sparkpudding.coreengine.api;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -88,6 +89,15 @@ public class Graphics {
 	 */
 	public void setColor(Color color) {
 		g2d.setColor(color);
+	}
+
+	/**
+	 * Changes the current width of the pen
+	 * 
+	 * @param width New width to use
+	 */
+	public void setPenWidth(float width) {
+		g2d.setStroke(new BasicStroke(width));
 	}
 
 	/**
