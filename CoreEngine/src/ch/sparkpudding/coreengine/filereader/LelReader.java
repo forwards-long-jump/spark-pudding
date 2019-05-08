@@ -72,7 +72,7 @@ public class LelReader {
 	/**
 	 * Sort systems according to their name
 	 * 
-	 * @param list
+	 * @param list of file to sort
 	 */
 	private void sortSystem(List<File> list) {
 		// TODO Better sort of the systems
@@ -201,7 +201,7 @@ public class LelReader {
 	/**
 	 * Get system files
 	 * 
-	 * @return
+	 * @return system files
 	 */
 	public Collection<File> getSystems() {
 		return listSystems;
@@ -210,7 +210,7 @@ public class LelReader {
 	/**
 	 * Get editing system files
 	 * 
-	 * @return
+	 * @return editing system files
 	 */
 	public Collection<File> getEditingSystems() {
 		return listEditingSystems;
