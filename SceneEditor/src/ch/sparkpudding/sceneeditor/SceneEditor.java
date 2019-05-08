@@ -1,10 +1,11 @@
 package ch.sparkpudding.sceneeditor;
 
+import ch.sparkpudding.coreengine.Camera;
 import ch.sparkpudding.coreengine.CoreEngine;
 
 /**
  * The heart of the SceneEditor, emerged after a 40 min fight
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  *
  */
@@ -16,23 +17,29 @@ public class SceneEditor {
 	public static FrameSceneEditor frameSceneEditor;
 	public static CoreEngine coreEngine;
 
+	private static Camera camera;
+	private static Camera gameCamera;
+
 	private static EDITOR_STATE gameState;
 
 	static {
 		gameState = EDITOR_STATE.PAUSE;
 
 		try {
-			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(), Main.class.getResource("/leleditor").getPath());
+			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(),
+					Main.class.getResource("/leleditor").getPath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		coreEngine.togglePauseAll();
+		coreEngine.setEditingPause(true);
+		camera = new Camera();
+		gameCamera = coreEngine.getCamera();
 	}
 
 	/**
 	 * Get current editor state
-	 * 
+	 *
 	 * @return current editor state
 	 */
 	public static EDITOR_STATE getGameState() {
@@ -46,10 +53,17 @@ public class SceneEditor {
 		gameState = state;
 		switch (state) {
 		case PAUSE:
-			SceneEditor.coreEngine.togglePauseAll();
+			gameCamera = SceneEditor.coreEngine.getCamera();
+			SceneEditor.coreEngine.setEditingPause(true);
+			// TODO: Use this below for a smoother effect
+			// camera.setScaling(gameCamera.getScaling());
+			// camera.setPosition(gameCamera.getPosition().getX(),
+			// gameCamera.getPosition().getY());
+			SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
 			break;
 		case PLAY:
-			SceneEditor.coreEngine.togglePauseAll();
+			SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
+			SceneEditor.coreEngine.setEditingPause(false);
 			break;
 		case STOP:
 			SceneEditor.coreEngine.scheduleResetCurrentScene(true);
