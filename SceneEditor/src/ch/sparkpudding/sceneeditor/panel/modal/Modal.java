@@ -1,6 +1,6 @@
 package ch.sparkpudding.sceneeditor.panel.modal;
 
-import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
@@ -19,11 +19,11 @@ public class Modal extends JDialog {
 
 	public Modal(JFrame parent, String title, Boolean modal) {
 		super(parent, title, modal);
-		this.setLayout(new BorderLayout());
+		this.setLayout(new FlowLayout());
 
 		this.mainPanel = new JPanel();
 		this.mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		this.add(mainPanel, BorderLayout.NORTH);
+		this.add(mainPanel);
 	}
 
 }

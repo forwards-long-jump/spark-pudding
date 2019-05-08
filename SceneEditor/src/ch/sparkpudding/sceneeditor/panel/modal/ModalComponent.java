@@ -1,6 +1,7 @@
 package ch.sparkpudding.sceneeditor.panel.modal;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -195,24 +196,26 @@ public class ModalComponent extends Modal {
 		btnValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				String compName = fiCompName.getText();
+				if (!compName.equals("")) {
+					Map<String, Field> fields = new HashMap<String, Field>();
 
-				Map<String, Field> fields = new HashMap<String, Field>();
+					for (int i = 0; i < tblCompFields.getRowCount(); i++) {
+						String fieldName = (String) tblCompFields.getModel().getValueAt(i, 0);
+						FieldType fieldType = (FieldType) tblCompFields.getModel().getValueAt(i, 1);
+						Object fieldValue = tblCompFields.getModel().getValueAt(i, 2);
 
-				for (int i = 0; i < tblCompFields.getRowCount(); i++) {
-					String fieldName = (String) tblCompFields.getModel().getValueAt(i, 0);
-					String fieldType = (String) tblCompFields.getModel().getValueAt(i, 1);
-					String fieldValue = (String) tblCompFields.getModel().getValueAt(i, 2);
-
-					if (fieldName != "" && fieldType != "") {
-						fields.put(fieldName, new Field(fieldName, fieldType, fieldValue));
+						if (fieldName != "" && fieldType != null) {
+							fields.put(fieldName, new Field(fieldName, fieldType, fieldValue));
+						}
 					}
+					Component component = new Component(compName, fields);
+
+					dispose();
+				} else {
+					fiCompName.setBackground(Color.RED);
 				}
-
-				Component component = new Component(fiCompName.getText(), fields);
 				// TODO : pass this component to the current entity
-
-				// TODO : maybe handle better the closing of the window
-				dispose();
 			}
 		});
 	}
