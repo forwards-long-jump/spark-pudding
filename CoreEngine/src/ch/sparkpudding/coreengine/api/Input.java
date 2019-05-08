@@ -55,6 +55,17 @@ public class Input {
 	public boolean isMouseClicked() {
 		return input.isMouseClicked();
 	}
+	
+	/**
+	 * Returns the number of notches (and partial notches) clicked during the wheel move
+	 * 
+	 * A negative number means the wheel rolled up (away from the user)
+	 *  	
+	 * @return number of notches clicked
+	 */
+	public double getMouseWheelRotation() {
+		return input.getMouseWheelRotation();
+	}
 
 	/**
 	 * Return the mouse position relative to the ui
