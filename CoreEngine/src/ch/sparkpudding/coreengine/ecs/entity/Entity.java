@@ -116,7 +116,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * @param element A properly formated XML element describing the entity
 	 */
 	public Entity(Element element) {
-		this(templates.get(element.getAttribute("template")));
+		this(templates.getOrDefault(element.getAttribute("template"), new Entity()));
 		this.name = element.getAttribute("name");
 		this.template = element.getAttribute("template");
 		this.zIndex = Integer.parseInt(element.getAttribute("z-index"));
