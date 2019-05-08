@@ -30,24 +30,29 @@ public class Component implements Iterable<Entry<String, Field>> {
 	/**
 	 * Create an empty component
 	 * 
-	 * @param name A unique name per component
+	 * @param name     : A unique name per component
+	 * @param template : The component template
 	 */
 	public Component(String name, String template) {
 		this.name = name;
 		this.template = template;
 		this.fields = new HashMap<String, Field>();
 	}
-	
-	public Component(String name, Map<String, Field> fields)
-	{
+
+	/**
+	 * 
+	 * @param name   : A unique name per component
+	 * @param fields : The components fields
+	 */
+	public Component(String name, Map<String, Field> fields) {
 		this.name = name;
-		this.fields = new HashMap<String,Field>(fields);
+		this.fields = fields;
 	}
 
 	/**
 	 * Copy constructor
 	 * 
-	 * @param component
+	 * @param component : The component to copy
 	 */
 	public Component(Component component) {
 		this.name = component.name;
