@@ -97,7 +97,7 @@ public class Input {
 
 		mouseClicked = mouseClickedBuffer;
 		mouseClickedBuffer = false;
-		
+
 		mouseWheelRotation = mouseWheelRotationBuffer;
 		mouseWheelRotationBuffer = 0;
 	}
@@ -161,9 +161,9 @@ public class Input {
 				mouseMoved(e);
 			}
 		});
-		
+
 		panel.addMouseWheelListener(new MouseWheelListener() {
-			
+
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				mouseWheelRotationBuffer = e.getPreciseWheelRotation();
@@ -208,7 +208,7 @@ public class Input {
 	public Point getMousePosition() {
 		return mousePosition;
 	}
-	
+
 	/**
 	 * Returns the vector from the previous mouse position to the current one
 	 * 
@@ -217,12 +217,13 @@ public class Input {
 	public Point getMouseSpeed() {
 		return mouseSpeed;
 	}
-	
+
 	/**
-	 * Returns the number of notches (and partial notches) clicked during the wheel move
+	 * Returns the number of notches (and partial notches) clicked during the wheel
+	 * move
 	 * 
 	 * A negative number means the wheel rolled up (away from the user)
-	 *  	
+	 * 
 	 * @return number of notches clicked
 	 */
 	public double getMouseWheelRotation() {
