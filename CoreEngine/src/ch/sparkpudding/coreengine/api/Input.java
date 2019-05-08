@@ -174,4 +174,22 @@ public class Input {
 	public double getMouseDY() {
 		return getMouseSpeed().getY();
 	}
+	
+	/**
+	 * Return the X of the mouse position when it was clicked in world coordinates
+	 * 
+	 * @return the X of the mouse position when it was clicked in world coordinates
+	 */
+	public double getMouseClickedX() {
+		return Lel.coreEngine.panelPositionToWorld(input.getMouseClickedPosition()).getX();
+	}
+	
+	/**
+	 * Return the Y of the mouse position when it was clicked in world coordinates
+	 * 
+	 * @return the Y of the mouse position when it was clicked in world coordinates
+	 */
+	public double getMouseClickedY() {
+		return Lel.coreEngine.panelPositionToWorld(input.getMouseClickedPosition()).getY();
+	}
 }

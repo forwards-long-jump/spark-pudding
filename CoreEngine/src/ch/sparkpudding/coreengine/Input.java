@@ -37,6 +37,7 @@ public class Input {
 	private Map<Integer, Boolean> keys;
 	private Map<Integer, Boolean> mouseButtons;
 	private Point mousePosition;
+	private Point mouseClickedPosition;
 	private Point mouseSpeed;
 	private boolean mouseClicked = false;
 	private double mouseWheelRotation;
@@ -58,6 +59,7 @@ public class Input {
 		mouseButtonsPressed = new ArrayList<Integer>();
 		mouseButtonsReleased = new ArrayList<Integer>();
 		mousePositionBuffer = new Point();
+		mouseClickedPosition = new Point();
 		mouseWheelRotationBuffer = 0;
 
 		keys = new HashMap<Integer, Boolean>();
@@ -85,6 +87,10 @@ public class Input {
 		for (Integer key : mouseButtonsPressed) {
 			mouseButtons.put(key, true);
 		}
+		
+		if(mouseButtonsPressed.size() > 0) {
+			mouseClickedPosition = mousePositionBuffer;
+		}
 		mouseButtonsPressed.clear();
 
 		for (Integer key : mouseButtonsReleased) {
@@ -94,7 +100,7 @@ public class Input {
 
 		mouseSpeed = new Point(mousePositionBuffer.x - mousePosition.x, mousePositionBuffer.y - mousePosition.y);
 		mousePosition = mousePositionBuffer;
-
+		
 		mouseClicked = mouseClickedBuffer;
 		mouseClickedBuffer = false;
 
@@ -228,5 +234,14 @@ public class Input {
 	 */
 	public double getMouseWheelRotation() {
 		return mouseWheelRotation;
+	}
+
+	/**
+	 * Get the last position where the mouse was clicked
+	 * 
+	 * @return the last position where the mouse was clicked
+	 */
+	public Point getMouseClickedPosition() {
+		return mouseClickedPosition;
 	}
 }
