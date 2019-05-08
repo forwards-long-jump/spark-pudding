@@ -82,13 +82,13 @@ public class FrameSceneEditor extends JFrame {
 				SceneEditor.coreEngine.requestFocus();
 			}
 		});
-		
+		FrameSceneEditor fSE = this;
 		SceneEditor.coreEngine.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyChar() == 'c')
 				{					
-					ModalComponent mc = new ModalComponent();
+					ModalComponent mc = new ModalComponent(fSE, "Component creation", true);
 					mc.pack();
 					mc.setVisible(true);
 				}		

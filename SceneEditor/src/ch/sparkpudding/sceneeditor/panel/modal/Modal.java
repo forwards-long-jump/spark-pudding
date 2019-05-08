@@ -3,6 +3,7 @@ package ch.sparkpudding.sceneeditor.panel.modal;
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -12,12 +13,12 @@ import javax.swing.JPanel;
  * 
  */
 @SuppressWarnings("serial")
-public class Modal extends JFrame {
+public class Modal extends JDialog {
 
 	JPanel mainPanel;
 
-	public Modal() {
-		super();
+	public Modal(JFrame parent, String title, Boolean modal) {
+		super(parent, title, modal);
 		this.setLayout(new BorderLayout());
 		
 		this.mainPanel = new JPanel();
