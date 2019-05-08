@@ -91,7 +91,7 @@ public class Input {
 	 * @return mouse speed relative to the ui
 	 */
 	public Point2D getUIMouseSpeed() {
-		return Lel.coreEngine.panelPositionToGame(input.getMouseSpeed());
+		return Lel.coreEngine.panelVectorToGame(input.getMouseSpeed());
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public class Input {
 	 * @return mouse speed relative to the world
 	 */
 	public Point2D getMouseSpeed() {
-		return Lel.coreEngine.panelPositionToWorld(input.getMouseSpeed());
+		return Lel.coreEngine.panelVectorToWorld(input.getMouseSpeed());
 	}
 
 	/**
@@ -137,5 +137,41 @@ public class Input {
 	 */
 	public double getMouseY() {
 		return getMousePosition().getY();
+	}
+	
+	/**
+	 * Return the diff of the last two X mouse position in ui coordinates
+	 * 
+	 * @return diff of the last two X mouse position in ui coordinates
+	 */
+	public double getUIMouseDX() {
+		return getUIMouseSpeed().getX();
+	}
+
+	/**
+	 * Return the diff of the last two Y mouse position in ui coordinates
+	 * 
+	 * @return diff of the last two Y mouse position in ui coordinates
+	 */
+	public double getUIMouseDY() {
+		return getUIMouseSpeed().getY();
+	}
+
+	/**
+	 * Return the diff of the last two X mouse position in world coordinates
+	 * 
+	 * @return diff of the last two X mouse position in world coordinates
+	 */
+	public double getMouseDX() {
+		return getMouseSpeed().getX();
+	}
+
+	/**
+	 * Return the diff of the last two Y mouse position in world coordinates
+	 * 
+	 * @return diff of the last two Y mouse position in world coordinates
+	 */
+	public double getMouseDY() {
+		return getMouseSpeed().getY();
 	}
 }

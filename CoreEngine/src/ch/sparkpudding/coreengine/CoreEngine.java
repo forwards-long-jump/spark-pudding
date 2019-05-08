@@ -816,6 +816,42 @@ public class CoreEngine extends JPanel {
 
 		return new Point2D.Double(x, y);
 	}
+	
+	/**
+	 * Convert a vector in pixels (panel units) to the game (UI) unit
+	 * 
+	 * @param v vector to convert
+	 * @return Point2D new vector
+	 */
+	public Point2D panelVectorToGame(Point2D v) {
+		double dx = v.getX();
+		double dy = v.getY();
+
+		double scaleRatio = getScaleRatio();
+
+		// Game ratio scaling
+		dx /= scaleRatio;
+		dy /= scaleRatio;
+
+		return new Point2D.Double(dx, dy);
+	}
+	
+	/**
+	 * Convert a vector in pixels (panel units) to the game world unit
+	 * 
+	 * @param v vector to convert
+	 * @return Point2D new vector
+	 */
+	public Point2D panelVectorToWorld(Point2D v) {
+		double dx = v.getX();
+		double dy = v.getY();
+
+		// Camera scaling
+		dx /= currentScene.getCamera().getScaling();
+		dy /= currentScene.getCamera().getScaling();
+
+		return new Point2D.Double(dx, dy);
+	}
 
 	/**
 	 * Get all entities intersecting given point. Note that the point should usually
