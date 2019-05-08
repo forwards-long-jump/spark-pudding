@@ -40,6 +40,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	}
 
 	/**
+	 * Template component constructor
 	 * 
 	 * @param name   : A unique name per component
 	 * @param fields : The components fields
@@ -47,6 +48,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	public Component(String name, Map<String, Field> fields) {
 		this.name = name;
 		this.fields = fields;
+		this.template = null;
 	}
 
 	/**
