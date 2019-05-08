@@ -20,9 +20,9 @@ public class Modal extends JDialog {
 	public Modal(JFrame parent, String title, Boolean modal) {
 		super(parent, title, modal);
 		this.setLayout(new BorderLayout());
-		
+
 		this.mainPanel = new JPanel();
-		this.mainPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+		this.mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		this.add(mainPanel, BorderLayout.NORTH);
 	}
 

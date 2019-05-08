@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -69,7 +70,7 @@ public class ModalComponent extends Modal {
 		this.btnAddField = new JButton("+");
 		this.btnRemoveField = new JButton("-");
 		this.cmbFieldType = new JComboBox<FieldType>();
-		
+
 		cmbFieldType.addItem(FieldType.BOOLEAN);
 		cmbFieldType.addItem(FieldType.DOUBLE);
 		cmbFieldType.addItem(FieldType.FILE_PATH);
