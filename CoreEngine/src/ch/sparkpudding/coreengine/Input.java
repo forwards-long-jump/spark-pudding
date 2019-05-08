@@ -37,6 +37,7 @@ public class Input {
 	private Map<Integer, Boolean> keys;
 	private Map<Integer, Boolean> mouseButtons;
 	private Point mousePosition;
+	private Point mouseSpeed;
 	private boolean mouseClicked = false;
 	private double mouseWheelRotation;
 
@@ -91,6 +92,7 @@ public class Input {
 		}
 		mouseButtonsReleased.clear();
 
+		mouseSpeed = new Point(mousePositionBuffer.x - mousePosition.x, mousePositionBuffer.y - mousePosition.y);
 		mousePosition = mousePositionBuffer;
 
 		mouseClicked = mouseClickedBuffer;
@@ -205,6 +207,15 @@ public class Input {
 	 */
 	public Point getMousePosition() {
 		return mousePosition;
+	}
+	
+	/**
+	 * Returns the vector from the previous mouse position to the current one
+	 * 
+	 * @return mouse speed relative to the jpanel
+	 */
+	public Point getMouseSpeed() {
+		return mouseSpeed;
 	}
 	
 	/**

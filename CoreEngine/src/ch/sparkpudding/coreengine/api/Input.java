@@ -84,6 +84,24 @@ public class Input {
 	public Point2D getMousePosition() {
 		return Lel.coreEngine.panelPositionToWorld(input.getMousePosition());
 	}
+	
+	/**
+	 * Return the mouse speed relative to the ui
+	 * 
+	 * @return mouse speed relative to the ui
+	 */
+	public Point2D getUIMouseSpeed() {
+		return Lel.coreEngine.panelPositionToGame(input.getMouseSpeed());
+	}
+	
+	/**
+	 * Return the mouse speed relative to the world
+	 * 
+	 * @return mouse speed relative to the world
+	 */
+	public Point2D getMouseSpeed() {
+		return Lel.coreEngine.panelPositionToWorld(input.getMouseSpeed());
+	}
 
 	/**
 	 * Return the X mouse position in ui coordinates
