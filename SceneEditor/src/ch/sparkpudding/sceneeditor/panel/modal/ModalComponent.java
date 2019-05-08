@@ -1,6 +1,7 @@
 package ch.sparkpudding.sceneeditor.panel.modal;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,8 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -32,22 +35,32 @@ public class ModalComponent extends Modal {
 	JTable tblCompFields;
 	DefaultTableModel tblModel;
 	JPanel pnlFields;
+	JScrollPane pnlFieldsScroll;
 
 	JButton btnValidate;
 	JButton btnAddField;
 	JButton btnRemoveField;
 
-	public ModalComponent() {
+	/**
+	 * Constructor
+	 */
+	public ModalComponent(JFrame parent, String title, Boolean modal) {
+		super(parent, title, modal);
 		init();
 		setupLayout();
+		setupFieldsTable();
 		setupFrame();
 		setupListener();
 	}
 
+	/**
+	 * Initialize the ui components and their values
+	 */
 	private void init() {
 		this.lblCompName = new JLabel("Name :");
 		this.fiCompName = new JTextField(20);
 		this.pnlFields = new JPanel();
+		this.pnlFieldsScroll = new JScrollPane();
 		this.btnValidate = new JButton("OK");
 		this.btnAddField = new JButton("+");
 		this.btnRemoveField = new JButton("-");
@@ -58,6 +71,22 @@ public class ModalComponent extends Modal {
 
 	}
 
+	/**
+	 * Set the fields table to be scrollable with header always visible
+	 */
+	private void setupFieldsTable() {
+		pnlFields.add(tblCompFields.getTableHeader(), BorderLayout.PAGE_START);
+		pnlFieldsScroll.add(tblCompFields);
+		pnlFieldsScroll.setViewportView(tblCompFields);
+
+		pnlFieldsScroll.setPreferredSize(new Dimension(250, 150));
+
+		pnlFields.add(pnlFieldsScroll, BorderLayout.CENTER);
+	}
+
+	/**
+	 * Set how the components display using a GridBagLayout
+	 */
 	private void setupLayout() {
 
 		mainPanel.setLayout(new GridBagLayout());
@@ -77,9 +106,6 @@ public class ModalComponent extends Modal {
 		mainPanel.add(fiCompName, c);
 
 		pnlFields.setLayout(new BorderLayout());
-		pnlFields.add(tblCompFields.getTableHeader(), BorderLayout.PAGE_START);
-		pnlFields.add(tblCompFields, BorderLayout.CENTER);
-
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 3;
@@ -105,20 +131,38 @@ public class ModalComponent extends Modal {
 		mainPanel.add(btnValidate, c);
 	}
 
+	/**
+	 * Set the frame size and parameters
+	 */
 	private void setupFrame() {
 		setSize(300, 500);
+		setResizable(false);
 	}
 
+	/**
+	 * Setup the listeners for the components and the frame
+	 */
 	private void setupListener() {
-		// fields.add
+
+		/**
+		 * Remove the selected row of the field table or the last row if none is
+		 * selected
+		 */
 		btnRemoveField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tblModel.removeRow(tblModel.getRowCount() - 1);
+				int selectedRow = tblCompFields.getSelectedRow();
+				if (selectedRow == -1) {
+					tblModel.removeRow(tblModel.getRowCount() - 1);
+				}
+				tblModel.removeRow(selectedRow);
 				pack();
 			}
 		});
 
+		/**
+		 * Add a new row in the field table
+		 */
 		btnAddField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -128,6 +172,10 @@ public class ModalComponent extends Modal {
 			}
 		});
 
+		/**
+		 * Create a component from user input, add it to the current entity the close
+		 * the modal
+		 */
 		btnValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
