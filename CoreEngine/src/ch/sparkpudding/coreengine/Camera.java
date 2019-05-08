@@ -441,4 +441,12 @@ public class Camera {
 		double ch = Lel.coreEngine.getGameHeight() / this.scaling;
 		return Collision.rectIntersectRect(x, y, width, height, cx, cy, cw, ch);
 	}
+
+	/**
+	 * Get target scaling
+	 * @return target scaling
+	 */
+	public float getTargetScaling() {
+		return targetScaling;
+	}
 }
