@@ -9,7 +9,6 @@ import org.luaj.vm2.LuaValue;
 
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
-import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.utils.Pair;
 
 public class Graphics {
@@ -43,7 +42,6 @@ public class Graphics {
 	 * To be called after the render system, disposes of the g2d graphical context
 	 */
 	public void dispose() {
-		g2d.dispose();
 		g2d = null;
 	}
 
@@ -453,8 +451,7 @@ public class Graphics {
 	 * @return Pair of coordinates (x, y) of integer components
 	 */
 	private Pair<Integer, Integer> fromLuaPoint(LuaTable lpoint) {
-		return new Pair<Integer, Integer>((int)((Field) lpoint.get("_x").touserdata()).getValue(),
-				(int)((Field) lpoint.get("_y").touserdata()).getValue());
+		return new Pair<Integer, Integer>(lpoint.get("x").toint(), lpoint.get("y").toint());
 	}
 
 	/**
@@ -465,7 +462,6 @@ public class Graphics {
 	 * @return Pair of coordinates (x, y) of integer components
 	 */
 	private Pair<Integer, Integer> fromLuaSize(LuaTable lpoint) {
-		return new Pair<Integer, Integer>((int) ((Field) lpoint.get("_width").touserdata()).getValue(),
-				(int) ((Field) lpoint.get("_height").touserdata()).getValue());
+		return new Pair<Integer, Integer>(lpoint.get("width").toint(), lpoint.get("height").toint());
 	}
 }

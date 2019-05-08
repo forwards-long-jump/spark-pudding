@@ -13,6 +13,7 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +58,12 @@ public class CoreEngine extends JPanel {
 	private Scene currentScene;
 
 	private List<UpdateSystem> systems;
+	private List<UpdateSystem> editingSystems;
 	private RenderSystem renderSystem;
+	private RenderSystem editingRenderSystem;
 
 	private boolean pause;
-	private boolean pauseAll;
+	private boolean editingPause;
 
 	private boolean systemReloadScheduled;
 	private boolean sceneReloadScheduled;
@@ -85,6 +88,38 @@ public class CoreEngine extends JPanel {
 	 *                   errors.
 	 */
 	public CoreEngine(String gameFolder) throws Exception {
+		init(gameFolder);
+		startGame();
+	}
+
+	/**
+	 * Create a CoreEngine which goal is to be run inside of scene editor
+	 * 
+	 * @param gameFolder         Location of the game file
+	 * @param editingToolsFolder The path to a folder containing "editing" systems
+	 *                           and components
+	 * @throws Exception
+	 */
+	public CoreEngine(String gameFolder, String editingToolsFolder) throws Exception {
+		init(gameFolder);
+		this.lelFile.loadEditingTools(editingToolsFolder);
+
+		populateEditingComponentTemplates();
+		editingSystems = new ArrayList<UpdateSystem>();
+		editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
+
+		startGame();
+
+		setCurrentScene(scenes.get("main"));
+	}
+
+	/**
+	 * Shared constructor
+	 * 
+	 * @param gameFolder Location of the game file
+	 * @throws Exception
+	 */
+	private void init(String gameFolder) throws Exception {
 		Lel.coreEngine = this;
 		this.input = new Input(this);
 
@@ -94,7 +129,7 @@ public class CoreEngine extends JPanel {
 		this.exit = false;
 
 		this.pause = false;
-		this.pauseAll = false;
+		this.editingPause = false;
 
 		this.entitesToDeleteAfterUpdate = new ArrayList<Entity>();
 		this.componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
@@ -109,36 +144,38 @@ public class CoreEngine extends JPanel {
 
 		this.lelFile = new LelReader(gameFolder);
 		this.resourceLocator = new ResourceLocator(this.lelFile);
+
 		populateComponentTemplates();
 		populateEntityTemplates();
 		populateScenes();
-		loadSystems();
+
+		systems = new ArrayList<UpdateSystem>();
+		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
 
 		setCurrentScene(scenes.get("main"));
-
-		new Thread(() -> {
-			try {
-				startGame();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}).start();
 	}
 
 	/**
-	 * Populates systems list with system files
+	 * Create System from files and place them in a container, return the render
+	 * system
+	 * 
+	 * @param systemContainer
+	 * @param systemList
+	 * @return RenderSystem to be stored somewhere
 	 */
-	private void loadSystems() {
-		systems = new ArrayList<UpdateSystem>();
-		renderSystem = null;
+	private RenderSystem loadSystemsFromFiles(List<UpdateSystem> systemContainer, Collection<File> systemList) {
+		RenderSystem renderSystem = null;
+		systemContainer.clear();
 
-		for (File systemFile : lelFile.getSystems()) {
+		for (File systemFile : systemList) {
 			if (systemFile.getName().equals(RenderSystem.LUA_FILE_NAME)) {
 				renderSystem = new RenderSystem(systemFile);
 			} else {
-				systems.add(new UpdateSystem(systemFile));
+				systemContainer.add(new UpdateSystem(systemFile));
 			}
 		}
+
+		return renderSystem;
 	}
 
 	/**
@@ -186,11 +223,41 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * Populates component templates list with component template files <br>
+	 * TODO: Merge this function and the one above
+	 * 
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	private void populateEditingComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
+		for (File xmlFile : lelFile.getEditingComponentsXML()) {
+			Component c = new Component(XMLParser.parse(xmlFile));
+			Component.addTemplate(c);
+		}
+	}
+
+	/**
 	 * Runs update and render loops
 	 * 
 	 * @throws InterruptedException
 	 */
 	private void startGame() throws InterruptedException {
+		new Thread(() -> {
+			try {
+				runGameLoop();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}).start();
+	}
+
+	/**
+	 * Run the game loop until the game ends
+	 * 
+	 * @throws InterruptedException
+	 */
+	private void runGameLoop() throws InterruptedException {
 		double previous = java.lang.System.currentTimeMillis();
 		double lag = 0.0;
 
@@ -245,7 +312,7 @@ public class CoreEngine extends JPanel {
 			systemReloadScheduled = false;
 			if (luaError != null) {
 				luaError = null; // Let's remove the error as reloading systems may fix it
-				pauseAll = false;
+				editingPause = false;
 			}
 			reloadSystemsFromDisk();
 		}
@@ -256,12 +323,13 @@ public class CoreEngine extends JPanel {
 	 */
 	private void handleLuaErrors() {
 		if (luaError != null) {
+			editingPause = true;
 			// Try to continue
 			if (input.isKeyDown(KeyEvent.VK_SPACE)) {
-				pauseAll = false;
+				editingPause = false;
 				luaError = null;
 			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
-				pauseAll = false;
+				editingPause = false;
 				luaError = null;
 				reloadSystemsFromDisk();
 			}
@@ -273,7 +341,11 @@ public class CoreEngine extends JPanel {
 	 * Reload systems from disk, live
 	 */
 	private void reloadSystemsFromDisk() {
-		loadSystems();
+		if (editingSystems != null) {
+			editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
+		}
+
+		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
 		setCurrentScene(getCurrentScene());
 	}
 
@@ -288,21 +360,25 @@ public class CoreEngine extends JPanel {
 	 * Runs all systems once
 	 */
 	private void update() {
-		if (pauseAll) {
-			return;
-		}
-
-		currentScene.incrementTick();
-
-		for (UpdateSystem system : systems) {
-			system.update();
-		}
-
 		currentScene.getCamera().update();
+
+		// Only update editing systems when the game is paused
+		if (editingPause && editingSystems != null) {
+			for (UpdateSystem system : editingSystems) {
+				system.update();
+			}
+		} else {
+			currentScene.incrementTick();
+
+			for (UpdateSystem system : systems) {
+				system.update();
+			}
+		}
 
 		for (Pair<Entity, String> pair : componentsToRemoveAfterUpdate) {
 			removeComponent(pair.first(), pair.second());
 		}
+
 		for (Entity entity : entitesToDeleteAfterUpdate) {
 			deleteEntity(entity);
 		}
@@ -319,7 +395,16 @@ public class CoreEngine extends JPanel {
 	 * Pauses all systems indescriminately
 	 */
 	public void togglePauseAll() {
-		pauseAll = !pauseAll;
+		editingPause = !editingPause;
+	}
+
+	/**
+	 * Change the pauseAll state
+	 * 
+	 * @param pause
+	 */
+	public void setEditingPause(boolean pause) {
+		editingPause = pause;
 	}
 
 	/**
@@ -376,8 +461,8 @@ public class CoreEngine extends JPanel {
 	 * @param pause If the game need to be paused after the reset
 	 */
 	public void scheduleResetCurrentScene(boolean pause) {
-		if (pause && !pauseAll) {
-			togglePauseAll();
+		if (pause) {
+			setEditingPause(true);
 		}
 		sceneReloadScheduled = true;
 	}
@@ -401,7 +486,18 @@ public class CoreEngine extends JPanel {
 		for (UpdateSystem system : systems) {
 			system.setEntities(newScene.getEntities());
 		}
+
 		renderSystem.setEntities(newScene.getEntities());
+
+		if (editingSystems != null) {
+			for (UpdateSystem system : editingSystems) {
+				system.setEntities(newScene.getEntities());
+			}
+		}
+
+		if (editingRenderSystem != null) {
+			editingRenderSystem.setEntities(newScene.getEntities());
+		}
 	}
 
 	/**
@@ -463,6 +559,10 @@ public class CoreEngine extends JPanel {
 
 		fps++;
 		renderSystem.render(g2d);
+
+		if (editingPause && editingRenderSystem != null) {
+			editingRenderSystem.render(g2d);
+		}
 
 		g2d.setTransform(transformationState);
 
@@ -561,7 +661,7 @@ public class CoreEngine extends JPanel {
 	public Input getInput() {
 		return input;
 	}
-	
+
 	/**
 	 * Getter for resourceLocator
 	 * 
@@ -733,13 +833,15 @@ public class CoreEngine extends JPanel {
 		for (Entity entity : currentScene.getEntities()) {
 			if (entity.hasComponents(requiredComponents)) {
 				Map<String, Component> components = entity.getComponents();
-
-				if (Collision.intersectRect(p.getX(), p.getY(),
-						(double)(int)components.get("position").getField("x").getValue(),
-						(double)(int)components.get("position").getField("y").getValue(),
-						(double)(int)components.get("size").getField("width").getValue(),
-						(double)(int)components.get("size").getField("height").getValue())) {
-					entities.add(entity);
+				// warning: this does not check that x y width and height exists.
+				if (components.get("position") != null && components.get("size") != null) {
+					if (Collision.intersectRect(p.getX(), p.getY(),
+							components.get("position").getField("x").getDouble(),
+							components.get("position").getField("y").getDouble(),
+							components.get("size").getField("width").getDouble(),
+							components.get("size").getField("height").getDouble())) {
+						entities.add(entity);
+					}
 				}
 			}
 		}
@@ -755,7 +857,8 @@ public class CoreEngine extends JPanel {
 	public void notifyLuaError(LuaError error) {
 		// We only display the first error encountered so we can fix it first
 		if (this.luaError == null) {
-			pauseAll = true;
+			error.printStackTrace();
+			editingPause = true;
 			this.luaError = error;
 		}
 	}

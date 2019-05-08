@@ -18,50 +18,15 @@ public class Field {
 	private Object value;
 
 	/**
-	 * Create field using actual types
-	 * 
-	 * @param name  Name of the field
-	 * @param type  Type of the data
-	 * @param value Data
-	 */
-	public Field(String name, FieldType type, Object value) {
-		this.name = name;
-		this.type = type;
-		switch (type) {
-		case BOOLEAN:
-		case INTEGER:
-		case DOUBLE:
-			this.value = value;
-			break;
-		case FILE_PATH:
-		case STRING:
-			this.value = new String(value.toString());
-			break;
-		default:
-			break;
-		}
-	}
-
-	/**
 	 * Copy constructor
 	 * 
 	 * @param field
 	 */
 	public Field(Field field) {
-		this(new String(field.name), field.type, new Object());
-		switch (type) {
-		case BOOLEAN:
-		case INTEGER:
-		case DOUBLE:
-			this.value = field.value;
-			break;
-		case FILE_PATH:
-		case STRING:
-			this.value = new String(field.value.toString());
-			break;
-		default:
-			break;
-		}
+		this.type = field.type;
+		this.name = field.name;
+		// NOTE: This only works because all used objects are immutable
+		this.value = field.value;
 	}
 
 	/**
@@ -107,14 +72,31 @@ public class Field {
 	 * @return Field value
 	 */
 	public Object getValue() {
-		if (type == FieldType.INTEGER) {
-			try {
-				return (int) value;
-			} catch (ClassCastException e) {
-				return Math.round((double) value);
-			}
-		}
 		return value;
+	}
+
+	/**
+	 * Try to convert INTEGER or DOUBLE to integer
+	 * 
+	 * @return A int value
+	 */
+	public int getInt() {
+		if (value instanceof Double) {
+			return ((Double) value).intValue();
+		}
+		return (int) value;
+	}
+
+	/**
+	 * Try to convert INTEGER or DOUBLE to double
+	 * 
+	 * @return A double value
+	 */
+	public double getDouble() {
+		if (value instanceof Integer) {
+			return (double) (Integer) value;
+		}
+		return (double) value;
 	}
 
 	/**
@@ -147,7 +129,7 @@ public class Field {
 			this.setValue(Integer.parseInt(value));
 			break;
 		default:
-			java.lang.System.err.println();
+			java.lang.System.err.println("Could not set field value from string");
 			break;
 		}
 	}

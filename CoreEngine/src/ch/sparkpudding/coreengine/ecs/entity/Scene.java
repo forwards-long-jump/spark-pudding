@@ -159,4 +159,13 @@ public class Scene {
 	public int getTick() {
 		return tick;
 	}
+
+	/**
+	 * Set a new camera for this scene
+	 * 
+	 * @param camera to use
+	 */
+	public void setCamera(Camera camera) {
+		this.camera = camera;
+	}
 }
