@@ -232,10 +232,19 @@ public class Camera {
 	 * @param x
 	 * @param y
 	 */
-	public void setPosition(float x, float y) {
+	public void setPosition(double x, double y) {
 		position.setLocation(x * scaling, y * scaling);
 		targetPosition.setLocation(position.getX(), position.getY());
 		resetForces();
+	}
+
+	/**
+	 * Set current camera scaling
+	 * 
+	 * @param current scaling
+	 */
+	public void setScaling(float scaling) {
+		this.scaling = scaling;
 	}
 
 	/**
@@ -400,7 +409,7 @@ public class Camera {
 	 * 
 	 * @return
 	 */
-	public double getScaling() {
+	public float getScaling() {
 		return scaling;
 	}
 
