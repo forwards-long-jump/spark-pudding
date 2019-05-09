@@ -65,9 +65,6 @@ public class CoreEngine extends JPanel {
 	private boolean pause;
 	private boolean editingPause;
 
-	private boolean systemReloadScheduled;
-	private boolean sceneReloadScheduled;
-
 	private Dimension renderSize;
 	private Color blackBarColor;
 	private Semaphore renderLock;
@@ -134,9 +131,6 @@ public class CoreEngine extends JPanel {
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
-
-		this.systemReloadScheduled = false;
-		this.sceneReloadScheduled = false;
 
 		this.renderLock = new Semaphore(0);
 
@@ -262,9 +256,7 @@ public class CoreEngine extends JPanel {
 		double lastFpsTime = java.lang.System.currentTimeMillis();
 
 		while (!exit) {
-			handleSystemsReloading();
-			handleSceneReloading();
-
+			scheduler.trigger(Trigger.GAME_LOOP_START);
 			double current = java.lang.System.currentTimeMillis();
 			double elapsed = current - previous;
 
@@ -290,32 +282,7 @@ public class CoreEngine extends JPanel {
 			}
 		}
 	}
-
-	/**
-	 * To be called before updating, check if scene should be reloaded
-	 */
-	private void handleSceneReloading() {
-		if (sceneReloadScheduled) {
-			sceneReloadScheduled = false;
-			currentScene.reset();
-			setCurrentScene(currentScene);
-		}
-	}
-
-	/**
-	 * To be called before updating, check if systems should be reloaded
-	 */
-	private void handleSystemsReloading() {
-		if (systemReloadScheduled) {
-			systemReloadScheduled = false;
-			if (luaError != null) {
-				luaError = null; // Let's remove the error as reloading systems may fix it
-				editingPause = false;
-			}
-			reloadSystemsFromDisk();
-		}
-	}
-
+	
 	/**
 	 * To be called before upading, handle lua error actions
 	 */
@@ -327,9 +294,8 @@ public class CoreEngine extends JPanel {
 				editingPause = false;
 				luaError = null;
 			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
-				editingPause = false;
-				luaError = null;
 				reloadSystemsFromDisk();
+				editingPause = false;
 			}
 			input.resetAllKeys();
 		}
@@ -338,20 +304,17 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Reload systems from disk, live
 	 */
-	private void reloadSystemsFromDisk() {
+	public void reloadSystemsFromDisk() {
 		if (editingSystems != null) {
 			editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
 		}
 
+		if (luaError != null) {
+			luaError = null; // Let's remove the error as reloading systems may fix it
+		}
+		
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
 		setCurrentScene(getCurrentScene());
-	}
-
-	/**
-	 * Reload system from disk at the start of next update
-	 */
-	public void scheduleSystemReloadFromDisk() {
-		systemReloadScheduled = true;
 	}
 
 	/**
@@ -450,16 +413,11 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Reset the current scene and notify engine
-	 * 
-	 * @param pause If the game need to be paused after the reset
+	 * Reset the current scene. To call be call before updating
 	 */
-	public void scheduleResetCurrentScene(boolean pause) {
-		// TODO : check if necessary
-		if (pause) {
-			setEditingPause(true);
-		}
-		sceneReloadScheduled = true;
+	public void resetCurrentScene() {
+		currentScene.reset();
+		setCurrentScene(currentScene);
 	}
 
 	/**

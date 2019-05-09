@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 
 public class Main {
 	static CoreEngine ce = null;
@@ -42,7 +43,13 @@ public class Main {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				if (arg0.getKeyCode() == KeyEvent.VK_F5) {
-					ce.scheduleSystemReloadFromDisk();
+					ce.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+						
+						@Override
+						public void run() {
+							ce.reloadSystemsFromDisk();
+						}
+					});
 				}
 			}
 		});
@@ -61,7 +68,13 @@ public class Main {
 			while ((key = watchService.take()) != null) {
 				key.pollEvents().clear();
 
-				ce.scheduleSystemReloadFromDisk();
+				ce.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+					
+					@Override
+					public void run() {
+						ce.reloadSystemsFromDisk();
+					}
+				});
 				key.reset();
 			}
 		} catch (IOException e) {
