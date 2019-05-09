@@ -19,11 +19,12 @@ public abstract class Modal extends JDialog {
 	JPanel mainPanel;
 
 	/**
-	 * Base cosntructor for the project's modal, prepare the modal to have the right comportement
+	 * Base constructor for the project's modal, prepare the modal to have the right
+	 * behavior
 	 * 
-	 * @param parent 	:	Component to block while the modal is active
-	 * @param title		:	Title of the modal
-	 * @param modal		:	True if the parent should be blocked while the modal is active
+	 * @param parent Component to block while the modal is active
+	 * @param title  Title of the modal
+	 * @param modal  True if the parent should be blocked while the modal is active
 	 */
 	public Modal(JFrame parent, String title, Boolean modal) {
 		super(parent, title, modal);

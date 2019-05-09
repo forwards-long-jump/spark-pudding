@@ -50,10 +50,9 @@ public class ModalComponent extends Modal {
 	/**
 	 * Constructor for the modal to create a new component
 	 * 
-	 * @param parent : Component to block while the modal is active
-	 * @param title  : Title of the modal
-	 * @param modal  : True if the parent should be blocked while the modal is
-	 *               active
+	 * @param parent Component to block while the modal is active
+	 * @param title  Title of the modal
+	 * @param modal  True if the parent should be blocked while the modal is active
 	 */
 	public ModalComponent(JFrame parent, String title, Boolean modal) {
 		super(parent, title, modal);
