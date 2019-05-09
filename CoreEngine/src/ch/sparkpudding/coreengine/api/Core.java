@@ -3,7 +3,7 @@ package ch.sparkpudding.coreengine.api;
 import org.luaj.vm2.LuaValue;
 
 import ch.sparkpudding.coreengine.Lel;
-import ch.sparkpudding.coreengine.TaskScheduler.Trigger;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
 /**

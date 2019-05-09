@@ -25,7 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.luaj.vm2.LuaError;
 import org.xml.sax.SAXException;
 
-import ch.sparkpudding.coreengine.TaskScheduler.Trigger;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
@@ -75,7 +75,7 @@ public class CoreEngine extends JPanel {
 	private int fpsCount;
 	private int fps;
 
-	private TaskScheduler taskScheduler;
+	private Scheduler scheduler;
 
 	private LuaError luaError;
 
@@ -130,7 +130,7 @@ public class CoreEngine extends JPanel {
 		this.pause = false;
 		this.editingPause = false;
 
-		this.taskScheduler = new TaskScheduler();
+		this.scheduler = new Scheduler();
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
@@ -358,7 +358,7 @@ public class CoreEngine extends JPanel {
 	 * Runs all systems once
 	 */
 	private void update() {
-		taskScheduler.trigger(Trigger.BEFORE_UPDATE);
+		scheduler.trigger(Trigger.BEFORE_UPDATE);
 
 		currentScene.getCamera().update();
 
@@ -375,7 +375,7 @@ public class CoreEngine extends JPanel {
 			}
 		}
 
-		taskScheduler.trigger(Trigger.AFTER_UPDATE);
+		scheduler.trigger(Trigger.AFTER_UPDATE);
 	}
 
 	/**
@@ -467,8 +467,8 @@ public class CoreEngine extends JPanel {
 	 * 
 	 * @return taskScheduler
 	 */
-	public TaskScheduler getTaskScheduler() {
-		return taskScheduler;
+	public Scheduler getTaskScheduler() {
+		return scheduler;
 	}
 
 	/**

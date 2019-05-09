@@ -1,7 +1,7 @@
 package ch.sparkpudding.coreengine.api;
 
 import ch.sparkpudding.coreengine.Lel;
-import ch.sparkpudding.coreengine.TaskScheduler.Trigger;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
 /**
