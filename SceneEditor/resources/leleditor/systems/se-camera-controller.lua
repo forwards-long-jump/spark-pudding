@@ -32,7 +32,7 @@ function update()
   if game.input:getMouseWheelRotation() ~= 0 then
     game.camera:setSmoothScaleSpeedCoeff(0.5)
     game.camera:setScalingPoint(game.input:getUIMouseX(), game.input:getUIMouseY())
-    scaling = scaling * (1 - game.input:getMouseWheelRotation() * 0.1)
+    scaling = scaling * (1 - game.input:getMouseWheelRotation() * 0.15)
   end
 
   -- Handle moving with keys
@@ -62,16 +62,16 @@ function update()
   else
     game.camera:setMode("NO_FOLLOW")
   end
-  
+
   game.camera:setTargetScaling(scaling)
-    
+
   --[[
   if game.input:isMouseButtonDown(2) then
     dx = game.input:getMouseDX()
     dy = game.input:getMouseDY()
   end
     game.camera:setMode("NO_FOLLOW")
-  
+
   game.camera:setPosition(game.camera:getX() - dx, game.camera:getY() - dy)
 --̣]]
   -- Commented out in case we still want to use buttons to zoom
@@ -87,4 +87,3 @@ function update()
   -- scaling = scaling * (1 - game.input:getMouseWheelRotation() * 0.3)
   --game.camera:setSmoothScaleSpeedCoeff(1)
 end
-
