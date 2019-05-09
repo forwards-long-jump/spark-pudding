@@ -93,13 +93,11 @@ public class FrameSceneEditor extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-
+	
 	/**
-	 * Get the left sidebar panel
-	 * 
-	 * @return the left sidebar panel
+	 * Populate all the component of the sidebarRight
 	 */
-	public PanelSidebarLeft getPanelSidebarLeft() {
-		return panelSidebarLeft;
+	public void populateSidebarRight() {
+		panelSidebarRight.populatePanel();
 	}
 }

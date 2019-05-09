@@ -6,7 +6,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.SceneEditor.EDITOR_STATE;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
+import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
 /**
  * Contains the different parameter of an entity
@@ -22,7 +25,7 @@ public class PanelEntity extends JPanel {
 	private PanelComponent livePanelComponent;
 	private JTabbedPane jTabbedPane;
 
-	private Entity currentEntity;
+	private SEEntity currentEntity;
 
 	private static final String TITLE = "Entity";
 
@@ -62,7 +65,7 @@ public class PanelEntity extends JPanel {
 	 */
 	private void resetBorderTitle() {
 		if (currentEntity != null) {
-			setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getName()));
+			setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getDefaultEntity().getName()));
 		} else {
 			setBorder(BorderFactory.createTitledBorder(TITLE + " — null"));
 		}
@@ -71,12 +74,12 @@ public class PanelEntity extends JPanel {
 	/**
 	 * Set the games entity represented by this panel
 	 * 
-	 * @param entity The entity represented by this panel
+	 * @param seEntity The entity represented by this panel
 	 */
-	public void setEntity(Entity entity) {
-		currentEntity = entity;
-		initialPanelComponent.setEntity(currentEntity);
-		livePanelComponent.setEntity(currentEntity);
+	public void setEntity(SEEntity seEntity) {
+		currentEntity = seEntity;
+		initialPanelComponent.setEntity(currentEntity.getDefaultEntity());
+		livePanelComponent.setEntity(currentEntity.getLiveEntity());
 		resetBorderTitle();
 	}
 }

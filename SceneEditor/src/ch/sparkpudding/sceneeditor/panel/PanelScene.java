@@ -76,10 +76,12 @@ public class PanelScene extends JPanel {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				Scene newScene = SceneEditor.coreEngine.getScenes().get(comboBoxScenes.getSelectedItem());
-				SceneEditor.coreEngine.setCurrentScene(newScene);
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					SEScene newScene = SceneEditor.seScenes.get(comboBoxScenes.getSelectedItem());
+					SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
 					panelEntityTree.updateListEntities(newScene);
 				}
+			}
 		});
 	}
 

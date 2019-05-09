@@ -15,8 +15,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import ch.sparkpudding.coreengine.ecs.entity.Entity;
-import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
+import ch.sparkpudding.sceneeditor.ecs.SEScene;
 
 /**
  * Show the different entity of a Scene as a list
@@ -30,8 +30,8 @@ public class PanelEntityTree extends JPanel {
 
 	private PanelEntity panelEntity;
 
-	private DefaultListModel<Entity> listModelEntities;
-	private JList<Entity> jListEntities;
+	private DefaultListModel<SEEntity> listModelEntities;
+	private JList<SEEntity> jListEntities;
 	private JScrollPane listScroller;
 
 	private static final String TITLE = "Entity list";
@@ -54,9 +54,9 @@ public class PanelEntityTree extends JPanel {
 	 * Initialize the different element of the panel
 	 */
 	private void init() {
-		listModelEntities = new DefaultListModel<Entity>();
+		listModelEntities = new DefaultListModel<SEEntity>();
 
-		jListEntities = new JList<Entity>(listModelEntities);
+		jListEntities = new JList<SEEntity>(listModelEntities);
 		jListEntities.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		jListEntities.setLayoutOrientation(JList.VERTICAL);
 		jListEntities.setVisibleRowCount(-1);
@@ -65,19 +65,15 @@ public class PanelEntityTree extends JPanel {
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
 				Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				if (renderer instanceof JLabel && value instanceof Entity) {
+				if (renderer instanceof JLabel && value instanceof SEEntity) {
 					// Here value will be of the Type 'CD'
-					((JLabel) renderer).setText(((Entity) value).getName());
+					((JLabel) renderer).setText(((SEEntity) value).getDefaultEntity().getName());
 				}
 				return renderer;
 			}
 		});
 
 		listScroller = new JScrollPane(jListEntities);
-		listScroller.setPreferredSize(
-				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
-		listScroller.setMaximumSize(
-				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
 	}
 
 	/**
@@ -85,6 +81,11 @@ public class PanelEntityTree extends JPanel {
 	 */
 	private void setupLayout() {
 		setLayout(new BorderLayout());
+		
+		listScroller.setPreferredSize(
+				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
+		listScroller.setMaximumSize(
+				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
 
 		add(listScroller, BorderLayout.CENTER);
 
@@ -100,8 +101,10 @@ public class PanelEntityTree extends JPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting() && e.getSource() instanceof JList<?>
-						&& ((JList<?>) e.getSource()).getSelectedValue() instanceof Entity) {
-					panelEntity.setEntity((Entity) ((JList<?>) e.getSource()).getSelectedValue());
+						&& ((JList<?>) e.getSource()).getSelectedValue() instanceof SEEntity) {
+					panelEntity.setEntity((SEEntity) ((JList<?>) e.getSource()).getSelectedValue());
+				} else {
+					panelEntity.removeEntity();
 				}
 			}
 		});
@@ -112,10 +115,10 @@ public class PanelEntityTree extends JPanel {
 	 * 
 	 * @param scene The scene which contains the entities
 	 */
-	public void updateListEntities(Scene scene) {
+	public void updateListEntities(SEScene scene) {
 		listModelEntities.removeAllElements();
 
-		for (Entity entity : scene.getEntities()) {
+		for (SEEntity entity : scene.getSEEntities()) {
 			listModelEntities.addElement(entity);
 		}
 	}
