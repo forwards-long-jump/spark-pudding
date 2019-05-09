@@ -1,8 +1,13 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
 /**
@@ -18,12 +23,16 @@ public class SceneEditor {
 
 	public static FrameSceneEditor frameSceneEditor;
 	public static CoreEngine coreEngine;
+	public static Map<String, SEScene> seScenes;
 
 	private static List<GameStateEventListener> eventListeners;
+
+	private static Runnable callbackSyncListEntity;
+
 	private static EDITOR_STATE gameState;
 
 	static {
-		gameState = EDITOR_STATE.PAUSE;
+		gameState = EDITOR_STATE.STOP;
 
 		try {
 			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath());
@@ -32,6 +41,11 @@ public class SceneEditor {
 		}
 
 		eventListeners = new ArrayList<GameStateEventListener>();
+
+		seScenes = new HashMap<String, SEScene>();
+		callbackSyncListEntity = createSyncListEntity();
+
+		coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
 	}
 
 	/**
@@ -56,7 +70,7 @@ public class SceneEditor {
 			SceneEditor.coreEngine.togglePauseAll();
 			break;
 		case STOP:
-			SceneEditor.coreEngine.scheduleResetCurrentScene(true);
+			SceneEditor.coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
 			break;
 		default:
 			break;
@@ -64,6 +78,26 @@ public class SceneEditor {
 		}
 		fireGameStateEvent();
 	}
+
+	/**
+	 * Create the callback to register all entity of the coreEngine
+	 * 
+	 * @return the callback
+	 */
+	private static Runnable createSyncListEntity() {
+		return new Runnable() {
+			@Override
+			public void run() {
+				Map<String, Scene> scenes = coreEngine.getScenes();
+				for (Scene scene : scenes.values()) {
+					seScenes.put(scene.getName(), new SEScene(scene));
+				}
+
+				frameSceneEditor.populateSidebarRight();
+			}
+		};
+	}
+
 	/**
 	 * Add a listener for the event of the state of the SceneEditor
 	 * 
