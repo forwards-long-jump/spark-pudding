@@ -1,8 +1,6 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.awt.BorderLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -12,7 +10,6 @@ import ch.sparkpudding.sceneeditor.menu.MenuBar;
 import ch.sparkpudding.sceneeditor.panel.PanelGame;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
-import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
 
 /**
  * Main frame containing the SceneEditor and a static reference to the core
