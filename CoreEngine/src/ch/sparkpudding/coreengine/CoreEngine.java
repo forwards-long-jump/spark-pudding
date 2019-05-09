@@ -273,9 +273,9 @@ public class CoreEngine extends JPanel {
 			previous = current;
 			lag += elapsed;
 
-			input.update();
-
 			while (lag >= msPerUpdate) {
+				input.update();
+
 				handleLuaErrors();
 
 				update();
