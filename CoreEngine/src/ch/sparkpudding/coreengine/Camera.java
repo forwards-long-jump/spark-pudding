@@ -23,7 +23,7 @@ public class Camera {
 	 * to it
 	 */
 	public enum Mode {
-		NO_FOLLOW, LINEAR, SMOOTH, SPRING;
+		NO_FOLLOW, INSTANT, LINEAR, SMOOTH, SPRING;
 	}
 
 	private Mode translateMode;
@@ -98,6 +98,10 @@ public class Camera {
 		// Translation
 		switch (translateMode) {
 		case NO_FOLLOW:
+			break;
+		case INSTANT:
+			x = targetPosition.getX();
+			y = targetPosition.getY();
 			break;
 		case LINEAR:
 			// x
@@ -436,5 +440,13 @@ public class Camera {
 		double cw = Lel.coreEngine.getGameWidth() / this.scaling;
 		double ch = Lel.coreEngine.getGameHeight() / this.scaling;
 		return Collision.rectIntersectRect(x, y, width, height, cx, cy, cw, ch);
+	}
+
+	/**
+	 * Get target scaling
+	 * @return target scaling
+	 */
+	public float getTargetScaling() {
+		return targetScaling;
 	}
 }

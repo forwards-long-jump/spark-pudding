@@ -1,8 +1,10 @@
 package ch.sparkpudding.coreengine.api;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Stroke;
 
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
@@ -88,6 +90,28 @@ public class Graphics {
 	 */
 	public void setColor(Color color) {
 		g2d.setColor(color);
+	}
+
+	/**
+	 * Changes the current width of the pen
+	 * 
+	 * @param width New width to use
+	 */
+	public void setPenWidth(float width) {
+		g2d.setStroke(new BasicStroke(width));
+	}
+
+	/**
+	 * Draw a moving line for selections
+	 * 
+	 * @param width   of the line
+	 * @param scacing between lines
+	 * @param phase   line spacing offset
+	 */
+	public void setAnimatedDashedLine(float width, float spacing, float phase) {
+		Stroke dashed = new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { spacing },
+				phase);
+		g2d.setStroke(dashed);
 	}
 
 	/**

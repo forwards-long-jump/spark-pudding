@@ -60,8 +60,9 @@ public class MetaEntity {
 	 * @return LuaTable
 	 */
 	public LuaTable addComponent(String componentName) {
-		entity.add(componentName);
-		Lel.coreEngine.notifySystemsOfNewComponent(entity, componentName);
+		if(entity.add(componentName)) {			
+			Lel.coreEngine.notifySystemsOfNewComponent(entity, componentName);
+		}
 		return entity.getLuaEntity();
 	}
 }

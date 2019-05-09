@@ -75,7 +75,7 @@ public class CoreEngine extends JPanel {
 	private int fpsCount;
 	private int fps;
 
-	private List<Entity> entitesToDeleteAfterUpdate;
+	private List<Entity> entitiesToDeleteAfterUpdate;
 	private List<Pair<Entity, String>> componentsToRemoveAfterUpdate;
 
 	private LuaError luaError;
@@ -131,7 +131,7 @@ public class CoreEngine extends JPanel {
 		this.pause = false;
 		this.editingPause = false;
 
-		this.entitesToDeleteAfterUpdate = new ArrayList<Entity>();
+		this.entitiesToDeleteAfterUpdate = new ArrayList<Entity>();
 		this.componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
 
 		this.renderSize = new Dimension(1280, 720);
@@ -273,9 +273,9 @@ public class CoreEngine extends JPanel {
 			previous = current;
 			lag += elapsed;
 
-			input.update();
-
 			while (lag >= msPerUpdate) {
+				input.update();
+
 				handleLuaErrors();
 
 				update();
@@ -378,10 +378,14 @@ public class CoreEngine extends JPanel {
 		for (Pair<Entity, String> pair : componentsToRemoveAfterUpdate) {
 			removeComponent(pair.first(), pair.second());
 		}
+		
+		componentsToRemoveAfterUpdate.clear();
 
-		for (Entity entity : entitesToDeleteAfterUpdate) {
+		for (Entity entity : entitiesToDeleteAfterUpdate) {
 			deleteEntity(entity);
 		}
+		
+		entitiesToDeleteAfterUpdate.clear();
 	}
 
 	/**
@@ -678,7 +682,12 @@ public class CoreEngine extends JPanel {
 	 */
 	public void addEntity(Entity e) {
 		renderSystem.tryAdd(e);
+		editingRenderSystem.tryAdd(e);
 		for (UpdateSystem system : systems) {
+			system.tryAdd(e);
+		}
+
+		for (UpdateSystem system : editingSystems) {
 			system.tryAdd(e);
 		}
 
@@ -715,11 +724,17 @@ public class CoreEngine extends JPanel {
 	 * @param componentName Name of the component to remove
 	 */
 	public void removeComponent(Entity entity, String componentName) {
-		entity.remove(componentName);
-		for (UpdateSystem system : systems) {
-			system.notifyRemovedComponent(entity, componentName);
+		if (entity.remove(componentName)) {
+			for (UpdateSystem system : systems) {
+				system.notifyRemovedComponent(entity, componentName);
+			}
+			renderSystem.notifyRemovedComponent(entity, componentName);
+
+			for (UpdateSystem system : editingSystems) {
+				system.notifyRemovedComponent(entity, componentName);
+			}
+			editingRenderSystem.notifyRemovedComponent(entity, componentName);
 		}
-		renderSystem.notifyRemovedComponent(entity, componentName);
 	}
 
 	/**
@@ -745,6 +760,11 @@ public class CoreEngine extends JPanel {
 			system.notifyNewComponent(entity, componentName);
 		}
 		renderSystem.notifyNewComponent(entity, componentName);
+
+		for (UpdateSystem system : editingSystems) {
+			system.notifyNewComponent(entity, componentName);
+		}
+		editingRenderSystem.notifyNewComponent(entity, componentName);
 	}
 
 	/**
@@ -753,7 +773,7 @@ public class CoreEngine extends JPanel {
 	 * @param entity
 	 */
 	public void deleteEntityAfterUpdate(Entity entity) {
-		entitesToDeleteAfterUpdate.add(entity);
+		entitiesToDeleteAfterUpdate.add(entity);
 	}
 
 	/**
@@ -815,6 +835,42 @@ public class CoreEngine extends JPanel {
 		y /= currentScene.getCamera().getScaling();
 
 		return new Point2D.Double(x, y);
+	}
+
+	/**
+	 * Convert a vector in pixels (panel units) to the game (UI) unit
+	 * 
+	 * @param v vector to convert
+	 * @return Point2D new vector
+	 */
+	public Point2D panelVectorToGame(Point2D v) {
+		double dx = v.getX();
+		double dy = v.getY();
+
+		double scaleRatio = getScaleRatio();
+
+		// Game ratio scaling
+		dx /= scaleRatio;
+		dy /= scaleRatio;
+
+		return new Point2D.Double(dx, dy);
+	}
+
+	/**
+	 * Convert a vector in pixels (panel units) to the game world unit
+	 * 
+	 * @param v vector to convert
+	 * @return Point2D new vector
+	 */
+	public Point2D panelVectorToWorld(Point2D v) {
+		double dx = v.getX();
+		double dy = v.getY();
+
+		// Camera scaling
+		dx /= currentScene.getCamera().getScaling();
+		dy /= currentScene.getCamera().getScaling();
+
+		return new Point2D.Double(dx, dy);
 	}
 
 	/**

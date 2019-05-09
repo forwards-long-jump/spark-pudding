@@ -161,28 +161,36 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * Adds a component from the templates to the entity. This method is intended to
 	 * be called by the Lua systems, and as such needs to update the Lua entity
 	 * 
-	 * @param componentName
+	 * @param componentName the name of the component
+	 * @return true if the component was added
 	 */
-	public void add(String componentName) {
+	public boolean add(String componentName) {
 		Component component = Component.getTemplates().get(componentName);
-		if (component != null) {
+		if (component != null && !components.containsKey(componentName)) {
 			add(component);
 
 			// update luaEntity
 			createLuaEntity();
+			return true;
 		}
+		return false;
 	}
 
 	/**
 	 * Removes a component from the entity
 	 * 
 	 * @param name Name of the component to be removed
+	 * @return true if the component was removed
 	 */
-	public void remove(String name) {
-		components.remove(name);
+	public boolean remove(String name) {
+		if (components.containsKey(name)) {
+			components.remove(name);
 
-		// update luaEntity
-		createLuaEntity();
+			// update luaEntity
+			createLuaEntity();
+			return true;
+		}
+		return false;
 	}
 
 	/**
