@@ -48,7 +48,12 @@ public class ModalComponent extends Modal {
 	JButton btnRemoveField;
 
 	/**
-	 * Constructor
+	 * Constructor for the modal to create a new component
+	 * 
+	 * @param parent : Component to block while the modal is active
+	 * @param title  : Title of the modal
+	 * @param modal  : True if the parent should be blocked while the modal is
+	 *               active
 	 */
 	public ModalComponent(JFrame parent, String title, Boolean modal) {
 		super(parent, title, modal);
@@ -161,10 +166,8 @@ public class ModalComponent extends Modal {
 	 */
 	private void setupListener() {
 
-		/**
-		 * Remove the selected row of the field table or the last row if none is
-		 * selected
-		 */
+		// Remove the selected row of the field table or the last row if none is
+		// selected
 		btnRemoveField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -177,9 +180,7 @@ public class ModalComponent extends Modal {
 			}
 		});
 
-		/**
-		 * Add a new row in the field table
-		 */
+		// Add a new row in the field table
 		btnAddField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -189,10 +190,8 @@ public class ModalComponent extends Modal {
 			}
 		});
 
-		/**
-		 * Create a component from user input, add it to the current entity the close
-		 * the modal
-		 */
+		// Create a component from user input, add it to the current entity the close
+		// the modal
 		btnValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

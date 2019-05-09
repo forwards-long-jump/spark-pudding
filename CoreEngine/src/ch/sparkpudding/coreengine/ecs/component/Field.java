@@ -41,6 +41,20 @@ public class Field {
 		this.type = FieldType.valueOf(type);
 		this.setValueFromString(value);
 	}
+	
+	/**
+	 * Constructor using Strings only
+	 * 
+	 * @param name  Name of the field
+	 * @param type  Type of the data
+	 * @param value Data
+	 */
+	public Field(String name, FieldType type, Object value) {
+		this.name = name;
+		this.type = type;
+		this.value =value;
+	}
+
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {

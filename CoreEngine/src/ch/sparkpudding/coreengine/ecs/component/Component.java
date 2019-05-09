@@ -28,7 +28,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	private Map<String, Field> fields;
 
 	/**
-	 * Create an empty component
+	 * Create an empty component with a reference on it's template
 	 * 
 	 * @param name     : A unique name per component
 	 * @param template : The component template

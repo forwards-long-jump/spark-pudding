@@ -8,15 +8,23 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
+ * Base modal for all the project's modals
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
 @SuppressWarnings("serial")
-public class Modal extends JDialog {
+public abstract class Modal extends JDialog {
 
 	JPanel mainPanel;
 
+	/**
+	 * Base cosntructor for the project's modal, prepare the modal to have the right comportement
+	 * 
+	 * @param parent 	:	Component to block while the modal is active
+	 * @param title		:	Title of the modal
+	 * @param modal		:	True if the parent should be blocked while the modal is active
+	 */
 	public Modal(JFrame parent, String title, Boolean modal) {
 		super(parent, title, modal);
 		this.setLayout(new FlowLayout());
