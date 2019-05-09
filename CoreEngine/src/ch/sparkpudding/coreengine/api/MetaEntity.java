@@ -32,12 +32,13 @@ public class MetaEntity {
 
 	/**
 	 * Sets the caller entity to have its component deleted at the end of the update
-	 * Returns the LuaEntity of the calling entity,
-	 * because Lua syntax for calling this is
+	 * Returns the LuaEntity of the calling entity, because Lua syntax for calling
+	 * this is
 	 * 
 	 * <pre>
 	 * entity = entity._meta:deleteComponent("componentName")
 	 * </pre>
+	 * 
 	 * @param componentName
 	 */
 	public LuaTable deleteComponent(String componentName) {
@@ -48,8 +49,7 @@ public class MetaEntity {
 	/**
 	 * Adds the given component to the entity right away. Note that this operation
 	 * must not be delayed at the end of the update because Lua writers may expect
-	 * it to be added right away.
-	 * Returns the LuaEntity of the calling entity,
+	 * it to be added right away. Returns the LuaEntity of the calling entity,
 	 * because Lua syntax for calling this is
 	 * 
 	 * <pre>
@@ -60,8 +60,9 @@ public class MetaEntity {
 	 * @return LuaTable
 	 */
 	public LuaTable addComponent(String componentName) {
-		entity.add(componentName);
-		Lel.coreEngine.notifySystemsOfNewComponent(entity, componentName);
+		if(entity.add(componentName)) {			
+			Lel.coreEngine.notifySystemsOfNewComponent(entity, componentName);
+		}
 		return entity.getLuaEntity();
 	}
 }

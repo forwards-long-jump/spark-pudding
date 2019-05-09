@@ -11,9 +11,9 @@ import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
-import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.ColorFactory;
+import ch.sparkpudding.coreengine.api.Graphics;
 
 public class RenderSystem extends System {
 	public static final String LUA_FILE_NAME = "render.lua";
@@ -22,11 +22,10 @@ public class RenderSystem extends System {
 	/**
 	 * Constructs the render system from its lua file
 	 *
-	 * @param file
-	 * @param coreEngine
+	 * @param file The system
 	 */
-	public RenderSystem(File file, CoreEngine coreEngine) {
-		super(file, coreEngine);
+	public RenderSystem(File file) {
+		super(file);
 		reload();
 	}
 
@@ -58,6 +57,7 @@ public class RenderSystem extends System {
 	 */
 	private void loadRenderApis() {
 		apiTable.set("color", CoerceJavaToLua.coerce(ColorFactory.getInstance()));
+		globals.set("g", CoerceJavaToLua.coerce(Graphics.getInstance()));
 	}
 
 	/**
@@ -92,11 +92,14 @@ public class RenderSystem extends System {
 
 	/**
 	 * Update the lua system in a new thread to prevent lua crashing the main app
+	 * 
+	 * @param g Graphics2D context
 	 */
 	private void sandboxedRender(Graphics2D g) {
-		LuaValue luaG = CoerceJavaToLua.coerce(g);
 		try {
-			renderMethod.call(luaG);
+			Graphics.getInstance().setGraphicalContext(g);
+			renderMethod.call();
+			Graphics.getInstance().dispose();
 		} catch (LuaError error) {
 			Lel.coreEngine.notifyLuaError(error);
 		} catch (StackOverflowError error) {

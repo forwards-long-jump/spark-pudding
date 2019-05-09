@@ -11,7 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Main {
 
 	public static void main(String[] args) {
-		
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e1) {
@@ -28,12 +28,7 @@ public class Main {
 			e1.printStackTrace();
 		}
 
-		try {
-			new FrameSceneEditor(Main.class.getResource("/emptygame").getPath());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		SceneEditor.frameSceneEditor = new FrameSceneEditor();
 	}
 
 }

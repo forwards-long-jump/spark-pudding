@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
 import ch.sparkpudding.coreengine.Camera.Mode;
-import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Lel;
 
 /**
@@ -15,7 +14,6 @@ import ch.sparkpudding.coreengine.Lel;
  *
  */
 public class Camera {
-	private CoreEngine coreEngine;
 	private static Camera instance;
 
 	/**
@@ -33,11 +31,8 @@ public class Camera {
 
 	/**
 	 * ctor
-	 *
-	 * @param coreEngine
 	 */
 	private Camera() {
-		this.coreEngine = Lel.coreEngine;
 	}
 
 	/**
@@ -47,7 +42,7 @@ public class Camera {
 	 * @param g2d
 	 */
 	public void applyTransforms(Graphics2D g2d) {
-		this.coreEngine.getCamera().applyTransforms(g2d);
+		Lel.coreEngine.getCamera().applyTransforms(g2d);
 	}
 
 	/**
@@ -57,7 +52,7 @@ public class Camera {
 	 * @param g2d
 	 */
 	public void resetTransforms(Graphics2D g2d) {
-		this.coreEngine.getCamera().resetTransforms(g2d);
+		Lel.coreEngine.getCamera().resetTransforms(g2d);
 	}
 
 	/**
@@ -67,7 +62,7 @@ public class Camera {
 	 * @param y
 	 */
 	public void setPosition(float x, float y) {
-		this.coreEngine.getCamera().setPosition(x, y);
+		Lel.coreEngine.getCamera().setPosition(x, y);
 	}
 
 	/**
@@ -77,14 +72,14 @@ public class Camera {
 	 * @param y
 	 */
 	public void setTargetScaling(float s) {
-		this.coreEngine.getCamera().setTargetScaling(s);
+		Lel.coreEngine.getCamera().setTargetScaling(s);
 	}
 
 	/**
 	 * Set the target position to the current position
 	 */
 	public void setTargetToPosition() {
-		this.coreEngine.getCamera().setTargetToPosition();
+		Lel.coreEngine.getCamera().setTargetToPosition();
 	}
 
 	/**
@@ -97,7 +92,7 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerTargetAt(float x, float y, float w, float h) {
-		this.coreEngine.getCamera().centerTargetAt(x, y, w, h);
+		Lel.coreEngine.getCamera().centerTargetAt(x, y, w, h);
 	}
 
 	/**
@@ -110,7 +105,7 @@ public class Camera {
 	 * @param h height of the entity
 	 */
 	public void centerAt(float x, float y, float w, float h) {
-		this.coreEngine.getCamera().centerAt(x, y, w, h);
+		Lel.coreEngine.getCamera().centerAt(x, y, w, h);
 	}
 
 	/**
@@ -142,7 +137,7 @@ public class Camera {
 	 * @param y
 	 */
 	public void setTargetPosition(float x, float y) {
-		this.coreEngine.getCamera().setTargetPosition(x, y);
+		Lel.coreEngine.getCamera().setTargetPosition(x, y);
 	}
 
 	/**
@@ -151,14 +146,14 @@ public class Camera {
 	 * @param mode
 	 */
 	public void setMode(String mode) {
-		this.coreEngine.getCamera().setTranslateMode(Mode.valueOf(mode));
+		Lel.coreEngine.getCamera().setTranslateMode(Mode.valueOf(mode));
 	}
 
 	/**
 	 * Clear current boundary
 	 */
 	public void clearBoundary() {
-		this.coreEngine.getCamera().setBoundary(null);
+		Lel.coreEngine.getCamera().setBoundary(null);
 	}
 
 	/**
@@ -170,7 +165,7 @@ public class Camera {
 	 * @param height
 	 */
 	public void setBoundary(float x, float y, float w, float h) {
-		this.coreEngine.getCamera().setBoundary(new Rectangle((int) x, (int) y, (int) w, (int) h));
+		Lel.coreEngine.getCamera().setBoundary(new Rectangle((int) x, (int) y, (int) w, (int) h));
 	}
 
 	/**
@@ -180,7 +175,7 @@ public class Camera {
 	 * @param y force
 	 */
 	public void setSpringTranslateForce(float x, float y) {
-		this.coreEngine.getCamera().setSpringTranslateForce(new Point2D.Double(x, y));
+		Lel.coreEngine.getCamera().setSpringTranslateForce(new Point2D.Double(x, y));
 	}
 
 	/**
@@ -190,7 +185,7 @@ public class Camera {
 	 * @param y constant
 	 */
 	public void setSpringTranslateConstant(float x, float y) {
-		this.coreEngine.getCamera().setSpringTranslateConstant(new Point2D.Double(x, y));
+		Lel.coreEngine.getCamera().setSpringTranslateConstant(new Point2D.Double(x, y));
 	}
 
 	/**
@@ -200,7 +195,7 @@ public class Camera {
 	 * @param y speed coeff
 	 */
 	public void setSpringTranslateSpeedCoeff(float x, float y) {
-		this.coreEngine.getCamera().setSpringTranslateSpeedCoeff(new Point2D.Double(x, y));
+		Lel.coreEngine.getCamera().setSpringTranslateSpeedCoeff(new Point2D.Double(x, y));
 	}
 
 	/**
@@ -210,7 +205,7 @@ public class Camera {
 	 * @param y speed coeff
 	 */
 	public void setSmoothSpeedCoeff(float x, float y) {
-		this.coreEngine.getCamera().setSmoothSpeedCoeff(new Point2D.Double(x, y));
+		Lel.coreEngine.getCamera().setSmoothSpeedCoeff(new Point2D.Double(x, y));
 	}
 
 	/**
@@ -220,14 +215,14 @@ public class Camera {
 	 * @param y speed delta
 	 */
 	public void setLinearSpeedDelta(float x, float y) {
-		this.coreEngine.getCamera().setLinearSpeedDelta(new Point2D.Double(x, y));
+		Lel.coreEngine.getCamera().setLinearSpeedDelta(new Point2D.Double(x, y));
 	}
 
 	/**
 	 * @param smoothScaleSpeedCoeff the smoothScaleSpeedCoeff to set
 	 */
 	public void setSmoothScaleSpeedCoeff(float smoothScaleSpeedCoeff) {
-		this.coreEngine.getCamera().setSmoothScaleSpeedCoeff(smoothScaleSpeedCoeff);
+		Lel.coreEngine.getCamera().setSmoothScaleSpeedCoeff(smoothScaleSpeedCoeff);
 	}
 
 	/**
@@ -237,7 +232,7 @@ public class Camera {
 	 * @param y coordinate
 	 */
 	public void setScalingPoint(double x, double y) {
-		this.coreEngine.getCamera().setScalingPoint(new Point2D.Double(x, y));
+		Lel.coreEngine.getCamera().setScalingPoint(new Point2D.Double(x, y));
 	}
 
 	/**
@@ -247,7 +242,7 @@ public class Camera {
 	 * @param duration  in tick
 	 */
 	public void shake(float intensity, int duration) {
-		this.coreEngine.getCamera().shake(intensity, duration);
+		Lel.coreEngine.getCamera().shake(intensity, duration);
 	}
 
 	/**
@@ -260,6 +255,41 @@ public class Camera {
 	 * @return true if the given rectangle is visible
 	 */
 	public boolean isInView(float x, float y, float width, float height) {
-		return this.coreEngine.getCamera().isInView(x, y, width, height);
+		return Lel.coreEngine.getCamera().isInView(x, y, width, height);
+	}
+
+	/**
+	 * Get the X coordinate of the camera
+	 * 
+	 * @return x coordinate
+	 */
+	public double getX() {
+		return Lel.coreEngine.getCamera().getPosition().getX();
+	}
+
+	/**
+	 * Get the Y coordinate of the camera
+	 * 
+	 * @return y coordinate
+	 */
+	public double getY() {
+		return Lel.coreEngine.getCamera().getPosition().getY();
+	}
+
+	/**
+	 * Get current camera scaling
+	 * 
+	 * @return camera scaling
+	 */
+	public float getScaling() {
+		return Lel.coreEngine.getCamera().getScaling();
+	}
+	
+	/**
+	 * Return true if close to target scaling
+	 * @return true if close to target scaling
+	 */
+	public boolean isAtTargetScaling() {
+		return Math.abs(Lel.coreEngine.getCamera().getScaling() - Lel.coreEngine.getCamera().getTargetScaling()) < 0.0001;
 	}
 }

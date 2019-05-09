@@ -1,10 +1,11 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 
-import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.sceneeditor.menu.MenuBar;
 import ch.sparkpudding.sceneeditor.panel.PanelGame;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
@@ -20,10 +21,9 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
  */
 @SuppressWarnings("serial")
 public class FrameSceneEditor extends JFrame {
-
-	private static final String TITLE = "Scene Editor";
-	private static final int WIDTH = 1280;
-	private static final int HEIGHT = 720;
+	private final String TITLE = "Scene Editor";
+	private final int WIDTH = 1280;
+	private final int HEIGHT = 720;
 
 	private MenuBar menuBar;
 	private PanelSidebarRight panelSidebarRight;
@@ -31,21 +31,17 @@ public class FrameSceneEditor extends JFrame {
 	private PanelGame panelGame;
 	private BorderLayout borderLayout;
 
-	public static CoreEngine coreEngine;
-
 	/**
 	 * ctor
 	 * 
 	 * @param gameFolder the path to the folder containing the current game
 	 * @throws Exception thrown if the coreEngine can't read the gameFolder
 	 */
-	public FrameSceneEditor(String gameFolder) throws Exception {
-		FrameSceneEditor.coreEngine = new CoreEngine(gameFolder);
-		FrameSceneEditor.coreEngine.togglePauseAll();
-
+	public FrameSceneEditor() {
 		init();
 		setupLayout();
 		setupFrame();
+		addListener();
 	}
 
 	/**
@@ -74,6 +70,18 @@ public class FrameSceneEditor extends JFrame {
 	}
 
 	/**
+	 * Add the different listener for each element of the panel
+	 */
+	private void addListener() {
+		SceneEditor.coreEngine.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				SceneEditor.coreEngine.requestFocus();
+			}
+		});
+	}
+
+	/**
 	 * Setup the basic value of the Frame
 	 */
 	private void setupFrame() {
@@ -86,4 +94,12 @@ public class FrameSceneEditor extends JFrame {
 		setVisible(true);
 	}
 
+	/**
+	 * Get the left sidebar panel
+	 * 
+	 * @return the left sidebar panel
+	 */
+	public PanelSidebarLeft getPanelSidebarLeft() {
+		return panelSidebarLeft;
+	}
 }

@@ -6,6 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,12 +31,16 @@ public class Input {
 	private List<Integer> mouseButtonsReleased;
 	private Point mousePositionBuffer;
 	private boolean mouseClickedBuffer = false;
+	private double mouseWheelRotationBuffer;
 
 	// Values to be read by systems
 	private Map<Integer, Boolean> keys;
 	private Map<Integer, Boolean> mouseButtons;
 	private Point mousePosition;
+	private Point mouseClickedPosition;
+	private Point mouseSpeed;
 	private boolean mouseClicked = false;
+	private double mouseWheelRotation;
 
 	private JPanel panel;
 
@@ -53,10 +59,13 @@ public class Input {
 		mouseButtonsPressed = new ArrayList<Integer>();
 		mouseButtonsReleased = new ArrayList<Integer>();
 		mousePositionBuffer = new Point();
+		mouseClickedPosition = new Point();
+		mouseWheelRotationBuffer = 0;
 
 		keys = new HashMap<Integer, Boolean>();
 		mouseButtons = new HashMap<Integer, Boolean>();
 		mousePosition = new Point();
+		mouseWheelRotation = 0;
 
 		panel.setFocusable(true);
 	}
@@ -78,6 +87,10 @@ public class Input {
 		for (Integer key : mouseButtonsPressed) {
 			mouseButtons.put(key, true);
 		}
+		
+		if(mouseButtonsPressed.size() > 0) {
+			mouseClickedPosition = mousePositionBuffer;
+		}
 		mouseButtonsPressed.clear();
 
 		for (Integer key : mouseButtonsReleased) {
@@ -85,10 +98,14 @@ public class Input {
 		}
 		mouseButtonsReleased.clear();
 
+		mouseSpeed = new Point(mousePositionBuffer.x - mousePosition.x, mousePositionBuffer.y - mousePosition.y);
 		mousePosition = mousePositionBuffer;
-
+		
 		mouseClicked = mouseClickedBuffer;
 		mouseClickedBuffer = false;
+
+		mouseWheelRotation = mouseWheelRotationBuffer;
+		mouseWheelRotationBuffer = 0;
 	}
 
 	/**
@@ -101,7 +118,7 @@ public class Input {
 		keysReleased.clear();
 		mouseButtonsPressed.clear();
 	}
-	
+
 	/**
 	 * Add listeners to the panel
 	 */
@@ -150,6 +167,14 @@ public class Input {
 				mouseMoved(e);
 			}
 		});
+
+		panel.addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				mouseWheelRotationBuffer = e.getPreciseWheelRotation();
+			}
+		});
 	}
 
 	/**
@@ -188,5 +213,35 @@ public class Input {
 	 */
 	public Point getMousePosition() {
 		return mousePosition;
+	}
+
+	/**
+	 * Returns the vector from the previous mouse position to the current one
+	 * 
+	 * @return mouse speed relative to the jpanel
+	 */
+	public Point getMouseSpeed() {
+		return mouseSpeed;
+	}
+
+	/**
+	 * Returns the number of notches (and partial notches) clicked during the wheel
+	 * move
+	 * 
+	 * A negative number means the wheel rolled up (away from the user)
+	 * 
+	 * @return number of notches clicked
+	 */
+	public double getMouseWheelRotation() {
+		return mouseWheelRotation;
+	}
+
+	/**
+	 * Get the last position where the mouse was clicked
+	 * 
+	 * @return the last position where the mouse was clicked
+	 */
+	public Point getMouseClickedPosition() {
+		return mouseClickedPosition;
 	}
 }

@@ -19,7 +19,7 @@ public class LelWriter {
 	 * Save all the specified CoreEngine in the specified directory
 	 * 
 	 * @param coreEngine is the core engine who will be saved in the Lel folder.
-	 * @param directory is the Lel directory path
+	 * @param directory  is the Lel directory path
 	 * @throws IOException
 	 */
 	public void write(CoreEngine coreEngine, String directory) throws IOException {
@@ -72,7 +72,7 @@ public class LelWriter {
 			xml += "\t<entity name=\"" + entity.getName() + "\" template=\"" + entity.getTemplate()
 					+ "\" z-index=\"1\">\n";
 			for (Component component : entity.getComponents().values()) {
-				xml += "\t\t<component template=\"" + component.getTemplate() + "\">\n";
+				xml += "\t\t<component template=\"" + component.getTemplateName() + "\">\n";
 				for (Field field : component.getFields().values()) {
 					xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
 				}
