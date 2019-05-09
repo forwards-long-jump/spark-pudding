@@ -1,8 +1,7 @@
 package ch.sparkpudding.coreengine.api;
 
-import org.luaj.vm2.LuaTable;
-
 import ch.sparkpudding.coreengine.Lel;
+import ch.sparkpudding.coreengine.TaskScheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
 /**
@@ -27,42 +26,46 @@ public class MetaEntity {
 	 * Sets the caller entity to be deleted at the end of the update
 	 */
 	public void delete() {
-		Lel.coreEngine.deleteEntityAfterUpdate(entity);
+		Lel.coreEngine.getTaskScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+
+			@Override
+			public void run() {
+				Lel.coreEngine.deleteEntity(entity);
+			}
+		});
 	}
 
 	/**
-	 * Sets the caller entity to have its component deleted at the end of the update
-	 * Returns the LuaEntity of the calling entity, because Lua syntax for calling
-	 * this is
-	 * 
-	 * <pre>
-	 * entity = entity._meta:deleteComponent("componentName")
-	 * </pre>
+	 * Sets the entity to have its specified component remove after the current
+	 * update
 	 * 
 	 * @param componentName
 	 */
-	public LuaTable deleteComponent(String componentName) {
-		Lel.coreEngine.removeComponentAfterUpdate(entity, componentName);
-		return entity.getLuaEntity();
+	public void deleteComponent(String componentName) {
+		Lel.coreEngine.getTaskScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+
+			@Override
+			public void run() {
+				Lel.coreEngine.removeComponent(entity, componentName);
+			}
+		});
 	}
 
 	/**
-	 * Adds the given component to the entity right away. Note that this operation
-	 * must not be delayed at the end of the update because Lua writers may expect
-	 * it to be added right away. Returns the LuaEntity of the calling entity,
-	 * because Lua syntax for calling this is
-	 * 
-	 * <pre>
-	 * entity = entity._meta:addComponent("componentName")
-	 * </pre>
+	 * Adds the given component to the entity, and schedules the Core Engine to
+	 * update the systems after the current update
 	 * 
 	 * @param componentName
-	 * @return LuaTable
 	 */
-	public LuaTable addComponent(String componentName) {
-		if(entity.add(componentName)) {			
-			Lel.coreEngine.notifySystemsOfNewComponent(entity, componentName);
+	public void addComponent(String componentName) {
+		if (entity.add(componentName)) {
+			Lel.coreEngine.getTaskScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+
+				@Override
+				public void run() {
+					Lel.coreEngine.notifySystemsOfNewComponent(entity, componentName);
+				}
+			});
 		}
-		return entity.getLuaEntity();
 	}
 }
