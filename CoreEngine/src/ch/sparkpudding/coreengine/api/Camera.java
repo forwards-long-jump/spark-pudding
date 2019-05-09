@@ -257,4 +257,39 @@ public class Camera {
 	public boolean isInView(float x, float y, float width, float height) {
 		return Lel.coreEngine.getCamera().isInView(x, y, width, height);
 	}
+
+	/**
+	 * Get the X coordinate of the camera
+	 * 
+	 * @return x coordinate
+	 */
+	public double getX() {
+		return Lel.coreEngine.getCamera().getPosition().getX();
+	}
+
+	/**
+	 * Get the Y coordinate of the camera
+	 * 
+	 * @return y coordinate
+	 */
+	public double getY() {
+		return Lel.coreEngine.getCamera().getPosition().getY();
+	}
+
+	/**
+	 * Get current camera scaling
+	 * 
+	 * @return camera scaling
+	 */
+	public float getScaling() {
+		return Lel.coreEngine.getCamera().getScaling();
+	}
+	
+	/**
+	 * Return true if close to target scaling
+	 * @return true if close to target scaling
+	 */
+	public boolean isAtTargetScaling() {
+		return Math.abs(Lel.coreEngine.getCamera().getScaling() - Lel.coreEngine.getCamera().getTargetScaling()) < 0.0001;
+	}
 }

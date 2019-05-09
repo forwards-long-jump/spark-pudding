@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.sparkpudding.coreengine.Camera;
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
@@ -12,7 +13,7 @@ import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
 /**
  * The heart of the SceneEditor, emerged after a 40 min fight
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  *
  */
@@ -29,13 +30,17 @@ public class SceneEditor {
 
 	private static Runnable callbackSyncListEntity;
 
+	private static Camera camera;
+	private static Camera gameCamera;
+
 	private static EDITOR_STATE gameState;
 
 	static {
 		gameState = EDITOR_STATE.STOP;
 
 		try {
-			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath());
+			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(),
+					Main.class.getResource("/leleditor").getPath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -46,11 +51,13 @@ public class SceneEditor {
 		callbackSyncListEntity = createSyncListEntity();
 
 		coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
+		camera = new Camera();
+		gameCamera = coreEngine.getCamera();
 	}
 
 	/**
 	 * Get current editor state
-	 * 
+	 *
 	 * @return current editor state
 	 */
 	public static EDITOR_STATE getGameState() {
@@ -64,10 +71,17 @@ public class SceneEditor {
 		gameState = state;
 		switch (state) {
 		case PAUSE:
-			SceneEditor.coreEngine.togglePauseAll();
+			gameCamera = SceneEditor.coreEngine.getCamera();
+			SceneEditor.coreEngine.setEditingPause(true);
+			// TODO: Use this below for a smoother effect
+			// camera.setScaling(gameCamera.getScaling());
+			// camera.setPosition(gameCamera.getPosition().getX(),
+			// gameCamera.getPosition().getY());
+			SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
 			break;
 		case PLAY:
-			SceneEditor.coreEngine.togglePauseAll();
+			SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
+			SceneEditor.coreEngine.setEditingPause(false);
 			break;
 		case STOP:
 			SceneEditor.coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
