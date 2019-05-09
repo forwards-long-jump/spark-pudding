@@ -1,16 +1,13 @@
 package ch.sparkpudding.coreengine.api;
 
 import java.applet.AudioClip;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
-import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
 import sun.audio.AudioData;
 import sun.audio.AudioDataStream;
 import sun.audio.AudioPlayer;
+import sun.audio.ContinuousAudioDataStream;
 
 /**
  * API that allow to play sound from the systems
@@ -42,12 +39,15 @@ public class Sound {
 	 * @param clip Music (intended to be aquired via the resource locator)
 	 */
 	public void playMusic(String name) {
-		AudioClip clip = resourceLocator.getMusic(name);
-		if (clip == null) {
+		AudioData audioData = resourceLocator.getMusic(name);
+		if (audioData == null) {
 			return;
 		}
-		currentMusic = clip;
-		currentMusic.loop();
+		
+		// Create an ContinuousAudioDataStream to play back continuously
+		ContinuousAudioDataStream loopMusicStream = new ContinuousAudioDataStream(audioData);
+		// Play the sound
+		AudioPlayer.player.start(loopMusicStream);
 	}
 
 	/**
@@ -72,36 +72,15 @@ public class Sound {
 	 * Plays a sound once
 	 * 
 	 * @param name The name of the sound to play
-	 */
+	 */  
 	public void play(String name) {
-		AudioClip clip = resourceLocator.getSound(name);
-		if (clip == null) {
+		AudioData audioData = resourceLocator.getSound(name);
+		if (audioData == null) {
 			return;
 		}
-		String path = "C:\\Users\\johnl\\Documents\\Ecole\\P2\\spark-pudding\\TestEngine\\bin\\testgame\\assets\\sounds\\slap.wav";
-		File f = new File(path);
-		byte[] b = readFileToByteArray(f);
-		// Create the AudioData object from the byte array
-		AudioData audiodata = new AudioData(b);
 		// Create an AudioDataStream to play back
-		AudioDataStream audioStream = new AudioDataStream(audiodata);
+		AudioDataStream audioStream = new AudioDataStream(audioData);
 		// Play the sound
 		AudioPlayer.player.start(audioStream);
 	}
-	
-	 private static byte[] readFileToByteArray(File file){
-	        FileInputStream fis = null;
-	        // Creating a byte array using the length of the file
-	        // file.length returns long which is cast to int
-	        byte[] bArray = new byte[(int) file.length()];
-	        try{
-	            fis = new FileInputStream(file);
-	            fis.read(bArray);
-	            fis.close();        
-	            
-	        }catch(IOException ioExp){
-	            ioExp.printStackTrace();
-	        }
-	        return bArray;
-	    }
 }

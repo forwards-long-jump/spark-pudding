@@ -1,10 +1,10 @@
 package ch.sparkpudding.coreengine.api;
 
-import java.applet.AudioClip;
 import java.awt.Image;
 
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
+import sun.audio.AudioData;
 
 /**
  * API that wraps the ResourceLocator class in order to only give access to
@@ -46,7 +46,7 @@ public class Resource {
 	 * @param name Name of the sound
 	 * @return Clip, or null when nothing is found
 	 */
-	public AudioClip getSound(String name) {
+	public AudioData getSound(String name) {
 		return resourceLocator.getSound(name);
 	}
 
@@ -56,7 +56,7 @@ public class Resource {
 	 * @param name Name of the music
 	 * @return Clip, or null when nothing is found
 	 */
-	public AudioClip getMusic(String name) {
+	public AudioData getMusic(String name) {
 		return resourceLocator.getMusic(name);
 	}
 }

@@ -1,11 +1,9 @@
 package ch.sparkpudding.coreengine;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.Image;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +12,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import ch.sparkpudding.coreengine.filereader.LelReader;
+import sun.audio.AudioData;
 
 /**
  * Handles getting files from the asset folder of the .lel file
@@ -26,8 +25,8 @@ public class ResourceLocator {
 	private Map<String, Image> textures;
 	// FIXME: We must find another solution, because using Clips prevents us from
 	// playing the same sound multiple times in quick succession
-	private Map<String, AudioClip> sounds;
-	private Map<String, AudioClip> musics;
+	private Map<String, AudioData> sounds;
+	private Map<String, AudioData> musics;
 
 	/**
 	 * ctor
@@ -71,14 +70,17 @@ public class ResourceLocator {
 	 * @throws LineUnavailableException
 	 */
 	private void loadSounds() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		sounds = new HashMap<String, AudioClip>();
+		sounds = new HashMap<String, AudioData>();
 		for (File file : lelReader.getSounds()) {
 			// TODO : remove as soon as .keep files are removed
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-			AudioClip audioClip = Applet.newAudioClip(file.toURI().toURL());
-			sounds.put(file.getName(), audioClip);
+			byte[] byteFile = readFileToByteArray(file);
+			// Create the AudioData object from the byte array
+			AudioData audioData = new AudioData(byteFile);
+
+			sounds.put(file.getName(), audioData);
 		}
 	}
 
@@ -89,16 +91,36 @@ public class ResourceLocator {
 	 * @throws LineUnavailableException
 	 */
 	private void loadMusics() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		musics = new HashMap<String, AudioClip>();
+		musics = new HashMap<String, AudioData>();
 		for (File file : lelReader.getMusics()) {
 			// TODO : remove as soon as .keep files are removed
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-			AudioClip audioClip = Applet.newAudioClip(file.toURI().toURL());
-			sounds.put(file.getName(), audioClip);
+			byte[] byteFile = readFileToByteArray(file);
+			// Create the AudioData object from the byte array
+			AudioData audioData = new AudioData(byteFile);
+
+			musics.put(file.getName(), audioData);
 		}
 	}
+	
+	// Return a byte array from the file
+	private static byte[] readFileToByteArray(File file){
+        FileInputStream fis = null;
+        // Creating a byte array using the length of the file
+        // file.length returns long which is cast to int
+        byte[] bArray = new byte[(int) file.length()];
+        try{
+            fis = new FileInputStream(file);
+            fis.read(bArray);
+            fis.close();        
+            
+        }catch(IOException ioExp){
+            ioExp.printStackTrace();
+        }
+        return bArray;
+    }
 
 	/**
 	 * Gets the texture by name
@@ -116,7 +138,7 @@ public class ResourceLocator {
 	 * @param name Name of the sound
 	 * @return Clip, or null when nothing is found
 	 */
-	public AudioClip getSound(String name) {
+	public AudioData getSound(String name) {
 		return sounds.get(name);
 	}
 
@@ -126,7 +148,7 @@ public class ResourceLocator {
 	 * @param name Name of the music
 	 * @return Clip, or null when nothing is found
 	 */
-	public AudioClip getMusic(String name) {
+	public AudioData getMusic(String name) {
 		return musics.get(name);
 	}
 }
