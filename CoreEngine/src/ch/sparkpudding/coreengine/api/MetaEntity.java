@@ -26,7 +26,7 @@ public class MetaEntity {
 	 * Sets the caller entity to be deleted at the end of the update
 	 */
 	public void delete() {
-		Lel.coreEngine.getTaskScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+		Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
 
 			@Override
 			public void run() {
@@ -42,7 +42,7 @@ public class MetaEntity {
 	 * @param componentName
 	 */
 	public void deleteComponent(String componentName) {
-		Lel.coreEngine.getTaskScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+		Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
 
 			@Override
 			public void run() {
@@ -59,7 +59,7 @@ public class MetaEntity {
 	 */
 	public void addComponent(String componentName) {
 		if (entity.add(componentName)) {
-			Lel.coreEngine.getTaskScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+			Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
 
 				@Override
 				public void run() {

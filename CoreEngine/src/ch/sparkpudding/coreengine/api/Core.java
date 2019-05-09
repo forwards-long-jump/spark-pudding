@@ -94,7 +94,7 @@ public class Core {
 	public LuaValue createEntity(String templateName) {
 		Entity e = new Entity(Entity.getTemplates().get(templateName));
 		
-		Lel.coreEngine.getTaskScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+		Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
 			@Override
 			public void run() {
 				Lel.coreEngine.addEntity(e);

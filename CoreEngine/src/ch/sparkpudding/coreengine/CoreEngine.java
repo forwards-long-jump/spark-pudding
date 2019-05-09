@@ -467,7 +467,7 @@ public class CoreEngine extends JPanel {
 	 * 
 	 * @return taskScheduler
 	 */
-	public Scheduler getTaskScheduler() {
+	public Scheduler getScheduler() {
 		return scheduler;
 	}
 
