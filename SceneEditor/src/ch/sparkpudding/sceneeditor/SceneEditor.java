@@ -2,6 +2,7 @@ package ch.sparkpudding.sceneeditor;
 
 import ch.sparkpudding.coreengine.Camera;
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 
 /**
  * The heart of the SceneEditor, emerged after a 40 min fight
@@ -23,7 +24,7 @@ public class SceneEditor {
 	private static EDITOR_STATE gameState;
 
 	static {
-		gameState = EDITOR_STATE.PAUSE;
+		gameState = EDITOR_STATE.STOP;
 
 		try {
 			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(),
@@ -32,9 +33,14 @@ public class SceneEditor {
 			e.printStackTrace();
 		}
 
-		coreEngine.setEditingPause(true);
+		coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
+			@Override
+			public void run() {
+				setGameState(EDITOR_STATE.STOP);
+			}
+		});
+
 		camera = new Camera();
-		gameCamera = coreEngine.getCamera();
 	}
 
 	/**
@@ -53,20 +59,42 @@ public class SceneEditor {
 		gameState = state;
 		switch (state) {
 		case PAUSE:
-			gameCamera = SceneEditor.coreEngine.getCamera();
-			SceneEditor.coreEngine.setEditingPause(true);
+			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+				@Override
+				public void run() {
+					SceneEditor.coreEngine.setEditingPause(true);
+					gameCamera = SceneEditor.coreEngine.getCamera();
+					SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+				}
+			});
+			
+			
 			// TODO: Use this below for a smoother effect
 			// camera.setScaling(gameCamera.getScaling());
 			// camera.setPosition(gameCamera.getPosition().getX(),
 			// gameCamera.getPosition().getY());
-			SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+			
 			break;
 		case PLAY:
-			SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
-			SceneEditor.coreEngine.setEditingPause(false);
+			coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
+				@Override
+				public void run() {
+					SceneEditor.coreEngine.setEditingPause(false);
+					SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
+				}
+			});
 			break;
 		case STOP:
-			SceneEditor.coreEngine.scheduleResetCurrentScene(true);
+			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+				@Override
+				public void run() {
+					SceneEditor.coreEngine.resetCurrentScene();
+					SceneEditor.coreEngine.setEditingPause(true);
+					gameCamera = SceneEditor.coreEngine.getCamera();
+					SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+				}
+			});
+			
 			break;
 		default:
 			break;
