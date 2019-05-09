@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Stroke;
 
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
@@ -98,6 +99,17 @@ public class Graphics {
 	 */
 	public void setPenWidth(float width) {
 		g2d.setStroke(new BasicStroke(width));
+	}
+
+	/**
+	 * Draw a moving line for selections
+	 * 
+	 * @param width
+	 * @param phase
+	 */
+	public void setAnimatedDashedLine(float width, float spacing, float phase) {
+		Stroke dashed = new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { spacing }, phase);
+		g2d.setStroke(dashed);
 	}
 
 	/**
