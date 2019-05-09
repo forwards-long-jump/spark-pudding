@@ -1,5 +1,7 @@
 package ch.sparkpudding.coreengine.api;
 
+import org.luaj.vm2.LuaValue;
+
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
@@ -55,9 +57,10 @@ public class MetaEntity {
 	 * Adds the given component to the entity, and schedules the Core Engine to
 	 * update the systems after the current update
 	 * 
-	 * @param componentName
+	 * @param componentName the name of the component to add
+	 * @return LuaValue the component that was added
 	 */
-	public void addComponent(String componentName) {
+	public LuaValue addComponent(String componentName) {
 		if (entity.add(componentName)) {
 			Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
 
@@ -66,6 +69,8 @@ public class MetaEntity {
 					Lel.coreEngine.notifySystemsOfNewComponent(entity, componentName);
 				}
 			});
+			return entity.getLuaEntity().get(componentName);
 		}
+		return LuaValue.NIL;
 	}
 }
