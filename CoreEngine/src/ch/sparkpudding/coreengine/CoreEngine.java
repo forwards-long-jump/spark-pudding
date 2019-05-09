@@ -378,10 +378,14 @@ public class CoreEngine extends JPanel {
 		for (Pair<Entity, String> pair : componentsToRemoveAfterUpdate) {
 			removeComponent(pair.first(), pair.second());
 		}
+		
+		componentsToRemoveAfterUpdate.clear();
 
 		for (Entity entity : entitesToDeleteAfterUpdate) {
 			deleteEntity(entity);
 		}
+		
+		entitesToDeleteAfterUpdate.clear();
 	}
 
 	/**
@@ -678,7 +682,12 @@ public class CoreEngine extends JPanel {
 	 */
 	public void addEntity(Entity e) {
 		renderSystem.tryAdd(e);
+		editingRenderSystem.tryAdd(e);
 		for (UpdateSystem system : systems) {
+			system.tryAdd(e);
+		}
+
+		for (UpdateSystem system : editingSystems) {
 			system.tryAdd(e);
 		}
 
@@ -715,11 +724,17 @@ public class CoreEngine extends JPanel {
 	 * @param componentName Name of the component to remove
 	 */
 	public void removeComponent(Entity entity, String componentName) {
-		entity.remove(componentName);
-		for (UpdateSystem system : systems) {
-			system.notifyRemovedComponent(entity, componentName);
+		if (entity.remove(componentName)) {
+			for (UpdateSystem system : systems) {
+				system.notifyRemovedComponent(entity, componentName);
+			}
+			renderSystem.notifyRemovedComponent(entity, componentName);
+
+			for (UpdateSystem system : editingSystems) {
+				system.notifyRemovedComponent(entity, componentName);
+			}
+			editingRenderSystem.notifyRemovedComponent(entity, componentName);
 		}
-		renderSystem.notifyRemovedComponent(entity, componentName);
 	}
 
 	/**
@@ -745,6 +760,11 @@ public class CoreEngine extends JPanel {
 			system.notifyNewComponent(entity, componentName);
 		}
 		renderSystem.notifyNewComponent(entity, componentName);
+
+		for (UpdateSystem system : editingSystems) {
+			system.notifyNewComponent(entity, componentName);
+		}
+		editingRenderSystem.notifyNewComponent(entity, componentName);
 	}
 
 	/**
@@ -816,7 +836,7 @@ public class CoreEngine extends JPanel {
 
 		return new Point2D.Double(x, y);
 	}
-	
+
 	/**
 	 * Convert a vector in pixels (panel units) to the game (UI) unit
 	 * 
@@ -835,7 +855,7 @@ public class CoreEngine extends JPanel {
 
 		return new Point2D.Double(dx, dy);
 	}
-	
+
 	/**
 	 * Convert a vector in pixels (panel units) to the game world unit
 	 * 
