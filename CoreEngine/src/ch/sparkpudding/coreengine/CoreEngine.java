@@ -25,6 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.luaj.vm2.LuaError;
 import org.xml.sax.SAXException;
 
+import ch.sparkpudding.coreengine.TaskScheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
@@ -34,7 +35,6 @@ import ch.sparkpudding.coreengine.filereader.LelReader;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
 import ch.sparkpudding.coreengine.utils.Collision;
 import ch.sparkpudding.coreengine.utils.Drawing;
-import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
  * Class keeping track of all the elements of the ECS, and responsible of
@@ -75,8 +75,7 @@ public class CoreEngine extends JPanel {
 	private int fpsCount;
 	private int fps;
 
-	private List<Entity> entitiesToDeleteAfterUpdate;
-	private List<Pair<Entity, String>> componentsToRemoveAfterUpdate;
+	private TaskScheduler taskScheduler;
 
 	private LuaError luaError;
 
@@ -131,8 +130,7 @@ public class CoreEngine extends JPanel {
 		this.pause = false;
 		this.editingPause = false;
 
-		this.entitiesToDeleteAfterUpdate = new ArrayList<Entity>();
-		this.componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
+		this.taskScheduler = new TaskScheduler();
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
@@ -360,6 +358,8 @@ public class CoreEngine extends JPanel {
 	 * Runs all systems once
 	 */
 	private void update() {
+		taskScheduler.trigger(Trigger.BEFORE_UPDATE);
+
 		currentScene.getCamera().update();
 
 		// Only update editing systems when the game is paused
@@ -375,17 +375,7 @@ public class CoreEngine extends JPanel {
 			}
 		}
 
-		for (Pair<Entity, String> pair : componentsToRemoveAfterUpdate) {
-			removeComponent(pair.first(), pair.second());
-		}
-		
-		componentsToRemoveAfterUpdate.clear();
-
-		for (Entity entity : entitiesToDeleteAfterUpdate) {
-			deleteEntity(entity);
-		}
-		
-		entitiesToDeleteAfterUpdate.clear();
+		taskScheduler.trigger(Trigger.AFTER_UPDATE);
 	}
 
 	/**
@@ -398,12 +388,12 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Pauses all systems indescriminately
 	 */
-	public void togglePauseAll() {
+	public void toggleEditingPause() {
 		editingPause = !editingPause;
 	}
 
 	/**
-	 * Change the pauseAll state
+	 * Change the editingPause state
 	 * 
 	 * @param pause
 	 */
@@ -465,10 +455,20 @@ public class CoreEngine extends JPanel {
 	 * @param pause If the game need to be paused after the reset
 	 */
 	public void scheduleResetCurrentScene(boolean pause) {
+		// TODO : check if necessary
 		if (pause) {
 			setEditingPause(true);
 		}
 		sceneReloadScheduled = true;
+	}
+
+	/**
+	 * Get the task scheduler
+	 * 
+	 * @return taskScheduler
+	 */
+	public TaskScheduler getTaskScheduler() {
+		return taskScheduler;
 	}
 
 	/**
@@ -682,13 +682,17 @@ public class CoreEngine extends JPanel {
 	 */
 	public void addEntity(Entity e) {
 		renderSystem.tryAdd(e);
-		editingRenderSystem.tryAdd(e);
 		for (UpdateSystem system : systems) {
 			system.tryAdd(e);
 		}
 
-		for (UpdateSystem system : editingSystems) {
-			system.tryAdd(e);
+		if (editingRenderSystem != null) {
+			editingRenderSystem.tryAdd(e);
+		}
+		if (editingSystems != null) {
+			for (UpdateSystem system : editingSystems) {
+				system.tryAdd(e);
+			}
 		}
 
 		getCurrentScene().add(e);
@@ -714,6 +718,15 @@ public class CoreEngine extends JPanel {
 		}
 		renderSystem.tryRemove(entity);
 		currentScene.remove(entity);
+
+		if (editingSystems != null) {
+			for (UpdateSystem system : editingSystems) {
+				system.tryRemove(entity);
+			}
+		}
+		if (editingRenderSystem != null) {
+			editingRenderSystem.tryRemove(entity);
+		}
 	}
 
 	/**
@@ -730,22 +743,15 @@ public class CoreEngine extends JPanel {
 			}
 			renderSystem.notifyRemovedComponent(entity, componentName);
 
-			for (UpdateSystem system : editingSystems) {
-				system.notifyRemovedComponent(entity, componentName);
+			if (editingSystems != null) {
+				for (UpdateSystem system : editingSystems) {
+					system.notifyRemovedComponent(entity, componentName);
+				}
 			}
-			editingRenderSystem.notifyRemovedComponent(entity, componentName);
+			if (editingRenderSystem != null) {
+				editingRenderSystem.notifyRemovedComponent(entity, componentName);
+			}
 		}
-	}
-
-	/**
-	 * Adds the given entity to have the given component removed from it after the
-	 * update
-	 * 
-	 * @param entity        Entity to work on
-	 * @param componentName Name of the component to remove
-	 */
-	public void removeComponentAfterUpdate(Entity entity, String componentName) {
-		componentsToRemoveAfterUpdate.add(new Pair<Entity, String>(entity, componentName));
 	}
 
 	/**
@@ -761,19 +767,14 @@ public class CoreEngine extends JPanel {
 		}
 		renderSystem.notifyNewComponent(entity, componentName);
 
-		for (UpdateSystem system : editingSystems) {
-			system.notifyNewComponent(entity, componentName);
+		if (editingSystems != null) {
+			for (UpdateSystem system : editingSystems) {
+				system.notifyNewComponent(entity, componentName);
+			}
 		}
-		editingRenderSystem.notifyNewComponent(entity, componentName);
-	}
-
-	/**
-	 * Adds the given entity to the list of deletable entities
-	 * 
-	 * @param entity
-	 */
-	public void deleteEntityAfterUpdate(Entity entity) {
-		entitiesToDeleteAfterUpdate.add(entity);
+		if (editingRenderSystem != null) {
+			editingRenderSystem.notifyNewComponent(entity, componentName);
+		}
 	}
 
 	/**
