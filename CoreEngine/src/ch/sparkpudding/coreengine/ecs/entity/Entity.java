@@ -161,7 +161,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * Adds a component from the templates to the entity. This method is intended to
 	 * be called by the Lua systems, and as such needs to update the Lua entity
 	 * 
-	 * @param componentName
+	 * @param componentName the name of the component
 	 * @return true if the component was added
 	 */
 	public boolean add(String componentName) {

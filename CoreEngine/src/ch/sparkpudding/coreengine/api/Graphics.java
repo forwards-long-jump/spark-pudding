@@ -104,11 +104,13 @@ public class Graphics {
 	/**
 	 * Draw a moving line for selections
 	 * 
-	 * @param width
-	 * @param phase
+	 * @param width   of the line
+	 * @param scacing between lines
+	 * @param phase   line spacing offset
 	 */
 	public void setAnimatedDashedLine(float width, float spacing, float phase) {
-		Stroke dashed = new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { spacing }, phase);
+		Stroke dashed = new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { spacing },
+				phase);
 		g2d.setStroke(dashed);
 	}
 
