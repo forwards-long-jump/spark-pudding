@@ -2,20 +2,20 @@ function getRequiredComponents()
   return {"position"}
 end
 
-local scaling = 1 -- Do not do stuff like that in game systems
-local sceneX = 0
+local sceneX = 0  -- Do not do stuff like that in game systems
 local sceneY = 0
 local firstMousePressedTick = true
 
 function update()
+  local scaling = game.camera:getScaling()
   local speed = 20
   local dx = 0
   local dy = 0
   -- TODO: Reset camera position / scaling / move to selected entity / etc...
   game.camera:setMode("NO_FOLLOW")
 
-  -- Handle moving camera with mid click
-  if game.input:isMouseButtonDown(2) then
+  -- Handle moving camera with left click
+  if game.input:isMouseButtonDown(3) then
     if firstMousePressedTick then
       firstMousePressedTick = false
       sceneX = game.camera:getX() / game.camera:getScaling()
@@ -33,6 +33,7 @@ function update()
     game.camera:setSmoothScaleSpeedCoeff(0.5)
     game.camera:setScalingPoint(game.input:getUIMouseX(), game.input:getUIMouseY())
     scaling = scaling * (1 - game.input:getMouseWheelRotation() * 0.15)
+    game.camera:setTargetScaling(scaling)
   end
 
   -- Handle moving with keys
@@ -63,7 +64,6 @@ function update()
     game.camera:setMode("NO_FOLLOW")
   end
 
-  game.camera:setTargetScaling(scaling)
 
   --[[
   if game.input:isMouseButtonDown(2) then

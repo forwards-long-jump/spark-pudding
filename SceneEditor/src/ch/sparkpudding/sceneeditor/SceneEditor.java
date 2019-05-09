@@ -1,6 +1,7 @@
 package ch.sparkpudding.sceneeditor;
 
 import ch.sparkpudding.coreengine.Camera;
+import ch.sparkpudding.coreengine.Camera.Mode;
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 
@@ -63,24 +64,17 @@ public class SceneEditor {
 				@Override
 				public void run() {
 					SceneEditor.coreEngine.setEditingPause(true);
-					gameCamera = SceneEditor.coreEngine.getCamera();
-					SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+					swapToSceneEditorCamera();
 				}
 			});
-			
-			
-			// TODO: Use this below for a smoother effect
-			// camera.setScaling(gameCamera.getScaling());
-			// camera.setPosition(gameCamera.getPosition().getX(),
-			// gameCamera.getPosition().getY());
-			
+
 			break;
 		case PLAY:
 			coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
 				@Override
 				public void run() {
 					SceneEditor.coreEngine.setEditingPause(false);
-					SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
+					swapToGameCamera();
 				}
 			});
 			break;
@@ -90,16 +84,44 @@ public class SceneEditor {
 				public void run() {
 					SceneEditor.coreEngine.resetCurrentScene();
 					SceneEditor.coreEngine.setEditingPause(true);
-					gameCamera = SceneEditor.coreEngine.getCamera();
-					SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+					swapToSceneEditorCamera();
 				}
 			});
-			
+
 			break;
 		default:
 			break;
 
 		}
 		frameSceneEditor.getPanelSidebarLeft().notifyStateChange(state);
+	}
+
+	/**
+	 * Swap game camera to use the one from the editor
+	 */
+	private static void swapToSceneEditorCamera() {
+		gameCamera = SceneEditor.coreEngine.getCamera();
+
+		// SMOOOOTH MC GROOOVE
+		camera.setScaling(gameCamera.getScaling());
+		camera.setTargetScaling(gameCamera.getScaling() * 0.9f);
+		camera.setSmoothScaleSpeedCoeff(0.1f);
+		camera.setScalingPoint(gameCamera.getScalingPoint());
+		camera.setPosition(gameCamera.getPosition().getX(), gameCamera.getPosition().getY());
+		camera.setTargetToPosition();
+		
+		SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+	}
+	
+	/**
+	 * Swap editor camera to use the one from the game
+	 */
+	private static void swapToGameCamera() {
+		// We allow ourselves to touch the player camera if it's set to reset itself
+		if(gameCamera.getTranslateMode() != Mode.INSTANT || gameCamera.getTranslateMode() != Mode.NO_FOLLOW) {
+			gameCamera.setPosition(camera.getPosition().getX(), camera.getPosition().getY());
+			gameCamera.setScaling(camera.getScaling());
+		}
+		SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
 	}
 }
