@@ -3,6 +3,7 @@ package ch.sparkpudding.coreengine.api;
 import java.awt.geom.Point2D;
 
 import ch.sparkpudding.coreengine.Lel;
+import ch.sparkpudding.coreengine.utils.Collision;
 
 /**
  * API that wraps the Input class in order to only give access to input
@@ -55,12 +56,13 @@ public class Input {
 	public boolean isMouseClicked() {
 		return input.isMouseClicked();
 	}
-	
+
 	/**
-	 * Returns the number of notches (and partial notches) clicked during the wheel move
+	 * Returns the number of notches (and partial notches) clicked during the wheel
+	 * move
 	 * 
 	 * A negative number means the wheel rolled up (away from the user)
-	 *  	
+	 * 
 	 * @return number of notches clicked
 	 */
 	public double getMouseWheelRotation() {
@@ -84,7 +86,7 @@ public class Input {
 	public Point2D getMousePosition() {
 		return Lel.coreEngine.panelPositionToWorld(input.getMousePosition());
 	}
-	
+
 	/**
 	 * Return the mouse speed relative to the ui
 	 * 
@@ -93,7 +95,7 @@ public class Input {
 	public Point2D getUIMouseSpeed() {
 		return Lel.coreEngine.panelVectorToGame(input.getMouseSpeed());
 	}
-	
+
 	/**
 	 * Return the mouse speed relative to the world
 	 * 
@@ -138,7 +140,7 @@ public class Input {
 	public double getMouseY() {
 		return getMousePosition().getY();
 	}
-	
+
 	/**
 	 * Return the diff of the last two X mouse position in ui coordinates
 	 * 
@@ -174,7 +176,7 @@ public class Input {
 	public double getMouseDY() {
 		return getMouseSpeed().getY();
 	}
-	
+
 	/**
 	 * Return the X of the mouse position when it was clicked in world coordinates
 	 * 
@@ -183,7 +185,7 @@ public class Input {
 	public double getMouseClickedX() {
 		return Lel.coreEngine.panelPositionToWorld(input.getMouseClickedPosition()).getX();
 	}
-	
+
 	/**
 	 * Return the Y of the mouse position when it was clicked in world coordinates
 	 * 
@@ -191,5 +193,19 @@ public class Input {
 	 */
 	public double getMouseClickedY() {
 		return Lel.coreEngine.panelPositionToWorld(input.getMouseClickedPosition()).getY();
+	}
+
+	/**
+	 * Return true if the mouse is over the specified rectangle in world coordinates
+	 * 
+	 * @param x of the rectangle
+	 * @param y of the rectangle
+	 * @param w of the rectangle
+	 * @param h of the rectangle
+	 * @return
+	 */
+	public boolean isMouseInRectangle(double x, double y, double w, double h) {
+		Point2D mouseLocation = Lel.coreEngine.panelPositionToWorld(input.getMousePosition());
+		return Collision.intersectRect(mouseLocation.getX(), mouseLocation.getY(), x, y, w, h);
 	}
 }
