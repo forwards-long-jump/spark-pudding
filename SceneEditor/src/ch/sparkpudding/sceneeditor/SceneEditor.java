@@ -1,6 +1,9 @@
 package ch.sparkpudding.sceneeditor;
 
+import java.util.ArrayList;
+import java.util.List;
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
 /**
  * The heart of the SceneEditor, emerged after a 40 min fight
@@ -16,6 +19,7 @@ public class SceneEditor {
 	public static FrameSceneEditor frameSceneEditor;
 	public static CoreEngine coreEngine;
 
+	private static List<GameStateEventListener> eventListeners;
 	private static EDITOR_STATE gameState;
 
 	static {
@@ -27,7 +31,7 @@ public class SceneEditor {
 			e.printStackTrace();
 		}
 
-		coreEngine.togglePauseAll();
+		eventListeners = new ArrayList<GameStateEventListener>();
 	}
 
 	/**
@@ -58,6 +62,40 @@ public class SceneEditor {
 			break;
 
 		}
-		frameSceneEditor.getPanelSidebarLeft().notifyStateChange(state);
+		fireGameStateEvent();
+	}
+	/**
+	 * Add a listener for the event of the state of the SceneEditor
+	 * 
+	 * @param evtListener the listener
+	 */
+	public static void addGameStateEventListener(GameStateEventListener evtListener) {
+		eventListeners.add(evtListener);
+	}
+
+	/**
+	 * Remove a listener for the event of the state of the SceneEditor
+	 * 
+	 * @param evtListener the listener to remove
+	 * @return {@code true} if the event exist
+	 */
+	public static boolean removeGameStateEventListener(GameStateEventListener evtListener) {
+		return eventListeners.remove(evtListener);
+	}
+
+	/**
+	 * Remove all the event of the SceneEditor
+	 */
+	public static void removeAllGameStateEventListener() {
+		eventListeners.clear();
+	}
+
+	/**
+	 * Allow to fire the gameState event of the listeners
+	 */
+	private static void fireGameStateEvent() {
+		for (GameStateEventListener gameStateEventListener : eventListeners) {
+			gameStateEventListener.gameStateEvent(gameState);
+		}
 	}
 }
