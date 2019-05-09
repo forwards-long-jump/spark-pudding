@@ -75,7 +75,7 @@ public class CoreEngine extends JPanel {
 	private int fpsCount;
 	private int fps;
 
-	private List<Entity> entitesToDeleteAfterUpdate;
+	private List<Entity> entitiesToDeleteAfterUpdate;
 	private List<Pair<Entity, String>> componentsToRemoveAfterUpdate;
 
 	private LuaError luaError;
@@ -131,7 +131,7 @@ public class CoreEngine extends JPanel {
 		this.pause = false;
 		this.editingPause = false;
 
-		this.entitesToDeleteAfterUpdate = new ArrayList<Entity>();
+		this.entitiesToDeleteAfterUpdate = new ArrayList<Entity>();
 		this.componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
 
 		this.renderSize = new Dimension(1280, 720);
@@ -381,11 +381,11 @@ public class CoreEngine extends JPanel {
 		
 		componentsToRemoveAfterUpdate.clear();
 
-		for (Entity entity : entitesToDeleteAfterUpdate) {
+		for (Entity entity : entitiesToDeleteAfterUpdate) {
 			deleteEntity(entity);
 		}
 		
-		entitesToDeleteAfterUpdate.clear();
+		entitiesToDeleteAfterUpdate.clear();
 	}
 
 	/**
@@ -773,7 +773,7 @@ public class CoreEngine extends JPanel {
 	 * @param entity
 	 */
 	public void deleteEntityAfterUpdate(Entity entity) {
-		entitesToDeleteAfterUpdate.add(entity);
+		entitiesToDeleteAfterUpdate.add(entity);
 	}
 
 	/**
