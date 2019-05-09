@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Scheduler {
 	public enum Trigger {
-		BEFORE_UPDATE, AFTER_UPDATE
+		BEFORE_UPDATE, AFTER_UPDATE, GAME_LOOP_START;
 	};
 
 	private Map<Trigger, List<Runnable>> tasks;
@@ -38,7 +38,7 @@ public class Scheduler {
 	 * 
 	 * @param trigger Trigger
 	 */
-	public void trigger(Trigger trigger) {
+	public synchronized void trigger(Trigger trigger) {
 		for (Runnable task : tasks.get(trigger)) {
 			task.run();
 		}
@@ -55,7 +55,7 @@ public class Scheduler {
 	 * @param trigger  trigger that will run the task
 	 * @param runnable task
 	 */
-	public void schedule(Trigger trigger, Runnable runnable) {
+	public synchronized void schedule(Trigger trigger, Runnable runnable) {
 		tasks.get(trigger).add(runnable);
 	}
 
