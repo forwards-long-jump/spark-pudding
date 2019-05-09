@@ -50,9 +50,9 @@ public class SceneEditor {
 		seScenes = new HashMap<String, SEScene>();
 		callbackSyncListEntity = createSyncListEntity();
 
-		coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
 		camera = new Camera();
 		gameCamera = coreEngine.getCamera();
+		coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
 	}
 
 	/**
