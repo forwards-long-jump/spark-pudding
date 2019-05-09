@@ -35,6 +35,7 @@ public class PanelEntity extends JPanel {
 	public PanelEntity() {
 		init();
 		setupLayout();
+		addListener();
 	}
 
 	/**
@@ -60,6 +61,16 @@ public class PanelEntity extends JPanel {
 		resetBorderTitle();
 	}
 
+	private void addListener() {
+		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
+
+			@Override
+			public void gameStateEvent(EDITOR_STATE state) {
+				resetEnabledPane();
+			}
+		});
+	}
+
 	/**
 	 * Reset the title of this panel with the name of the entity represented
 	 */
@@ -68,6 +79,23 @@ public class PanelEntity extends JPanel {
 			setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getDefaultEntity().getName()));
 		} else {
 			setBorder(BorderFactory.createTitledBorder(TITLE + " — null"));
+		}
+	}
+
+	/**
+	 * Allow to set the good pane in regards of the gameState
+	 */
+	private void resetEnabledPane() {
+		switch (SceneEditor.getGameState()) {
+		case STOP:
+			initialPanelComponent.setEnabled(true);
+			livePanelComponent.setEnabled(false);
+			break;
+		default:
+			initialPanelComponent.setEnabled(false);
+			livePanelComponent.setEnabled(true);
+			break;
+
 		}
 	}
 
@@ -81,5 +109,15 @@ public class PanelEntity extends JPanel {
 		initialPanelComponent.setEntity(currentEntity.getDefaultEntity());
 		livePanelComponent.setEntity(currentEntity.getLiveEntity());
 		resetBorderTitle();
+		resetEnabledPane();
+	}
+
+	/**
+	 * Remove the component of the different entity panel
+	 */
+	public void removeEntity() {
+		currentEntity = null;
+		initialPanelComponent.removeAll();
+		livePanelComponent.removeAll();
 	}
 }
