@@ -19,13 +19,22 @@ public class SEScene {
 	private Scene liveScene;
 	private List<SEEntity> seEntities;
 
+	/**
+	 * Create a SEScene and populate the list of entities (default and live) as
+	 * SEEntity
+	 * 
+	 * @param liveScene the Scene represented by this SEScene
+	 */
 	public SEScene(Scene liveScene) {
 		this.liveScene = liveScene;
 		this.seEntities = new ArrayList<SEEntity>();
-		
+
 		populateSEEntities();
 	}
-	
+
+	/**
+	 * Populate the list of entities (default and live) as SEEntity
+	 */
 	public void populateSEEntities() {
 		List<Entity> defaultEntities = liveScene.getDefaultEntities();
 		List<Entity> liveEntities = liveScene.getEntities();
@@ -33,14 +42,22 @@ public class SEScene {
 			seEntities.add(new SEEntity(defaultEntities.get(i), liveEntities.get(i)));
 		}
 	}
-	
-	public List<SEEntity> getSEEntities()
-	{
+
+	/**
+	 * Get all the seEntities contains in a SEScene
+	 * 
+	 * @return all the SEEntities
+	 */
+	public List<SEEntity> getSEEntities() {
 		return this.seEntities;
 	}
-	
-	public Scene getLiveScene()
-	{
+
+	/**
+	 * Get the live Scene linked to this SEScene
+	 * 
+	 * @return the live Scene
+	 */
+	public Scene getLiveScene() {
 		return this.liveScene;
 	}
 

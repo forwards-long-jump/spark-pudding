@@ -100,6 +100,12 @@ public class FieldGenerator extends JComponent {
 		return input;
 	}
 
+	/**
+	 * Create the listener for the field based on Integer
+	 * 
+	 * @param input the input which contains the new value
+	 * @param field the field represented by this input
+	 */
 	private void createIntegerListener(JTextField input, Field field) {
 		input.addActionListener(new ActionListener() {
 			@Override

@@ -7,9 +7,11 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 /**
+ * Represent the MenuFile of the SceneEditor
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ *         Creation Date : 9 mai 2019
+ *
  */
 @SuppressWarnings("serial")
 public class MenuFile extends JMenu {
@@ -18,6 +20,9 @@ public class MenuFile extends JMenu {
 	private JMenuItem itemSave;
 	private JMenuItem itemExit;
 
+	/**
+	 * ctor
+	 */
 	public MenuFile() {
 		init();
 		addAction();

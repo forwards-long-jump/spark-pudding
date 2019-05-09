@@ -46,6 +46,24 @@ public class PanelComponent extends JPanel {
 	}
 
 	/**
+	 * Get all the component contained in a container recursively source :
+	 * https://stackoverflow.com/questions/19324918/how-to-disable-all-components-in-a-jpanel
+	 * 
+	 * @param container the container where we need to find all the child
+	 * @return the complete list of the children
+	 */
+	private List<Component> getAllComponents(final Container container) {
+		Component[] comps = container.getComponents();
+		List<Component> compList = new ArrayList<Component>();
+		for (Component comp : comps) {
+			compList.add(comp);
+			if (comp instanceof Container)
+				compList.addAll(getAllComponents((Container) comp));
+		}
+		return compList;
+	}
+
+	/**
 	 * Set the games entity represented by this panel
 	 * 
 	 * @param entity The entity represented by this panel
@@ -57,22 +75,14 @@ public class PanelComponent extends JPanel {
 		revalidate();
 	}
 
+	/**
+	 * Override the default behavior to disable recursively all the components
+	 */
 	@Override
 	public void setEnabled(boolean enabled) {
 		List<Component> comps = getAllComponents(this);
 		for (Component comp : comps) {
-		       comp.setEnabled(enabled);
+			comp.setEnabled(enabled);
 		}
-	}
-	
-	public List<Component> getAllComponents(final Container c) {
-		Component[] comps = c.getComponents();
-		List<Component> compList = new ArrayList<Component>();
-		for (Component comp : comps) {
-			compList.add(comp);
-			if (comp instanceof Container)
-				compList.addAll(getAllComponents((Container) comp));
-		}
-		return compList;
 	}
 }

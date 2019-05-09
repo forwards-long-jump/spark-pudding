@@ -61,6 +61,9 @@ public class PanelEntity extends JPanel {
 		resetBorderTitle();
 	}
 
+	/**
+	 * Add the different listener for each element of the panel
+	 */
 	private void addListener() {
 		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
 
