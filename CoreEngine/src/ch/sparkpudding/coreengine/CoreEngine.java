@@ -682,14 +682,14 @@ public class CoreEngine extends JPanel {
 	 */
 	public void addEntity(Entity e) {
 		renderSystem.tryAdd(e);
-		editingRenderSystem.tryAdd(e);
+		//editingRenderSystem.tryAdd(e);
 		for (UpdateSystem system : systems) {
 			system.tryAdd(e);
 		}
 
-		for (UpdateSystem system : editingSystems) {
-			system.tryAdd(e);
-		}
+//		for (UpdateSystem system : editingSystems) {
+//			system.tryAdd(e);
+//		}
 
 		getCurrentScene().add(e);
 	}
@@ -730,10 +730,10 @@ public class CoreEngine extends JPanel {
 			}
 			renderSystem.notifyRemovedComponent(entity, componentName);
 
-			for (UpdateSystem system : editingSystems) {
-				system.notifyRemovedComponent(entity, componentName);
-			}
-			editingRenderSystem.notifyRemovedComponent(entity, componentName);
+//			for (UpdateSystem system : editingSystems) {
+//				system.notifyRemovedComponent(entity, componentName);
+//			}
+//			editingRenderSystem.notifyRemovedComponent(entity, componentName);
 		}
 	}
 
@@ -761,10 +761,10 @@ public class CoreEngine extends JPanel {
 		}
 		renderSystem.notifyNewComponent(entity, componentName);
 
-		for (UpdateSystem system : editingSystems) {
-			system.notifyNewComponent(entity, componentName);
-		}
-		editingRenderSystem.notifyNewComponent(entity, componentName);
+//		for (UpdateSystem system : editingSystems) {
+//			system.notifyNewComponent(entity, componentName);
+//		}
+//		editingRenderSystem.notifyNewComponent(entity, componentName);
 	}
 
 	/**

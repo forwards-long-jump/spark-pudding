@@ -1,8 +1,7 @@
 package ch.sparkpudding.coreengine.api;
 
+import java.applet.AudioClip;
 import java.awt.Image;
-
-import javax.sound.sampled.Clip;
 
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
@@ -47,7 +46,7 @@ public class Resource {
 	 * @param name Name of the sound
 	 * @return Clip, or null when nothing is found
 	 */
-	public Clip getSound(String name) {
+	public AudioClip getSound(String name) {
 		return resourceLocator.getSound(name);
 	}
 
@@ -57,7 +56,7 @@ public class Resource {
 	 * @param name Name of the music
 	 * @return Clip, or null when nothing is found
 	 */
-	public Clip getMusic(String name) {
+	public AudioClip getMusic(String name) {
 		return resourceLocator.getMusic(name);
 	}
 }

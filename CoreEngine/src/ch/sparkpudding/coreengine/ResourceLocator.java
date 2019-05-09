@@ -10,9 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -80,7 +77,7 @@ public class ResourceLocator {
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-			AudioClip audioClip = Applet.newAudioClip(new URL(file.getAbsolutePath()));
+			AudioClip audioClip = Applet.newAudioClip(file.toURI().toURL());
 			sounds.put(file.getName(), audioClip);
 		}
 	}
@@ -98,8 +95,7 @@ public class ResourceLocator {
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-
-			AudioClip audioClip = Applet.newAudioClip(new URL(file.getAbsolutePath()));
+			AudioClip audioClip = Applet.newAudioClip(file.toURI().toURL());
 			sounds.put(file.getName(), audioClip);
 		}
 	}
