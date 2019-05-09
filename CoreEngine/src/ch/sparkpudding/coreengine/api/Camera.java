@@ -56,13 +56,13 @@ public class Camera {
 	}
 
 	/**
-	 * Teleport the camera to the specified position, cancel all momentum
+	 * Teleport the camera to the specified world position, cancel all momentum
 	 *
 	 * @param x
 	 * @param y
 	 */
 	public void setPosition(float x, float y) {
-		Lel.coreEngine.getCamera().setPosition(x, y);
+		Lel.coreEngine.getCamera().setWorldPosition(x, y);
 	}
 
 	/**

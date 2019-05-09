@@ -231,15 +231,25 @@ public class Camera {
 	}
 
 	/**
-	 * Teleport the camera to the specified position, cancel all momentum
+	 * Teleport the camera to the specified world position, cancel all momentum
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void setWorldPosition(double x, double y) {
+		position.setLocation(x * scaling, y * scaling);
+		targetPosition.setLocation(position.getX(), position.getY());
+		resetForces();
+	}
+
+	/**
+	 * Teleport the camera to the specified position
 	 * 
 	 * @param x
 	 * @param y
 	 */
 	public void setPosition(double x, double y) {
-		position.setLocation(x * scaling, y * scaling);
-		targetPosition.setLocation(position.getX(), position.getY());
-		resetForces();
+		position.setLocation(x, y);
 	}
 
 	/**
@@ -444,9 +454,28 @@ public class Camera {
 
 	/**
 	 * Get target scaling
+	 * 
 	 * @return target scaling
 	 */
 	public float getTargetScaling() {
 		return targetScaling;
+	}
+
+	/**
+	 * Get scaling point
+	 * 
+	 * @return scaling point
+	 */
+	public Point2D getScalingPoint() {
+		return scalingPoint;
+	}
+
+	/**
+	 * Return current translate mode
+	 * 
+	 * @return current translate mode
+	 */
+	public Mode getTranslateMode() {
+		return translateMode;
 	}
 }
