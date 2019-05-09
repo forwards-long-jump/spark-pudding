@@ -24,7 +24,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	}
 
 	private String name;
-	private String template;
+	private String templateName;
 	private Map<String, Field> fields;
 
 	/**
@@ -35,7 +35,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 */
 	public Component(String name, String template) {
 		this.name = name;
-		this.template = template;
+		this.templateName = template;
 		this.fields = new HashMap<String, Field>();
 	}
 
@@ -48,7 +48,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	public Component(String name, Map<String, Field> fields) {
 		this.name = name;
 		this.fields = fields;
-		this.template = null;
+		this.templateName = null;
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 */
 	public Component(Component component) {
 		this.name = component.name;
-		this.template = component.template;
+		this.templateName = component.templateName;
 		this.fields = new HashMap<String, Field>();
 		for (Field field : component.fields.values()) {
 			addField(new Field(field));
@@ -76,7 +76,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	public Component(Document document) {
 		this.fields = new HashMap<String, Field>();
 		this.name = document.getDocumentElement().getAttribute("name");
-		this.template = null;
+		this.templateName = null;
 
 		NodeList fields = document.getDocumentElement().getChildNodes();
 		for (int i = 0; i < fields.getLength(); i++) {
@@ -97,7 +97,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 */
 	public Component(Element element) {
 		this(templates.get(element.getAttribute("template")));
-		this.template = element.getAttribute("template");
+		this.templateName = element.getAttribute("template");
 		NodeList fields = element.getChildNodes();
 		for (int i = 0; i < fields.getLength(); i++) {
 			Node node = fields.item(i);
@@ -162,7 +162,11 @@ public class Component implements Iterable<Entry<String, Field>> {
 		templates.put(template.getName(), template);
 	}
 
-	public String getTemplate() {
-		return template;
+	/**
+	 * Return the template  name of this component
+	 * @return
+	 */
+	public String getTemplateName() {
+		return templateName;
 	}
 }
