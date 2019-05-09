@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import ch.sparkpudding.sceneeditor.listener.HistoryEventListener;
+
 /**
  * This class is a singleton who handle the differents actions to allow basic
  * undo and redo management
@@ -109,6 +111,23 @@ public class ActionsHistory {
 	 */
 	public void addHistoryEventListener(HistoryEventListener evtListener) {
 		eventListeners.add(evtListener);
+	}
+
+	/**
+	 * Remove a listener for the event of the History
+	 * 
+	 * @param evtListener the listener to remove
+	 * @return {@code true} if the event exist
+	 */
+	public boolean removeHistoryEventListener(HistoryEventListener evtListener) {
+		return eventListeners.remove(evtListener);
+	}
+
+	/**
+	 * Remove all the event of the History
+	 */
+	public void removeAllHistoryEventListener() {
+		eventListeners.clear();
 	}
 
 	/**
