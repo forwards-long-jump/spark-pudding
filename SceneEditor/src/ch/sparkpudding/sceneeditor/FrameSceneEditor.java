@@ -42,6 +42,8 @@ public class FrameSceneEditor extends JFrame {
 		setupLayout();
 		setupFrame();
 		addListener();
+		
+		SceneEditor.firstPopulateNewProject();
 	}
 
 	/**

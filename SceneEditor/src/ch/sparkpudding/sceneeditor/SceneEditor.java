@@ -52,7 +52,6 @@ public class SceneEditor {
 
 		camera = new Camera();
 		gameCamera = coreEngine.getCamera();
-		coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
 	}
 
 	/**
@@ -110,6 +109,13 @@ public class SceneEditor {
 				frameSceneEditor.populateSidebarRight();
 			}
 		};
+	}
+
+	/**
+	 * Workaround to delay the first populating of a new FrameSceneEditor
+	 */
+	public static void firstPopulateNewProject() {
+		coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
 	}
 
 	/**
