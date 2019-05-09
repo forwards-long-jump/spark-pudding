@@ -10,7 +10,7 @@ import ch.sparkpudding.sceneeditor.action.AbstractAction;
 import ch.sparkpudding.sceneeditor.action.ActionRedo;
 import ch.sparkpudding.sceneeditor.action.ActionUndo;
 import ch.sparkpudding.sceneeditor.action.ActionsHistory;
-import ch.sparkpudding.sceneeditor.action.HistoryEventListener;
+import ch.sparkpudding.sceneeditor.listener.HistoryEventListener;
 
 /**
  * 
