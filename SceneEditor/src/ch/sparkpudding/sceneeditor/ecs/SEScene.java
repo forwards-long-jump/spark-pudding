@@ -23,10 +23,10 @@ public class SEScene {
 		this.liveScene = liveScene;
 		this.seEntities = new ArrayList<SEEntity>();
 		
-		populateScene();
+		populateSEEntities();
 	}
 	
-	public void populateScene() {
+	public void populateSEEntities() {
 		List<Entity> defaultEntities = liveScene.getDefaultEntities();
 		List<Entity> liveEntities = liveScene.getEntities();
 		for (int i = 0; i < defaultEntities.size(); i++) {

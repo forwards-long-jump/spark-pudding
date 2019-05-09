@@ -3,45 +3,46 @@ package ch.sparkpudding.sceneeditor.ecs;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
 /**
+ * Allow to track a game entity from the SceneEditor and duplicate it with it
+ * default values
+ * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 15 avr. 2019
  * 
- *         Allow to track a game entity from the SceneEditor and duplicate it
- *         with it default values
- * 
  */
-public class SEEntityLinker {
+public class SEEntity {
 
-	private Entity gameEntity;
-	private Entity editorEntity;
+	private Entity defaultEntity;
+	private Entity liveEntity;
 
 	/**
-	 * Ctor create a SEEntity and it components as SEComponent
+	 * Create a SEEntityLinker and link the two entity
 	 * 
-	 * @param gameEntity the entity link to this SceneEditor Entity
+	 * @param defaultEntity The entity at a start of a scene
+	 * @param liveEntity    The entity live link to the default one
 	 */
-	public SEEntityLinker(Entity gameEntity) {
+	public SEEntity(Entity defaultEntity, Entity liveEntity) {
 
-		this.gameEntity = gameEntity;
-		this.editorEntity = new Entity(gameEntity);
+		this.defaultEntity = defaultEntity;
+		this.liveEntity = liveEntity;
 
 	}
 
 	/**
-	 * Getter for gameEntity
+	 * Getter for defaultEntity
 	 * 
-	 * @return the gameEntity attached to this
+	 * @return The default entity linked to it
 	 */
-	public Entity getGameEntity() {
-		return gameEntity;
+	public Entity getDefaultEntity() {
+		return defaultEntity;
 	}
 
 	/**
-	 * Getter for editorEntity
+	 * Getter for liveEntity
 	 * 
-	 * @return the gameEntity attached to this
+	 * @return The live entity linked to it
 	 */
-	public Entity getEditorEntity() {
-		return editorEntity;
+	public Entity getLiveEntity() {
+		return liveEntity;
 	}
 }
