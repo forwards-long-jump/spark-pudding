@@ -1,5 +1,7 @@
 package ch.sparkpudding.sceneeditor.generator;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.Collection;
 
@@ -11,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.sceneeditor.action.ActionChangeInteger;
 import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
 
 /**
@@ -74,6 +77,7 @@ public class FieldGenerator extends JComponent {
 			integerFormatter.setGroupingUsed(false);
 			input = new JFormattedTextField(integerFormatter);
 			((JFormattedTextField) input).setValue(field.getValue());
+			createIntegerListener((JTextField) input, field);
 			break;
 		case DOUBLE:
 			input = new JFormattedTextField(NumberFormat.getInstance());
@@ -94,5 +98,15 @@ public class FieldGenerator extends JComponent {
 		}
 		labelField.setLabelFor(input);
 		return input;
+	}
+
+	private void createIntegerListener(JTextField input, Field field) {
+		input.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ActionChangeInteger action = new ActionChangeInteger("", field, input);
+				action.actionPerformed(e);
+			}
+		});
 	}
 }
