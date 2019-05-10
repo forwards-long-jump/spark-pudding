@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import ch.sparkpudding.coreengine.ecs.component.Field;
-import ch.sparkpudding.sceneeditor.action.ActionChangeObject;
+import ch.sparkpudding.sceneeditor.action.ActionChangeTextField;
 import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
 
 /**
@@ -110,7 +110,7 @@ public class FieldGenerator extends JComponent {
 		input.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ActionChangeObject action = new ActionChangeObject("", field, input);
+				ActionChangeTextField action = new ActionChangeTextField("", field, input);
 				action.actionPerformed(e);
 			}
 		});
