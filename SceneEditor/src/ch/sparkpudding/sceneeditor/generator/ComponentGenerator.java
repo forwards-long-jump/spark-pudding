@@ -70,7 +70,10 @@ public class ComponentGenerator extends JPanel {
 	private void createComponents() {
 		removeAll();
 		for (Component component : components) {
-			setupComponentsLayout(component);
+			// TODO add check in the CoreEngine
+			if (!component.getName().startsWith("se-")) {
+				setupComponentsLayout(component);
+			}
 		}
 		revalidate();
 	}
@@ -91,7 +94,8 @@ public class ComponentGenerator extends JPanel {
 		titleBar.add(new JButton("Delete"));
 		titleBar.add(new JButton("Detach"));
 		this.contentPanel.add(titleBar);
-		this.contentPanel.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values())));
+		this.contentPanel
+				.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values()), component.getName()));
 		this.contentPanel.add(new JSeparator());
 	}
 }
