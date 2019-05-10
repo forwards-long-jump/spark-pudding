@@ -82,12 +82,12 @@ public class FieldGenerator extends JComponent {
 			NumberFormat integerFormatter = NumberFormat.getIntegerInstance();
 			integerFormatter.setGroupingUsed(false);
 			input = new JFormattedTextField(integerFormatter);
-			((JFormattedTextField) input).setValue(field.getValue());
+			((JFormattedTextField) input).setValue(field.getInt());
 			createTextFieldListener((JTextField) input, field);
 			break;
 		case DOUBLE:
 			input = new JFormattedTextField(NumberFormat.getInstance());
-			((JFormattedTextField) input).setValue(field.getValue());
+			((JFormattedTextField) input).setValue(field.getDouble());
 			createTextFieldListener((JTextField) input, field);
 			break;
 		default: // Permits to avoid double-initialization of input.

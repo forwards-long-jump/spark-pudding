@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import ch.sparkpudding.coreengine.Camera;
+import ch.sparkpudding.coreengine.Camera.Mode;
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
@@ -18,7 +20,7 @@ import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
  *
  */
 public class SceneEditor {
-	public enum EDITOR_STATE {
+	public enum EditorState {
 		PLAY, PAUSE, STOP;
 	}
 
@@ -33,11 +35,9 @@ public class SceneEditor {
 	private static Camera camera;
 	private static Camera gameCamera;
 
-	private static EDITOR_STATE gameState;
+	private static EditorState gameState;
 
 	static {
-		gameState = EDITOR_STATE.STOP;
-
 		try {
 			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(),
 					Main.class.getResource("/leleditor").getPath());
@@ -45,13 +45,18 @@ public class SceneEditor {
 			e.printStackTrace();
 		}
 
+		coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
+			@Override
+			public void run() {
+				setGameState(EditorState.STOP);
+			}
+		});
+
 		eventListeners = new ArrayList<GameStateEventListener>();
 
 		seScenes = new HashMap<String, SEScene>();
-		callbackSyncListEntity = createSyncListEntity();
 
 		camera = new Camera();
-		gameCamera = coreEngine.getCamera();
 	}
 
 	/**
@@ -59,31 +64,51 @@ public class SceneEditor {
 	 *
 	 * @return current editor state
 	 */
-	public static EDITOR_STATE getGameState() {
+	public static EditorState getGameState() {
 		return gameState;
 	}
 
 	/**
 	 * Change editor state
 	 */
-	public static void setGameState(EDITOR_STATE state) {
+	public static void setGameState(EditorState state) {
 		gameState = state;
 		switch (state) {
 		case PAUSE:
-			gameCamera = SceneEditor.coreEngine.getCamera();
-			SceneEditor.coreEngine.setEditingPause(true);
-			// TODO: Use this below for a smoother effect
-			// camera.setScaling(gameCamera.getScaling());
-			// camera.setPosition(gameCamera.getPosition().getX(),
-			// gameCamera.getPosition().getY());
-			SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+				@Override
+				public void run() {
+					if (!SceneEditor.coreEngine.isEditingPause()) {
+						SceneEditor.coreEngine.setEditingPause(true);
+						swapToSceneEditorCamera();
+					}
+				}
+			});
+
 			break;
 		case PLAY:
-			SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
-			SceneEditor.coreEngine.setEditingPause(false);
+			coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
+				@Override
+				public void run() {
+					if (SceneEditor.coreEngine.isEditingPause()) {
+						SceneEditor.coreEngine.setEditingPause(false);
+						swapToGameCamera();
+					}
+				}
+			});
 			break;
 		case STOP:
-			SceneEditor.coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
+			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+				@Override
+				public void run() {
+					SceneEditor.coreEngine.resetCurrentScene();
+					createEntityList();
+					if (!SceneEditor.coreEngine.isEditingPause()) {
+						SceneEditor.coreEngine.setEditingPause(true);
+						swapToSceneEditorCamera();
+					}
+				}
+			});
 			break;
 		default:
 			break;
@@ -97,10 +122,12 @@ public class SceneEditor {
 	 * 
 	 * @return the callback
 	 */
-	private static Runnable createSyncListEntity() {
-		return new Runnable() {
+	public static void createEntityList() {
+		coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+			
 			@Override
 			public void run() {
+				coreEngine.resetCurrentScene();
 				Map<String, Scene> scenes = coreEngine.getScenes();
 				for (Scene scene : scenes.values()) {
 					seScenes.put(scene.getName(), new SEScene(scene));
@@ -108,14 +135,7 @@ public class SceneEditor {
 
 				frameSceneEditor.populateSidebarRight();
 			}
-		};
-	}
-
-	/**
-	 * Workaround to delay the first populating of a new FrameSceneEditor
-	 */
-	public static void firstPopulateNewProject() {
-		coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
+		});
 	}
 
 	/**
@@ -151,5 +171,34 @@ public class SceneEditor {
 		for (GameStateEventListener gameStateEventListener : eventListeners) {
 			gameStateEventListener.gameStateEvent(gameState);
 		}
+	}
+
+	/**
+	 * Swap game camera to use the one from the editor
+	 */
+	private static void swapToSceneEditorCamera() {
+		gameCamera = SceneEditor.coreEngine.getCamera();
+
+		// SMOOOOTH MC GROOOVE
+		camera.setScaling(gameCamera.getScaling());
+		camera.setTargetScaling(gameCamera.getScaling() * 0.9f);
+		camera.setSmoothScaleSpeedCoeff(0.1f);
+		camera.setScalingPoint(gameCamera.getScalingPoint());
+		camera.setPosition(gameCamera.getPosition().getX(), gameCamera.getPosition().getY());
+		camera.setTargetToPosition();
+
+		SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+	}
+
+	/**
+	 * Swap editor camera to use the one from the game
+	 */
+	private static void swapToGameCamera() {
+		// We allow ourselves to touch the player camera if it's set to reset itself
+		if (gameCamera.getTranslateMode() != Mode.INSTANT || gameCamera.getTranslateMode() != Mode.NO_FOLLOW) {
+			gameCamera.setPosition(camera.getPosition().getX(), camera.getPosition().getY());
+			gameCamera.setScaling(camera.getScaling());
+		}
+		SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
 	}
 }

@@ -25,6 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.luaj.vm2.LuaError;
 import org.xml.sax.SAXException;
 
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
@@ -34,7 +35,6 @@ import ch.sparkpudding.coreengine.filereader.LelReader;
 import ch.sparkpudding.coreengine.filereader.XMLParser;
 import ch.sparkpudding.coreengine.utils.Collision;
 import ch.sparkpudding.coreengine.utils.Drawing;
-import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
  * Class keeping track of all the elements of the ECS, and responsible of
@@ -65,11 +65,6 @@ public class CoreEngine extends JPanel {
 	private boolean pause;
 	private boolean editingPause;
 
-	private boolean systemReloadScheduled;
-	private boolean sceneReloadScheduled;
-	
-	private Runnable callbackSceneReload;
-
 	private Dimension renderSize;
 	private Color blackBarColor;
 	private Semaphore renderLock;
@@ -77,8 +72,7 @@ public class CoreEngine extends JPanel {
 	private int fpsCount;
 	private int fps;
 
-	private List<Entity> entitiesToDeleteAfterUpdate;
-	private List<Pair<Entity, String>> componentsToRemoveAfterUpdate;
+	private Scheduler scheduler;
 
 	private LuaError luaError;
 
@@ -133,14 +127,10 @@ public class CoreEngine extends JPanel {
 		this.pause = false;
 		this.editingPause = false;
 
-		this.entitiesToDeleteAfterUpdate = new ArrayList<Entity>();
-		this.componentsToRemoveAfterUpdate = new ArrayList<Pair<Entity, String>>();
+		this.scheduler = new Scheduler();
 
 		this.renderSize = new Dimension(1280, 720);
 		this.blackBarColor = Color.BLACK;
-
-		this.systemReloadScheduled = false;
-		this.sceneReloadScheduled = false;
 
 		this.renderLock = new Semaphore(0);
 
@@ -266,9 +256,7 @@ public class CoreEngine extends JPanel {
 		double lastFpsTime = java.lang.System.currentTimeMillis();
 
 		while (!exit) {
-			handleSystemsReloading();
-			handleSceneReloading();
-
+			scheduler.trigger(Trigger.GAME_LOOP_START);
 			double current = java.lang.System.currentTimeMillis();
 			double elapsed = current - previous;
 
@@ -296,32 +284,6 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * To be called before updating, check if scene should be reloaded
-	 */
-	private void handleSceneReloading() {
-		if (sceneReloadScheduled) {
-			sceneReloadScheduled = false;
-			currentScene.reset();
-			setCurrentScene(currentScene);
-			callbackSceneReload.run();
-		}
-	}
-
-	/**
-	 * To be called before updating, check if systems should be reloaded
-	 */
-	private void handleSystemsReloading() {
-		if (systemReloadScheduled) {
-			systemReloadScheduled = false;
-			if (luaError != null) {
-				luaError = null; // Let's remove the error as reloading systems may fix it
-				editingPause = false;
-			}
-			reloadSystemsFromDisk();
-		}
-	}
-
-	/**
 	 * To be called before upading, handle lua error actions
 	 */
 	private void handleLuaErrors() {
@@ -332,9 +294,8 @@ public class CoreEngine extends JPanel {
 				editingPause = false;
 				luaError = null;
 			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
-				editingPause = false;
-				luaError = null;
 				reloadSystemsFromDisk();
+				editingPause = false;
 			}
 			input.resetAllKeys();
 		}
@@ -343,9 +304,13 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Reload systems from disk, live
 	 */
-	private void reloadSystemsFromDisk() {
+	public void reloadSystemsFromDisk() {
 		if (editingSystems != null) {
 			editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
+		}
+
+		if (luaError != null) {
+			luaError = null; // Let's remove the error as reloading systems may fix it
 		}
 
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
@@ -353,16 +318,11 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Reload system from disk at the start of next update
-	 */
-	public void scheduleSystemReloadFromDisk() {
-		systemReloadScheduled = true;
-	}
-
-	/**
 	 * Runs all systems once
 	 */
 	private void update() {
+		scheduler.trigger(Trigger.BEFORE_UPDATE);
+
 		currentScene.getCamera().update();
 
 		// Only update editing systems when the game is paused
@@ -378,17 +338,7 @@ public class CoreEngine extends JPanel {
 			}
 		}
 
-		for (Pair<Entity, String> pair : componentsToRemoveAfterUpdate) {
-			removeComponent(pair.first(), pair.second());
-		}
-		
-		componentsToRemoveAfterUpdate.clear();
-
-		for (Entity entity : entitiesToDeleteAfterUpdate) {
-			deleteEntity(entity);
-		}
-		
-		entitiesToDeleteAfterUpdate.clear();
+		scheduler.trigger(Trigger.AFTER_UPDATE);
 	}
 
 	/**
@@ -401,12 +351,20 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Pauses all systems indescriminately
 	 */
-	public void togglePauseAll() {
+	public void toggleEditingPause() {
 		editingPause = !editingPause;
 	}
 
 	/**
-	 * Change the pauseAll state
+	 * Return true if paused for editing
+	 * @return true if paused for editing
+	 */
+	public boolean isEditingPause() {
+		return editingPause;
+	}
+	
+	/**
+	 * Change the editingPause state
 	 * 
 	 * @param pause
 	 */
@@ -463,17 +421,20 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Reset the current scene and notify engine
-	 * 
-	 * @param pause If the game need to be paused after the reset
-	 * @param callback 
+	 * Reset the current scene. To call be call before updating
 	 */
-	public void scheduleResetCurrentScene(boolean pause, Runnable callback) {
-		if (pause) {
-			setEditingPause(true);
-		}
-		sceneReloadScheduled = true;
-		callbackSceneReload = callback;
+	public void resetCurrentScene() {
+		currentScene.reset();
+		setCurrentScene(currentScene);
+	}
+
+	/**
+	 * Get the task scheduler
+	 * 
+	 * @return the task scheduler
+	 */
+	public Scheduler getScheduler() {
+		return scheduler;
 	}
 
 	/**
@@ -488,7 +449,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Change current scene to new scene
 	 * 
-	 * @param newScene
+	 * @param newScene to switch to
 	 */
 	public void setCurrentScene(Scene newScene) {
 		this.currentScene = newScene;
@@ -513,7 +474,7 @@ public class CoreEngine extends JPanel {
 	 * Return the translation of the game (the one that keep it centered in the
 	 * middle of black bars)
 	 * 
-	 * @return
+	 * @return Point the translation of the game (the one using black bars)
 	 */
 	private Point getGameTranslation() {
 		double scaleRatio = getScaleRatio();
@@ -528,9 +489,9 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Calculate height
+	 * Calculate scale ratio
 	 * 
-	 * @return
+	 * @return the max w/h or h/w scale ratio
 	 */
 	private double getScaleRatio() {
 		// Calculate screen ratio for width / height
@@ -591,7 +552,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Render an overlay giving help about a lua error that could've occurer
 	 * 
-	 * @param g2d
+	 * @param g2d graphics context
 	 */
 	private void renderLuaError(Graphics2D g2d) {
 		if (luaError != null) {
@@ -656,7 +617,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Getter for camera.
 	 * 
-	 * @return camera
+	 * @return camera attached for current scene
 	 */
 	public Camera getCamera() {
 		return currentScene.getCamera();
@@ -665,7 +626,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Getter for input.
 	 * 
-	 * @return input
+	 * @return input api
 	 */
 	public Input getInput() {
 		return input;
@@ -687,13 +648,17 @@ public class CoreEngine extends JPanel {
 	 */
 	public void addEntity(Entity e) {
 		renderSystem.tryAdd(e);
-		editingRenderSystem.tryAdd(e);
 		for (UpdateSystem system : systems) {
 			system.tryAdd(e);
 		}
 
-		for (UpdateSystem system : editingSystems) {
-			system.tryAdd(e);
+		if (editingRenderSystem != null) {
+			editingRenderSystem.tryAdd(e);
+		}
+		if (editingSystems != null) {
+			for (UpdateSystem system : editingSystems) {
+				system.tryAdd(e);
+			}
 		}
 
 		getCurrentScene().add(e);
@@ -719,6 +684,15 @@ public class CoreEngine extends JPanel {
 		}
 		renderSystem.tryRemove(entity);
 		currentScene.remove(entity);
+
+		if (editingSystems != null) {
+			for (UpdateSystem system : editingSystems) {
+				system.tryRemove(entity);
+			}
+		}
+		if (editingRenderSystem != null) {
+			editingRenderSystem.tryRemove(entity);
+		}
 	}
 
 	/**
@@ -735,22 +709,15 @@ public class CoreEngine extends JPanel {
 			}
 			renderSystem.notifyRemovedComponent(entity, componentName);
 
-			for (UpdateSystem system : editingSystems) {
-				system.notifyRemovedComponent(entity, componentName);
+			if (editingSystems != null) {
+				for (UpdateSystem system : editingSystems) {
+					system.notifyRemovedComponent(entity, componentName);
+				}
 			}
-			editingRenderSystem.notifyRemovedComponent(entity, componentName);
+			if (editingRenderSystem != null) {
+				editingRenderSystem.notifyRemovedComponent(entity, componentName);
+			}
 		}
-	}
-
-	/**
-	 * Adds the given entity to have the given component removed from it after the
-	 * update
-	 * 
-	 * @param entity        Entity to work on
-	 * @param componentName Name of the component to remove
-	 */
-	public void removeComponentAfterUpdate(Entity entity, String componentName) {
-		componentsToRemoveAfterUpdate.add(new Pair<Entity, String>(entity, componentName));
 	}
 
 	/**
@@ -766,19 +733,14 @@ public class CoreEngine extends JPanel {
 		}
 		renderSystem.notifyNewComponent(entity, componentName);
 
-		for (UpdateSystem system : editingSystems) {
-			system.notifyNewComponent(entity, componentName);
+		if (editingSystems != null) {
+			for (UpdateSystem system : editingSystems) {
+				system.notifyNewComponent(entity, componentName);
+			}
 		}
-		editingRenderSystem.notifyNewComponent(entity, componentName);
-	}
-
-	/**
-	 * Adds the given entity to the list of deletable entities
-	 * 
-	 * @param entity
-	 */
-	public void deleteEntityAfterUpdate(Entity entity) {
-		entitiesToDeleteAfterUpdate.add(entity);
+		if (editingRenderSystem != null) {
+			editingRenderSystem.notifyNewComponent(entity, componentName);
+		}
 	}
 
 	/**
@@ -913,7 +875,7 @@ public class CoreEngine extends JPanel {
 	 * Notify the engine that a lua error occured. Pause the game and display the
 	 * error
 	 * 
-	 * @param error
+	 * @param LuaError to display
 	 */
 	public void notifyLuaError(LuaError error) {
 		// We only display the first error encountered so we can fix it first

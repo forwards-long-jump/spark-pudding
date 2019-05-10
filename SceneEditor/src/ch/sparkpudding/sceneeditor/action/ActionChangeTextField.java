@@ -53,7 +53,7 @@ public class ActionChangeTextField extends AbstractAction {
 	 */
 	@Override
 	public void undoAction() {
-		field.setValue(oldValue);
+		field.setValueFromString(oldValue);
 
 		if (textField != null)
 			textField.setText(oldValue);
@@ -64,7 +64,7 @@ public class ActionChangeTextField extends AbstractAction {
 	 */
 	@Override
 	public boolean doAction() {
-		field.setValue(value);
+		field.setValueFromString(value);
 
 		if (textField != null)
 			textField.setText(value);
