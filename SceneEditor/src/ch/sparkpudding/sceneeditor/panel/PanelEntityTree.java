@@ -66,7 +66,6 @@ public class PanelEntityTree extends JPanel {
 					boolean cellHasFocus) {
 				Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				if (renderer instanceof JLabel && value instanceof SEEntity) {
-					// Here value will be of the Type 'CD'
 					((JLabel) renderer).setText(((SEEntity) value).getDefaultEntity().getName());
 				}
 				return renderer;
