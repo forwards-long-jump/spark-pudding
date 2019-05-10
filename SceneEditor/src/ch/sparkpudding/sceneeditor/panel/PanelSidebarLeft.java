@@ -11,7 +11,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
 import ch.sparkpudding.sceneeditor.SceneEditor;
-import ch.sparkpudding.sceneeditor.SceneEditor.EDITOR_STATE;
+import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
@@ -80,10 +80,10 @@ public class PanelSidebarLeft extends JPanel {
 		btnPausePlay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (SceneEditor.getGameState() == EDITOR_STATE.PLAY) {
-					SceneEditor.setGameState(EDITOR_STATE.PAUSE);
+				if (SceneEditor.getGameState() == EditorState.PLAY) {
+					SceneEditor.setGameState(EditorState.PAUSE);
 				} else {
-					SceneEditor.setGameState(EDITOR_STATE.PLAY);
+					SceneEditor.setGameState(EditorState.PLAY);
 				}
 			}
 		});
@@ -92,14 +92,14 @@ public class PanelSidebarLeft extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SceneEditor.setGameState(EDITOR_STATE.STOP);
+				SceneEditor.setGameState(EditorState.STOP);
 			}
 		});
 
 		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
 
 			@Override
-			public void gameStateEvent(EDITOR_STATE state) {
+			public void gameStateEvent(EditorState state) {
 				switch (state) {
 				case PAUSE:
 					btnReset.setIcon(ImageStorage.STOP);

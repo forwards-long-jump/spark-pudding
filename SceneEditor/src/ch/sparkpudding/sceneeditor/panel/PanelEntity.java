@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import ch.sparkpudding.sceneeditor.SceneEditor;
-import ch.sparkpudding.sceneeditor.SceneEditor.EDITOR_STATE;
+import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
@@ -68,7 +68,7 @@ public class PanelEntity extends JPanel {
 		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
 
 			@Override
-			public void gameStateEvent(EDITOR_STATE state) {
+			public void gameStateEvent(EditorState state) {
 				resetEnabledPane();
 			}
 		});

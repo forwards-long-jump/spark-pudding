@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 
+import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.menu.MenuBar;
 import ch.sparkpudding.sceneeditor.panel.PanelGame;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
@@ -43,7 +44,7 @@ public class FrameSceneEditor extends JFrame {
 		setupFrame();
 		addListener();
 		
-		SceneEditor.firstPopulateNewProject();
+		SceneEditor.setGameState(EditorState.STOP);
 	}
 
 	/**

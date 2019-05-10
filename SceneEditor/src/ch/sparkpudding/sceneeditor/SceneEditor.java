@@ -20,7 +20,7 @@ import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
  *
  */
 public class SceneEditor {
-	public enum EDITOR_STATE {
+	public enum EditorState {
 		PLAY, PAUSE, STOP;
 	}
 
@@ -35,11 +35,9 @@ public class SceneEditor {
 	private static Camera camera;
 	private static Camera gameCamera;
 
-	private static EDITOR_STATE gameState;
+	private static EditorState gameState;
 
 	static {
-		gameState = EDITOR_STATE.STOP;
-
 		try {
 			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(),
 					Main.class.getResource("/leleditor").getPath());
@@ -50,14 +48,13 @@ public class SceneEditor {
 		coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
 			@Override
 			public void run() {
-				setGameState(EDITOR_STATE.STOP);
+				setGameState(EditorState.STOP);
 			}
 		});
 
 		eventListeners = new ArrayList<GameStateEventListener>();
 
 		seScenes = new HashMap<String, SEScene>();
-		callbackSyncListEntity = createSyncListEntity();
 
 		camera = new Camera();
 	}
@@ -67,14 +64,14 @@ public class SceneEditor {
 	 *
 	 * @return current editor state
 	 */
-	public static EDITOR_STATE getGameState() {
+	public static EditorState getGameState() {
 		return gameState;
 	}
 
 	/**
 	 * Change editor state
 	 */
-	public static void setGameState(EDITOR_STATE state) {
+	public static void setGameState(EditorState state) {
 		gameState = state;
 		switch (state) {
 		case PAUSE:
@@ -105,6 +102,7 @@ public class SceneEditor {
 				@Override
 				public void run() {
 					SceneEditor.coreEngine.resetCurrentScene();
+					createEntityList();
 					if (!SceneEditor.coreEngine.isEditingPause()) {
 						SceneEditor.coreEngine.setEditingPause(true);
 						swapToSceneEditorCamera();
@@ -124,10 +122,12 @@ public class SceneEditor {
 	 * 
 	 * @return the callback
 	 */
-	private static Runnable createSyncListEntity() {
-		return new Runnable() {
+	public static void createEntityList() {
+		coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+			
 			@Override
 			public void run() {
+				coreEngine.resetCurrentScene();
 				Map<String, Scene> scenes = coreEngine.getScenes();
 				for (Scene scene : scenes.values()) {
 					seScenes.put(scene.getName(), new SEScene(scene));
@@ -135,14 +135,7 @@ public class SceneEditor {
 
 				frameSceneEditor.populateSidebarRight();
 			}
-		};
-	}
-
-	/**
-	 * Workaround to delay the first populating of a new FrameSceneEditor
-	 */
-	public static void firstPopulateNewProject() {
-		coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, callbackSyncListEntity);
+		});
 	}
 
 	/**
