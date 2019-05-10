@@ -19,7 +19,7 @@ import ch.sparkpudding.sceneeditor.utils.ImageStorage;
  * The panel which contains the commands to control the state of the game
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 29 avr. 2019
+ *         Creation Date : 29 April 2019
  *
  */
 @SuppressWarnings("serial")

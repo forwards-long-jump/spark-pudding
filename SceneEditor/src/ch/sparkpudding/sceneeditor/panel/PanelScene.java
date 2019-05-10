@@ -17,7 +17,7 @@ import ch.sparkpudding.sceneeditor.ecs.SEScene;
  * The panel which show the different scene
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 29 avr. 2019
+ *         Creation Date : 29 April 2019
  *
  */
 @SuppressWarnings("serial")

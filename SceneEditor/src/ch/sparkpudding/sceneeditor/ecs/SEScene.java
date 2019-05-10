@@ -11,7 +11,7 @@ import ch.sparkpudding.coreengine.ecs.entity.Scene;
  * default values
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 7 mai 2019
+ *         Creation Date : 7 May 2019
  *
  */
 public class SEScene {

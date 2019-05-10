@@ -8,7 +8,7 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
  * The action to register the update of an integer value for an entity field
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 7 mai 2019
+ *         Creation Date : 7 May 2019
  *
  */
 @SuppressWarnings("serial")

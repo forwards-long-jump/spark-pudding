@@ -11,7 +11,7 @@ import ch.sparkpudding.sceneeditor.listener.HistoryEventListener;
  * undo and redo management
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 16 avr. 2019
+ *         Creation Date : 16 April 2019
  * 
  */
 public class ActionsHistory {

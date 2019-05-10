@@ -4,7 +4,7 @@ package ch.sparkpudding.sceneeditor.action;
  * The action who handle the undo
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 16 avr. 2019
+ *         Creation Date : 16 April 2019
  *
  */
 @SuppressWarnings("serial")

@@ -15,7 +15,7 @@ import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
  * Display the components of the selected entity
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br />
- *         Creation Date : 9 avr. 2019
+ *         Creation Date : 9 April 2019
  * 
  */
 @SuppressWarnings("serial")

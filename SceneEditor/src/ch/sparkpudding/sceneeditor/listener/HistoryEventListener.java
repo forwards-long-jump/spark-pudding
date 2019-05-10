@@ -6,7 +6,7 @@ import java.util.EventListener;
  * Interface to create HistoryEventListener
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 9 mai 2019
+ *         Creation Date : 9 May 2019
  *
  */
 public interface HistoryEventListener extends EventListener {

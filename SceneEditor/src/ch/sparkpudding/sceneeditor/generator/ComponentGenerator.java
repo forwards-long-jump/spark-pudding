@@ -22,7 +22,7 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
  * inherits JComponent, it can be used as one.
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 8 avr. 2019
+ *         Creation Date : 8 April 2019
  * 
  */
 @SuppressWarnings("serial")

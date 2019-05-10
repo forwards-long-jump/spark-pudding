@@ -7,7 +7,7 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
  * default values
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 15 avr. 2019
+ *         Creation Date : 15 April 2019
  * 
  */
 public class SEEntity {

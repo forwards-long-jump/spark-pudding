@@ -10,7 +10,7 @@ import ch.sparkpudding.sceneeditor.SceneEditor;
  * The panel which show the game
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 29 avr. 2019
+ *         Creation Date : 29 April 2019
  *
  */
 @SuppressWarnings("serial")

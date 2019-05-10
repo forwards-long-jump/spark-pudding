@@ -6,7 +6,7 @@ import javax.swing.JMenuBar;
  * Represent the MenuBar of the SceneEditor
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 9 mai 2019
+ *         Creation Date : 9 May 2019
  *
  */
 @SuppressWarnings("serial")
