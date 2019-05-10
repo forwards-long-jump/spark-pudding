@@ -282,7 +282,7 @@ public class CoreEngine extends JPanel {
 			}
 		}
 	}
-	
+
 	/**
 	 * To be called before upading, handle lua error actions
 	 */
@@ -312,7 +312,7 @@ public class CoreEngine extends JPanel {
 		if (luaError != null) {
 			luaError = null; // Let's remove the error as reloading systems may fix it
 		}
-		
+
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
 		setCurrentScene(getCurrentScene());
 	}

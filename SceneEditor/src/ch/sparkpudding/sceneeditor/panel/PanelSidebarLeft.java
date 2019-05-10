@@ -12,13 +12,14 @@ import javax.swing.border.EtchedBorder;
 
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.SceneEditor.EDITOR_STATE;
+import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
 /**
  * The panel which contains the commands to control the state of the game
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 29 avr. 2019
+ *         Creation Date : 29 April 2019
  *
  */
 @SuppressWarnings("serial")
@@ -94,32 +95,31 @@ public class PanelSidebarLeft extends JPanel {
 				SceneEditor.setGameState(EDITOR_STATE.STOP);
 			}
 		});
-	}
 
-	/**
-	 * To be called when the editor state is changed, update buttons
-	 * 
-	 * @param newState
-	 */
-	public void notifyStateChange(EDITOR_STATE newState) {
-		switch (newState) {
-		case PAUSE:
-			btnReset.setIcon(ImageStorage.STOP);
-			btnPausePlay.setIcon(ImageStorage.PLAY);
-			break;
-		case PLAY:
-			btnReset.setIcon(ImageStorage.STOP);
-			btnPausePlay.setIcon(ImageStorage.PAUSE);
-			btnReset.setEnabled(true);
-			break;
-		case STOP:
-			btnReset.setIcon(ImageStorage.STOP_DISABLED);
-			btnPausePlay.setIcon(ImageStorage.PLAY);
-			btnReset.setEnabled(false);
-			break;
-		default:
-			break;
+		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
 
-		}
+			@Override
+			public void gameStateEvent(EDITOR_STATE state) {
+				switch (state) {
+				case PAUSE:
+					btnReset.setIcon(ImageStorage.STOP);
+					btnPausePlay.setIcon(ImageStorage.PLAY);
+					break;
+				case PLAY:
+					btnReset.setIcon(ImageStorage.STOP);
+					btnPausePlay.setIcon(ImageStorage.PAUSE);
+					btnReset.setEnabled(true);
+					break;
+				case STOP:
+					btnReset.setIcon(ImageStorage.STOP_DISABLED);
+					btnPausePlay.setIcon(ImageStorage.PLAY);
+					btnReset.setEnabled(false);
+					break;
+				default:
+					break;
+
+				}
+			}
+		});
 	}
 }

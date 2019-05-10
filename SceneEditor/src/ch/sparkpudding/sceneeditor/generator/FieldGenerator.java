@@ -1,5 +1,7 @@
 package ch.sparkpudding.sceneeditor.generator;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.Collection;
 
@@ -11,6 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.sceneeditor.action.ActionChangeCheckBox;
+import ch.sparkpudding.sceneeditor.action.ActionChangeTextField;
 import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
 
 /**
@@ -18,7 +22,7 @@ import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
  * JComponent, it can be used as one.
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 8 avr. 2019
+ *         Creation Date : 8 April 2019
  * 
  */
 @SuppressWarnings("serial")
@@ -26,13 +30,16 @@ public class FieldGenerator extends JComponent {
 
 	private Collection<Field> fields;
 
+	private String nameComp;
+
 	/**
 	 * ctor
 	 * 
 	 * @param fields Collection of all the components of an entity
 	 */
-	public FieldGenerator(Collection<Field> fields) {
+	public FieldGenerator(Collection<Field> fields, String nameComp) {
 		this.fields = fields;
+		this.nameComp = nameComp;
 
 		createFields();
 		setupLayout();
@@ -43,7 +50,9 @@ public class FieldGenerator extends JComponent {
 	 */
 	private void setupLayout() {
 		setLayout(new SpringLayout());
-		SpringUtilities.makeGrid(this, fields.size(), 2, 5, 5, 5, 5);
+		if (fields.size() > 0) {
+			SpringUtilities.makeGrid(this, fields.size(), 2, 5, 5, 5, 5);
+		}
 	}
 
 	/**
@@ -74,25 +83,62 @@ public class FieldGenerator extends JComponent {
 			integerFormatter.setGroupingUsed(false);
 			input = new JFormattedTextField(integerFormatter);
 			((JFormattedTextField) input).setValue(field.getValue());
+			createTextFieldListener((JTextField) input, field);
 			break;
 		case DOUBLE:
 			input = new JFormattedTextField(NumberFormat.getInstance());
 			((JFormattedTextField) input).setValue(field.getValue());
+			createTextFieldListener((JTextField) input, field);
 			break;
 		default: // Permits to avoid double-initialization of input.
 		case STRING:
 			input = new JTextField();
 			((JTextField) input).setText(field.getValue().toString());
+			createTextFieldListener((JTextField) input, field);
 			break;
 		case FILE_PATH:
 			input = new JFormattedTextField();
 			((JFormattedTextField) input).setValue(field.getValue());
+			createTextFieldListener((JTextField) input, field);
 			break;
 		case BOOLEAN:
 			input = new JCheckBox("", (boolean) field.getValue());
+			createCheckBoxListener((JCheckBox) input, field);
 			break;
 		}
 		labelField.setLabelFor(input);
 		return input;
+	}
+
+	/**
+	 * Create the listener for a textField
+	 * 
+	 * @param input the input which contains the new value
+	 * @param field the field represented by this input
+	 */
+	private void createTextFieldListener(JTextField input, Field field) {
+		input.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ActionChangeTextField action = new ActionChangeTextField("", field, input);
+				action.actionPerformed(e);
+			}
+		});
+	}
+
+	/**
+	 * Create the listener for a checkBox
+	 * 
+	 * @param input the input which contains the new value
+	 * @param field the field represented by this input
+	 */
+	private void createCheckBoxListener(JCheckBox input, Field field) {
+		input.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ActionChangeCheckBox action = new ActionChangeCheckBox("", field, input);
+				action.actionPerformed(e);
+			}
+		});
 	}
 }

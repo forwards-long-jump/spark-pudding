@@ -13,6 +13,13 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 
+/**
+ * The class to write all the file of a game from the SceneEditor
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ *         Creation Date : 29 April 2019
+ *
+ */
 public class LelWriter {
 
 	/**
@@ -72,7 +79,7 @@ public class LelWriter {
 			xml += "\t<entity name=\"" + entity.getName() + "\" template=\"" + entity.getTemplate()
 					+ "\" z-index=\"1\">\n";
 			for (Component component : entity.getComponents().values()) {
-				xml += "\t\t<component template=\"" + component.getTemplate() + "\">\n";
+				xml += "\t\t<component template=\"" + component.getTemplateName() + "\">\n";
 				for (Field field : component.getFields().values()) {
 					xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
 				}
