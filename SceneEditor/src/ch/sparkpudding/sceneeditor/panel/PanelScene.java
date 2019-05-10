@@ -11,12 +11,13 @@ import javax.swing.JPanel;
 
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.ecs.SEScene;
 
 /**
  * The panel which show the different scene
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 29 avr. 2019
+ *         Creation Date : 29 April 2019
  *
  */
 @SuppressWarnings("serial")
@@ -47,20 +48,8 @@ public class PanelScene extends JPanel {
 	private void init() {
 		comboBoxScenes = new JComboBox<String>();
 
-		for (Scene scene : SceneEditor.coreEngine.getScenes().values()) {
-			comboBoxScenes.addItem(scene.getName());
-		}
-
-		comboBoxScenes.setSelectedItem(SceneEditor.coreEngine.getCurrentScene().getName());
-		comboBoxScenes.setPreferredSize(
-				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
-		comboBoxScenes.setMaximumSize(
-				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
-
 		// TODO Implement editable to add scene
 		// comboBoxScenes.setEditable(true);
-
-		panelEntityTree.updateListEntities(SceneEditor.coreEngine.getCurrentScene());
 	}
 
 	/**
@@ -68,6 +57,11 @@ public class PanelScene extends JPanel {
 	 */
 	private void setupLayout() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+		comboBoxScenes.setPreferredSize(
+				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
+		comboBoxScenes.setMaximumSize(
+				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
 
 		add(comboBoxScenes);
 
@@ -82,11 +76,30 @@ public class PanelScene extends JPanel {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				Scene newScene = SceneEditor.coreEngine.getScenes().get(comboBoxScenes.getSelectedItem());
-				SceneEditor.coreEngine.setCurrentScene(newScene);
-				panelEntityTree.updateListEntities(newScene);
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					SEScene newScene = SceneEditor.seScenes.get(comboBoxScenes.getSelectedItem());
+					SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
+					panelEntityTree.updateListEntities(newScene);
+				}
 			}
 		});
+	}
+
+	/**
+	 * Populate the panel, allow to wait for the coreEngine to load all the scenes
+	 */
+	public void populatePanel() {
+		// Get the last currentScene to prevent selecting something else when populating
+		Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
+
+		// Populate
+		comboBoxScenes.removeAllItems();
+		for (SEScene scene : SceneEditor.seScenes.values()) {
+			comboBoxScenes.addItem(scene.getLiveScene().getName());
+		}
+
+		// Reset lastScene after populating
+		comboBoxScenes.setSelectedItem(lastScene.getName());
 	}
 
 }

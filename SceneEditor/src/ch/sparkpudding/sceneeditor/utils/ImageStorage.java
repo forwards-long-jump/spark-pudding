@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
  * Class with static attributes to access basic images of the interface
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 3 mai 2019
+ *         Creation Date : 3 May 2019
  *
  */
 public class ImageStorage {

@@ -1,7 +1,15 @@
 package ch.sparkpudding.sceneeditor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import ch.sparkpudding.coreengine.Camera;
 import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.sceneeditor.ecs.SEScene;
+import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
 /**
  * The heart of the SceneEditor, emerged after a 40 min fight
@@ -16,6 +24,11 @@ public class SceneEditor {
 
 	public static FrameSceneEditor frameSceneEditor;
 	public static CoreEngine coreEngine;
+	public static Map<String, SEScene> seScenes;
+
+	private static List<GameStateEventListener> eventListeners;
+
+	private static Runnable callbackSyncListEntity;
 
 	private static Camera camera;
 	private static Camera gameCamera;
@@ -23,7 +36,7 @@ public class SceneEditor {
 	private static EDITOR_STATE gameState;
 
 	static {
-		gameState = EDITOR_STATE.PAUSE;
+		gameState = EDITOR_STATE.STOP;
 
 		try {
 			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(),
@@ -32,7 +45,11 @@ public class SceneEditor {
 			e.printStackTrace();
 		}
 
-		coreEngine.setEditingPause(true);
+		eventListeners = new ArrayList<GameStateEventListener>();
+
+		seScenes = new HashMap<String, SEScene>();
+		callbackSyncListEntity = createSyncListEntity();
+
 		camera = new Camera();
 		gameCamera = coreEngine.getCamera();
 	}
@@ -66,12 +83,73 @@ public class SceneEditor {
 			SceneEditor.coreEngine.setEditingPause(false);
 			break;
 		case STOP:
-			SceneEditor.coreEngine.scheduleResetCurrentScene(true);
+			SceneEditor.coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
 			break;
 		default:
 			break;
 
 		}
-		frameSceneEditor.getPanelSidebarLeft().notifyStateChange(state);
+		fireGameStateEvent();
+	}
+
+	/**
+	 * Create the callback to register all entity of the coreEngine
+	 * 
+	 * @return the callback
+	 */
+	private static Runnable createSyncListEntity() {
+		return new Runnable() {
+			@Override
+			public void run() {
+				Map<String, Scene> scenes = coreEngine.getScenes();
+				for (Scene scene : scenes.values()) {
+					seScenes.put(scene.getName(), new SEScene(scene));
+				}
+
+				frameSceneEditor.populateSidebarRight();
+			}
+		};
+	}
+
+	/**
+	 * Workaround to delay the first populating of a new FrameSceneEditor
+	 */
+	public static void firstPopulateNewProject() {
+		coreEngine.scheduleResetCurrentScene(true, callbackSyncListEntity);
+	}
+
+	/**
+	 * Add a listener for the event of the state of the SceneEditor
+	 * 
+	 * @param evtListener the listener
+	 */
+	public static void addGameStateEventListener(GameStateEventListener evtListener) {
+		eventListeners.add(evtListener);
+	}
+
+	/**
+	 * Remove a listener for the event of the state of the SceneEditor
+	 * 
+	 * @param evtListener the listener to remove
+	 * @return {@code true} if the event exist
+	 */
+	public static boolean removeGameStateEventListener(GameStateEventListener evtListener) {
+		return eventListeners.remove(evtListener);
+	}
+
+	/**
+	 * Remove all the event of the SceneEditor
+	 */
+	public static void removeAllGameStateEventListener() {
+		eventListeners.clear();
+	}
+
+	/**
+	 * Allow to fire the gameState event of the listeners
+	 */
+	private static void fireGameStateEvent() {
+		for (GameStateEventListener gameStateEventListener : eventListeners) {
+			gameStateEventListener.gameStateEvent(gameState);
+		}
 	}
 }

@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
  * A class which contains static method to load image
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 3 mai 2019
+ *         Creation Date : 3 May 2019
  *
  */
 public class ImageLoader {

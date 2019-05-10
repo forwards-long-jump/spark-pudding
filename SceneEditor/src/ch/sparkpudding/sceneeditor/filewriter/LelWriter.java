@@ -13,6 +13,13 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 
+/**
+ * The class to write all the file of a game from the SceneEditor
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ *         Creation Date : 29 April 2019
+ *
+ */
 public class LelWriter {
 
 	/**

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
  * components)
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 29 avr. 2019
+ *         Creation Date : 29 April 2019
  *
  */
 @SuppressWarnings("serial")
@@ -55,5 +55,12 @@ public class PanelSidebarRight extends JPanel {
 		add(panelEntity);
 
 		setBorder(BorderFactory.createEtchedBorder());
+	}
+	
+	/**
+	 * Populate this panel
+	 */
+	public void populatePanel() {
+		panelScene.populatePanel();
 	}
 }

@@ -6,13 +6,16 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.SceneEditor.EDITOR_STATE;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
+import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
 /**
  * Contains the different parameter of an entity
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 29 avr. 2019
+ *         Creation Date : 29 April 2019
  *
  */
 @SuppressWarnings("serial")
@@ -22,7 +25,7 @@ public class PanelEntity extends JPanel {
 	private PanelComponent livePanelComponent;
 	private JTabbedPane jTabbedPane;
 
-	private Entity currentEntity;
+	private SEEntity currentEntity;
 
 	private static final String TITLE = "Entity";
 
@@ -32,6 +35,7 @@ public class PanelEntity extends JPanel {
 	public PanelEntity() {
 		init();
 		setupLayout();
+		addListener();
 	}
 
 	/**
@@ -58,25 +62,65 @@ public class PanelEntity extends JPanel {
 	}
 
 	/**
+	 * Add the different listener for each element of the panel
+	 */
+	private void addListener() {
+		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
+
+			@Override
+			public void gameStateEvent(EDITOR_STATE state) {
+				resetEnabledPane();
+			}
+		});
+	}
+
+	/**
 	 * Reset the title of this panel with the name of the entity represented
 	 */
 	private void resetBorderTitle() {
 		if (currentEntity != null) {
-			setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getName()));
+			setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getDefaultEntity().getName()));
 		} else {
 			setBorder(BorderFactory.createTitledBorder(TITLE + " — null"));
 		}
 	}
 
 	/**
+	 * Allow to set the good pane in regards of the gameState
+	 */
+	private void resetEnabledPane() {
+		switch (SceneEditor.getGameState()) {
+		case STOP:
+			initialPanelComponent.setEnabled(true);
+			livePanelComponent.setEnabled(false);
+			break;
+		default:
+			initialPanelComponent.setEnabled(false);
+			livePanelComponent.setEnabled(true);
+			break;
+
+		}
+	}
+
+	/**
 	 * Set the games entity represented by this panel
 	 * 
-	 * @param entity The entity represented by this panel
+	 * @param seEntity The entity represented by this panel
 	 */
-	public void setEntity(Entity entity) {
-		currentEntity = entity;
-		initialPanelComponent.setEntity(currentEntity);
-		livePanelComponent.setEntity(currentEntity);
+	public void setEntity(SEEntity seEntity) {
+		currentEntity = seEntity;
+		initialPanelComponent.setEntity(currentEntity.getDefaultEntity());
+		livePanelComponent.setEntity(currentEntity.getLiveEntity());
 		resetBorderTitle();
+		resetEnabledPane();
+	}
+
+	/**
+	 * Remove the component of the different entity panel
+	 */
+	public void removeEntity() {
+		currentEntity = null;
+		initialPanelComponent.removeAll();
+		livePanelComponent.removeAll();
 	}
 }

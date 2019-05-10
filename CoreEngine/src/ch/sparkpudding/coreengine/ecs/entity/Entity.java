@@ -20,10 +20,9 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.utils.Lua;
 
 /**
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
+ * Part of the ECS design pattern, described by the components it contains.
  * 
- *         Part of the ECS design pattern, described by the components it
- *         contains.
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
  */
 public class Entity implements Iterable<Entry<String, Component>> {

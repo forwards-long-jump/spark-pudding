@@ -10,12 +10,14 @@ import ch.sparkpudding.sceneeditor.action.AbstractAction;
 import ch.sparkpudding.sceneeditor.action.ActionRedo;
 import ch.sparkpudding.sceneeditor.action.ActionUndo;
 import ch.sparkpudding.sceneeditor.action.ActionsHistory;
-import ch.sparkpudding.sceneeditor.action.HistoryEventListener;
+import ch.sparkpudding.sceneeditor.listener.HistoryEventListener;
 
 /**
+ * Represent the MenuEdit of the SceneEditor
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ *         Creation Date : 9 May 2019
+ *
  */
 @SuppressWarnings("serial")
 public class MenuEdit extends JMenu {

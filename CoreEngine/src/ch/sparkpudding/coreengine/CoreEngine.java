@@ -67,6 +67,8 @@ public class CoreEngine extends JPanel {
 
 	private boolean systemReloadScheduled;
 	private boolean sceneReloadScheduled;
+	
+	private Runnable callbackSceneReload;
 
 	private Dimension renderSize;
 	private Color blackBarColor;
@@ -301,6 +303,7 @@ public class CoreEngine extends JPanel {
 			sceneReloadScheduled = false;
 			currentScene.reset();
 			setCurrentScene(currentScene);
+			callbackSceneReload.run();
 		}
 	}
 
@@ -463,12 +466,14 @@ public class CoreEngine extends JPanel {
 	 * Reset the current scene and notify engine
 	 * 
 	 * @param pause If the game need to be paused after the reset
+	 * @param callback 
 	 */
-	public void scheduleResetCurrentScene(boolean pause) {
+	public void scheduleResetCurrentScene(boolean pause, Runnable callback) {
 		if (pause) {
 			setEditingPause(true);
 		}
 		sceneReloadScheduled = true;
+		callbackSceneReload = callback;
 	}
 
 	/**
@@ -682,14 +687,14 @@ public class CoreEngine extends JPanel {
 	 */
 	public void addEntity(Entity e) {
 		renderSystem.tryAdd(e);
-		//editingRenderSystem.tryAdd(e);
+		editingRenderSystem.tryAdd(e);
 		for (UpdateSystem system : systems) {
 			system.tryAdd(e);
 		}
 
-//		for (UpdateSystem system : editingSystems) {
-//			system.tryAdd(e);
-//		}
+		for (UpdateSystem system : editingSystems) {
+			system.tryAdd(e);
+		}
 
 		getCurrentScene().add(e);
 	}
@@ -730,10 +735,10 @@ public class CoreEngine extends JPanel {
 			}
 			renderSystem.notifyRemovedComponent(entity, componentName);
 
-//			for (UpdateSystem system : editingSystems) {
-//				system.notifyRemovedComponent(entity, componentName);
-//			}
-//			editingRenderSystem.notifyRemovedComponent(entity, componentName);
+			for (UpdateSystem system : editingSystems) {
+				system.notifyRemovedComponent(entity, componentName);
+			}
+			editingRenderSystem.notifyRemovedComponent(entity, componentName);
 		}
 	}
 
@@ -761,10 +766,10 @@ public class CoreEngine extends JPanel {
 		}
 		renderSystem.notifyNewComponent(entity, componentName);
 
-//		for (UpdateSystem system : editingSystems) {
-//			system.notifyNewComponent(entity, componentName);
-//		}
-//		editingRenderSystem.notifyNewComponent(entity, componentName);
+		for (UpdateSystem system : editingSystems) {
+			system.notifyNewComponent(entity, componentName);
+		}
+		editingRenderSystem.notifyNewComponent(entity, componentName);
 	}
 
 	/**
