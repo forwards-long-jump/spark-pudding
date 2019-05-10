@@ -423,7 +423,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Get the task scheduler
 	 * 
-	 * @return taskScheduler
+	 * @return the task scheduler
 	 */
 	public Scheduler getScheduler() {
 		return scheduler;
@@ -441,7 +441,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Change current scene to new scene
 	 * 
-	 * @param newScene
+	 * @param newScene to switch to
 	 */
 	public void setCurrentScene(Scene newScene) {
 		this.currentScene = newScene;
@@ -466,7 +466,7 @@ public class CoreEngine extends JPanel {
 	 * Return the translation of the game (the one that keep it centered in the
 	 * middle of black bars)
 	 * 
-	 * @return
+	 * @return Point the translation of the game (the one using black bars)
 	 */
 	private Point getGameTranslation() {
 		double scaleRatio = getScaleRatio();
@@ -481,9 +481,9 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Calculate height
+	 * Calculate scale ratio
 	 * 
-	 * @return
+	 * @return the max w/h or h/w scale ratio
 	 */
 	private double getScaleRatio() {
 		// Calculate screen ratio for width / height
@@ -544,7 +544,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Render an overlay giving help about a lua error that could've occurer
 	 * 
-	 * @param g2d
+	 * @param g2d graphics context
 	 */
 	private void renderLuaError(Graphics2D g2d) {
 		if (luaError != null) {
@@ -609,7 +609,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Getter for camera.
 	 * 
-	 * @return camera
+	 * @return camera attached for current scene
 	 */
 	public Camera getCamera() {
 		return currentScene.getCamera();
@@ -618,7 +618,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Getter for input.
 	 * 
-	 * @return input
+	 * @return input api
 	 */
 	public Input getInput() {
 		return input;
@@ -867,7 +867,7 @@ public class CoreEngine extends JPanel {
 	 * Notify the engine that a lua error occured. Pause the game and display the
 	 * error
 	 * 
-	 * @param error
+	 * @param LuaError to display
 	 */
 	public void notifyLuaError(LuaError error) {
 		// We only display the first error encountered so we can fix it first

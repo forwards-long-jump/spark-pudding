@@ -41,7 +41,7 @@ public class MetaEntity {
 	 * Sets the entity to have its specified component remove after the current
 	 * update
 	 * 
-	 * @param componentName
+	 * @param componentName to delete
 	 */
 	public void deleteComponent(String componentName) {
 		Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {

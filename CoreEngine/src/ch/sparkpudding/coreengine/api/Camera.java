@@ -58,8 +58,8 @@ public class Camera {
 	/**
 	 * Teleport the camera to the specified world position, cancel all momentum
 	 *
-	 * @param x
-	 * @param y
+	 * @param x coordinate
+	 * @param y coordinate
 	 */
 	public void setPosition(float x, float y) {
 		Lel.coreEngine.getCamera().setWorldPosition(x, y);
@@ -68,8 +68,8 @@ public class Camera {
 	/**
 	 * Set the target position for the camera to move to
 	 *
-	 * @param x
-	 * @param y
+	 * @param x coordinate
+	 * @param y coordinate
 	 */
 	public void setTargetScaling(float s) {
 		Lel.coreEngine.getCamera().setTargetScaling(s);
@@ -133,8 +133,8 @@ public class Camera {
 	/**
 	 * Set the target position for the camera to move to
 	 *
-	 * @param x
-	 * @param y
+	 * @param x coordinate
+	 * @param y coordinate
 	 */
 	public void setTargetPosition(float x, float y) {
 		Lel.coreEngine.getCamera().setTargetPosition(x, y);
@@ -143,7 +143,7 @@ public class Camera {
 	/**
 	 * Change translate mode
 	 *
-	 * @param mode
+	 * @param mode to change the camera to
 	 */
 	public void setMode(String mode) {
 		Lel.coreEngine.getCamera().setTranslateMode(Mode.valueOf(mode));
@@ -161,8 +161,8 @@ public class Camera {
 	 * 
 	 * @param x      of the boundary
 	 * @param y      of the boundary
-	 * @param width
-	 * @param height
+	 * @param width  of the boundary
+	 * @param height of the boundary
 	 */
 	public void setBoundary(float x, float y, float w, float h) {
 		Lel.coreEngine.getCamera().setBoundary(new Rectangle((int) x, (int) y, (int) w, (int) h));
@@ -284,12 +284,14 @@ public class Camera {
 	public float getScaling() {
 		return Lel.coreEngine.getCamera().getScaling();
 	}
-	
+
 	/**
 	 * Return true if close to target scaling
+	 * 
 	 * @return true if close to target scaling
 	 */
 	public boolean isAtTargetScaling() {
-		return Math.abs(Lel.coreEngine.getCamera().getScaling() - Lel.coreEngine.getCamera().getTargetScaling()) < 0.0001;
+		return Math
+				.abs(Lel.coreEngine.getCamera().getScaling() - Lel.coreEngine.getCamera().getTargetScaling()) < 0.0001;
 	}
 }

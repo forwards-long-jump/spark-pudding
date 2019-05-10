@@ -36,7 +36,7 @@ public class Scheduler {
 	/**
 	 * Runs all tasks and notifications associated with the given trigger
 	 * 
-	 * @param trigger Trigger
+	 * @param trigger method type to run
 	 */
 	public synchronized void trigger(Trigger trigger) {
 		for (Runnable task : tasks.get(trigger)) {
@@ -53,7 +53,7 @@ public class Scheduler {
 	 * Add a task to be ran the next time the given trigger is activated
 	 * 
 	 * @param trigger  trigger that will run the task
-	 * @param runnable task
+	 * @param runnable task to run
 	 */
 	public synchronized void schedule(Trigger trigger, Runnable runnable) {
 		tasks.get(trigger).add(runnable);
@@ -63,7 +63,7 @@ public class Scheduler {
 	 * Add a notification to be ran the next time the given trigger is activated
 	 * 
 	 * @param trigger  trigger that will run the notification
-	 * @param runnable notification
+	 * @param runnable notification to run
 	 */
 	public void notify(Trigger trigger, Runnable runnable) {
 		notifications.get(trigger).add(runnable);
