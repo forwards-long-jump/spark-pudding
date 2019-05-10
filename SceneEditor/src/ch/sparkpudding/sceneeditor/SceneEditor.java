@@ -122,7 +122,6 @@ public class SceneEditor {
 		return new Runnable() {
 			@Override
 			public void run() {
-				coreEngine.setEditingPause(true);
 				Map<String, Scene> scenes = coreEngine.getScenes();
 				for (Scene scene : scenes.values()) {
 					seScenes.put(scene.getName(), new SEScene(scene));
@@ -137,7 +136,7 @@ public class SceneEditor {
 	 * Workaround to delay the first populating of a new FrameSceneEditor
 	 */
 	public static void firstPopulateNewProject() {
-		coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, callbackSyncListEntity);
+		coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, callbackSyncListEntity);
 	}
 
 	/**
