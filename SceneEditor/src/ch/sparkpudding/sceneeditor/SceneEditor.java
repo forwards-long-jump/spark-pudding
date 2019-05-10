@@ -81,8 +81,10 @@ public class SceneEditor {
 			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
 				@Override
 				public void run() {
-					SceneEditor.coreEngine.setEditingPause(true);
-					swapToSceneEditorCamera();
+					if (!SceneEditor.coreEngine.isEditingPause()) {
+						SceneEditor.coreEngine.setEditingPause(true);
+						swapToSceneEditorCamera();
+					}
 				}
 			});
 
@@ -91,8 +93,10 @@ public class SceneEditor {
 			coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
 				@Override
 				public void run() {
-					SceneEditor.coreEngine.setEditingPause(false);
-					swapToGameCamera();
+					if (SceneEditor.coreEngine.isEditingPause()) {
+						SceneEditor.coreEngine.setEditingPause(false);
+						swapToGameCamera();
+					}
 				}
 			});
 			break;
@@ -101,8 +105,10 @@ public class SceneEditor {
 				@Override
 				public void run() {
 					SceneEditor.coreEngine.resetCurrentScene();
-					SceneEditor.coreEngine.setEditingPause(true);
-					swapToSceneEditorCamera();
+					if (!SceneEditor.coreEngine.isEditingPause()) {
+						SceneEditor.coreEngine.setEditingPause(true);
+						swapToSceneEditorCamera();
+					}
 				}
 			});
 			break;

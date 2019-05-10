@@ -356,6 +356,14 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * Return true if paused for editing
+	 * @return true if paused for editing
+	 */
+	public boolean isEditingPause() {
+		return editingPause;
+	}
+	
+	/**
 	 * Change the editingPause state
 	 * 
 	 * @param pause
