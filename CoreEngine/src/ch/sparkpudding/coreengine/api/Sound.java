@@ -19,13 +19,21 @@ import sun.audio.ContinuousAudioDataStream;
 public class Sound {
 	private static Sound instance;
 	private ResourceLocator resourceLocator;
-	
+
 	private AudioClip currentMusic;
-	
+
+	/**
+	 * Private constructor for the singleton
+	 */
 	private Sound() {
 		this.resourceLocator = Lel.coreEngine.getResourceLocator();
 	}
 
+	/**
+	 * Create instance if it doesn't exist and return it anyway
+	 * 
+	 * @return The instance of Sound
+	 */
 	public static Sound getInstance() {
 		if (instance == null) {
 			instance = new Sound();
@@ -36,14 +44,15 @@ public class Sound {
 	/**
 	 * Plays the given music
 	 * 
-	 * @param clip Music (intended to be aquired via the resource locator)
+	 * @param name The name of the music (intended to be acquired via the resource
+	 *             locator)
 	 */
 	public void playMusic(String name) {
 		AudioData audioData = resourceLocator.getMusic(name);
 		if (audioData == null) {
 			return;
 		}
-		
+
 		// Create an ContinuousAudioDataStream to play back continuously
 		ContinuousAudioDataStream loopMusicStream = new ContinuousAudioDataStream(audioData);
 		// Play the sound
@@ -72,7 +81,7 @@ public class Sound {
 	 * Plays a sound once
 	 * 
 	 * @param name The name of the sound to play
-	 */  
+	 */
 	public void play(String name) {
 		AudioData audioData = resourceLocator.getSound(name);
 		if (audioData == null) {

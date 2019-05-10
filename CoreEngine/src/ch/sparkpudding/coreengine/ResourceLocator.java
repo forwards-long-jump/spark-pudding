@@ -104,23 +104,23 @@ public class ResourceLocator {
 			musics.put(file.getName(), audioData);
 		}
 	}
-	
+
 	// Return a byte array from the file
-	private static byte[] readFileToByteArray(File file){
-        FileInputStream fis = null;
-        // Creating a byte array using the length of the file
-        // file.length returns long which is cast to int
-        byte[] bArray = new byte[(int) file.length()];
-        try{
-            fis = new FileInputStream(file);
-            fis.read(bArray);
-            fis.close();        
-            
-        }catch(IOException ioExp){
-            ioExp.printStackTrace();
-        }
-        return bArray;
-    }
+	private static byte[] readFileToByteArray(File file) {
+		FileInputStream fis = null;
+		// Creating a byte array using the length of the file
+		// file.length returns long which is cast to int
+		byte[] bArray = new byte[(int) file.length()];
+		try {
+			fis = new FileInputStream(file);
+			fis.read(bArray);
+			fis.close();
+
+		} catch (IOException ioExp) {
+			ioExp.printStackTrace();
+		}
+		return bArray;
+	}
 
 	/**
 	 * Gets the texture by name
@@ -136,7 +136,7 @@ public class ResourceLocator {
 	 * Gets the sound by name
 	 * 
 	 * @param name Name of the sound
-	 * @return Clip, or null when nothing is found
+	 * @return AudioData, or null when nothing is found
 	 */
 	public AudioData getSound(String name) {
 		return sounds.get(name);
@@ -146,7 +146,7 @@ public class ResourceLocator {
 	 * Gets music by name
 	 * 
 	 * @param name Name of the music
-	 * @return Clip, or null when nothing is found
+	 * @return AudioData, or null when nothing is found
 	 */
 	public AudioData getMusic(String name) {
 		return musics.get(name);

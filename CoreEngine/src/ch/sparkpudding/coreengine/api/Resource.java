@@ -44,7 +44,7 @@ public class Resource {
 	 * Gets the sound by name
 	 * 
 	 * @param name Name of the sound
-	 * @return Clip, or null when nothing is found
+	 * @return AudioData, or null when nothing is found
 	 */
 	public AudioData getSound(String name) {
 		return resourceLocator.getSound(name);
@@ -54,7 +54,7 @@ public class Resource {
 	 * Gets music by name
 	 * 
 	 * @param name Name of the music
-	 * @return Clip, or null when nothing is found
+	 * @return AudioData, or null when nothing is found
 	 */
 	public AudioData getMusic(String name) {
 		return resourceLocator.getMusic(name);
