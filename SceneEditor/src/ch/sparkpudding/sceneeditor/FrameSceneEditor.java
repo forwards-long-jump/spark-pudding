@@ -16,7 +16,7 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
  * engine
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 29 avr. 2019
+ *         Creation Date : 29 April 2019
  *
  */
 @SuppressWarnings("serial")
@@ -42,6 +42,8 @@ public class FrameSceneEditor extends JFrame {
 		setupLayout();
 		setupFrame();
 		addListener();
+		
+		SceneEditor.firstPopulateNewProject();
 	}
 
 	/**
@@ -93,13 +95,11 @@ public class FrameSceneEditor extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-
+	
 	/**
-	 * Get the left sidebar panel
-	 * 
-	 * @return the left sidebar panel
+	 * Populate all the component of the sidebarRight
 	 */
-	public PanelSidebarLeft getPanelSidebarLeft() {
-		return panelSidebarLeft;
+	public void populateSidebarRight() {
+		panelSidebarRight.populatePanel();
 	}
 }
