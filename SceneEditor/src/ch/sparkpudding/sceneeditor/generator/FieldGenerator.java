@@ -30,13 +30,16 @@ public class FieldGenerator extends JComponent {
 
 	private Collection<Field> fields;
 
+	private String nameComp;
+
 	/**
 	 * ctor
 	 * 
 	 * @param fields Collection of all the components of an entity
 	 */
-	public FieldGenerator(Collection<Field> fields) {
+	public FieldGenerator(Collection<Field> fields, String nameComp) {
 		this.fields = fields;
+		this.nameComp = nameComp;
 
 		createFields();
 		setupLayout();
@@ -47,7 +50,9 @@ public class FieldGenerator extends JComponent {
 	 */
 	private void setupLayout() {
 		setLayout(new SpringLayout());
-		SpringUtilities.makeGrid(this, fields.size(), 2, 5, 5, 5, 5);
+		if (fields.size() > 0) {
+			SpringUtilities.makeGrid(this, fields.size(), 2, 5, 5, 5, 5);
+		}
 	}
 
 	/**
