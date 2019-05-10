@@ -12,7 +12,7 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
  *
  */
 @SuppressWarnings("serial")
-public class ActionChangeInteger extends AbstractAction {
+public class ActionChangeObject extends AbstractAction {
 
 	private Field field;
 	private String value;
@@ -27,7 +27,7 @@ public class ActionChangeInteger extends AbstractAction {
 	 * @param field Specify the field of the entity needed to be update
 	 * @param value Specify the value to set for the field
 	 */
-	public ActionChangeInteger(String name, Field field, String value) {
+	public ActionChangeObject(String name, Field field, String value) {
 		super("Value (" + value + ")");
 		this.field = field;
 		this.value = value;
@@ -43,7 +43,7 @@ public class ActionChangeInteger extends AbstractAction {
 	 * @param textField Specify JTextField linked to this value for update when undo
 	 *                  or redo
 	 */
-	public ActionChangeInteger(String name, Field field, JTextField textField) {
+	public ActionChangeObject(String name, Field field, JTextField textField) {
 		this(name, field, textField.getText());
 		this.textField = textField;
 	}
