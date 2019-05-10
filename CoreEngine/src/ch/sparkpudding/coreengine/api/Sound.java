@@ -44,8 +44,7 @@ public class Sound {
 	/**
 	 * Plays the given music
 	 * 
-	 * @param name The name of the music (intended to be acquired via the resource
-	 *             locator)
+	 * @param name The name of the music
 	 */
 	public void playMusic(String name) {
 		AudioData audioData = resourceLocator.getMusic(name);
@@ -53,7 +52,7 @@ public class Sound {
 			return;
 		}
 
-		// Create an ContinuousAudioDataStream to play back continuously
+		// Create a ContinuousAudioDataStream to play back continuously
 		ContinuousAudioDataStream loopMusicStream = new ContinuousAudioDataStream(audioData);
 		// Play the sound
 		AudioPlayer.player.start(loopMusicStream);

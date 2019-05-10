@@ -152,7 +152,7 @@ public class LelReader {
 	public Collection<File> getEditingComponentsXML() {
 		return mapEditingComponents.values();
 	}
-	
+
 	/**
 	 * Get scenes files
 	 * 
@@ -206,7 +206,7 @@ public class LelReader {
 	public Collection<File> getSystems() {
 		return listSystems;
 	}
-	
+
 	/**
 	 * Get editing system files
 	 * 

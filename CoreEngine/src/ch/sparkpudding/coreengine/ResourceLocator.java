@@ -23,8 +23,6 @@ public class ResourceLocator {
 	private LelReader lelReader;
 
 	private Map<String, Image> textures;
-	// FIXME: We must find another solution, because using Clips prevents us from
-	// playing the same sound multiple times in quick succession
 	private Map<String, AudioData> sounds;
 	private Map<String, AudioData> musics;
 
@@ -65,9 +63,9 @@ public class ResourceLocator {
 	/**
 	 * Loads all the sounds of assets/sounds into the field
 	 * 
-	 * @throws UnsupportedAudioFileException
-	 * @throws IOException
-	 * @throws LineUnavailableException
+	 * @throws UnsupportedAudioFileException If the file has an unsupported extension
+	 * @throws IOException If the file is unreachable
+	 * @throws LineUnavailableException If the line is unavailable
 	 */
 	private void loadSounds() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		sounds = new HashMap<String, AudioData>();
@@ -87,8 +85,9 @@ public class ResourceLocator {
 	/**
 	 * Loads all the musics of assets/music into the field
 	 * 
-	 * @throws IOException
-	 * @throws LineUnavailableException
+	 * @throws UnsupportedAudioFileException If the file has an unsupported extension
+	 * @throws IOException If the file is unreachable
+	 * @throws LineUnavailableException If the line is unavailable
 	 */
 	private void loadMusics() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		musics = new HashMap<String, AudioData>();
@@ -105,7 +104,12 @@ public class ResourceLocator {
 		}
 	}
 
-	// Return a byte array from the file
+	/**
+	 * Return a byte array from the file
+	 * 
+	 * @param file The file to transform in byte array
+	 * @return Byte array from file
+	 */
 	private static byte[] readFileToByteArray(File file) {
 		FileInputStream fis = null;
 		// Creating a byte array using the length of the file
