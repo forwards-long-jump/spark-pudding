@@ -86,6 +86,7 @@ public class CoreEngine extends JPanel {
 	public CoreEngine(String gameFolder) throws Exception {
 		init(gameFolder);
 		startGame();
+		setCurrentScene(scenes.get("main"));
 	}
 
 	/**
@@ -105,7 +106,6 @@ public class CoreEngine extends JPanel {
 		editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
 
 		startGame();
-
 		setCurrentScene(scenes.get("main"));
 	}
 
@@ -143,8 +143,6 @@ public class CoreEngine extends JPanel {
 
 		systems = new ArrayList<UpdateSystem>();
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
-
-		setCurrentScene(scenes.get("main"));
 	}
 
 	/**

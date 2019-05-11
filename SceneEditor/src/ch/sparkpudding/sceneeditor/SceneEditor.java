@@ -47,13 +47,6 @@ public class SceneEditor {
 			e.printStackTrace();
 		}
 
-		coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
-			@Override
-			public void run() {
-				setGameState(EditorState.STOP);
-			}
-		});
-
 		coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, new Runnable() {
 			@Override
 			public void run() {
@@ -138,29 +131,22 @@ public class SceneEditor {
 	}
 
 	/**
-	 * Create the callback to register all entity of the coreEngine
-	 * 
-	 * @return the callback
+	 * Create the entity list for all scenes and update the display must be called
+	 * in sync in the core engine
 	 */
-	public static void createEntityList() {
-		coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+	private static void createEntityList() {
+		Map<String, Scene> scenes = coreEngine.getScenes();
+		seScenes.clear();
+		for (Scene scene : scenes.values()) {
+			SEScene seScene = new SEScene(scene);
+			seScenes.put(scene.getName(), seScene);
 
-			@Override
-			public void run() {
-				coreEngine.resetCurrentScene();
-				Map<String, Scene> scenes = coreEngine.getScenes();
-				for (Scene scene : scenes.values()) {
-					SEScene seScene = new SEScene(scene);
-					seScenes.put(scene.getName(), seScene);
-
-					if (coreEngine.getCurrentScene() == scene) {
-						currentScene = seScene;
-					}
-				}
-
-				frameSceneEditor.populateSidebarRight();
+			if (coreEngine.getCurrentScene() == scene) {
+				currentScene = seScene;
 			}
-		});
+		}
+
+		frameSceneEditor.populateSidebarRight();
 	}
 
 	/**

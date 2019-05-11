@@ -15,31 +15,39 @@ import ch.sparkpudding.sceneeditor.ecs.SEScene;
 
 /**
  * The panel which show the different scene
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 29 April 2019
  *
  */
 @SuppressWarnings("serial")
 public class PanelScene extends JPanel {
-
-	private PanelEntityTree panelEntityTree;
-
 	private JComboBox<String> comboBoxScenes;
 
 	private static final String TITLE = "Scenes";
 
+	private ItemListener itemListener;
+
 	/**
 	 * ctor
-	 * 
+	 *
 	 * @param panelEntityTree the panel which show the entities of a scene
 	 */
 	public PanelScene(PanelEntityTree panelEntityTree) {
-		this.panelEntityTree = panelEntityTree;
-
 		init();
 		setupLayout();
-		addListener();
+
+		itemListener = new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					SEScene newScene = SceneEditor.seScenes.get(comboBoxScenes.getSelectedItem());
+					SceneEditor.setCurrentScene(newScene);
+					SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
+					panelEntityTree.updateListEntities(newScene);
+				}
+			}
+		};
 	}
 
 	/**
@@ -69,27 +77,10 @@ public class PanelScene extends JPanel {
 	}
 
 	/**
-	 * Add the different listener for each element of the panel
-	 */
-	private void addListener() {
-		comboBoxScenes.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					SEScene newScene = SceneEditor.seScenes.get(comboBoxScenes.getSelectedItem());
-					SceneEditor.setCurrentScene(newScene);
-					SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
-					panelEntityTree.updateListEntities(newScene);
-				}
-			}
-		});
-	}
-
-	/**
 	 * Populate the panel, allow to wait for the coreEngine to load all the scenes
 	 */
 	public void populatePanel() {
+		comboBoxScenes.removeItemListener(itemListener);
 		// Get the last currentScene to prevent selecting something else when populating
 		Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
 
@@ -100,6 +91,7 @@ public class PanelScene extends JPanel {
 		}
 
 		// Reset lastScene after populating
+		comboBoxScenes.addItemListener(itemListener);
 		comboBoxScenes.setSelectedItem(lastScene.getName());
 	}
 
