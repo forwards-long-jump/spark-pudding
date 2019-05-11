@@ -63,4 +63,12 @@ public class PanelSidebarRight extends JPanel {
 	public void populatePanel() {
 		panelScene.populatePanel();
 	}
+	
+	/**
+	 * Get panelEntity
+	 * @return panelEntity
+	 */
+	public PanelEntity getPanelEntity() {
+		return panelEntity;
+	}
 }

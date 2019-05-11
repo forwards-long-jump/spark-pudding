@@ -103,4 +103,12 @@ public class FrameSceneEditor extends JFrame {
 	public void populateSidebarRight() {
 		panelSidebarRight.populatePanel();
 	}
+	
+	/**
+	 * Get panelSidebarRight
+	 * @return panelSidebarRight
+	 */
+	public PanelSidebarRight getPanelSidebarRight() {
+		return panelSidebarRight;
+	}
 }

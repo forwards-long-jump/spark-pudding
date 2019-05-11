@@ -14,6 +14,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.sparkpudding.coreengine.Lel;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.api.MetaEntity;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
@@ -154,6 +156,8 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public void add(Component c) {
 		components.put(c.getName(), c);
+
+		Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED);
 	}
 
 	/**
@@ -170,6 +174,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 
 			// update luaEntity
 			createLuaEntity();
+			Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED);
 			return true;
 		}
 		return false;
@@ -314,5 +319,15 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public LuaTable getLuaEntity() {
 		return luaEntity;
+	}
+
+	/**
+	 * Return true if the entity has the specified component
+	 * 
+	 * @param componentName to look for
+	 * @return true if the entity has the specified component
+	 */
+	public boolean hasComponent(String componentName) {
+		return components.keySet().contains(componentName);
 	}
 }

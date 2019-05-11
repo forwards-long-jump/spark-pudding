@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Scheduler {
 	public enum Trigger {
-		BEFORE_UPDATE, AFTER_UPDATE, GAME_LOOP_START;
+		BEFORE_UPDATE, AFTER_UPDATE, GAME_LOOP_START, COMPONENT_ADDED;
 	};
 
 	private Map<Trigger, List<Runnable>> tasks;
@@ -65,7 +65,7 @@ public class Scheduler {
 	 * @param trigger  trigger that will run the notification
 	 * @param runnable notification to run
 	 */
-	public void notify(Trigger trigger, Runnable runnable) {
+	public synchronized void notify(Trigger trigger, Runnable runnable) {
 		notifications.get(trigger).add(runnable);
 	}
 }

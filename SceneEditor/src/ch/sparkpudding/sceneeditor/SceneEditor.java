@@ -9,7 +9,9 @@ import ch.sparkpudding.coreengine.Camera;
 import ch.sparkpudding.coreengine.Camera.Mode;
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
@@ -27,10 +29,10 @@ public class SceneEditor {
 	public static FrameSceneEditor frameSceneEditor;
 	public static CoreEngine coreEngine;
 	public static Map<String, SEScene> seScenes;
+	public static SEScene currentScene;
+	public static SEEntity selectedEntity;
 
 	private static List<GameStateEventListener> eventListeners;
-
-	private static Runnable callbackSyncListEntity;
 
 	private static Camera camera;
 	private static Camera gameCamera;
@@ -52,11 +54,29 @@ public class SceneEditor {
 			}
 		});
 
+		coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, new Runnable() {
+			@Override
+			public void run() {
+				for (int i = 0; i < coreEngine.getCurrentScene().getEntities().size(); i++) {
+					Entity entity = coreEngine.getCurrentScene().getEntities().get(i);
+					if (entity.hasComponent("se-selected")) {
+						for (SEEntity seEntity : currentScene.getSEEntities()) {
+							if (seEntity.getLiveEntity() == entity) {
+								selectEntity(seEntity);
+								return;
+							}
+						}
+					}
+				}
+			}
+		});
+
 		eventListeners = new ArrayList<GameStateEventListener>();
 
 		seScenes = new HashMap<String, SEScene>();
 
 		camera = new Camera();
+
 	}
 
 	/**
@@ -124,13 +144,18 @@ public class SceneEditor {
 	 */
 	public static void createEntityList() {
 		coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
-			
+
 			@Override
 			public void run() {
 				coreEngine.resetCurrentScene();
 				Map<String, Scene> scenes = coreEngine.getScenes();
 				for (Scene scene : scenes.values()) {
-					seScenes.put(scene.getName(), new SEScene(scene));
+					SEScene seScene = new SEScene(scene);
+					seScenes.put(scene.getName(), seScene);
+
+					if (coreEngine.getCurrentScene() == scene) {
+						currentScene = seScene;
+					}
 				}
 
 				frameSceneEditor.populateSidebarRight();
@@ -200,5 +225,33 @@ public class SceneEditor {
 			gameCamera.setScaling(camera.getScaling());
 		}
 		SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
+	}
+
+	/**
+	 * Select an entity in game
+	 * 
+	 * @param entity to set as selected
+	 */
+	public static void selectEntity(SEEntity entity) {
+		if (entity == selectedEntity) {
+			return;
+		}
+
+		if (selectedEntity != null) {
+			selectedEntity.setSelected(false);
+		}
+
+		selectedEntity = entity;
+		entity.setSelected(true);
+		SceneEditor.frameSceneEditor.getPanelSidebarRight().getPanelEntity().setEntity(entity);
+	}
+
+	/**
+	 * Set current scene
+	 * 
+	 * @param newScene the new current scene
+	 */
+	public static void setCurrentScene(SEScene newScene) {
+		currentScene = newScene;
 	}
 }

@@ -15,6 +15,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 
@@ -80,7 +81,7 @@ public class PanelEntityTree extends JPanel {
 	 */
 	private void setupLayout() {
 		setLayout(new BorderLayout());
-		
+
 		listScroller.setPreferredSize(
 				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
 		listScroller.setMaximumSize(
@@ -101,7 +102,9 @@ public class PanelEntityTree extends JPanel {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting() && e.getSource() instanceof JList<?>
 						&& ((JList<?>) e.getSource()).getSelectedValue() instanceof SEEntity) {
-					panelEntity.setEntity((SEEntity) ((JList<?>) e.getSource()).getSelectedValue());
+
+					SceneEditor.selectEntity(((SEEntity) ((JList<?>) e.getSource()).getSelectedValue()));;
+
 				} else {
 					panelEntity.removeEntity();
 				}
