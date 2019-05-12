@@ -355,12 +355,13 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Return true if paused for editing
+	 * 
 	 * @return true if paused for editing
 	 */
 	public boolean isEditingPause() {
 		return editingPause;
 	}
-	
+
 	/**
 	 * Change the editingPause state
 	 * 
@@ -882,5 +883,14 @@ public class CoreEngine extends JPanel {
 			editingPause = true;
 			this.luaError = error;
 		}
+	}
+
+	/**
+	 * Set black bars color
+	 * 
+	 * @param color of the black bar
+	 */
+	public void setBlackBarsColor(Color color) {
+		blackBarColor = color;
 	}
 }

@@ -1,5 +1,6 @@
 package ch.sparkpudding.sceneeditor;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +47,9 @@ public class SceneEditor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
+
 
 		coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, new Runnable() {
 			@Override
