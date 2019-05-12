@@ -53,6 +53,9 @@ public class ComponentGenerator extends JPanel {
 		this.contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
 		this.jScrollPane = new JScrollPane(contentPanel);
+		this.jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		this.jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		this.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 	/**
