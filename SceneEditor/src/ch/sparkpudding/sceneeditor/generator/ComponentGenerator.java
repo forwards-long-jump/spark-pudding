@@ -98,7 +98,7 @@ public class ComponentGenerator extends JPanel {
 		titleBar.add(new JButton("Detach"));
 		this.contentPanel.add(titleBar);
 		this.contentPanel
-				.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values()), component.getName()));
+				.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values())));
 		this.contentPanel.add(new JSeparator());
 	}
 }
