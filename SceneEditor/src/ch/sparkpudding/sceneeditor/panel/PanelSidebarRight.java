@@ -19,6 +19,7 @@ public class PanelSidebarRight extends JPanel {
 	private PanelEntityTree panelEntityTree;
 	private PanelEntity panelEntity;
 
+	public static final int DEFAULT_PANEL_SIZE = 500;
 	public static final int BASIC_ELEMENT_WIDTH = 275;
 	public static final int BASIC_ELEMENT_HEIGHT = 275;
 	public static final int BASIC_ELEMENT_MARGIN = 5;

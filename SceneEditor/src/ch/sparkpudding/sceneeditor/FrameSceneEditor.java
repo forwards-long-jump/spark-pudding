@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JSplitPane;
 
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.menu.MenuBar;
@@ -40,10 +41,10 @@ public class FrameSceneEditor extends JFrame {
 	 */
 	public FrameSceneEditor() {
 		init();
-		setupLayout();
 		setupFrame();
+		setupLayout();
 		addListener();
-		
+
 		SceneEditor.setGameState(EditorState.STOP);
 	}
 
@@ -67,9 +68,10 @@ public class FrameSceneEditor extends JFrame {
 		setLayout(borderLayout);
 		setJMenuBar(menuBar);
 
-		add(panelSidebarRight, BorderLayout.EAST);
 		add(panelSidebarLeft, BorderLayout.WEST);
-		add(panelGame, BorderLayout.CENTER);
+		JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelGame, panelSidebarRight);
+		sp.setDividerLocation(this.getWidth() - PanelSidebarRight.DEFAULT_PANEL_SIZE);
+		add(sp, BorderLayout.CENTER);
 	}
 
 	/**
@@ -96,16 +98,17 @@ public class FrameSceneEditor extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-	
+
 	/**
 	 * Populate all the component of the sidebarRight
 	 */
 	public void populateSidebarRight() {
 		panelSidebarRight.populatePanel();
 	}
-	
+
 	/**
 	 * Get panelSidebarRight
+	 * 
 	 * @return panelSidebarRight
 	 */
 	public PanelSidebarRight getPanelSidebarRight() {
