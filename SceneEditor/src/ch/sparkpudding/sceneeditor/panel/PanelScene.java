@@ -92,6 +92,8 @@ public class PanelScene extends JPanel {
 
 		// Reset lastScene after populating
 		comboBoxScenes.addItemListener(itemListener);
+
+		comboBoxScenes.setSelectedItem(null);
 		comboBoxScenes.setSelectedItem(lastScene.getName());
 	}
 
