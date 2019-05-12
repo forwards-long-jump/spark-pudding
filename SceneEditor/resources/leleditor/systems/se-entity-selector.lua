@@ -18,6 +18,8 @@ function update()
     end
   end
 
+  mouseClickedAtPreviousTick = false
+
   if game.input:isMouseClicked() then
     mouseClickedAtPreviousTick = true
     -- Remove selected to all other entities
