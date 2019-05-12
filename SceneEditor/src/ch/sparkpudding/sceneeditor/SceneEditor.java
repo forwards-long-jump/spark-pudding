@@ -55,7 +55,8 @@ public class SceneEditor {
 					if (entity.hasComponent("se-selected")) {
 						for (SEEntity seEntity : currentScene.getSEEntities()) {
 							if (seEntity.getLiveEntity() == entity) {
-								selectEntity(seEntity);
+								SceneEditor.frameSceneEditor.getPanelSidebarRight().getPanelEntityTree()
+										.selectSEEntity(seEntity);
 								return;
 							}
 						}
@@ -151,7 +152,7 @@ public class SceneEditor {
 
 	/**
 	 * Add a listener for the event of the state of the SceneEditor
-	 * 
+	 *
 	 * @param evtListener the listener
 	 */
 	public static void addGameStateEventListener(GameStateEventListener evtListener) {
@@ -160,7 +161,7 @@ public class SceneEditor {
 
 	/**
 	 * Remove a listener for the event of the state of the SceneEditor
-	 * 
+	 *
 	 * @param evtListener the listener to remove
 	 * @return {@code true} if the event exist
 	 */
@@ -215,7 +216,7 @@ public class SceneEditor {
 
 	/**
 	 * Select an entity in game
-	 * 
+	 *
 	 * @param entity to set as selected
 	 */
 	public static void selectEntity(SEEntity entity) {
@@ -234,7 +235,7 @@ public class SceneEditor {
 
 	/**
 	 * Set current scene
-	 * 
+	 *
 	 * @param newScene the new current scene
 	 */
 	public static void setCurrentScene(SEScene newScene) {

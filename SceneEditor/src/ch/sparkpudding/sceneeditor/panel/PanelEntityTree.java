@@ -103,7 +103,7 @@ public class PanelEntityTree extends JPanel {
 				if (!e.getValueIsAdjusting() && e.getSource() instanceof JList<?>
 						&& ((JList<?>) e.getSource()).getSelectedValue() instanceof SEEntity) {
 
-					SceneEditor.selectEntity(((SEEntity) ((JList<?>) e.getSource()).getSelectedValue()));;
+					SceneEditor.selectEntity(((SEEntity) ((JList<?>) e.getSource()).getSelectedValue()));
 
 				} else {
 					panelEntity.removeEntity();
@@ -123,6 +123,15 @@ public class PanelEntityTree extends JPanel {
 		for (SEEntity entity : scene.getSEEntities()) {
 			listModelEntities.addElement(entity);
 		}
+	}
+
+	/**
+	 * Select the specified seEntity in the tree
+	 * 
+	 * @param entity to select
+	 */
+	public void selectSEEntity(SEEntity entity) {
+		jListEntities.setSelectedValue(entity, true);
 	}
 
 }

@@ -41,7 +41,7 @@ public class PanelSidebarRight extends JPanel {
 	 */
 	private void init() {
 		layout = new BorderLayout();
-		
+
 		panelEntity = new PanelEntity();
 		panelEntityTree = new PanelEntityTree(panelEntity);
 		panelScene = new PanelScene(panelEntityTree);
@@ -55,7 +55,7 @@ public class PanelSidebarRight extends JPanel {
 
 		add(panelScene, BorderLayout.NORTH);
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panelEntityTree, panelEntity);
-	
+
 		add(sp, BorderLayout.CENTER);
 		setBorder(BorderFactory.createEtchedBorder());
 	}
@@ -74,5 +74,14 @@ public class PanelSidebarRight extends JPanel {
 	 */
 	public PanelEntity getPanelEntity() {
 		return panelEntity;
+	}
+
+	/**
+	 * Get panelEntityTree
+	 * 
+	 * @return panelEntityTree
+	 */
+	public PanelEntityTree getPanelEntityTree() {
+		return panelEntityTree;
 	}
 }
