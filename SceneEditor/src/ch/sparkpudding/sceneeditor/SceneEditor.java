@@ -24,7 +24,7 @@ import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
  */
 public class SceneEditor {
 	public enum EditorState {
-		PLAY, PAUSE, STOP;
+		PLAY, PAUSE, STOP, RESET;
 	}
 
 	public static FrameSceneEditor frameSceneEditor;
@@ -125,6 +125,16 @@ public class SceneEditor {
 						SceneEditor.coreEngine.setEditingPause(true);
 						swapToSceneEditorCamera();
 					}
+				}
+			});
+			break;
+		case RESET:
+			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+				@Override
+				public void run() {
+					SceneEditor.coreEngine.resetCurrentScene();
+					createEntityList();
+					setGameState(EditorState.PLAY);
 				}
 			});
 			break;
