@@ -1,18 +1,19 @@
 package ch.sparkpudding.coreengine;
 
 import java.awt.Image;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import ch.sparkpudding.coreengine.filereader.LelReader;
-import sun.audio.AudioData;
 
 /**
  * Handles getting files from the asset folder of the .lel file
@@ -23,8 +24,8 @@ public class ResourceLocator {
 	private LelReader lelReader;
 
 	private Map<String, Image> textures;
-	private Map<String, AudioData> sounds;
-	private Map<String, AudioData> musics;
+	private Map<String, AudioInputStream> sounds;
+	private Map<String, AudioInputStream> musics;
 
 	/**
 	 * ctor
@@ -63,67 +64,42 @@ public class ResourceLocator {
 	/**
 	 * Loads all the sounds of assets/sounds into the field
 	 * 
-	 * @throws UnsupportedAudioFileException If the file has an unsupported extension
-	 * @throws IOException If the file is unreachable
-	 * @throws LineUnavailableException If the line is unavailable
+	 * @throws UnsupportedAudioFileException If the file has an unsupported
+	 *                                       extension
+	 * @throws IOException                   If the file is unreachable
 	 */
-	private void loadSounds() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		sounds = new HashMap<String, AudioData>();
+	private void loadSounds() throws UnsupportedAudioFileException, IOException {
+		sounds = new HashMap<String, AudioInputStream>();
 		for (File file : lelReader.getSounds()) {
 			// TODO : remove as soon as .keep files are removed
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-			byte[] byteFile = readFileToByteArray(file);
-			// Create the AudioData object from the byte array
-			AudioData audioData = new AudioData(byteFile);
 
-			sounds.put(file.getName(), audioData);
+			AudioInputStream audioInputStream = createReusableAudioInputStream(file);
+
+			sounds.put(file.getName(), audioInputStream);
 		}
 	}
 
 	/**
 	 * Loads all the musics of assets/music into the field
 	 * 
-	 * @throws UnsupportedAudioFileException If the file has an unsupported extension
-	 * @throws IOException If the file is unreachable
-	 * @throws LineUnavailableException If the line is unavailable
+	 * @throws UnsupportedAudioFileException If the file has an unsupported
+	 *                                       extension
+	 * @throws IOException                   If the file is unreachable
 	 */
-	private void loadMusics() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		musics = new HashMap<String, AudioData>();
+	private void loadMusics() throws UnsupportedAudioFileException, IOException {
+		musics = new HashMap<String, AudioInputStream>();
 		for (File file : lelReader.getMusics()) {
 			// TODO : remove as soon as .keep files are removed
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
-			byte[] byteFile = readFileToByteArray(file);
-			// Create the AudioData object from the byte array
-			AudioData audioData = new AudioData(byteFile);
+			AudioInputStream audioInputStream = createReusableAudioInputStream(file);
 
-			musics.put(file.getName(), audioData);
+			musics.put(file.getName(), audioInputStream);
 		}
-	}
-
-	/**
-	 * Return a byte array from the file
-	 * 
-	 * @param file The file to transform in byte array
-	 * @return Byte array from file
-	 */
-	private static byte[] readFileToByteArray(File file) {
-		FileInputStream fis = null;
-		// Creating a byte array using the length of the file
-		// file.length returns long which is cast to int
-		byte[] bArray = new byte[(int) file.length()];
-		try {
-			fis = new FileInputStream(file);
-			fis.read(bArray);
-			fis.close();
-
-		} catch (IOException ioExp) {
-			ioExp.printStackTrace();
-		}
-		return bArray;
 	}
 
 	/**
@@ -140,9 +116,9 @@ public class ResourceLocator {
 	 * Gets the sound by name
 	 * 
 	 * @param name Name of the sound
-	 * @return AudioData, or null when nothing is found
+	 * @return AudioInputStream, or null when nothing is found
 	 */
-	public AudioData getSound(String name) {
+	public AudioInputStream getSound(String name) {
 		return sounds.get(name);
 	}
 
@@ -150,9 +126,40 @@ public class ResourceLocator {
 	 * Gets music by name
 	 * 
 	 * @param name Name of the music
-	 * @return AudioData, or null when nothing is found
+	 * @return AudioInputStream, or null when nothing is found
 	 */
-	public AudioData getMusic(String name) {
+	public AudioInputStream getMusic(String name) {
 		return musics.get(name);
+	}
+
+	/**
+	 * Return an AudioInputStream that can be reset
+	 * 
+	 * Comes from https://stackoverflow.com/a/10000439
+	 * 
+	 * @param file The origin file of the stream
+	 * @return A resettable AudioInputStream
+	 * @throws IOException                   When the file cannot be accessed
+	 * @throws UnsupportedAudioFileException When the file format isn't supported
+	 */
+	private static AudioInputStream createReusableAudioInputStream(File file)
+			throws IOException, UnsupportedAudioFileException {
+		AudioInputStream ais = null;
+		try {
+			ais = AudioSystem.getAudioInputStream(file);
+			byte[] buffer = new byte[1024 * 32];
+			int read = 0;
+			ByteArrayOutputStream baos = new ByteArrayOutputStream(buffer.length);
+			while ((read = ais.read(buffer, 0, buffer.length)) != -1) {
+				baos.write(buffer, 0, read);
+			}
+			AudioInputStream reusableAis = new AudioInputStream(new ByteArrayInputStream(baos.toByteArray()),
+					ais.getFormat(), AudioSystem.NOT_SPECIFIED);
+			return reusableAis;
+		} finally {
+			if (ais != null) {
+				ais.close();
+			}
+		}
 	}
 }

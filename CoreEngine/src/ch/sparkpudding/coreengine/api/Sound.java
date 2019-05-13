@@ -1,13 +1,15 @@
 package ch.sparkpudding.coreengine.api;
 
-import java.applet.AudioClip;
+import java.io.IOException;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
-import sun.audio.AudioData;
-import sun.audio.AudioDataStream;
-import sun.audio.AudioPlayer;
-import sun.audio.ContinuousAudioDataStream;
 
 /**
  * API that allow to play sound from the systems
@@ -20,7 +22,7 @@ public class Sound {
 	private static Sound instance;
 	private ResourceLocator resourceLocator;
 
-	private AudioClip currentMusic;
+	private Clip currentMusic;
 
 	/**
 	 * Private constructor for the singleton
@@ -45,17 +47,27 @@ public class Sound {
 	 * Plays the given music
 	 * 
 	 * @param name The name of the music
+	 * @throws IOException                   If the file is unreachable
+	 * @throws LineUnavailableException      If the line is unavailable
+	 * @throws InterruptedException
+	 * @throws UnsupportedAudioFileException
 	 */
-	public void playMusic(String name) {
-		AudioData audioData = resourceLocator.getMusic(name);
-		if (audioData == null) {
-			return;
-		}
+	public void playMusic(String name)
+			throws LineUnavailableException, IOException, InterruptedException, UnsupportedAudioFileException {
 
-		// Create a ContinuousAudioDataStream to play back continuously
-		ContinuousAudioDataStream loopMusicStream = new ContinuousAudioDataStream(audioData);
-		// Play the sound
-		AudioPlayer.player.start(loopMusicStream);
+		AudioInputStream audioInputStream = resourceLocator.getMusic(name);
+
+		if (audioInputStream == null)
+			return;
+
+		audioInputStream.reset();
+
+		if (currentMusic != null)
+			currentMusic.stop();
+
+		currentMusic = AudioSystem.getClip();
+		currentMusic.open(audioInputStream);
+		currentMusic.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
 	/**
@@ -72,7 +84,7 @@ public class Sound {
 	 */
 	public void resumeMusic() {
 		if (currentMusic != null) {
-			currentMusic.loop();
+			currentMusic.start();
 		}
 	}
 
@@ -80,15 +92,20 @@ public class Sound {
 	 * Plays a sound once
 	 * 
 	 * @param name The name of the sound to play
+	 * @throws IOException              If the file is unreachable
+	 * @throws LineUnavailableException If the line is unavailable
 	 */
-	public void play(String name) {
-		AudioData audioData = resourceLocator.getSound(name);
-		if (audioData == null) {
+	public void play(String name) throws LineUnavailableException, IOException {
+		AudioInputStream audioInputStream = resourceLocator.getSound(name);
+
+		if (audioInputStream == null)
 			return;
-		}
-		// Create an AudioDataStream to play back
-		AudioDataStream audioStream = new AudioDataStream(audioData);
-		// Play the sound
-		AudioPlayer.player.start(audioStream);
+
+		audioInputStream.reset();
+
+		Clip clip = AudioSystem.getClip();
+		clip.open(audioInputStream);
+		clip.start();
+
 	}
 }
