@@ -14,7 +14,7 @@ import ch.sparkpudding.coreengine.ResourceLocator;
  * API that allow to play sound from the systems
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
- *         Creation Date : 6 mai 2019
+ *         Creation Date : 6 May 2019
  *
  */
 public class Sound {
