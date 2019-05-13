@@ -3,6 +3,7 @@ package ch.sparkpudding.sceneeditor.panel;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
+import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 
 /**
  * The panel which show the different scene
@@ -22,11 +24,12 @@ import ch.sparkpudding.sceneeditor.ecs.SEScene;
  */
 @SuppressWarnings("serial")
 public class PanelScene extends JPanel {
+
+	private PanelEntityTree panelEntityTree;
+
 	private JComboBox<String> comboBoxScenes;
 
 	private static final String TITLE = "Scenes";
-
-	private ItemListener itemListener;
 
 	/**
 	 * ctor
@@ -34,20 +37,11 @@ public class PanelScene extends JPanel {
 	 * @param panelEntityTree the panel which show the entities of a scene
 	 */
 	public PanelScene(PanelEntityTree panelEntityTree) {
+		this.panelEntityTree = panelEntityTree;
+
 		init();
 		setupLayout();
-
-		itemListener = new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					SEScene newScene = SceneEditor.seScenes.get(comboBoxScenes.getSelectedItem());
-					SceneEditor.setCurrentScene(newScene);
-					SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
-					panelEntityTree.updateListEntities(newScene);
-				}
-			}
-		};
+		addListener();
 	}
 
 	/**
@@ -76,25 +70,34 @@ public class PanelScene extends JPanel {
 		setBorder(BorderFactory.createTitledBorder(TITLE));
 	}
 
-	/**
-	 * Populate the panel, allow to wait for the coreEngine to load all the scenes
-	 */
-	public void populatePanel() {
-		comboBoxScenes.removeItemListener(itemListener);
-		// Get the last currentScene to prevent selecting something else when populating
-		Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
+	private void addListener() {
+		SceneEditor.addEntityEventListener(new EntityEventAdapter() {
+			@Override
+			public void entityListChanged(Map<String, SEScene> seScenes) {
+				Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
 
-		// Populate
-		comboBoxScenes.removeAllItems();
-		for (SEScene scene : SceneEditor.seScenes.values()) {
-			comboBoxScenes.addItem(scene.getLiveScene().getName());
-		}
+				// Populate
+				comboBoxScenes.removeAllItems();
+				for (SEScene scene : seScenes.values()) {
+					comboBoxScenes.addItem(scene.getLiveScene().getName());
+				}
 
-		// Reset lastScene after populating
-		comboBoxScenes.addItemListener(itemListener);
+				comboBoxScenes.setSelectedItem(lastScene.getName());
+			}
+		});
 
-		comboBoxScenes.setSelectedItem(null);
-		comboBoxScenes.setSelectedItem(lastScene.getName());
+		comboBoxScenes.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					SEScene newScene = SceneEditor.seScenes.get(comboBoxScenes.getSelectedItem());
+					SceneEditor.setCurrentScene(newScene);
+					SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
+					panelEntityTree.updateListEntities(newScene);
+				}
+			}
+		});
 	}
 
 }

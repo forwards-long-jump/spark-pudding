@@ -1,19 +1,20 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import javax.swing.SwingUtilities;
+import javax.swing.event.EventListenerList;
 
 import ch.sparkpudding.coreengine.Camera;
 import ch.sparkpudding.coreengine.Camera.Mode;
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
-import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
+import ch.sparkpudding.sceneeditor.listener.EntityEventListener;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
 /**
@@ -33,7 +34,7 @@ public class SceneEditor {
 	public static SEScene currentScene;
 	public static SEEntity selectedEntity;
 
-	private static List<GameStateEventListener> eventListeners;
+	private static EventListenerList listenerList;
 
 	private static Camera camera;
 	private static Camera gameCamera;
@@ -41,40 +42,9 @@ public class SceneEditor {
 	private static EditorState gameState;
 
 	static {
-		try {
-			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(),
-					Main.class.getResource("/leleditor").getPath());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
-
-
-		coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, new Runnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i < coreEngine.getCurrentScene().getEntities().size(); i++) {
-					Entity entity = coreEngine.getCurrentScene().getEntities().get(i);
-					if (entity.hasComponent("se-selected")) {
-						for (SEEntity seEntity : currentScene.getSEEntities()) {
-							if (seEntity.getLiveEntity() == entity) {
-								SceneEditor.frameSceneEditor.getPanelSidebarRight().getPanelEntityTree()
-										.selectSEEntity(seEntity);
-								return;
-							}
-						}
-					}
-				}
-			}
-		});
-
-		eventListeners = new ArrayList<GameStateEventListener>();
-
+		listenerList = new EventListenerList();
 		seScenes = new HashMap<String, SEScene>();
-
 		camera = new Camera();
-
 	}
 
 	/**
@@ -96,8 +66,9 @@ public class SceneEditor {
 			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
 				@Override
 				public void run() {
-					if (!SceneEditor.coreEngine.isEditingPause()) {
-						SceneEditor.coreEngine.setEditingPause(true);
+					coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
+					if (!coreEngine.isEditingPause()) {
+						coreEngine.setEditingPause(true);
 						swapToSceneEditorCamera();
 					}
 				}
@@ -108,8 +79,9 @@ public class SceneEditor {
 			coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
 				@Override
 				public void run() {
-					if (SceneEditor.coreEngine.isEditingPause()) {
-						SceneEditor.coreEngine.setEditingPause(false);
+					coreEngine.setBlackBarsColor(new Color(0, 0, 0));
+					if (coreEngine.isEditingPause()) {
+						coreEngine.setEditingPause(false);
 						swapToGameCamera();
 					}
 				}
@@ -119,10 +91,11 @@ public class SceneEditor {
 			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
 				@Override
 				public void run() {
-					SceneEditor.coreEngine.resetCurrentScene();
+					coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
+					coreEngine.resetCurrentScene();
 					createEntityList();
-					if (!SceneEditor.coreEngine.isEditingPause()) {
-						SceneEditor.coreEngine.setEditingPause(true);
+					if (!coreEngine.isEditingPause()) {
+						coreEngine.setEditingPause(true);
 						swapToSceneEditorCamera();
 					}
 				}
@@ -132,7 +105,7 @@ public class SceneEditor {
 			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
 				@Override
 				public void run() {
-					SceneEditor.coreEngine.resetCurrentScene();
+					coreEngine.resetCurrentScene();
 					createEntityList();
 					setGameState(EditorState.PLAY);
 				}
@@ -142,7 +115,13 @@ public class SceneEditor {
 			break;
 
 		}
-		fireGameStateEvent();
+		
+		SwingUtilities.invokeLater(new Runnable() {		
+			@Override
+			public void run() {
+				fireGameStateChanged();
+			}
+		});
 	}
 
 	/**
@@ -161,42 +140,12 @@ public class SceneEditor {
 			}
 		}
 
-		frameSceneEditor.populateSidebarRight();
-	}
-
-	/**
-	 * Add a listener for the event of the state of the SceneEditor
-	 *
-	 * @param evtListener the listener
-	 */
-	public static void addGameStateEventListener(GameStateEventListener evtListener) {
-		eventListeners.add(evtListener);
-	}
-
-	/**
-	 * Remove a listener for the event of the state of the SceneEditor
-	 *
-	 * @param evtListener the listener to remove
-	 * @return {@code true} if the event exist
-	 */
-	public static boolean removeGameStateEventListener(GameStateEventListener evtListener) {
-		return eventListeners.remove(evtListener);
-	}
-
-	/**
-	 * Remove all the event of the SceneEditor
-	 */
-	public static void removeAllGameStateEventListener() {
-		eventListeners.clear();
-	}
-
-	/**
-	 * Allow to fire the gameState event of the listeners
-	 */
-	private static void fireGameStateEvent() {
-		for (GameStateEventListener gameStateEventListener : eventListeners) {
-			gameStateEventListener.gameStateEvent(gameState);
-		}
+		SwingUtilities.invokeLater(new Runnable() {		
+			@Override
+			public void run() {
+				fireEntityListChanged();
+			}
+		});
 	}
 
 	/**
@@ -233,7 +182,7 @@ public class SceneEditor {
 	 *
 	 * @param entity to set as selected
 	 */
-	public static void selectEntity(SEEntity entity) {
+	public static void setSelectedEntity(SEEntity entity) {
 		if (entity == selectedEntity) {
 			return;
 		}
@@ -244,7 +193,8 @@ public class SceneEditor {
 
 		selectedEntity = entity;
 		entity.setSelected(true);
-		SceneEditor.frameSceneEditor.getPanelSidebarRight().getPanelEntity().setEntity(entity);
+
+		fireSelectedEntityChanged();
 	}
 
 	/**
@@ -254,5 +204,70 @@ public class SceneEditor {
 	 */
 	public static void setCurrentScene(SEScene newScene) {
 		currentScene = newScene;
+	}
+
+	/**
+	 * Add a listener for the event of the state of the SceneEditor
+	 *
+	 * @param evtListener the listener
+	 */
+	public static void addGameStateEventListener(GameStateEventListener evtListener) {
+		listenerList.add(GameStateEventListener.class, evtListener);
+	}
+
+	/**
+	 * Remove a listener for the event of the state of the SceneEditor
+	 *
+	 * @param evtListener the listener to remove
+	 * @return {@code true} if the event exist
+	 */
+	public static void removeGameStateEventListener(GameStateEventListener evtListener) {
+		listenerList.remove(GameStateEventListener.class, evtListener);
+	}
+
+	/**
+	 * Allow to fire the gameState event of the listeners
+	 */
+	private static void fireGameStateChanged() {
+		for (GameStateEventListener listener : listenerList.getListeners(GameStateEventListener.class)) {
+			listener.gameStateChanged(gameState);
+		}
+	}
+
+	/**
+	 * Add an entity listener
+	 *
+	 * @param evtListener the listener
+	 */
+	public static void addEntityEventListener(EntityEventListener evtListener) {
+		listenerList.add(EntityEventListener.class, evtListener);
+	}
+
+	/**
+	 * Remove an entity listener
+	 *
+	 * @param evtListener the listener to remove
+	 * @return {@code true} if the event exist
+	 */
+	public static void removeEntityEventListener(EntityEventListener evtListener) {
+		listenerList.remove(EntityEventListener.class, evtListener);
+	}
+
+	/**
+	 * Allow to fire an event when the selected entity change
+	 */
+	private static void fireSelectedEntityChanged() {
+		for (EntityEventListener listener : listenerList.getListeners(EntityEventListener.class)) {
+			listener.changeSelectedEntity(selectedEntity);
+		}
+	}
+	
+	/**
+	 * Allow to fire an event when the selected entity change
+	 */
+	private static void fireEntityListChanged() {
+		for (EntityEventListener listener : listenerList.getListeners(EntityEventListener.class)) {
+			listener.entityListChanged(seScenes);
+		}
 	}
 }

@@ -9,6 +9,7 @@ import javax.swing.JTabbedPane;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
+import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 
 /**
@@ -68,8 +69,16 @@ public class PanelEntity extends JPanel {
 		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
 
 			@Override
-			public void gameStateEvent(EditorState state) {
+			public void gameStateChanged(EditorState state) {
 				resetEnabledPane();
+			}
+		});
+
+		SceneEditor.addEntityEventListener(new EntityEventAdapter() {
+
+			@Override
+			public void changeSelectedEntity(SEEntity entity) {
+				setEntity(entity);
 			}
 		});
 	}
@@ -107,7 +116,7 @@ public class PanelEntity extends JPanel {
 	 * 
 	 * @param seEntity The entity represented by this panel
 	 */
-	public void setEntity(SEEntity seEntity) {
+	private void setEntity(SEEntity seEntity) {
 		currentEntity = seEntity;
 		initialPanelComponent.setEntity(currentEntity.getDefaultEntity());
 		livePanelComponent.setEntity(currentEntity.getLiveEntity());

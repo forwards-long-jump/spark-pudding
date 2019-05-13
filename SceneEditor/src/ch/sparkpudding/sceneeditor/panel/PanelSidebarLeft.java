@@ -117,7 +117,7 @@ public class PanelSidebarLeft extends JPanel {
 		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
 
 			@Override
-			public void gameStateEvent(EditorState state) {
+			public void gameStateChanged(EditorState state) {
 				switch (state) {
 				case PAUSE:
 					btnStop.setIcon(ImageStorage.STOP);

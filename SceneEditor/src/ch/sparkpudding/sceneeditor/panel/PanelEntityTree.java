@@ -12,9 +12,12 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
@@ -103,10 +106,33 @@ public class PanelEntityTree extends JPanel {
 				if (!e.getValueIsAdjusting() && e.getSource() instanceof JList<?>
 						&& ((JList<?>) e.getSource()).getSelectedValue() instanceof SEEntity) {
 
-					SceneEditor.selectEntity(((SEEntity) ((JList<?>) e.getSource()).getSelectedValue()));
+					SceneEditor.setSelectedEntity(((SEEntity) ((JList<?>) e.getSource()).getSelectedValue()));
 
 				} else {
 					panelEntity.removeEntity();
+				}
+			}
+		});
+
+		SceneEditor.coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, new Runnable() {
+			@Override
+			public void run() {
+				for (int i = 0; i < SceneEditor.coreEngine.getCurrentScene().getEntities().size(); i++) {
+					Entity entity = SceneEditor.coreEngine.getCurrentScene().getEntities().get(i);
+					if (entity.hasComponent("se-selected")) {
+						for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
+							if (seEntity.getLiveEntity() == entity) {
+								// FIXME argh
+								SwingUtilities.invokeLater(new Runnable() {
+									@Override
+									public void run() {
+										selectSEEntity(seEntity);
+									}
+								});
+								return;
+							}
+						}
+					}
 				}
 			}
 		});
@@ -123,6 +149,8 @@ public class PanelEntityTree extends JPanel {
 		for (SEEntity entity : scene.getSEEntities()) {
 			listModelEntities.addElement(entity);
 		}
+		
+		revalidate();
 	}
 
 	/**

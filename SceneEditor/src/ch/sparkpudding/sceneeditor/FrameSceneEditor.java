@@ -99,19 +99,4 @@ public class FrameSceneEditor extends JFrame {
 		setVisible(true);
 	}
 
-	/**
-	 * Populate all the component of the sidebarRight
-	 */
-	public void populateSidebarRight() {
-		panelSidebarRight.populatePanel();
-	}
-
-	/**
-	 * Get panelSidebarRight
-	 * 
-	 * @return panelSidebarRight
-	 */
-	public PanelSidebarRight getPanelSidebarRight() {
-		return panelSidebarRight;
-	}
 }

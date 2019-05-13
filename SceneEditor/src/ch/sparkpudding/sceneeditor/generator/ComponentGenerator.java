@@ -73,7 +73,6 @@ public class ComponentGenerator extends JPanel {
 	private void createComponents() {
 		removeAll();
 		for (Component component : components) {
-			// TODO add check in the CoreEngine
 			if (!component.getName().startsWith("se-")) {
 				setupComponentsLayout(component);
 			}

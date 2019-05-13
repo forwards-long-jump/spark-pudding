@@ -60,28 +60,4 @@ public class PanelSidebarRight extends JPanel {
 		setBorder(BorderFactory.createEtchedBorder());
 	}
 
-	/**
-	 * Populate this panel
-	 */
-	public void populatePanel() {
-		panelScene.populatePanel();
-	}
-
-	/**
-	 * Get panelEntity
-	 * 
-	 * @return panelEntity
-	 */
-	public PanelEntity getPanelEntity() {
-		return panelEntity;
-	}
-
-	/**
-	 * Get panelEntityTree
-	 * 
-	 * @return panelEntityTree
-	 */
-	public PanelEntityTree getPanelEntityTree() {
-		return panelEntityTree;
-	}
 }
