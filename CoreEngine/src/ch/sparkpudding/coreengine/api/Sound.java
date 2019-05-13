@@ -6,7 +6,6 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
@@ -47,13 +46,10 @@ public class Sound {
 	 * Plays the given music
 	 * 
 	 * @param name The name of the music
-	 * @throws IOException                   If the file is unreachable
-	 * @throws LineUnavailableException      If the line is unavailable
-	 * @throws InterruptedException
-	 * @throws UnsupportedAudioFileException
+	 * @throws IOException              If the file is unreachable
+	 * @throws LineUnavailableException If the line is unavailable
 	 */
-	public void playMusic(String name)
-			throws LineUnavailableException, IOException, InterruptedException, UnsupportedAudioFileException {
+	public void playMusic(String name) throws IOException, LineUnavailableException {
 
 		AudioInputStream audioInputStream = resourceLocator.getMusic(name);
 
