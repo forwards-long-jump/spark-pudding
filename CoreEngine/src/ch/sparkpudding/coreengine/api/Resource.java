@@ -2,9 +2,10 @@ package ch.sparkpudding.coreengine.api;
 
 import java.awt.Image;
 
+import javax.sound.sampled.AudioInputStream;
+
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
-import sun.audio.AudioData;
 
 /**
  * API that wraps the ResourceLocator class in order to only give access to
@@ -46,7 +47,7 @@ public class Resource {
 	 * @param name Name of the sound
 	 * @return AudioData, or null when nothing is found
 	 */
-	public AudioData getSound(String name) {
+	public AudioInputStream getSound(String name) {
 		return resourceLocator.getSound(name);
 	}
 
@@ -56,7 +57,7 @@ public class Resource {
 	 * @param name Name of the music
 	 * @return AudioData, or null when nothing is found
 	 */
-	public AudioData getMusic(String name) {
+	public AudioInputStream getMusic(String name) {
 		return resourceLocator.getMusic(name);
 	}
 }
