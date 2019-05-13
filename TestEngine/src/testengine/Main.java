@@ -29,7 +29,7 @@ public class Main {
 		jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		try {
-			ce = new CoreEngine(ClassLoader.getSystemResource("testgame").getPath());
+			ce = new CoreEngine(ClassLoader.getSystemResource("testgame2").getPath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -60,7 +60,7 @@ public class Main {
 		try {
 			watchService = FileSystems.getDefault().newWatchService();
 
-			Path path = Paths.get(new URI(ClassLoader.getSystemResource("testgame/systems/").toString()));
+			Path path = Paths.get(new URI(ClassLoader.getSystemResource("testgame2/systems/").toString()));
 			path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE,
 					StandardWatchEventKinds.ENTRY_MODIFY);
 
