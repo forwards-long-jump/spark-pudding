@@ -3,6 +3,7 @@ package ch.sparkpudding.coreengine.api;
 import org.luaj.vm2.LuaValue;
 
 import ch.sparkpudding.coreengine.Lel;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
 /**
@@ -92,7 +93,14 @@ public class Core {
 	 */
 	public LuaValue createEntity(String templateName) {
 		Entity e = new Entity(Entity.getTemplates().get(templateName));
-		Lel.coreEngine.addEntity(e);
+		
+		Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+			@Override
+			public void run() {
+				Lel.coreEngine.addEntity(e);
+			}
+		});
+		
 		return e.getLuaEntity();
 	}
 }

@@ -27,7 +27,7 @@ function update()
         if (bullet.position.y < enemy.position.y + enemy.size.height and bullet.position.y + bullet.size.height > enemy.position.y) then
           game.camera:shake(8, 10)
           bullet._meta:delete()
-          enemy = enemy._meta:addComponent("gravity")
+          enemy._meta:addComponent("gravity")
           enemy._meta:deleteComponent("enemy")
           game.sound:play("slap.wav")
         end

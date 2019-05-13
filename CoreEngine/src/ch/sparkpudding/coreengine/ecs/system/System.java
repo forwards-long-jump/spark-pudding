@@ -126,6 +126,9 @@ public abstract class System {
 		} catch (LuaError error) {
 			Lel.coreEngine.notifyLuaError(error);
 		}
+		catch (Exception error) {
+			Lel.coreEngine.notifyLuaError(new LuaError(error.toString()));
+		}
 
 		return false;
 	}

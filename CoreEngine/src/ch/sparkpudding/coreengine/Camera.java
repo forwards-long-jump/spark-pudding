@@ -211,7 +211,7 @@ public class Camera {
 	 * Apply translate and scale to the context. Context must be saved and restored
 	 * manually
 	 * 
-	 * @param g2d
+	 * @param g2d graphic context
 	 */
 	public void applyTransforms(Graphics2D g2d) {
 		transformationState = g2d.getTransform();
@@ -224,22 +224,32 @@ public class Camera {
 	 * Apply translate and scale to the context. Context must be saved and restored
 	 * manually
 	 * 
-	 * @param g2d
+	 * @param g2d graphic context
 	 */
 	public void resetTransforms(Graphics2D g2d) {
 		g2d.setTransform(transformationState);
 	}
 
 	/**
-	 * Teleport the camera to the specified position, cancel all momentum
+	 * Teleport the camera to the specified world position, cancel all momentum
 	 * 
-	 * @param x
-	 * @param y
+	 * @param x coordinate
+	 * @param y coordinate
 	 */
-	public void setPosition(double x, double y) {
+	public void setWorldPosition(double x, double y) {
 		position.setLocation(x * scaling, y * scaling);
 		targetPosition.setLocation(position.getX(), position.getY());
 		resetForces();
+	}
+
+	/**
+	 * Teleport the camera to the specified position
+	 * 
+	 * @param x coordinate
+	 * @param y coordinate
+	 */
+	public void setPosition(double x, double y) {
+		position.setLocation(x, y);
 	}
 
 	/**
@@ -444,9 +454,28 @@ public class Camera {
 
 	/**
 	 * Get target scaling
+	 * 
 	 * @return target scaling
 	 */
 	public float getTargetScaling() {
 		return targetScaling;
+	}
+
+	/**
+	 * Get scaling point
+	 * 
+	 * @return scaling point
+	 */
+	public Point2D getScalingPoint() {
+		return scalingPoint;
+	}
+
+	/**
+	 * Return current translate mode
+	 * 
+	 * @return current translate mode
+	 */
+	public Mode getTranslateMode() {
+		return translateMode;
 	}
 }
