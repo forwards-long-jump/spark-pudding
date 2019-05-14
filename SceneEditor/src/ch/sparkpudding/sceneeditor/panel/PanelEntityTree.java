@@ -121,8 +121,8 @@ public class PanelEntityTree extends JPanel {
 					Entity entity = SceneEditor.coreEngine.getCurrentScene().getEntities().get(i);
 					if (entity.hasComponent("se-selected")) {
 						for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
-							if (seEntity.getLiveEntity() == entity) {
-								// FIXME argh
+							// FIXME: this *kinda* works but could be way better
+							if (seEntity.getLiveEntity() == entity && jListEntities.getSelectedValue().getLiveEntity() != entity) {
 								SwingUtilities.invokeLater(new Runnable() {
 									@Override
 									public void run() {
