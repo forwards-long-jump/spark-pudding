@@ -8,6 +8,8 @@ function render()
   game.camera:applyTransforms(g:getContext())
 
   local penWidth = 2 / game.camera:getScaling()
+  local cursorSize = 10 / game.camera:getScaling()
+
   for i, entity in ipairs(selectedEntities) do
     g:setColor(game.color:fromRGBA(255, 255, 255, 150))
     g:fillRect(entity.position, entity.size)
@@ -16,7 +18,19 @@ function render()
     g:setColor(game.color:fromRGBA(0, 0, 0, 200))
     g:drawRect(entity.position, entity.size)
 
+    -- Draw the resizing cursors
+    -- TODO: Use images
 
+    local selectedHoverIndex = entity["se-selected"].hoverResizerIndex
+    local draggerColorSelected = game.color:fromRGBA(0, 0, 0, 255)
+    local draggerColor = game.color:fromRGBA(255, 255, 255, 200)
+
+    for i = 0, 8 do
+      local x = entity.position.x - cursorSize / 2 + (i % 3) * entity.size.width / 2
+      local y = entity.position.y - cursorSize / 2 + math.floor(i / 3) * entity.size.height / 2
+      if(selectedHoverIndex == i) then g:setColor(draggerColorSelected) else g:setColor(draggerColor) end
+      g:fillRect(x, y, cursorSize, cursorSize)
+    end
   end
 
   for i, entity in ipairs(hoveredEntities) do
