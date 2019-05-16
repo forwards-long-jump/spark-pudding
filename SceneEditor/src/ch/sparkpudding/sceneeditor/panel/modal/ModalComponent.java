@@ -107,7 +107,7 @@ public class ModalComponent extends Modal {
 
 		String[] tableHeaders = { "Name", "Type", "Default value" };
 
-		this.tableModel = new DefaultTableModel(tableHeaders, 0) {
+		this.tableModel = new DefaultTableModel(tableHeaders, 3) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				if ((column == 0 || column == 1) && entity != null) {
@@ -154,7 +154,9 @@ public class ModalComponent extends Modal {
 			JOptionPane.showMessageDialog(this, "This entity already has all existing components.");
 			dispose();
 			return false;
-		} else {
+		}
+
+		if (entity != null) {
 			// Display table every time, could be optimised but it means handling which one
 			// is selected
 			cmbComponents.setSelectedIndex(0);
@@ -288,12 +290,23 @@ public class ModalComponent extends Modal {
 					Map<String, Field> fields = new HashMap<String, Field>();
 
 					for (int i = 0; i < tableFields.getRowCount(); i++) {
-						String fieldName = (String) tableFields.getModel().getValueAt(i, 0);
-						String fieldType = (String) tableFields.getModel().getValueAt(i, 1);
-						String fieldValue = (String) tableFields.getModel().getValueAt(i, 2);
+						try {
+							String fieldName = (String) tableFields.getModel().getValueAt(i, 0);
+							String fieldType;
+							if (tableFields.getModel().getValueAt(i, 1) instanceof FieldType) {
+								fieldType = ((FieldType) tableFields.getModel().getValueAt(i, 1)).name();
+							} else {
+								fieldType = (String) tableFields.getModel().getValueAt(i, 1);
+							}
 
-						if (fieldName != "" && fieldType != null) {
-							fields.put(fieldName, new Field(fieldName, fieldType, fieldValue));
+							String fieldValue = (String) tableFields.getModel().getValueAt(i, 2);
+
+							if (fieldName != "" && fieldType != null) {
+								fields.put(fieldName, new Field(fieldName, fieldType, fieldValue));
+							}
+						} catch (Exception exception) {
+							JOptionPane.showMessageDialog(ModalComponent.this, "Please check your inputs.");
+							return;
 						}
 					}
 

@@ -11,7 +11,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
