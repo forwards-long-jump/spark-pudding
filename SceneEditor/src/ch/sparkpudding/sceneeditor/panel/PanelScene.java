@@ -1,6 +1,7 @@
 package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -8,13 +9,14 @@ import java.awt.event.ItemListener;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.action.ActionRemoveScene;
+import ch.sparkpudding.sceneeditor.action.ActionRenameScene;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalScene;
@@ -56,8 +58,9 @@ public class PanelScene extends JPanel {
 	private void init() {
 		comboBoxScenes = new JComboBox<String>();
 
-		buttonRemoveScene = new JButton("Remove");
-		buttonAddScene = new JButton("Add");
+		buttonAddScene = new JButton("+");
+		buttonRemoveScene = new JButton("-");
+		buttonRemoveScene.setPreferredSize(buttonAddScene.getPreferredSize());
 
 		comboBoxScenes.setEditable(true);
 	}
@@ -66,7 +69,7 @@ public class PanelScene extends JPanel {
 	 * Setup the layout of the panel
 	 */
 	private void setupLayout() {
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setLayout(new FlowLayout());
 
 		comboBoxScenes.setPreferredSize(
 				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
@@ -102,23 +105,24 @@ public class PanelScene extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					SEScene newScene = SceneEditor.seScenes.get(comboBoxScenes.getSelectedItem());
-					SceneEditor.setCurrentScene(newScene);
-					SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
-					panelEntityTree.updateListEntities(newScene);
-				}
-			}
-		});
+					String selected = (String) comboBoxScenes.getSelectedItem();
 
-		comboBoxScenes.addActionListener(new ActionListener() {
+					// Prevent modifying of main scene
+					// (not the only measure taken, but helps indicate the intent to the user)
+					boolean alterable = !selected.equals("main");
+					comboBoxScenes.setEditable(alterable);
+					buttonRemoveScene.setEnabled(alterable);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int index = comboBoxScenes.getSelectedIndex();
-				if (index >= 0) {
-					comboBoxScenes.setSelectedIndex(index);
-				} else if (e.getActionCommand().equals("comboBoxEdited")) {
-					// rename selected scene
+					SEScene newScene = SceneEditor.seScenes.get(selected);
+					// Change scene if it exists
+					if (newScene != null) {
+						SceneEditor.setCurrentScene(newScene);
+						SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
+						panelEntityTree.updateListEntities(newScene);
+					} else {
+						new ActionRenameScene(SceneEditor.currentScene.getLiveScene().getName(), selected)
+								.actionPerformed(null);
+					}
 				}
 			}
 		});
@@ -128,6 +132,16 @@ public class PanelScene extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new ModalScene(SceneEditor.frameSceneEditor).setVisible(true);
+			}
+		});
+
+		buttonRemoveScene.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String toRemove = (String) comboBoxScenes.getSelectedItem();
+				comboBoxScenes.setSelectedItem("main");
+				new ActionRemoveScene(toRemove).actionPerformed(null);
 			}
 		});
 
