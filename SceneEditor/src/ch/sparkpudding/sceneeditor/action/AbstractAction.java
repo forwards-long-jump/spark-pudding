@@ -1,6 +1,7 @@
 package ch.sparkpudding.sceneeditor.action;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Action;
 
@@ -12,7 +13,7 @@ import javax.swing.Action;
  *
  */
 @SuppressWarnings("serial")
-public abstract class AbstractAction extends javax.swing.AbstractAction {
+public abstract class AbstractAction extends javax.swing.AbstractAction implements ActionListener {
 
 	private boolean isTracked;
 
