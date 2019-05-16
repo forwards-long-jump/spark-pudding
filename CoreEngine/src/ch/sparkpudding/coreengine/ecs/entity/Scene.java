@@ -34,6 +34,11 @@ public class Scene {
 		this.camera = new Camera();
 		this.tick = 0;
 	}
+	
+	public Scene(String name) {
+		this();
+		this.name = name;
+	}
 
 	/**
 	 * Create a scene from a parsed XML Document and populates its entities

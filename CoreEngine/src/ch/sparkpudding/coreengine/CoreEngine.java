@@ -398,6 +398,26 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * Removes scene from scenes list
+	 * 
+	 * @param name Name of the scene
+	 */
+	public void removeScene(String name) {
+		if (currentScene.getName().equals(name)) {
+			scheduler.schedule(Trigger.GAME_LOOP_START, new Runnable() {
+
+				@Override
+				public void run() {
+					setCurrentScene(scenes.get("main"));
+					
+				}
+			});
+		} else {
+			scenes.remove(name);
+		}
+	}
+
+	/**
 	 * Sets scene as current scene, without reloading
 	 *
 	 * @param name Name of the scene
