@@ -34,7 +34,7 @@ public class Scene {
 		this.camera = new Camera();
 		this.tick = 0;
 	}
-	
+
 	public Scene(String name) {
 		this();
 		this.name = name;
@@ -129,6 +129,15 @@ public class Scene {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Set the name of the scene
+	 * 
+	 * @param name new name of the scene
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
