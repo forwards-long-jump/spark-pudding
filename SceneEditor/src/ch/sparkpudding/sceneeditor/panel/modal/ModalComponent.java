@@ -8,13 +8,15 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,6 +28,9 @@ import javax.swing.table.TableColumn;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.component.Field.FieldType;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.action.ActionAddComponent;
 
 /**
  * Create a new component for the current entity with the input in this modal
@@ -36,9 +41,11 @@ import ch.sparkpudding.coreengine.ecs.component.Field.FieldType;
 @SuppressWarnings("serial")
 public class ModalComponent extends Modal {
 	JLabel lblCompName;
+	JComboBox<String> cmbComponents;
+
 	JTextField fiCompName;
 	JComboBox<FieldType> cmbFieldType;
-	JTable tblCompFields;
+	JTable tblFields;
 	DefaultTableModel tblModel;
 	JPanel pnlFields;
 	JScrollPane pnlFieldsScroll;
@@ -47,20 +54,30 @@ public class ModalComponent extends Modal {
 	JButton btnAddField;
 	JButton btnRemoveField;
 
+	Entity entity;
+
 	/**
 	 * Constructor for the modal to create a new component
+	 * 
+	 * @param entity to add component to
 	 * 
 	 * @param parent Component to block while the modal is active
 	 * @param title  Title of the modal
 	 * @param modal  True if the parent should be blocked while the modal is active
 	 */
-	public ModalComponent(JFrame parent, String title, Boolean modal) {
-		super(parent, title, modal);
+	public ModalComponent(Entity entity) {
+		super(SceneEditor.frameSceneEditor, "Add component", true);
 		init();
 		setupLayout();
 		setupFieldsTable();
 		setupFrame();
 		setupListener();
+
+		this.entity = entity;
+		
+		pack();
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
 	/**
@@ -75,6 +92,14 @@ public class ModalComponent extends Modal {
 		this.btnAddField = new JButton("+");
 		this.btnRemoveField = new JButton("-");
 		this.cmbFieldType = new JComboBox<FieldType>();
+		this.cmbComponents = new JComboBox<String>();
+
+		// Find all existing components
+		for (Entry<String, Component> component : Component.getTemplates().entrySet()) {
+			if (!component.getValue().getName().startsWith("se-")) {
+				cmbComponents.addItem(component.getValue().getName());
+			}
+		}
 
 		cmbFieldType.addItem(FieldType.BOOLEAN);
 		cmbFieldType.addItem(FieldType.DOUBLE);
@@ -83,9 +108,20 @@ public class ModalComponent extends Modal {
 		cmbFieldType.addItem(FieldType.STRING);
 
 		String[] tableHeaders = { "Name", "Type", "Default value" };
-		this.tblModel = new DefaultTableModel(tableHeaders, 2);
-		this.tblCompFields = new JTable(tblModel);
-		TableColumn cm = tblCompFields.getColumnModel().getColumn(1);
+
+		this.tblModel = new DefaultTableModel(tableHeaders, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				if ((column == 0 || column == 1) && entity == null) {
+					return false;
+				}
+				return true;
+			}
+		};
+
+		this.tblFields = new JTable(tblModel);
+
+		TableColumn cm = tblFields.getColumnModel().getColumn(1);
 		cm.setCellEditor(new DefaultCellEditor(cmbFieldType));
 	}
 
@@ -93,9 +129,9 @@ public class ModalComponent extends Modal {
 	 * Set the fields table to be scrollable with header always visible
 	 */
 	private void setupFieldsTable() {
-		pnlFields.add(tblCompFields.getTableHeader(), BorderLayout.PAGE_START);
-		pnlFieldsScroll.add(tblCompFields);
-		pnlFieldsScroll.setViewportView(tblCompFields);
+		pnlFields.add(tblFields.getTableHeader(), BorderLayout.PAGE_START);
+		pnlFieldsScroll.add(tblFields);
+		pnlFieldsScroll.setViewportView(tblFields);
 
 		pnlFieldsScroll.setPreferredSize(new Dimension(250, 150));
 
@@ -121,11 +157,20 @@ public class ModalComponent extends Modal {
 
 		c.gridwidth = 1;
 		c.gridx = 1;
-		mainPanel.add(fiCompName, c);
+
+		// No entity => panel edition
+		if (entity != null) {
+			mainPanel.add(fiCompName, c);
+		} else {
+			mainPanel.add(cmbComponents);
+
+			btnAddField.setEnabled(false);
+			btnRemoveField.setEnabled(false);
+		}
 
 		pnlFields.setLayout(new BorderLayout());
-		pnlFields.add(tblCompFields.getTableHeader(), BorderLayout.PAGE_START);
-		pnlFields.add(tblCompFields, BorderLayout.CENTER);
+		pnlFields.add(tblFields.getTableHeader(), BorderLayout.PAGE_START);
+		pnlFields.add(tblFields, BorderLayout.CENTER);
 
 		c.gridx = 0;
 		c.gridy = 1;
@@ -170,7 +215,7 @@ public class ModalComponent extends Modal {
 		btnRemoveField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selectedRow = tblCompFields.getSelectedRow();
+				int selectedRow = tblFields.getSelectedRow();
 				if (selectedRow == -1) {
 					tblModel.removeRow(tblModel.getRowCount() - 1);
 				}
@@ -194,26 +239,67 @@ public class ModalComponent extends Modal {
 		btnValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String compName = fiCompName.getText();
+				String compName;
+				if (entity == null) {
+					compName = fiCompName.getText();
+				} else {
+					compName = (String)cmbComponents.getSelectedItem();
+				}
 				if (!compName.equals("")) {
 					Map<String, Field> fields = new HashMap<String, Field>();
 
-					for (int i = 0; i < tblCompFields.getRowCount(); i++) {
-						String fieldName = (String) tblCompFields.getModel().getValueAt(i, 0);
-						FieldType fieldType = (FieldType) tblCompFields.getModel().getValueAt(i, 1);
-						Object fieldValue = tblCompFields.getModel().getValueAt(i, 2);
+					for (int i = 0; i < tblFields.getRowCount(); i++) {
+						String fieldName = (String) tblFields.getModel().getValueAt(i, 0);
+						String fieldType = (String)tblFields.getModel().getValueAt(i, 1);
+						String fieldValue = (String) tblFields.getModel().getValueAt(i, 2);
 
 						if (fieldName != "" && fieldType != null) {
 							fields.put(fieldName, new Field(fieldName, fieldType, fieldValue));
 						}
 					}
+
+					// This *should* be the same as "From template" when adding it to an entity
 					Component component = new Component(compName, fields);
+
+					if (entity == null) {
+						Component.addTemplate(component);
+					} else {
+						(new ActionAddComponent("Add component (" + component.getName() + ")", entity, component)).actionPerformed(null);
+					}
 
 					dispose();
 				} else {
 					fiCompName.setBackground(Color.RED);
 				}
-				// TODO : pass this component to the current entity
+			}
+		});
+
+		this.cmbComponents.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tblModel.setRowCount(0);
+				// Find all existing components
+				for (Entry<String, Component> component : Component.getTemplates().entrySet()) {
+					if (component.getValue().getName().equals(cmbComponents.getSelectedItem())) {
+						cmbComponents.addItem(component.getValue().getName());
+						for (Entry<String, Field> field : component.getValue().getFields().entrySet()) {
+							String[] row = { field.getValue().getName(), field.getValue().getType().toString(),
+									field.getValue().getValue().toString() };
+							tblModel.addRow(row);
+						}
+						break;
+					}
+				}
+
+				pack();
+			}
+		});
+
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+
 			}
 		});
 	}
