@@ -6,18 +6,20 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -67,23 +69,26 @@ public class ModalComponent extends Modal {
 	 */
 	public ModalComponent(Entity entity) {
 		super(SceneEditor.frameSceneEditor, "Add component", true);
-		init();
-		setupLayout();
-		setupFieldsTable();
-		setupFrame();
-		addListener();
-
 		this.entity = entity;
-		
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
+
+		if (init()) {
+			setupLayout();
+			setupFieldsTable();
+			setupFrame();
+			addListener();
+
+			pack();
+			setLocationRelativeTo(null);
+			setVisible(true);
+		}
 	}
 
 	/**
 	 * Initialize the ui components and their values
+	 * 
+	 * @return true if everything went well
 	 */
-	private void init() {
+	private boolean init() {
 		this.labelComponentName = new JLabel("Name :");
 		this.fieldComponentName = new JTextField(20);
 		this.panelFields = new JPanel();
@@ -93,13 +98,6 @@ public class ModalComponent extends Modal {
 		this.buttonRemoveField = new JButton("-");
 		this.comboBoxFieldType = new JComboBox<FieldType>();
 		this.cmbComponents = new JComboBox<String>();
-
-		// Find all existing components
-		for (Entry<String, Component> component : Component.getTemplates().entrySet()) {
-			if (!component.getValue().getName().startsWith("se-")) {
-				cmbComponents.addItem(component.getValue().getName());
-			}
-		}
 
 		comboBoxFieldType.addItem(FieldType.BOOLEAN);
 		comboBoxFieldType.addItem(FieldType.DOUBLE);
@@ -112,7 +110,7 @@ public class ModalComponent extends Modal {
 		this.tableModel = new DefaultTableModel(tableHeaders, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				if ((column == 0 || column == 1) && entity == null) {
+				if ((column == 0 || column == 1) && entity != null) {
 					return false;
 				}
 				return true;
@@ -123,6 +121,47 @@ public class ModalComponent extends Modal {
 
 		TableColumn cm = tableFields.getColumnModel().getColumn(1);
 		cm.setCellEditor(new DefaultCellEditor(comboBoxFieldType));
+
+		ActionMap am = this.tableFields.getActionMap();
+		am.put("selectPreviousColumnCell", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+				manager.focusPreviousComponent();
+			}
+		});
+
+		am.put("selectNextColumnCell", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+				manager.focusNextComponent();
+			}
+		});
+
+		// Find all existing components
+		for (Entry<String, Component> component : Component.getTemplates().entrySet()) {
+			if (!component.getValue().getName().startsWith("se-")) {
+				if (entity == null || !entity.hasComponent(component.getValue().getName())) {
+					cmbComponents.addItem(component.getValue().getName());
+				}
+			}
+		}
+
+		if (cmbComponents.getItemCount() == 0) {
+			JOptionPane.showMessageDialog(this, "This entity already has all existing components.");
+			dispose();
+			return false;
+		} else {
+			// Display table every time, could be optimised but it means handling which one
+			// is selected
+			cmbComponents.setSelectedIndex(0);
+			displayFieldsForComponent(cmbComponents.getItemAt(0));
+		}
+
+		return true;
 	}
 
 	/**
@@ -159,7 +198,7 @@ public class ModalComponent extends Modal {
 		c.gridx = 1;
 
 		// No entity => panel edition
-		if (entity != null) {
+		if (entity == null) {
 			mainPanel.add(fieldComponentName, c);
 		} else {
 			mainPanel.add(cmbComponents);
@@ -243,14 +282,14 @@ public class ModalComponent extends Modal {
 				if (entity == null) {
 					compName = fieldComponentName.getText();
 				} else {
-					compName = (String)cmbComponents.getSelectedItem();
+					compName = (String) cmbComponents.getSelectedItem();
 				}
 				if (!compName.equals("")) {
 					Map<String, Field> fields = new HashMap<String, Field>();
 
 					for (int i = 0; i < tableFields.getRowCount(); i++) {
 						String fieldName = (String) tableFields.getModel().getValueAt(i, 0);
-						String fieldType = (String)tableFields.getModel().getValueAt(i, 1);
+						String fieldType = (String) tableFields.getModel().getValueAt(i, 1);
 						String fieldValue = (String) tableFields.getModel().getValueAt(i, 2);
 
 						if (fieldName != "" && fieldType != null) {
@@ -264,7 +303,8 @@ public class ModalComponent extends Modal {
 					if (entity == null) {
 						Component.addTemplate(component);
 					} else {
-						(new ActionAddComponent("Add component (" + component.getName() + ")", entity, component)).actionPerformed(null);
+						(new ActionAddComponent("Add component (" + component.getName() + ")", entity, component))
+								.actionPerformed(null);
 					}
 
 					dispose();
@@ -275,32 +315,30 @@ public class ModalComponent extends Modal {
 		});
 
 		this.cmbComponents.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				tableModel.setRowCount(0);
-				// Find all existing components
-				for (Entry<String, Component> component : Component.getTemplates().entrySet()) {
-					if (component.getValue().getName().equals(cmbComponents.getSelectedItem())) {
-						cmbComponents.addItem(component.getValue().getName());
-						for (Entry<String, Field> field : component.getValue().getFields().entrySet()) {
-							String[] row = { field.getValue().getName(), field.getValue().getType().toString(),
-									field.getValue().getValue().toString() };
-							tableModel.addRow(row);
-						}
-						break;
-					}
+				displayFieldsForComponent(cmbComponents.getSelectedItem().toString());
+			}
+		});
+	}
+
+	/**
+	 * Update the table to display fields from selected component
+	 */
+	private void displayFieldsForComponent(String componentName) {
+		tableModel.setRowCount(0);
+		// Find all existing components
+		for (Entry<String, Component> component : Component.getTemplates().entrySet()) {
+			if (component.getValue().getName().equals(componentName)) {
+				for (Entry<String, Field> field : component.getValue().getFields().entrySet()) {
+					String[] row = { field.getValue().getName(), field.getValue().getType().toString(),
+							field.getValue().getValue().toString() };
+					tableModel.addRow(row);
 				}
-
-				pack();
+				break;
 			}
-		});
+		}
 
-		addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-
-			}
-		});
+		pack();
 	}
 }
