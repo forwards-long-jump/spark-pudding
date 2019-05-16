@@ -149,11 +149,14 @@ public class PanelEntityTree extends JPanel {
 	 * @param scene The scene which contains the entities
 	 */
 	public void updateListEntities(SEScene scene) {
+		int previousIndex = jListEntities.getSelectedIndex();
 		listModelEntities.removeAllElements();
 
 		for (SEEntity entity : scene.getSEEntities()) {
 			listModelEntities.addElement(entity);
 		}
+		
+		jListEntities.setSelectedIndex(previousIndex);
 
 		revalidate();
 	}

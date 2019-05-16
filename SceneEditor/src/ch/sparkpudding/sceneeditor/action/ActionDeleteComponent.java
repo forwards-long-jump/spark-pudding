@@ -1,5 +1,7 @@
 package ch.sparkpudding.sceneeditor.action;
 
+import javax.swing.SwingUtilities;
+
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
@@ -37,8 +39,14 @@ public class ActionDeleteComponent extends AbstractAction {
 
 			@Override
 			public void run() {
-				System.out.println(component.getName());
 				Lel.coreEngine.removeComponent(entity, component.getName());
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {						
+						SceneEditor.fireSelectedEntityChanged();
+					}
+				});
 			}
 		});
 		return true;
@@ -52,6 +60,13 @@ public class ActionDeleteComponent extends AbstractAction {
 			public void run() {
 				entity.add(component);
 				Lel.coreEngine.notifySystemsOfNewComponent(entity, component);
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {						
+						SceneEditor.fireSelectedEntityChanged();
+					}
+				});
 			}
 		});
 	}
