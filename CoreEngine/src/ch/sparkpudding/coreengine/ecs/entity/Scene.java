@@ -35,6 +35,11 @@ public class Scene {
 		this.tick = 0;
 	}
 
+	/**
+	 * Create an empty scene, but with a given name
+	 * 
+	 * @param name name of the scene
+	 */
 	public Scene(String name) {
 		this();
 		this.name = name;

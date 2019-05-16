@@ -206,6 +206,11 @@ public class SceneEditor {
 		currentScene = seScenes.get(newSceneName);
 	}
 	
+	/**
+	 * Loads and unloads scenes which differ from those of the Core Engine
+	 * 
+	 * To be called whenever the scenes list of Core Engine changes
+	 */
 	public static void updateSeSceneList() {
 		// Add missing scenes
 		for (Scene scene : coreEngine.getScenes().values()) {

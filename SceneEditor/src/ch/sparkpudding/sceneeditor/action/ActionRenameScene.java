@@ -18,12 +18,21 @@ public class ActionRenameScene extends AbstractAction {
 	private String oldName;
 	private String newName;
 
+	/**
+	 * ctor
+	 * 
+	 * @param oldName name of the scene to rename
+	 * @param newName new name to give to the scene
+	 */
 	public ActionRenameScene(String oldName, String newName) {
 		super("Rename scene " + oldName + " to " + newName);
 		this.oldName = oldName;
 		this.newName = newName;
 	}
 
+	/**
+	 * Set the name of the scene to newName
+	 */
 	@Override
 	public boolean doAction() {
 		// We disallow getting rid of the entry scene
@@ -47,6 +56,9 @@ public class ActionRenameScene extends AbstractAction {
 		return true;
 	}
 
+	/**
+	 * Reverts the name of the scene to oldName
+	 */
 	@Override
 	public void undoAction() {
 		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
