@@ -2,6 +2,7 @@ package ch.sparkpudding.sceneeditor;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.SwingUtilities;
@@ -196,6 +197,15 @@ public class SceneEditor {
 		currentScene = newScene;
 	}
 	
+	/**
+	 * Set current scene by name
+	 * 
+	 * @param newSceneName name of the new current scene
+	 */
+	public static void setCurrentScene(String newSceneName) {
+		currentScene = seScenes.get(newSceneName);
+	}
+	
 	public static void updateSeSceneList() {
 		// Add missing scenes
 		for (Scene scene : coreEngine.getScenes().values()) {
@@ -206,9 +216,10 @@ public class SceneEditor {
 		}
 		
 		// Remove excedent scenes
-		for (String seSceneName : seScenes.keySet()) {
-			if (!coreEngine.getScenes().containsKey(seSceneName)) {
-				seScenes.remove(seSceneName);
+		Iterator<String> it = seScenes.keySet().iterator();
+		while (it.hasNext()) {
+			if (!coreEngine.getScenes().containsKey(it.next())) {
+				it.remove();
 			}
 		}
 	}

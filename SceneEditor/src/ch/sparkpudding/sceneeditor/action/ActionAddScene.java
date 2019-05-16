@@ -2,7 +2,6 @@ package ch.sparkpudding.sceneeditor.action;
 
 import javax.swing.SwingUtilities;
 
-import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
@@ -18,6 +17,7 @@ import ch.sparkpudding.sceneeditor.SceneEditor;
 public class ActionAddScene extends AbstractAction {
 
 	private Scene scene;
+
 
 	/**
 	 * ctor
@@ -37,11 +37,11 @@ public class ActionAddScene extends AbstractAction {
 		if (SceneEditor.seScenes.containsKey(scene.getName())) {
 			return false;
 		}
-		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 			
 			@Override
 			public void run() {
-				Lel.coreEngine.addScene(scene.getName(), scene);
+				SceneEditor.coreEngine.addScene(scene.getName(), scene);
 				SwingUtilities.invokeLater(new Runnable() {
 					
 					@Override
@@ -59,11 +59,11 @@ public class ActionAddScene extends AbstractAction {
 	 */
 	@Override
 	public void undoAction() {
-		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 			
 			@Override
 			public void run() {
-				Lel.coreEngine.removeScene(scene.getName());
+				SceneEditor.coreEngine.removeScene(scene.getName());
 				SwingUtilities.invokeLater(new Runnable() {
 					
 					@Override
