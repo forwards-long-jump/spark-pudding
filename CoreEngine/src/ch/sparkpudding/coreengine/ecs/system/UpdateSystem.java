@@ -1,6 +1,6 @@
 package ch.sparkpudding.coreengine.ecs.system;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -27,16 +27,17 @@ public class UpdateSystem extends System {
 	/**
 	 * Constructs the update system from its lua file
 	 * 
-	 * @param file The system
+	 * @param name 
+	 * @param inputStream The system
 	 */
-	public UpdateSystem(File file) {
-		super(file);
+	public UpdateSystem(String name, InputStream inputStream) {
+		super(name, inputStream);
 
 		sandboxThread = new Thread(() -> {
 			sandboxedUpdate();
 		});
 		// (re)Load system from filepath
-		reload();
+		reloadSpecifics();
 	}
 
 	/**
@@ -57,6 +58,13 @@ public class UpdateSystem extends System {
 	public void reload() {
 		super.reload();
 
+		reloadSpecifics();
+	}
+
+	/**
+	 * Reloads the systems specific to the class
+	 */
+	private void reloadSpecifics() {
 		if (!loadingFailed) {
 			readMethodsFromLua();
 

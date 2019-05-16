@@ -1,10 +1,11 @@
 package ch.sparkpudding.coreengine;
 
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
@@ -53,13 +54,13 @@ public class ResourceLocator {
 	 */
 	private void loadTextures() throws IOException {
 		textures = new HashMap<String, Image>();
-		for (File file : lelReader.getTextures()) {
+		for (Entry<String, InputStream> file : lelReader.getTextures().entrySet()) {
 			// TODO : remove as soon as .keep files are removed
-			if (file.getName().equals(".keep")) {
+			if (file.getKey().equals(".keep")) {
 				continue;
 			}
 
-			textures.put(file.getName(), ImageIO.read(file));
+			textures.put(file.getKey(), ImageIO.read(file.getValue()));
 		}
 	}
 
@@ -72,16 +73,16 @@ public class ResourceLocator {
 	 */
 	private void loadSounds() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		sounds = new HashMap<String, Clip>();
-		for (File file : lelReader.getSounds()) {
+		for (Entry<String, InputStream> file : lelReader.getSounds().entrySet()) {
 			// TODO : remove as soon as .keep files are removed
-			if (file.getName().equals(".keep")) {
+			if (file.getKey().equals(".keep")) {
 				continue;
 			}
 
-			AudioInputStream audio = AudioSystem.getAudioInputStream(file);
+			AudioInputStream audio = AudioSystem.getAudioInputStream(file.getValue());
 			Clip clip = AudioSystem.getClip();
 			clip.open(audio);
-			sounds.put(file.getName(), clip);
+			sounds.put(file.getKey(), clip);
 		}
 	}
 
@@ -93,16 +94,16 @@ public class ResourceLocator {
 	 */
 	private void loadMusics() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		musics = new HashMap<String, Clip>();
-		for (File file : lelReader.getMusics()) {
+		for (Entry<String, InputStream> file : lelReader.getMusics().entrySet()) {
 			// TODO : remove as soon as .keep files are removed
-			if (file.getName().equals(".keep")) {
+			if (file.getKey().equals(".keep")) {
 				continue;
 			}
 
-			AudioInputStream audio = AudioSystem.getAudioInputStream(file);
+			AudioInputStream audio = AudioSystem.getAudioInputStream(file.getValue());
 			Clip clip = AudioSystem.getClip();
 			clip.open(audio);
-			musics.put(file.getName(), clip);
+			musics.put(file.getKey(), clip);
 		}
 	}
 

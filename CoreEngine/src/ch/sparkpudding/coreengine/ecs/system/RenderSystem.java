@@ -1,7 +1,7 @@
 package ch.sparkpudding.coreengine.ecs.system;
 
 import java.awt.Graphics2D;
-import java.io.File;
+import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -21,12 +21,13 @@ public class RenderSystem extends System {
 
 	/**
 	 * Constructs the render system from its lua file
-	 *
-	 * @param file The system
+	 * 
+	 * @param name
+	 * @param inputStream The system
 	 */
-	public RenderSystem(File file) {
-		super(file);
-		reload();
+	public RenderSystem(String name, InputStream inputStream) {
+		super(name, inputStream);
+		reloadSpecifics();
 	}
 
 	/**
@@ -46,6 +47,13 @@ public class RenderSystem extends System {
 	public void reload() {
 		super.reload();
 
+		reloadSpecifics();
+	}
+
+	/**
+	 * Reloads the systems specific to the class
+	 */
+	private void reloadSpecifics() {
 		if (!loadingFailed) {
 			readMethodsFromLua();
 			loadRenderApis();

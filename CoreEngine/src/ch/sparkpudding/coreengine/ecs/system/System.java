@@ -1,6 +1,6 @@
 package ch.sparkpudding.coreengine.ecs.system;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +28,7 @@ import ch.sparkpudding.coreengine.api.Core;
 import ch.sparkpudding.coreengine.api.Resource;
 import ch.sparkpudding.coreengine.api.Sound;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.coreengine.utils.StreamTools;
 
 /**
  * Read components required by a lua script, builds a list of entities affected
@@ -39,6 +40,7 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
  */
 public abstract class System {
 	protected String filepath;
+	private InputStream stream;
 
 	// named lists of required components
 	private Map<String, List<String>> componentGroups;
@@ -55,6 +57,7 @@ public abstract class System {
 	// Systems should use this to execute their lua in a safe manner
 	Thread sandboxThread;
 	protected ExecutorService executor;
+
 	protected static final int MAX_EXECUTION_TIME_IN_SECONDS = 1;
 
 	/**
@@ -62,8 +65,9 @@ public abstract class System {
 	 * 
 	 * @param file Lua script file
 	 */
-	public System(File file) {
-		this.filepath = file.getAbsolutePath();
+	public System(String filename, InputStream file) {
+		this.filepath = filename;
+		this.stream = file;
 		executor = Executors.newFixedThreadPool(1);
 
 		// (re)Load this system
@@ -121,12 +125,11 @@ public abstract class System {
 	 */
 	private boolean loadLuaSystem() {
 		try {
-			globals.get("dofile").call(LuaValue.valueOf(filepath));
+			globals.load(StreamTools.read(stream)).call();
 			return true;
 		} catch (LuaError error) {
 			Lel.coreEngine.notifyLuaError(error);
-		}
-		catch (Exception error) {
+		} catch (Exception error) {
 			Lel.coreEngine.notifyLuaError(new LuaError(error.toString()));
 		}
 
@@ -147,7 +150,6 @@ public abstract class System {
 	private void loadRequiredComponents() {
 		componentGroups.clear();
 		LuaTable list = null;
-
 		try {
 			list = (LuaTable) getRequiredComponentsMethod.call(); // Return { entity = {"comp1", "comp2"}}
 		} catch (ClassCastException error) {
@@ -197,6 +199,7 @@ public abstract class System {
 			}
 			componentGroups.put("entities", components);
 		}
+		// java.lang.System.out.println(componentGroups);
 	}
 
 	/**

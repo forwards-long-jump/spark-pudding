@@ -2,6 +2,7 @@ package ch.sparkpudding.coreengine.filereader;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,6 +32,23 @@ public class XMLParser {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
 		Document doc = docBuilder.parse(xmlFile);
+		doc.getDocumentElement().normalize();
+		return doc;
+	}
+	
+	/**
+	 * Parse XML from stream
+	 * 
+	 * @param xmlStream
+	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	static public Document parse(InputStream xmlStream) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
+		Document doc = docBuilder.parse(xmlStream);
 		doc.getDocumentElement().normalize();
 		return doc;
 	}
