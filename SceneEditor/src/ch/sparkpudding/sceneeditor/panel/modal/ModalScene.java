@@ -35,9 +35,8 @@ public class ModalScene extends Modal {
 		super(parent, "New scene", true);
 		init();
 		setupLayout();
-		setupFrame();
 		setupListener();
-	}
+ 	}
 	
 	/**
 	 * Initialize the ui components and their values
@@ -66,6 +65,7 @@ public class ModalScene extends Modal {
 	private void setupFrame() {
 		setSize(400, 100);
 		setResizable(false);
+		setVisible(true);
 	}	
 	
 	/**

@@ -131,7 +131,7 @@ public class PanelScene extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new ModalScene(SceneEditor.frameSceneEditor).setVisible(true);
+				new ModalScene(SceneEditor.frameSceneEditor);
 			}
 		});
 
