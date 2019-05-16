@@ -1,3 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="se-selected">
+	<field type="INTEGER" name="hoverResizerIndex">-1</field>
 </component>

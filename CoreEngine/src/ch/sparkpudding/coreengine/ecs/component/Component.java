@@ -5,10 +5,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import ch.sparkpudding.coreengine.utils.Lua;
 
 /**
  * Represents settings (key-value pairs) that can be attached to an entity
@@ -163,10 +168,30 @@ public class Component implements Iterable<Entry<String, Field>> {
 	}
 
 	/**
-	 * Return the template  name of this component
+	 * Return the template name of this component
+	 * 
 	 * @return
 	 */
 	public String getTemplateName() {
 		return templateName;
+	}
+
+	/**
+	 * Convert this entity to a Luatable in the form of component.field
+	 * 
+	 * @return Luatable in the form of component.field
+	 */
+	public LuaValue coerceToLua() {
+		LuaTable componentLua = new LuaTable();
+		LuaValue metatableSetterMethod = Lua.getMetatableSetterMethod();
+
+		for (Field field : getFields().values()) {
+			// entity.component.field
+			LuaValue fieldLua = CoerceJavaToLua.coerce(field);
+			componentLua.set("_" + field.getName(), fieldLua);
+		}
+
+		metatableSetterMethod.call(componentLua);
+		return componentLua;	
 	}
 }

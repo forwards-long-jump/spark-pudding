@@ -727,7 +727,8 @@ public class CoreEngine extends JPanel {
 	 * @param entity        Entity which has received a component
 	 * @param componentName Name of the new component
 	 */
-	public void notifySystemsOfNewComponent(Entity entity, String componentName) {
+	public void notifySystemsOfNewComponent(Entity entity, Component component) {
+		String componentName = component.getName();
 		for (UpdateSystem system : systems) {
 			system.notifyNewComponent(entity, componentName);
 		}
