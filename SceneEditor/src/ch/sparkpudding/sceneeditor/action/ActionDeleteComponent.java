@@ -54,7 +54,7 @@ public class ActionDeleteComponent extends AbstractAction {
 
 	@Override
 	public void undoAction() {
-		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 
 			@Override
 			public void run() {

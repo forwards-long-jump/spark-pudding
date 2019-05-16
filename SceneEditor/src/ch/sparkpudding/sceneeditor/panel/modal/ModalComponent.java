@@ -40,21 +40,21 @@ import ch.sparkpudding.sceneeditor.action.ActionAddComponent;
  */
 @SuppressWarnings("serial")
 public class ModalComponent extends Modal {
-	JLabel lblCompName;
-	JComboBox<String> cmbComponents;
+	private JLabel labelComponentName;
+	private JComboBox<String> cmbComponents;
 
-	JTextField fiCompName;
-	JComboBox<FieldType> cmbFieldType;
-	JTable tblFields;
-	DefaultTableModel tblModel;
-	JPanel pnlFields;
-	JScrollPane pnlFieldsScroll;
+	private JTextField fieldComponentName;
+	private JComboBox<FieldType> comboBoxFieldType;
+	private JTable tableFields;
+	private DefaultTableModel tableModel;
+	private JPanel panelFields;
+	private JScrollPane panelFieldsScroll;
 
-	JButton btnValidate;
-	JButton btnAddField;
-	JButton btnRemoveField;
+	private JButton buttonValidate;
+	private JButton buttonAddField;
+	private JButton buttonRemoveField;
 
-	Entity entity;
+	private Entity entity;
 
 	/**
 	 * Constructor for the modal to create a new component
@@ -71,7 +71,7 @@ public class ModalComponent extends Modal {
 		setupLayout();
 		setupFieldsTable();
 		setupFrame();
-		setupListener();
+		addListener();
 
 		this.entity = entity;
 		
@@ -84,14 +84,14 @@ public class ModalComponent extends Modal {
 	 * Initialize the ui components and their values
 	 */
 	private void init() {
-		this.lblCompName = new JLabel("Name :");
-		this.fiCompName = new JTextField(20);
-		this.pnlFields = new JPanel();
-		this.pnlFieldsScroll = new JScrollPane();
-		this.btnValidate = new JButton("OK");
-		this.btnAddField = new JButton("+");
-		this.btnRemoveField = new JButton("-");
-		this.cmbFieldType = new JComboBox<FieldType>();
+		this.labelComponentName = new JLabel("Name :");
+		this.fieldComponentName = new JTextField(20);
+		this.panelFields = new JPanel();
+		this.panelFieldsScroll = new JScrollPane();
+		this.buttonValidate = new JButton("OK");
+		this.buttonAddField = new JButton("+");
+		this.buttonRemoveField = new JButton("-");
+		this.comboBoxFieldType = new JComboBox<FieldType>();
 		this.cmbComponents = new JComboBox<String>();
 
 		// Find all existing components
@@ -101,15 +101,15 @@ public class ModalComponent extends Modal {
 			}
 		}
 
-		cmbFieldType.addItem(FieldType.BOOLEAN);
-		cmbFieldType.addItem(FieldType.DOUBLE);
-		cmbFieldType.addItem(FieldType.FILE_PATH);
-		cmbFieldType.addItem(FieldType.INTEGER);
-		cmbFieldType.addItem(FieldType.STRING);
+		comboBoxFieldType.addItem(FieldType.BOOLEAN);
+		comboBoxFieldType.addItem(FieldType.DOUBLE);
+		comboBoxFieldType.addItem(FieldType.FILE_PATH);
+		comboBoxFieldType.addItem(FieldType.INTEGER);
+		comboBoxFieldType.addItem(FieldType.STRING);
 
 		String[] tableHeaders = { "Name", "Type", "Default value" };
 
-		this.tblModel = new DefaultTableModel(tableHeaders, 0) {
+		this.tableModel = new DefaultTableModel(tableHeaders, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				if ((column == 0 || column == 1) && entity == null) {
@@ -119,23 +119,23 @@ public class ModalComponent extends Modal {
 			}
 		};
 
-		this.tblFields = new JTable(tblModel);
+		this.tableFields = new JTable(tableModel);
 
-		TableColumn cm = tblFields.getColumnModel().getColumn(1);
-		cm.setCellEditor(new DefaultCellEditor(cmbFieldType));
+		TableColumn cm = tableFields.getColumnModel().getColumn(1);
+		cm.setCellEditor(new DefaultCellEditor(comboBoxFieldType));
 	}
 
 	/**
 	 * Set the fields table to be scrollable with header always visible
 	 */
 	private void setupFieldsTable() {
-		pnlFields.add(tblFields.getTableHeader(), BorderLayout.PAGE_START);
-		pnlFieldsScroll.add(tblFields);
-		pnlFieldsScroll.setViewportView(tblFields);
+		panelFields.add(tableFields.getTableHeader(), BorderLayout.PAGE_START);
+		panelFieldsScroll.add(tableFields);
+		panelFieldsScroll.setViewportView(tableFields);
 
-		pnlFieldsScroll.setPreferredSize(new Dimension(250, 150));
+		panelFieldsScroll.setPreferredSize(new Dimension(250, 150));
 
-		pnlFields.add(pnlFieldsScroll, BorderLayout.CENTER);
+		panelFields.add(panelFieldsScroll, BorderLayout.CENTER);
 	}
 
 	/**
@@ -153,30 +153,30 @@ public class ModalComponent extends Modal {
 		c.gridx = 0;
 		c.gridy = 0;
 		c.insets = new Insets(0, 0, 0, 20);
-		mainPanel.add(lblCompName, c);
+		mainPanel.add(labelComponentName, c);
 
 		c.gridwidth = 1;
 		c.gridx = 1;
 
 		// No entity => panel edition
 		if (entity != null) {
-			mainPanel.add(fiCompName, c);
+			mainPanel.add(fieldComponentName, c);
 		} else {
 			mainPanel.add(cmbComponents);
 
-			btnAddField.setEnabled(false);
-			btnRemoveField.setEnabled(false);
+			buttonAddField.setEnabled(false);
+			buttonRemoveField.setEnabled(false);
 		}
 
-		pnlFields.setLayout(new BorderLayout());
-		pnlFields.add(tblFields.getTableHeader(), BorderLayout.PAGE_START);
-		pnlFields.add(tblFields, BorderLayout.CENTER);
+		panelFields.setLayout(new BorderLayout());
+		panelFields.add(tableFields.getTableHeader(), BorderLayout.PAGE_START);
+		panelFields.add(tableFields, BorderLayout.CENTER);
 
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 3;
 		c.insets = new Insets(20, 0, 0, 0);
-		mainPanel.add(pnlFields, c);
+		mainPanel.add(panelFields, c);
 
 		c.gridy = 2;
 		c.gridx = 1;
@@ -184,17 +184,17 @@ public class ModalComponent extends Modal {
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.EAST;
 		c.insets = new Insets(5, 0, 0, 0);
-		mainPanel.add(btnRemoveField, c);
+		mainPanel.add(buttonRemoveField, c);
 
 		c.gridx = 2;
-		mainPanel.add(btnAddField, c);
+		mainPanel.add(buttonAddField, c);
 
 		c.insets = new Insets(20, 0, 0, 0);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 3;
 		c.gridwidth = 3;
-		mainPanel.add(btnValidate, c);
+		mainPanel.add(buttonValidate, c);
 	}
 
 	/**
@@ -208,50 +208,50 @@ public class ModalComponent extends Modal {
 	/**
 	 * Setup the listeners for the components and the frame
 	 */
-	private void setupListener() {
+	private void addListener() {
 
 		// Remove the selected row of the field table or the last row if none is
 		// selected
-		btnRemoveField.addActionListener(new ActionListener() {
+		buttonRemoveField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selectedRow = tblFields.getSelectedRow();
+				int selectedRow = tableFields.getSelectedRow();
 				if (selectedRow == -1) {
-					tblModel.removeRow(tblModel.getRowCount() - 1);
+					tableModel.removeRow(tableModel.getRowCount() - 1);
 				}
-				tblModel.removeRow(selectedRow);
+				tableModel.removeRow(selectedRow);
 				pack();
 			}
 		});
 
 		// Add a new row in the field table
-		btnAddField.addActionListener(new ActionListener() {
+		buttonAddField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String[] emptyRow = { "", "", "" };
-				tblModel.addRow(emptyRow);
+				tableModel.addRow(emptyRow);
 				pack();
 			}
 		});
 
 		// Create a component from user input, add it to the current entity the close
 		// the modal
-		btnValidate.addActionListener(new ActionListener() {
+		buttonValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String compName;
 				if (entity == null) {
-					compName = fiCompName.getText();
+					compName = fieldComponentName.getText();
 				} else {
 					compName = (String)cmbComponents.getSelectedItem();
 				}
 				if (!compName.equals("")) {
 					Map<String, Field> fields = new HashMap<String, Field>();
 
-					for (int i = 0; i < tblFields.getRowCount(); i++) {
-						String fieldName = (String) tblFields.getModel().getValueAt(i, 0);
-						String fieldType = (String)tblFields.getModel().getValueAt(i, 1);
-						String fieldValue = (String) tblFields.getModel().getValueAt(i, 2);
+					for (int i = 0; i < tableFields.getRowCount(); i++) {
+						String fieldName = (String) tableFields.getModel().getValueAt(i, 0);
+						String fieldType = (String)tableFields.getModel().getValueAt(i, 1);
+						String fieldValue = (String) tableFields.getModel().getValueAt(i, 2);
 
 						if (fieldName != "" && fieldType != null) {
 							fields.put(fieldName, new Field(fieldName, fieldType, fieldValue));
@@ -269,7 +269,7 @@ public class ModalComponent extends Modal {
 
 					dispose();
 				} else {
-					fiCompName.setBackground(Color.RED);
+					fieldComponentName.setBackground(Color.RED);
 				}
 			}
 		});
@@ -278,7 +278,7 @@ public class ModalComponent extends Modal {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				tblModel.setRowCount(0);
+				tableModel.setRowCount(0);
 				// Find all existing components
 				for (Entry<String, Component> component : Component.getTemplates().entrySet()) {
 					if (component.getValue().getName().equals(cmbComponents.getSelectedItem())) {
@@ -286,7 +286,7 @@ public class ModalComponent extends Modal {
 						for (Entry<String, Field> field : component.getValue().getFields().entrySet()) {
 							String[] row = { field.getValue().getName(), field.getValue().getType().toString(),
 									field.getValue().getValue().toString() };
-							tblModel.addRow(row);
+							tableModel.addRow(row);
 						}
 						break;
 					}
