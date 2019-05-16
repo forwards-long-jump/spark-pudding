@@ -92,17 +92,19 @@ public class ComponentGenerator extends JPanel {
 	private void setupComponentsLayout(Entity entity, Component component) {
 		Box titleBar = new Box(BoxLayout.X_AXIS);
 		JLabel titleComp = new JLabel(component.getName());
+		JButton btnDelete = new JButton("Delete");
+		JButton btnDetach = new JButton("Detach");
+
 		titleComp.setFont(titleComp.getFont().deriveFont(Font.BOLD));
 
 		titleBar.add(Box.createHorizontalStrut(PanelSidebarRight.BASIC_ELEMENT_MARGIN));
 		titleBar.add(titleComp);
 		titleBar.add(Box.createHorizontalGlue());
-		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(
 				new ActionDeleteComponent("delete component " + component.getName(), entity, component));
 
 		titleBar.add(btnDelete);
-		titleBar.add(new JButton("Detach"));
+		titleBar.add(btnDetach);
 		this.contentPanel.add(titleBar);
 		this.contentPanel.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values())));
 		this.contentPanel.add(new JSeparator());
