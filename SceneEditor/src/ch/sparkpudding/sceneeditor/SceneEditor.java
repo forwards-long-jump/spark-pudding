@@ -246,7 +246,7 @@ public class SceneEditor {
 	/**
 	 * Allow to fire an event when the selected entity change
 	 */
-	private static void fireSelectedEntityChanged() {
+	public static void fireSelectedEntityChanged() {
 		for (EntityEventListener listener : listenerList.getListeners(EntityEventListener.class)) {
 			listener.changeSelectedEntity(selectedEntity);
 		}
@@ -255,7 +255,7 @@ public class SceneEditor {
 	/**
 	 * Allow to fire an event when the selected entity change
 	 */
-	private static void fireEntityListChanged() {
+	public static void fireEntityListChanged() {
 		for (EntityEventListener listener : listenerList.getListeners(EntityEventListener.class)) {
 			listener.entityListChanged(seScenes);
 		}

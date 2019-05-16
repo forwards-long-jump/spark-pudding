@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -18,8 +17,6 @@ import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.api.MetaEntity;
 import ch.sparkpudding.coreengine.ecs.component.Component;
-import ch.sparkpudding.coreengine.ecs.component.Field;
-import ch.sparkpudding.coreengine.utils.Lua;
 import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
