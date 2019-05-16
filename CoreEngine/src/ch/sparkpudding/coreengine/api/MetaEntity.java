@@ -4,6 +4,7 @@ import org.luaj.vm2.LuaValue;
 
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
+import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 
 /**
@@ -44,7 +45,7 @@ public class MetaEntity {
 	 * @param componentName to delete
 	 */
 	public void deleteComponent(String componentName) {
-		Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 
 			@Override
 			public void run() {
@@ -61,16 +62,18 @@ public class MetaEntity {
 	 * @return LuaValue the component that was added
 	 */
 	public LuaValue addComponent(String componentName) {
-		if (entity.add(componentName)) {
-			Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+		Component component = new Component(Component.getTemplates().get(componentName));
+		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 
-				@Override
-				public void run() {
-					Lel.coreEngine.notifySystemsOfNewComponent(entity, componentName);
+			@Override
+			public void run() {
+				if (!entity.hasComponent(componentName)) {
+					entity.add(component);
+					Lel.coreEngine.notifySystemsOfNewComponent(entity, component);
 				}
-			});
-			return entity.getLuaEntity().get(componentName);
-		}
-		return LuaValue.NIL;
+			}
+		});
+
+		return component.coerceToLua();
 	}
 }

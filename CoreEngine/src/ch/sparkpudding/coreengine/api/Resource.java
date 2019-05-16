@@ -2,7 +2,7 @@ package ch.sparkpudding.coreengine.api;
 
 import java.awt.Image;
 
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioInputStream;
 
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
@@ -45,9 +45,9 @@ public class Resource {
 	 * Gets the sound by name
 	 * 
 	 * @param name Name of the sound
-	 * @return Clip, or null when nothing is found
+	 * @return AudioData, or null when nothing is found
 	 */
-	public Clip getSound(String name) {
+	public AudioInputStream getSound(String name) {
 		return resourceLocator.getSound(name);
 	}
 
@@ -55,9 +55,9 @@ public class Resource {
 	 * Gets music by name
 	 * 
 	 * @param name Name of the music
-	 * @return Clip, or null when nothing is found
+	 * @return AudioData, or null when nothing is found
 	 */
-	public Clip getMusic(String name) {
+	public AudioInputStream getMusic(String name) {
 		return resourceLocator.getMusic(name);
 	}
 }

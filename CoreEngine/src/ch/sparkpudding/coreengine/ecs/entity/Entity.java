@@ -159,6 +159,8 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		components.put(c.getName(), c);
 
 		Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED, new Pair<Entity, Component>(this, c));
+
+		createLuaEntity();
 	}
 
 	/**
@@ -286,28 +288,13 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	/**
 	 * Convert this entity to a Luatable in the form of entity.component.field
 	 * 
-	 * @param metatableSetterMethod System.metableSetterMethod
-	 * @param componentFilter       List<String>
-	 * @return
+	 * @return Luatable in the form of entity.component.field
 	 */
 	private LuaTable coerceToLua() {
-		// entity
 		LuaTable entityLua = new LuaTable();
-		LuaValue metatableSetterMethod = Lua.getMetatableSetterMethod();
 		for (Component component : this.getComponents().values()) {
-			// We only give access to explicitly required components
-
 			// entity.component
-			LuaTable componentLua = new LuaTable();
-
-			for (Field field : component.getFields().values()) {
-				// entity.component.field
-				LuaValue fieldLua = CoerceJavaToLua.coerce(field);
-				componentLua.set("_" + field.getName(), fieldLua);
-			}
-
-			metatableSetterMethod.call(componentLua);
-			entityLua.set(component.getName(), componentLua);
+			entityLua.set(component.getName(), component.coerceToLua());
 		}
 		entityLua.set("_meta", CoerceJavaToLua.coerce(new MetaEntity(this)));
 		return entityLua;
