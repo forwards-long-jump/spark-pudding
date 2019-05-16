@@ -71,7 +71,7 @@ public class SEEntity {
 				@Override
 				public void run() {
 					if (getLiveEntity().add("se-selected")) {
-						SceneEditor.coreEngine.notifySystemsOfNewComponent(getLiveEntity(), "se-selected");
+						SceneEditor.coreEngine.notifySystemsOfNewComponent(getLiveEntity(), getLiveEntity().getComponents().get("se-selected"));
 					}
 				}
 			});
