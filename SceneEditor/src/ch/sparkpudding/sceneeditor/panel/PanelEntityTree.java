@@ -122,7 +122,8 @@ public class PanelEntityTree extends JPanel {
 					if (entity.hasComponent("se-selected")) {
 						for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
 							// FIXME: this *kinda* works but could be way better
-							if (seEntity.getLiveEntity() == entity && jListEntities.getSelectedValue().getLiveEntity() != entity) {
+							if (seEntity.getLiveEntity() == entity && (jListEntities.getSelectedValue() == null
+									|| jListEntities.getSelectedValue().getLiveEntity() != entity)) {
 								SwingUtilities.invokeLater(new Runnable() {
 									@Override
 									public void run() {
@@ -149,7 +150,7 @@ public class PanelEntityTree extends JPanel {
 		for (SEEntity entity : scene.getSEEntities()) {
 			listModelEntities.addElement(entity);
 		}
-		
+
 		revalidate();
 	}
 
