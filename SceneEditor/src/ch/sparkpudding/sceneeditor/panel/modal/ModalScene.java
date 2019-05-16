@@ -1,6 +1,8 @@
 package ch.sparkpudding.sceneeditor.panel.modal;
 
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -42,7 +44,7 @@ public class ModalScene extends Modal {
 	 */
 	private void init() {
 		lblName = new JLabel("Name :");
-		fiName = new JTextField(20);
+		fiName = new JTextField(15);
 		btnAdd = new JButton("Add");
 		btnAdd.setEnabled(false);
 	}
@@ -51,7 +53,7 @@ public class ModalScene extends Modal {
 	 * Set the display of the components
 	 */
 	private void setupLayout() {
-		mainPanel.setLayout(new FlowLayout());
+		mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
 		mainPanel.add(lblName);
 		mainPanel.add(fiName);
@@ -62,7 +64,7 @@ public class ModalScene extends Modal {
 	 * Set the frame size and parameters
 	 */
 	private void setupFrame() {
-		setSize(300, 100);
+		setSize(400, 100);
 		setResizable(false);
 	}	
 	
@@ -74,12 +76,26 @@ public class ModalScene extends Modal {
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				btnAdd.setEnabled(fiName.getText().length() == 0);
+				btnAdd.setEnabled(fiName.getText().length() > 0);
 			}
 		});
 		
-		fiName.addActionListener(new ActionAddScene(fiName.getText()));		
-		btnAdd.addActionListener(new ActionAddScene(fiName.getText()));
+		btnAdd.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ActionAddScene(fiName.getText()).actionPerformed(e);
+				dispose();
+			}
+		});
+				
+		fiName.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnAdd.doClick();
+			}
+		});
 	}
 
 }
