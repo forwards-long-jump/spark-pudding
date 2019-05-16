@@ -98,13 +98,8 @@ public class ComponentGenerator extends JPanel {
 		titleBar.add(titleComp);
 		titleBar.add(Box.createHorizontalGlue());
 		JButton btnDelete = new JButton("Delete");
-		btnDelete.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				new ActionDeleteComponent("delete component " + component.getName(), entity, component).actionPerformed(arg0);
-			}
-		});
+		btnDelete.addActionListener(
+				new ActionDeleteComponent("delete component " + component.getName(), entity, component));
 
 		titleBar.add(btnDelete);
 		titleBar.add(new JButton("Detach"));
