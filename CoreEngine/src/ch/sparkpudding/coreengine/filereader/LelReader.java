@@ -1,138 +1,184 @@
 package ch.sparkpudding.coreengine.filereader;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
- * Manages Ludic Engine in Lua game files, supports reading from folder and from
- * .lel
+ * Manages Ludic Engine in Lua game files, supports reading from .lel
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  */
 public class LelReader {
-	private String directory;
+	private String lelFilepath;
+	private String editingLelFilepath;
 
-	private Map<String, File> mapComponents;
-	private Map<String, File> mapScenes;
-	private Map<String, File> mapEntityTemplates;
-	private List<File> listSystems;
+	private ZipFile lelFile;
+	private ZipFile editingLelFile;
 
-	private Map<String, File> mapSounds;
-	private Map<String, File> mapMusic;
-	private Map<String, File> mapTextures;
+	private Map<String, InputStream> mapComponents;
+	private Map<String, InputStream> mapScenes;
+	private Map<String, InputStream> mapEntityTemplates;
+	private Map<String, InputStream> mapSystems;
+	private List<String> systemOrder;
+
+	private Map<String, InputStream> mapSounds;
+	private Map<String, InputStream> mapMusic;
+	private Map<String, InputStream> mapTextures;
 
 	// Editing tools
-	private List<File> listEditingSystems;
-	private Map<String, File> mapEditingComponents;
+	private Map<String, InputStream> mapEditingComponents;
+	private Map<String, InputStream> mapEditingSystems;
+	private List<String> editingSystemOrder;
 
 	final String[] requiredSubFolders = { "components", "assets/textures", "assets/sounds", "assets/music", "scenes",
 			"entitytemplates", "systems" };
 
 	/**
-	 * Reads a game file and exposes all of the files in differents maps
+	 * Reads a game file and exposes all of the files in different maps
 	 * 
-	 * @param directory The path to the directory or LEL file
+	 * @param lelFilepath path to the LEL file
 	 * @throws Exception
 	 */
-	public LelReader(String directory) throws Exception {
-		this.directory = directory;
+	public LelReader(String lelFilepath) throws Exception {
+		this.lelFilepath = lelFilepath;
 
-		if (!isValidLel())
-			throw new FileNotFoundException();
-
-		mapComponents = new HashMap<String, File>();
-		populateMaps(new File(directory + "/components"), mapComponents);
-
-		mapScenes = new HashMap<String, File>();
-		populateMaps(new File(directory + "/scenes"), mapScenes);
-
-		mapEntityTemplates = new HashMap<String, File>();
-		populateMaps(new File(directory + "/entitytemplates"), mapEntityTemplates);
-
-		listSystems = new ArrayList<File>();
-		populateList(new File(directory + "/systems"), listSystems);
-		sortSystem(listSystems);
-
-		mapSounds = new HashMap<String, File>();
-		populateMaps(new File(directory + "/assets/sounds"), mapSounds);
-
-		mapMusic = new HashMap<String, File>();
-		populateMaps(new File(directory + "/assets/music"), mapMusic);
-
-		mapTextures = new HashMap<String, File>();
-		populateMaps(new File(directory + "/assets/textures"), mapTextures);
+		reload();
 	}
 
 	/**
-	 * Sort systems according to their name
+	 * Reads a game file and exposes all of the files in different maps, also reads
+	 * the editing tools from the .lel of the scene editor
 	 * 
-	 * @param list of file to sort
+	 * @param lelFilepath        path to the LEL file
+	 * @param editingLelFilepath path to the editing tools LEL file
+	 * @throws Exception
 	 */
-	private void sortSystem(List<File> list) {
-		// TODO Better sort of the systems
-		Collections.sort(list);
+	public LelReader(String lelFilepath, String editingLelFilepath) throws Exception {
+		this(lelFilepath);
+		this.editingLelFilepath = editingLelFilepath;
+
+		reloadEditingTools();
 	}
 
 	/**
-	 * Load editing systems and components from folder (editing folder must have
+	 * Reloads the streams from the LEL file
+	 * 
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws FileNotFoundException
+	 */
+	public void reload() throws IOException, ParserConfigurationException, SAXException, FileNotFoundException {
+		lelFile = new ZipFile(lelFilepath);
+		// We must not close the lel file, or else all the inputstreams we got out of it
+		// will be closed as well
+
+		if (!isValidLel(lelFile)) {
+			lelFile.close();
+			throw new FileNotFoundException();
+		}
+
+		mapComponents = new HashMap<String, InputStream>();
+		populateMaps(lelFile, "components/", mapComponents);
+
+		mapScenes = new HashMap<String, InputStream>();
+		populateMaps(lelFile, "scenes/", mapScenes);
+
+		mapEntityTemplates = new HashMap<String, InputStream>();
+		populateMaps(lelFile, "entitytemplates/", mapEntityTemplates);
+
+		mapSystems = new HashMap<String, InputStream>();
+		populateMaps(lelFile, "systems/", mapSystems);
+
+		mapSounds = new HashMap<String, InputStream>();
+		populateMaps(lelFile, "assets/sounds/", mapSounds);
+
+		mapMusic = new HashMap<String, InputStream>();
+		populateMaps(lelFile, "assets/music/", mapMusic);
+
+		mapTextures = new HashMap<String, InputStream>();
+		populateMaps(lelFile, "assets/textures/", mapTextures);
+	}
+
+	/**
+	 * Load editing systems and components from .lel file (editing folder must have
 	 * /components and /systems)
 	 * 
-	 * @param directory Path to the directory
+	 * @throws IOException
 	 */
-	public void loadEditingTools(String directory) {
-		mapEditingComponents = new HashMap<String, File>();
-		populateMaps(new File(directory + "/components"), mapEditingComponents);
+	public void reloadEditingTools() throws IOException {
+		editingLelFile = new ZipFile(editingLelFilepath);
 
-		listEditingSystems = new ArrayList<File>();
-		populateList(new File(directory + "/systems"), listEditingSystems);
-		sortSystem(listEditingSystems);
-	}
+		mapEditingComponents = new HashMap<String, InputStream>();
+		populateMaps(editingLelFile, "components/", mapEditingComponents);
 
-	/**
-	 * Populate lists from the files present in the game folder
-	 * 
-	 * @param folder Folder to read the files from
-	 * @param list   List to populate
-	 */
-	private void populateList(File folder, List<File> list) {
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory()) {
-				populateList(file, list);
-			} else {
-				list.add(file);
-			}
-		}
+		mapEditingSystems = new HashMap<String, InputStream>();
+		populateMaps(editingLelFile, "systems/", mapEditingSystems);
+		editingSystemOrder = new ArrayList<String>(mapEditingSystems.keySet());
+		editingSystemOrder.remove("render.lua");
 	}
 
 	/**
 	 * Populate maps from the files present in the game folder
 	 * 
-	 * @param folder Folder to read the files from
-	 * @param map    Map to populate
+	 * @param lelFile source file
+	 * @param folder  Folder to read the files from
+	 * @param map     Map to populate
+	 * @throws IOException
 	 */
-	private void populateMaps(File folder, Map<String, File> map) {
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory()) {
-				populateMaps(file, map);
-			} else {
-				map.put(file.getAbsolutePath().substring(this.directory.length()), file);
+	private void populateMaps(ZipFile lelFile, String prefix, Map<String, InputStream> map) throws IOException {
+		Enumeration<? extends ZipEntry> entries = lelFile.entries();
+
+		while (entries.hasMoreElements()) {
+			ZipEntry entry = entries.nextElement();
+			if (entry.getName().startsWith(prefix)) {
+				// TODO: remove .keep condition when it is no longer needed
+				if (!entry.isDirectory() && !entry.getName().equals(".keep")) {
+					map.put(entry.getName().substring(prefix.length()), lelFile.getInputStream(entry));
+				}
 			}
 		}
 	}
 
 	/**
-	 * Check whether a LEL folder is valid or not using its metadata.xml file
+	 * Check whether a LEL file is valid or not using its metadata.xml file. Also
+	 * reads the order of the systems described within
 	 * 
+	 * @param lelFile LEL file to check
 	 * @return validity of the LEL folder
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
 	 */
-	private boolean isValidLel() {
-		return (new File(this.directory + "/metadata.xml").exists());
+	private boolean isValidLel(ZipFile lelFile) throws ParserConfigurationException, SAXException, IOException {
+		ZipEntry metadataZip;
+		if ((metadataZip = lelFile.getEntry("metadata.xml")) == null) {
+			return false;
+		}
+		this.systemOrder = new ArrayList<String>();
+
+		Document metadata = XMLParser.parse(lelFile.getInputStream(metadataZip));
+		NodeList systemsXML = metadata.getElementsByTagName("system");
+		for (int i = 0; i < systemsXML.getLength(); i++) {
+			systemOrder.add(systemsXML.item(i).getTextContent() + ".lua");
+		}
+		systemOrder.remove("render.lua");
+
+		return true;
 	}
 
 	/**
@@ -140,8 +186,8 @@ public class LelReader {
 	 * 
 	 * @return component files
 	 */
-	public Collection<File> getComponentsXML() {
-		return mapComponents.values();
+	public Map<String, InputStream> getComponentsXML() {
+		return mapComponents;
 	}
 
 	/**
@@ -149,17 +195,17 @@ public class LelReader {
 	 * 
 	 * @return component files
 	 */
-	public Collection<File> getEditingComponentsXML() {
-		return mapEditingComponents.values();
+	public Map<String, InputStream> getEditingComponentsXML() {
+		return mapEditingComponents;
 	}
-	
+
 	/**
 	 * Get scenes files
 	 * 
 	 * @return scenes files
 	 */
-	public Collection<File> getScenesXML() {
-		return mapScenes.values();
+	public Map<String, InputStream> getScenesXML() {
+		return mapScenes;
 	}
 
 	/**
@@ -167,8 +213,8 @@ public class LelReader {
 	 * 
 	 * @return entity templates files
 	 */
-	public Collection<File> getEntityTemplatesXML() {
-		return mapEntityTemplates.values();
+	public Map<String, InputStream> getEntityTemplatesXML() {
+		return mapEntityTemplates;
 	}
 
 	/**
@@ -176,8 +222,8 @@ public class LelReader {
 	 * 
 	 * @return textures files
 	 */
-	public Collection<File> getTextures() {
-		return mapTextures.values();
+	public Map<String, InputStream> getTextures() {
+		return mapTextures;
 	}
 
 	/**
@@ -185,8 +231,8 @@ public class LelReader {
 	 * 
 	 * @return music files
 	 */
-	public Collection<File> getMusics() {
-		return mapMusic.values();
+	public Map<String, InputStream> getMusics() {
+		return mapMusic;
 	}
 
 	/**
@@ -194,8 +240,8 @@ public class LelReader {
 	 * 
 	 * @return sounds files
 	 */
-	public Collection<File> getSounds() {
-		return mapSounds.values();
+	public Map<String, InputStream> getSounds() {
+		return mapSounds;
 	}
 
 	/**
@@ -203,16 +249,34 @@ public class LelReader {
 	 * 
 	 * @return system files
 	 */
-	public Collection<File> getSystems() {
-		return listSystems;
+	public Map<String, InputStream> getSystems() {
+		return mapSystems;
 	}
-	
+
+	/**
+	 * Get the system order
+	 * 
+	 * @return system order
+	 */
+	public List<String> getSystemOrder() {
+		return systemOrder;
+	}
+
+	/**
+	 * Get the editing system order
+	 * 
+	 * @return editing system order
+	 */
+	public List<String> getEditingSystemOrder() {
+		return editingSystemOrder;
+	}
+
 	/**
 	 * Get editing system files
 	 * 
 	 * @return editing system files
 	 */
-	public Collection<File> getEditingSystems() {
-		return listEditingSystems;
+	public Map<String, InputStream> getEditingSystems() {
+		return mapEditingSystems;
 	}
 }
