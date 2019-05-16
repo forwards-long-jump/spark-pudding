@@ -284,7 +284,6 @@ public class Graphics {
 	 */
 	public void drawPolygon(LuaTable points) {
 		int nPoints = points.length();
-		System.out.println(nPoints);
 		int[] xPoints = new int[nPoints];
 		int[] yPoints = new int[nPoints];
 		for (int i = 0; i < nPoints; i++) {

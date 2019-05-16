@@ -10,10 +10,9 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +83,7 @@ public class CoreEngine extends JPanel {
 	 *                   errors.
 	 */
 	public CoreEngine(String gameFolder) throws Exception {
+		this.lelFile = new LelReader(gameFolder);
 		init(gameFolder);
 		startGame();
 	}
@@ -97,12 +97,13 @@ public class CoreEngine extends JPanel {
 	 * @throws Exception
 	 */
 	public CoreEngine(String gameFolder, String editingToolsFolder) throws Exception {
+		this.lelFile = new LelReader(gameFolder, editingToolsFolder);
 		init(gameFolder);
-		this.lelFile.loadEditingTools(editingToolsFolder);
 
 		populateEditingComponentTemplates();
 		editingSystems = new ArrayList<UpdateSystem>();
-		editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
+		editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems(),
+				lelFile.getEditingSystemOrder());
 
 		startGame();
 
@@ -134,7 +135,6 @@ public class CoreEngine extends JPanel {
 
 		this.renderLock = new Semaphore(0);
 
-		this.lelFile = new LelReader(gameFolder);
 		this.resourceLocator = new ResourceLocator(this.lelFile);
 
 		populateComponentTemplates();
@@ -142,7 +142,7 @@ public class CoreEngine extends JPanel {
 		populateScenes();
 
 		systems = new ArrayList<UpdateSystem>();
-		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
+		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems(), lelFile.getSystemOrder());
 
 		setCurrentScene(scenes.get("main"));
 	}
@@ -151,21 +151,20 @@ public class CoreEngine extends JPanel {
 	 * Create System from files and place them in a container, return the render
 	 * system
 	 * 
-	 * @param systemContainer
-	 * @param systemList
+	 * @param systemContainer list of systems to fill
+	 * @param systems         system streams from the .lel file
+	 * @param systemOrder     order to run the systems in
 	 * @return RenderSystem to be stored somewhere
 	 */
-	private RenderSystem loadSystemsFromFiles(List<UpdateSystem> systemContainer, Collection<File> systemList) {
+	private RenderSystem loadSystemsFromFiles(List<UpdateSystem> systemContainer, Map<String, InputStream> systems,
+			List<String> systemOrder) {
 		RenderSystem renderSystem = null;
 		systemContainer.clear();
-
-		for (File systemFile : systemList) {
-			if (systemFile.getName().equals(RenderSystem.LUA_FILE_NAME)) {
-				renderSystem = new RenderSystem(systemFile);
-			} else {
-				systemContainer.add(new UpdateSystem(systemFile));
-			}
+		for (String systemName : systemOrder) {
+			System.out.println(systemName);
+			systemContainer.add(new UpdateSystem(systemName, systems.get(systemName)));
 		}
+		renderSystem = new RenderSystem("render.lua", systems.get("render.lua"));
 
 		return renderSystem;
 	}
@@ -180,7 +179,7 @@ public class CoreEngine extends JPanel {
 	private void populateScenes() throws ParserConfigurationException, SAXException, IOException {
 		scenes = new HashMap<String, Scene>();
 
-		for (File xmlFile : lelFile.getScenesXML()) {
+		for (InputStream xmlFile : lelFile.getScenesXML().values()) {
 			Scene scene = new Scene(XMLParser.parse(xmlFile));
 			addScene(scene.getName(), scene);
 		}
@@ -194,7 +193,7 @@ public class CoreEngine extends JPanel {
 	 * @throws ParserConfigurationException
 	 */
 	private void populateEntityTemplates() throws ParserConfigurationException, SAXException, IOException {
-		for (File xmlFile : lelFile.getEntityTemplatesXML()) {
+		for (InputStream xmlFile : lelFile.getEntityTemplatesXML().values()) {
 			Entity e = new Entity(XMLParser.parse(xmlFile));
 			Entity.addTemplate(e);
 		}
@@ -208,7 +207,7 @@ public class CoreEngine extends JPanel {
 	 * @throws IOException
 	 */
 	private void populateComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
-		for (File xmlFile : lelFile.getComponentsXML()) {
+		for (InputStream xmlFile : lelFile.getComponentsXML().values()) {
 			Component c = new Component(XMLParser.parse(xmlFile));
 			Component.addTemplate(c);
 		}
@@ -223,7 +222,7 @@ public class CoreEngine extends JPanel {
 	 * @throws IOException
 	 */
 	private void populateEditingComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
-		for (File xmlFile : lelFile.getEditingComponentsXML()) {
+		for (InputStream xmlFile : lelFile.getEditingComponentsXML().values()) {
 			Component c = new Component(XMLParser.parse(xmlFile));
 			Component.addTemplate(c);
 		}
@@ -305,15 +304,28 @@ public class CoreEngine extends JPanel {
 	 * Reload systems from disk, live
 	 */
 	public void reloadSystemsFromDisk() {
+		try {
+			lelFile.reload();
+		} catch (IOException | ParserConfigurationException | SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (editingSystems != null) {
-			editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
+			try {
+				lelFile.reloadEditingTools();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems(),
+					lelFile.getEditingSystemOrder());
 		}
 
 		if (luaError != null) {
 			luaError = null; // Let's remove the error as reloading systems may fix it
 		}
 
-		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
+		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems(), lelFile.getSystemOrder());
 		setCurrentScene(getCurrentScene());
 	}
 
@@ -357,12 +369,13 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Return true if paused for editing
+	 * 
 	 * @return true if paused for editing
 	 */
 	public boolean isEditingPause() {
 		return editingPause;
 	}
-	
+
 	/**
 	 * Change the editingPause state
 	 * 

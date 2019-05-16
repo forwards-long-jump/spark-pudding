@@ -39,8 +39,8 @@ public class SceneEditor {
 
 	static {
 		try {
-			coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(),
-					Main.class.getResource("/leleditor").getPath());
+			coreEngine = new CoreEngine(Main.class.getResource("/emptygame.lel").getPath(),
+					Main.class.getResource("/leleditor.lel").getPath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

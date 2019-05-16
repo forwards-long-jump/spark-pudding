@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="lifetime">
-	<field type="INTEGER" name="tick">100</field>
-</component>

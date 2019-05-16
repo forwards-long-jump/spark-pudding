@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="camera-anchor">
-	<field type="DOUBLE" name="scale">0.7</field>
-	<field type="DOUBLE" name="speed">0.08</field>
-</component>
