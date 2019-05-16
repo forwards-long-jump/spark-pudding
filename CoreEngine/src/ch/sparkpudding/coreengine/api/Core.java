@@ -72,7 +72,7 @@ public class Core {
 	 * @param name of the scene to display
 	 */
 	public void setScene(String name) {
-		Lel.coreEngine.setScene(name);
+		setScene(name, false);
 	}
 
 	/**
@@ -82,7 +82,12 @@ public class Core {
 	 * @param reset or not the new scene
 	 */
 	public void setScene(String name, boolean reset) {
-		Lel.coreEngine.setScene(name, reset);
+		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+			@Override
+			public void run() {
+				Lel.coreEngine.setScene(name, reset);
+			}
+		});
 	}
 
 	/**
