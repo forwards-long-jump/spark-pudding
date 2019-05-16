@@ -17,7 +17,6 @@ import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
-import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalScene;
 
 /**
@@ -85,6 +84,7 @@ public class PanelScene extends JPanel {
 		SceneEditor.addEntityEventListener(new EntityEventAdapter() {
 			@Override
 			public void entityListChanged(Map<String, SEScene> seScenes) {
+				SceneEditor.updateSeSceneList();
 				Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
 
 				// Populate

@@ -195,6 +195,23 @@ public class SceneEditor {
 	public static void setCurrentScene(SEScene newScene) {
 		currentScene = newScene;
 	}
+	
+	public static void updateSeSceneList() {
+		// Add missing scenes
+		for (Scene scene : coreEngine.getScenes().values()) {
+			if (!seScenes.containsKey(scene.getName()))
+			{
+				seScenes.put(scene.getName(), new SEScene(scene));
+			}
+		}
+		
+		// Remove excedent scenes
+		for (String seSceneName : seScenes.keySet()) {
+			if (!coreEngine.getScenes().containsKey(seSceneName)) {
+				seScenes.remove(seSceneName);
+			}
+		}
+	}
 
 	/**
 	 * Add a listener for the event of the state of the SceneEditor
