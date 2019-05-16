@@ -1,6 +1,8 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -32,6 +34,7 @@ public class FrameSceneEditor extends JFrame {
 	private PanelSidebarLeft panelSidebarLeft;
 	private PanelGame panelGame;
 	private BorderLayout borderLayout;
+	private JSplitPane splitPanel;
 
 	/**
 	 * ctor
@@ -44,6 +47,8 @@ public class FrameSceneEditor extends JFrame {
 		setupFrame();
 		setupLayout();
 		addListener();
+
+		setVisible(true);
 
 		SceneEditor.setGameState(EditorState.STOP);
 	}
@@ -69,9 +74,8 @@ public class FrameSceneEditor extends JFrame {
 		setJMenuBar(menuBar);
 
 		add(panelSidebarLeft, BorderLayout.WEST);
-		JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelGame, panelSidebarRight);
-		sp.setDividerLocation(this.getWidth() - PanelSidebarRight.DEFAULT_PANEL_SIZE);
-		add(sp, BorderLayout.CENTER);
+		splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelGame, panelSidebarRight);
+		add(splitPanel, BorderLayout.CENTER);
 	}
 
 	/**
@@ -82,6 +86,13 @@ public class FrameSceneEditor extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				SceneEditor.coreEngine.requestFocus();
+			}
+		});
+		
+		this.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				splitPanel.setDividerLocation(e.getComponent().getWidth() - PanelSidebarRight.DEFAULT_PANEL_SIZE);
 			}
 		});
 	}
@@ -96,7 +107,6 @@ public class FrameSceneEditor extends JFrame {
 		setTitle(TITLE);
 		setJMenuBar(menuBar);
 		setLocationRelativeTo(null);
-		setVisible(true);
 	}
 
 }
