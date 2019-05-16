@@ -1,12 +1,15 @@
 package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
@@ -14,6 +17,8 @@ import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
+import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
+import ch.sparkpudding.sceneeditor.panel.modal.ModalScene;
 
 /**
  * The panel which show the different scene
@@ -28,6 +33,8 @@ public class PanelScene extends JPanel {
 	private PanelEntityTree panelEntityTree;
 
 	private JComboBox<String> comboBoxScenes;
+	private JButton buttonRemoveScene;
+	private JButton buttonAddScene;
 
 	private static final String TITLE = "Scenes";
 
@@ -50,8 +57,10 @@ public class PanelScene extends JPanel {
 	private void init() {
 		comboBoxScenes = new JComboBox<String>();
 
-		// TODO Implement editable to add scene
-		// comboBoxScenes.setEditable(true);
+		buttonRemoveScene = new JButton("Remove");
+		buttonAddScene = new JButton("Add");
+
+		comboBoxScenes.setEditable(true);
 	}
 
 	/**
@@ -66,6 +75,8 @@ public class PanelScene extends JPanel {
 				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
 
 		add(comboBoxScenes);
+		add(buttonRemoveScene);
+		add(buttonAddScene);
 
 		setBorder(BorderFactory.createTitledBorder(TITLE));
 	}
@@ -98,6 +109,28 @@ public class PanelScene extends JPanel {
 				}
 			}
 		});
+
+		comboBoxScenes.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int index = comboBoxScenes.getSelectedIndex();
+				if (index >= 0) {
+					comboBoxScenes.setSelectedIndex(index);
+				} else if (e.getActionCommand().equals("comboBoxEdited")) {
+					// rename selected scene
+				}
+			}
+		});
+
+		buttonAddScene.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ModalScene(SceneEditor.frameSceneEditor).setVisible(true);
+			}
+		});
+
 	}
 
 }
