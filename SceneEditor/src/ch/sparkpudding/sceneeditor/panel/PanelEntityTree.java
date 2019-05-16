@@ -18,6 +18,8 @@ import javax.swing.event.ListSelectionListener;
 
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.coreengine.utils.Pair;
+import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
@@ -114,24 +116,26 @@ public class PanelEntityTree extends JPanel {
 			}
 		});
 
-		SceneEditor.coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, new Runnable() {
+		SceneEditor.coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, new RunnableOneParameter() {
 			@Override
 			public void run() {
-				for (int i = 0; i < SceneEditor.coreEngine.getCurrentScene().getEntities().size(); i++) {
-					Entity entity = SceneEditor.coreEngine.getCurrentScene().getEntities().get(i);
-					if (entity.hasComponent("se-selected")) {
-						for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
-							// FIXME: this *kinda* works but could be way better
-							if (seEntity.getLiveEntity() == entity && (jListEntities.getSelectedValue() == null
-									|| jListEntities.getSelectedValue().getLiveEntity() != entity)) {
-								SwingUtilities.invokeLater(new Runnable() {
-									@Override
-									public void run() {
-										selectSEEntity(seEntity);
-									}
-								});
-								return;
-							}
+				ch.sparkpudding.coreengine.ecs.component.Component component = (ch.sparkpudding.coreengine.ecs.component.Component) ((Pair<?, ?>) getObject())
+						.second();
+
+				if (component.getName().equals("se-selected")) {
+					Entity entity = (Entity) ((Pair<?, ?>) getObject()).first();
+
+					for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
+						// FIXME: this *kinda* works but could be way better
+						if (seEntity.getLiveEntity() == entity && (jListEntities.getSelectedValue() == null
+								|| jListEntities.getSelectedValue().getLiveEntity() != entity)) {
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									selectSEEntity(seEntity);
+								}
+							});
+							return;
 						}
 					}
 				}

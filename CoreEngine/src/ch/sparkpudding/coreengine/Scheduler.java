@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
+
 /**
  * Schedule tasks to be run at set trigger points
  * 
@@ -50,12 +52,45 @@ public class Scheduler {
 	}
 
 	/**
+	 * Runs all tasks and notifications associated with the given trigger
+	 * 
+	 * @param trigger method type to run
+	 * @param object to give to the triggerred object
+	 */
+	public synchronized void trigger(Trigger trigger, Object object) {
+		for (Runnable task : tasks.get(trigger)) {
+			if (task instanceof RunnableOneParameter) {
+				((RunnableOneParameter) task).setObject(object);
+			}
+			task.run();
+		}
+		tasks.get(trigger).clear();
+
+		for (Runnable notif : notifications.get(trigger)) {
+			if (notif instanceof RunnableOneParameter) {
+				((RunnableOneParameter) notif).setObject(object);
+			}
+			notif.run();
+		}
+	}
+
+	/**
 	 * Add a task to be ran the next time the given trigger is activated
 	 * 
 	 * @param trigger  trigger that will run the task
 	 * @param runnable task to run
 	 */
 	public synchronized void schedule(Trigger trigger, Runnable runnable) {
+		tasks.get(trigger).add(runnable);
+	}
+
+	/**
+	 * Add a task to be ran the next time the given trigger is activated
+	 * 
+	 * @param trigger  trigger that will run the task
+	 * @param runnable task to run
+	 */
+	public synchronized void schedule(Trigger trigger, RunnableOneParameter runnable) {
 		tasks.get(trigger).add(runnable);
 	}
 

@@ -20,6 +20,7 @@ import ch.sparkpudding.coreengine.api.MetaEntity;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.utils.Lua;
+import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
  * Part of the ECS design pattern, described by the components it contains.
@@ -157,7 +158,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	public void add(Component c) {
 		components.put(c.getName(), c);
 
-		Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED);
+		Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED, new Pair<Entity, Component>(this, c));
 	}
 
 	/**
@@ -174,7 +175,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 
 			// update luaEntity
 			createLuaEntity();
-			Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED);
+			Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED, new Pair<Entity, Component>(this, component));
 			return true;
 		}
 		return false;
