@@ -18,6 +18,6 @@ public interface GameStateEventListener extends EventListener {
 	 * 
 	 * @param state The current state of the game
 	 */
-	public void gameStateEvent(SceneEditor.EditorState state);
+	public void gameStateChanged(SceneEditor.EditorState state);
 
 }

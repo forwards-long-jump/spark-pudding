@@ -30,16 +30,13 @@ public class FieldGenerator extends JComponent {
 
 	private Collection<Field> fields;
 
-	private String nameComp;
-
 	/**
 	 * ctor
 	 * 
 	 * @param fields Collection of all the components of an entity
 	 */
-	public FieldGenerator(Collection<Field> fields, String nameComp) {
+	public FieldGenerator(Collection<Field> fields) {
 		this.fields = fields;
-		this.nameComp = nameComp;
 
 		createFields();
 		setupLayout();

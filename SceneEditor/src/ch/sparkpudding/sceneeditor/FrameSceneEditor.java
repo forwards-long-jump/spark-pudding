@@ -1,10 +1,13 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JSplitPane;
 
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.menu.MenuBar;
@@ -31,6 +34,7 @@ public class FrameSceneEditor extends JFrame {
 	private PanelSidebarLeft panelSidebarLeft;
 	private PanelGame panelGame;
 	private BorderLayout borderLayout;
+	private JSplitPane splitPanel;
 
 	/**
 	 * ctor
@@ -40,10 +44,12 @@ public class FrameSceneEditor extends JFrame {
 	 */
 	public FrameSceneEditor() {
 		init();
-		setupLayout();
 		setupFrame();
+		setupLayout();
 		addListener();
-		
+
+		setVisible(true);
+
 		SceneEditor.setGameState(EditorState.STOP);
 	}
 
@@ -67,9 +73,9 @@ public class FrameSceneEditor extends JFrame {
 		setLayout(borderLayout);
 		setJMenuBar(menuBar);
 
-		add(panelSidebarRight, BorderLayout.EAST);
 		add(panelSidebarLeft, BorderLayout.WEST);
-		add(panelGame, BorderLayout.CENTER);
+		splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelGame, panelSidebarRight);
+		add(splitPanel, BorderLayout.CENTER);
 	}
 
 	/**
@@ -80,6 +86,13 @@ public class FrameSceneEditor extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				SceneEditor.coreEngine.requestFocus();
+			}
+		});
+		
+		this.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				splitPanel.setDividerLocation(e.getComponent().getWidth() - PanelSidebarRight.DEFAULT_PANEL_SIZE);
 			}
 		});
 	}
@@ -94,13 +107,6 @@ public class FrameSceneEditor extends JFrame {
 		setTitle(TITLE);
 		setJMenuBar(menuBar);
 		setLocationRelativeTo(null);
-		setVisible(true);
 	}
-	
-	/**
-	 * Populate all the component of the sidebarRight
-	 */
-	public void populateSidebarRight() {
-		panelSidebarRight.populatePanel();
-	}
+
 }

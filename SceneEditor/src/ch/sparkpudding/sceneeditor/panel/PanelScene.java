@@ -3,6 +3,7 @@ package ch.sparkpudding.sceneeditor.panel;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -12,10 +13,11 @@ import javax.swing.JPanel;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
+import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 
 /**
  * The panel which show the different scene
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 29 April 2019
  *
@@ -31,7 +33,7 @@ public class PanelScene extends JPanel {
 
 	/**
 	 * ctor
-	 * 
+	 *
 	 * @param panelEntityTree the panel which show the entities of a scene
 	 */
 	public PanelScene(PanelEntityTree panelEntityTree) {
@@ -68,38 +70,34 @@ public class PanelScene extends JPanel {
 		setBorder(BorderFactory.createTitledBorder(TITLE));
 	}
 
-	/**
-	 * Add the different listener for each element of the panel
-	 */
 	private void addListener() {
+		SceneEditor.addEntityEventListener(new EntityEventAdapter() {
+			@Override
+			public void entityListChanged(Map<String, SEScene> seScenes) {
+				Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
+
+				// Populate
+				comboBoxScenes.removeAllItems();
+				for (SEScene scene : seScenes.values()) {
+					comboBoxScenes.addItem(scene.getLiveScene().getName());
+				}
+
+				comboBoxScenes.setSelectedItem(lastScene.getName());
+			}
+		});
+
 		comboBoxScenes.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					SEScene newScene = SceneEditor.seScenes.get(comboBoxScenes.getSelectedItem());
+					SceneEditor.setCurrentScene(newScene);
 					SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
 					panelEntityTree.updateListEntities(newScene);
 				}
 			}
 		});
-	}
-
-	/**
-	 * Populate the panel, allow to wait for the coreEngine to load all the scenes
-	 */
-	public void populatePanel() {
-		// Get the last currentScene to prevent selecting something else when populating
-		Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
-
-		// Populate
-		comboBoxScenes.removeAllItems();
-		for (SEScene scene : SceneEditor.seScenes.values()) {
-			comboBoxScenes.addItem(scene.getLiveScene().getName());
-		}
-
-		// Reset lastScene after populating
-		comboBoxScenes.setSelectedItem(lastScene.getName());
 	}
 
 }

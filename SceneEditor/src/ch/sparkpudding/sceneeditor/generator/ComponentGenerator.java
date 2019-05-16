@@ -53,6 +53,9 @@ public class ComponentGenerator extends JPanel {
 		this.contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
 		this.jScrollPane = new JScrollPane(contentPanel);
+		this.jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		this.jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		this.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 	/**
@@ -70,7 +73,6 @@ public class ComponentGenerator extends JPanel {
 	private void createComponents() {
 		removeAll();
 		for (Component component : components) {
-			// TODO add check in the CoreEngine
 			if (!component.getName().startsWith("se-")) {
 				setupComponentsLayout(component);
 			}
@@ -95,7 +97,7 @@ public class ComponentGenerator extends JPanel {
 		titleBar.add(new JButton("Detach"));
 		this.contentPanel.add(titleBar);
 		this.contentPanel
-				.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values()), component.getName()));
+				.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values())));
 		this.contentPanel.add(new JSeparator());
 	}
 }

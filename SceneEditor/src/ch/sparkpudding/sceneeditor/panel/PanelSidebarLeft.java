@@ -26,7 +26,7 @@ import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 public class PanelSidebarLeft extends JPanel {
 
 	private JButton btnPausePlay;
-	private JButton btnReset;
+	private JButton btnStop;
 
 	private BoxLayout layout;
 
@@ -46,19 +46,19 @@ public class PanelSidebarLeft extends JPanel {
 		layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 
 		btnPausePlay = new JButton();
-		btnReset = new JButton();
-
+		btnStop = new JButton();
+		
 		btnPausePlay.setIcon(ImageStorage.PLAY);
-		btnReset.setIcon(ImageStorage.STOP_DISABLED);
+		btnStop.setIcon(ImageStorage.STOP_DISABLED);
 
-		btnReset.setEnabled(false);
+		btnStop.setEnabled(false);
 
 		btnPausePlay.setOpaque(false);
 		btnPausePlay.setContentAreaFilled(false);
 		btnPausePlay.setBorderPainted(false);
-		btnReset.setOpaque(false);
-		btnReset.setContentAreaFilled(false);
-		btnReset.setBorderPainted(false);
+		btnStop.setOpaque(false);
+		btnStop.setContentAreaFilled(false);
+		btnStop.setBorderPainted(false);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class PanelSidebarLeft extends JPanel {
 		setLayout(layout);
 
 		add(btnPausePlay);
-		add(btnReset);
+		add(btnStop);
 
 		setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(), new EmptyBorder(10, 10, 10, 10)));
 	}
@@ -85,39 +85,40 @@ public class PanelSidebarLeft extends JPanel {
 				} else {
 					SceneEditor.setGameState(EditorState.PLAY);
 				}
+				SceneEditor.coreEngine.requestFocus();
 			}
 		});
 
-		btnReset.addActionListener(new ActionListener() {
+		btnStop.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SceneEditor.setGameState(EditorState.STOP);
+				SceneEditor.coreEngine.requestFocus();
 			}
 		});
 
 		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
 
 			@Override
-			public void gameStateEvent(EditorState state) {
+			public void gameStateChanged(EditorState state) {
 				switch (state) {
 				case PAUSE:
-					btnReset.setIcon(ImageStorage.STOP);
+					btnStop.setIcon(ImageStorage.STOP);
 					btnPausePlay.setIcon(ImageStorage.PLAY);
 					break;
 				case PLAY:
-					btnReset.setIcon(ImageStorage.STOP);
+					btnStop.setIcon(ImageStorage.STOP);
 					btnPausePlay.setIcon(ImageStorage.PAUSE);
-					btnReset.setEnabled(true);
+					btnStop.setEnabled(true);
 					break;
 				case STOP:
-					btnReset.setIcon(ImageStorage.STOP_DISABLED);
+					btnStop.setIcon(ImageStorage.STOP_DISABLED);
 					btnPausePlay.setIcon(ImageStorage.PLAY);
-					btnReset.setEnabled(false);
+					btnStop.setEnabled(false);
 					break;
 				default:
 					break;
-
 				}
 			}
 		});

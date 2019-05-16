@@ -14,10 +14,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.sparkpudding.coreengine.Lel;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.api.MetaEntity;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.utils.Lua;
+import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
  * Part of the ECS design pattern, described by the components it contains.
@@ -154,6 +157,9 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public void add(Component c) {
 		components.put(c.getName(), c);
+
+		Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED, new Pair<Entity, Component>(this, c));
+
 		createLuaEntity();
 	}
 
@@ -171,6 +177,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 
 			// update luaEntity
 			createLuaEntity();
+			Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED, new Pair<Entity, Component>(this, component));
 			return true;
 		}
 		return false;
@@ -303,12 +310,12 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	}
 
 	/**
-	 * Return true if entity has specified template
+	 * Return true if the entity has the specified component
 	 * 
-	 * @param componentName to check if it exists
-	 * @return true if entity has specified template
+	 * @param componentName to look for
+	 * @return true if the entity has the specified component
 	 */
 	public boolean hasComponent(String componentName) {
-		return components.containsKey(componentName);
+		return components.keySet().contains(componentName);
 	}
 }

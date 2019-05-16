@@ -55,7 +55,7 @@ public abstract class System {
 	// Systems should use this to execute their lua in a safe manner
 	Thread sandboxThread;
 	protected ExecutorService executor;
-	protected static final int MAX_EXECUTION_TIME_IN_SECONDS = 1;
+	protected static final int MAX_EXECUTION_TIME_IN_SECONDS = 3;
 
 	/**
 	 * Constructs the system from the Lua file

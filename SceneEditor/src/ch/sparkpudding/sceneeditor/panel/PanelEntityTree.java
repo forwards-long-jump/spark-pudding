@@ -12,9 +12,15 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.coreengine.utils.Pair;
+import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
+import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 
@@ -80,7 +86,7 @@ public class PanelEntityTree extends JPanel {
 	 */
 	private void setupLayout() {
 		setLayout(new BorderLayout());
-		
+
 		listScroller.setPreferredSize(
 				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
 		listScroller.setMaximumSize(
@@ -101,9 +107,37 @@ public class PanelEntityTree extends JPanel {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting() && e.getSource() instanceof JList<?>
 						&& ((JList<?>) e.getSource()).getSelectedValue() instanceof SEEntity) {
-					panelEntity.setEntity((SEEntity) ((JList<?>) e.getSource()).getSelectedValue());
+
+					SceneEditor.setSelectedEntity(((SEEntity) ((JList<?>) e.getSource()).getSelectedValue()));
+
 				} else {
 					panelEntity.removeEntity();
+				}
+			}
+		});
+
+		SceneEditor.coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, new RunnableOneParameter() {
+			@Override
+			public void run() {
+				ch.sparkpudding.coreengine.ecs.component.Component component = (ch.sparkpudding.coreengine.ecs.component.Component) ((Pair<?, ?>) getObject())
+						.second();
+
+				if (component.getName().equals("se-selected")) {
+					Entity entity = (Entity) ((Pair<?, ?>) getObject()).first();
+
+					for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
+						// FIXME: this *kinda* works but could be way better
+						if (seEntity.getLiveEntity() == entity && (jListEntities.getSelectedValue() == null
+								|| jListEntities.getSelectedValue().getLiveEntity() != entity)) {
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									selectSEEntity(seEntity);
+								}
+							});
+							return;
+						}
+					}
 				}
 			}
 		});
@@ -120,6 +154,17 @@ public class PanelEntityTree extends JPanel {
 		for (SEEntity entity : scene.getSEEntities()) {
 			listModelEntities.addElement(entity);
 		}
+
+		revalidate();
+	}
+
+	/**
+	 * Select the specified seEntity in the tree
+	 * 
+	 * @param entity to select
+	 */
+	public void selectSEEntity(SEEntity entity) {
+		jListEntities.setSelectedValue(entity, true);
 	}
 
 }
