@@ -2,6 +2,8 @@ package ch.sparkpudding.sceneeditor.generator;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,6 +17,8 @@ import javax.swing.JSeparator;
 
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.sceneeditor.action.ActionDeleteComponent;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
 
 /**
@@ -37,11 +41,11 @@ public class ComponentGenerator extends JPanel {
 	 * 
 	 * @param components Collection of all the components of an entity
 	 */
-	public ComponentGenerator(Collection<Component> components) {
-		this.components = components;
+	public ComponentGenerator(Entity entity) {
+		this.components = entity.getComponents().values();
 
 		init();
-		createComponents();
+		createComponents(entity);
 		setupLayout();
 	}
 
@@ -70,11 +74,11 @@ public class ComponentGenerator extends JPanel {
 	 * Create and recreate all the representation of the components stored in
 	 * <code>this.components</code>
 	 */
-	private void createComponents() {
+	private void createComponents(Entity entity) {
 		removeAll();
 		for (Component component : components) {
 			if (!component.getName().startsWith("se-")) {
-				setupComponentsLayout(component);
+				setupComponentsLayout(entity, component);
 			}
 		}
 		revalidate();
@@ -85,7 +89,7 @@ public class ComponentGenerator extends JPanel {
 	 * 
 	 * @param component The component to consider
 	 */
-	private void setupComponentsLayout(Component component) {
+	private void setupComponentsLayout(Entity entity, Component component) {
 		Box titleBar = new Box(BoxLayout.X_AXIS);
 		JLabel titleComp = new JLabel(component.getName());
 		titleComp.setFont(titleComp.getFont().deriveFont(Font.BOLD));
@@ -93,11 +97,19 @@ public class ComponentGenerator extends JPanel {
 		titleBar.add(Box.createHorizontalStrut(PanelSidebarRight.BASIC_ELEMENT_MARGIN));
 		titleBar.add(titleComp);
 		titleBar.add(Box.createHorizontalGlue());
-		titleBar.add(new JButton("Delete"));
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new ActionDeleteComponent("delete component " + component.getName(), entity, component).actionPerformed(arg0);
+			}
+		});
+
+		titleBar.add(btnDelete);
 		titleBar.add(new JButton("Detach"));
 		this.contentPanel.add(titleBar);
-		this.contentPanel
-				.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values())));
+		this.contentPanel.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values())));
 		this.contentPanel.add(new JSeparator());
 	}
 }

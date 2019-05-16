@@ -71,7 +71,7 @@ public class PanelComponent extends JPanel {
 	public void setEntity(Entity entity) {
 		fieldList.clear();
 		removeAll();
-		add(new ComponentGenerator(entity.getComponents().values()), BorderLayout.CENTER);
+		add(new ComponentGenerator(entity), BorderLayout.CENTER);
 		revalidate();
 	}
 
