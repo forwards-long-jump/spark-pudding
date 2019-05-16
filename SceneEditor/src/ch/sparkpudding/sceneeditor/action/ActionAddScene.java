@@ -1,5 +1,9 @@
 package ch.sparkpudding.sceneeditor.action;
 
+import javax.swing.SwingUtilities;
+
+import ch.sparkpudding.coreengine.Lel;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 
@@ -29,11 +33,24 @@ public class ActionAddScene extends AbstractAction {
 	 * Add scene to the game's scenes
 	 */
 	@Override
-	public boolean doAction() {
+	public boolean doAction() {		
 		if (SceneEditor.seScenes.containsKey(scene.getName())) {
 			return false;
 		}
-		SceneEditor.coreEngine.addScene(scene.getName(), scene);
+		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+			
+			@Override
+			public void run() {
+				Lel.coreEngine.addScene(scene.getName(), scene);
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						SceneEditor.fireEntityListChanged();
+					}
+				});
+			}
+		});
 		return true;
 	}
 
@@ -42,7 +59,20 @@ public class ActionAddScene extends AbstractAction {
 	 */
 	@Override
 	public void undoAction() {
-		SceneEditor.coreEngine.removeScene(scene.getName());
+		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+			
+			@Override
+			public void run() {
+				Lel.coreEngine.removeScene(scene.getName());
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						SceneEditor.fireEntityListChanged();
+					}
+				});
+			}
+		});
 	}
 
 }
