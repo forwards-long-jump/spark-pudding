@@ -27,7 +27,6 @@ public class PanelSidebarLeft extends JPanel {
 
 	private JButton btnPausePlay;
 	private JButton btnStop;
-	private JButton btnRestart;
 
 	private BoxLayout layout;
 
@@ -48,11 +47,9 @@ public class PanelSidebarLeft extends JPanel {
 
 		btnPausePlay = new JButton();
 		btnStop = new JButton();
-		btnRestart = new JButton();
-
+		
 		btnPausePlay.setIcon(ImageStorage.PLAY);
 		btnStop.setIcon(ImageStorage.STOP_DISABLED);
-		btnRestart.setIcon(ImageStorage.RESET);
 
 		btnStop.setEnabled(false);
 
@@ -62,9 +59,6 @@ public class PanelSidebarLeft extends JPanel {
 		btnStop.setOpaque(false);
 		btnStop.setContentAreaFilled(false);
 		btnStop.setBorderPainted(false);
-		btnRestart.setOpaque(false);
-		btnRestart.setContentAreaFilled(false);
-		btnRestart.setBorderPainted(false);
 	}
 
 	/**
@@ -75,7 +69,6 @@ public class PanelSidebarLeft extends JPanel {
 
 		add(btnPausePlay);
 		add(btnStop);
-		add(btnRestart);
 
 		setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(), new EmptyBorder(10, 10, 10, 10)));
 	}
@@ -105,15 +98,6 @@ public class PanelSidebarLeft extends JPanel {
 			}
 		});
 
-		btnRestart.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SceneEditor.setGameState(EditorState.RESET);
-				SceneEditor.coreEngine.requestFocus();
-			}
-		});
-
 		SceneEditor.addGameStateEventListener(new GameStateEventListener() {
 
 			@Override
@@ -135,7 +119,6 @@ public class PanelSidebarLeft extends JPanel {
 					break;
 				default:
 					break;
-
 				}
 			}
 		});
