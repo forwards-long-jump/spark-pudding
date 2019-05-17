@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.action.ActionAddScene;
 
 /**
@@ -31,11 +32,12 @@ public class ModalScene extends Modal {
 	 * 
 	 * @param parent Component to block while the modal is active
 	 */
-	public ModalScene(JFrame parent) {
-		super(parent, "New scene", true);
+	public ModalScene() {
+		super(SceneEditor.frameSceneEditor, "New scene", true);
 		init();
 		setupLayout();
 		setupListener();
+		setupFrame();
  	}
 	
 	/**
