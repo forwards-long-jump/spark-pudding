@@ -1,7 +1,5 @@
 package ch.sparkpudding.sceneeditor.action;
 
-import javax.swing.SwingUtilities;
-
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
@@ -41,14 +39,8 @@ public class ActionRemoveScene extends AbstractAction {
 
 			@Override
 			public void run() {
+				SceneEditor.coreEngine.setScene("main");
 				SceneEditor.coreEngine.removeScene(scene.getName());
-				SwingUtilities.invokeLater(new Runnable() {
-
-					@Override
-					public void run() {
-						SceneEditor.fireEntityListChanged();
-					}
-				});
 			}
 		});
 		return true;
@@ -64,13 +56,7 @@ public class ActionRemoveScene extends AbstractAction {
 			@Override
 			public void run() {
 				SceneEditor.coreEngine.addScene(scene.getName(), scene);
-				SwingUtilities.invokeLater(new Runnable() {
-
-					@Override
-					public void run() {
-						SceneEditor.fireEntityListChanged();
-					}
-				});
+				SceneEditor.coreEngine.setCurrentScene(scene);
 			}
 		});
 	}

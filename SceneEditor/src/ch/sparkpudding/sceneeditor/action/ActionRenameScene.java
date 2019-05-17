@@ -1,7 +1,5 @@
 package ch.sparkpudding.sceneeditor.action;
 
-import javax.swing.SwingUtilities;
-
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 
@@ -44,13 +42,6 @@ public class ActionRenameScene extends AbstractAction {
 			@Override
 			public void run() {
 				SceneEditor.coreEngine.renameScene(oldName, newName);
-				SwingUtilities.invokeLater(new Runnable() {
-
-					@Override
-					public void run() {
-						SceneEditor.fireEntityListChanged();
-					}
-				});
 			}
 		});
 		return true;
@@ -66,13 +57,6 @@ public class ActionRenameScene extends AbstractAction {
 			@Override
 			public void run() {
 				SceneEditor.coreEngine.renameScene(newName, oldName);
-				SwingUtilities.invokeLater(new Runnable() {
-
-					@Override
-					public void run() {
-						SceneEditor.fireEntityListChanged();
-					}
-				});
 			}
 		});
 	}

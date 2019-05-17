@@ -395,6 +395,7 @@ public class CoreEngine extends JPanel {
 	 */
 	public void addScene(String name, Scene s) {
 		scenes.put(name, s);
+		scheduler.trigger(Trigger.SCENE_LIST_CHANGED);
 	}
 
 	/**
@@ -410,10 +411,12 @@ public class CoreEngine extends JPanel {
 				public void run() {
 					setCurrentScene(scenes.get("main"));
 					scenes.remove(name);
+					scheduler.trigger(Trigger.SCENE_LIST_CHANGED);
 				}
 			});
 		} else {
 			scenes.remove(name);
+			scheduler.trigger(Trigger.SCENE_LIST_CHANGED);
 		}
 	}
 
@@ -460,6 +463,7 @@ public class CoreEngine extends JPanel {
 			scenes.remove(oldName);
 			scene.setName(newName);
 			scenes.put(newName, scene);
+			scheduler.trigger(Trigger.SCENE_LIST_CHANGED);
 			return true;
 		}
 		return false;
@@ -505,6 +509,7 @@ public class CoreEngine extends JPanel {
 		if (editingRenderSystem != null) {
 			editingRenderSystem.setEntities(newScene.getEntities());
 		}
+		scheduler.trigger(Trigger.SCENE_CHANGED, newScene);
 	}
 
 	/**
