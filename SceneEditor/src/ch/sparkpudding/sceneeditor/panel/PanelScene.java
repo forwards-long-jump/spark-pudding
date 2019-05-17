@@ -12,8 +12,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.action.ActionRemoveScene;
 import ch.sparkpudding.sceneeditor.action.ActionRenameScene;
@@ -84,19 +87,42 @@ public class PanelScene extends JPanel {
 	}
 
 	private void addListener() {
+		SceneEditor.coreEngine.getScheduler().notify(Trigger.SCENE_CHANGED, new RunnableOneParameter() {
+
+			@Override
+			public void run() {
+				if (SceneEditor.currentScene != null) {
+					SwingUtilities.invokeLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							comboBoxScenes.setSelectedItem(((Scene) getObject()).getName());
+						}
+					});
+				}
+			}
+		});
+
+		SceneEditor.coreEngine.getScheduler().notify(Trigger.SCENE_LIST_CHANGED, new Runnable() {
+
+			@Override
+			public void run() {
+				SceneEditor.updateSeSceneList();
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						populateComboBox(SceneEditor.seScenes);
+					}
+				});
+			}
+		});
+
 		SceneEditor.addEntityEventListener(new EntityEventAdapter() {
 			@Override
 			public void entityListChanged(Map<String, SEScene> seScenes) {
 				SceneEditor.updateSeSceneList();
-				Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
-
-				// Populate
-				comboBoxScenes.removeAllItems();
-				for (SEScene scene : seScenes.values()) {
-					comboBoxScenes.addItem(scene.getLiveScene().getName());
-				}
-
-				comboBoxScenes.setSelectedItem(lastScene.getName());
+				populateComboBox(seScenes);
 			}
 		});
 
@@ -145,6 +171,18 @@ public class PanelScene extends JPanel {
 			}
 		});
 
+	}
+	
+	private void populateComboBox(Map<String, SEScene> seScenes) {
+		Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
+
+		// Populate
+		comboBoxScenes.removeAllItems();
+		for (SEScene scene : seScenes.values()) {
+			comboBoxScenes.addItem(scene.getLiveScene().getName());
+		}
+
+		comboBoxScenes.setSelectedItem(lastScene.getName());
 	}
 
 }
