@@ -59,9 +59,11 @@ public class LelWriter {
 
 		// Overwrite Components
 		for (Map.Entry<String, Component> componentEntry : Component.getTemplates().entrySet()) {
-			File fComponent = new File(directory + "/components/" + componentEntry.getKey() + ".xml");
-			String xmlComponent = xmlFromComponent(componentEntry.getValue());
-			Files.write(fComponent.toPath(), xmlComponent.getBytes());
+			if(!componentEntry.getValue().getName().startsWith("se-")) {
+				File fComponent = new File(directory + "/components/" + componentEntry.getKey() + ".xml");
+				String xmlComponent = xmlFromComponent(componentEntry.getValue());
+				Files.write(fComponent.toPath(), xmlComponent.getBytes());				
+			}
 		}
 
 	}
@@ -123,10 +125,10 @@ public class LelWriter {
 	 * @return String to write in the xml file of the component
 	 */
 	private String xmlFromComponent(Component component) {
-		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 		xml += "<component name=\"" + component.getName() + "\">\n";
 		for (Field field : component.getFields().values()) {
-			xml += "\t<field  type=\"" + field.getType() + "\" name=\"" + field.getName() + "\">" + field.getValue()
+			xml += "\t<field type=\"" + field.getType() + "\" name=\"" + field.getName() + "\">" + field.getValue()
 					+ "</field>\n";
 		}
 		xml += "</component>";
