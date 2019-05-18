@@ -16,5 +16,6 @@ public class ImageStorage {
 	public static final ImageIcon STOP_DISABLED = ImageLoader.loadImage("stop_dis.png");
 	public static final ImageIcon STOP = ImageLoader.loadImage("stop.png");
 	public static final ImageIcon WARNING = ImageLoader.loadImage("warning.png");
+	public static final ImageIcon RELOAD = ImageLoader.loadImage("reload.png");
 
 }

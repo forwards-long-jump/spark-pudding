@@ -28,6 +28,7 @@ public class PanelSidebarLeft extends JPanel {
 
 	private JButton btnPausePlay;
 	private JButton btnStop;
+	private JButton btnReset;
 
 	private BoxLayout layout;
 
@@ -48,18 +49,25 @@ public class PanelSidebarLeft extends JPanel {
 
 		btnPausePlay = new JButton();
 		btnStop = new JButton();
+		btnReset = new JButton();
 
 		btnPausePlay.setIcon(ImageStorage.PLAY);
 		btnStop.setIcon(ImageStorage.STOP_DISABLED);
+		btnReset.setIcon(ImageStorage.RELOAD);
 
 		btnStop.setEnabled(false);
 
 		btnPausePlay.setOpaque(false);
 		btnPausePlay.setContentAreaFilled(false);
 		btnPausePlay.setBorderPainted(false);
+
 		btnStop.setOpaque(false);
 		btnStop.setContentAreaFilled(false);
 		btnStop.setBorderPainted(false);
+
+		btnReset.setContentAreaFilled(false);
+		btnReset.setBorderPainted(false);
+		btnReset.setOpaque(false);
 	}
 
 	/**
@@ -70,6 +78,7 @@ public class PanelSidebarLeft extends JPanel {
 
 		add(btnPausePlay);
 		add(btnStop);
+		add(btnReset);
 
 		setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(), new EmptyBorder(10, 10, 10, 10)));
 	}
@@ -114,6 +123,23 @@ public class PanelSidebarLeft extends JPanel {
 					}
 				});
 				SceneEditor.coreEngine.requestFocus();
+			}
+		});
+
+		btnReset.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+					@Override
+					public void run() {
+						SceneEditor.coreEngine.reloadSystemsFromDisk();
+						if(SceneEditor.coreEngine.isInError()) {
+							SceneEditor.setGameState(EditorState.PLAY);
+							SceneEditor.coreEngine.clearError();
+						}
+					}
+				});
 			}
 		});
 
