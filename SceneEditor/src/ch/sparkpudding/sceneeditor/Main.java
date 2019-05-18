@@ -9,9 +9,9 @@ import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 
 /**
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
+ *
  */
 public class Main {
 
@@ -40,15 +40,15 @@ public class Main {
 			e.printStackTrace();
 		}
 
+		// EDITING_STATE_CHANGED is called in GAME_LOOP_START so no need to add another scheduling
+		// adding a new scheduling would break the camera
 		SceneEditor.coreEngine.getScheduler().notify(Trigger.EDITING_STATE_CHANGED, new RunnableOneParameter() {
 			@Override
 			public void run() {
-				if ((boolean) getObject()) {
-					// TODO: Handle error in a more nice way (though this could be fixed if changing
-					// initial is done instantly)
-					if (SceneEditor.getGameState() != EditorState.STOP) {
-						SceneEditor.setGameState(EditorState.PAUSE);
-					}
+				if (SceneEditor.coreEngine.isInError()) {
+					SceneEditor.setGameState(EditorState.ERROR);
+				} else if ((boolean) getObject()) {
+					SceneEditor.setGameState(EditorState.PAUSE);
 				} else {
 					SceneEditor.setGameState(EditorState.PLAY);
 				}

@@ -10,7 +10,6 @@ import javax.swing.event.EventListenerList;
 import ch.sparkpudding.coreengine.Camera;
 import ch.sparkpudding.coreengine.Camera.Mode;
 import ch.sparkpudding.coreengine.CoreEngine;
-import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
@@ -57,53 +56,38 @@ public class SceneEditor {
 	}
 
 	/**
-	 * Change editor state
+	 * Change editor state This MUST be called in sync with something done in
+	 * GAME_LOOP_START
 	 */
 	public static void setGameState(EditorState state) {
 		gameState = state;
 		switch (state) {
 		case PAUSE:
-			coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
-				@Override
-				public void run() {
-					coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
-					if (!coreEngine.isEditingPause()) {
-						coreEngine.setEditingPause(true, true);
-						swapToSceneEditorCamera();
-					}
-				}
-			});
-
+			swapToSceneEditorCamera();
+			coreEngine.setEditingPause(true, true);
 			break;
 		case PLAY:
-			coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
-				@Override
-				public void run() {
-					coreEngine.setBlackBarsColor(new Color(0, 0, 0));
-					if (coreEngine.isEditingPause()) {
-						coreEngine.setEditingPause(false, true);
-						swapToGameCamera();
-					}
-				}
-			});
+			swapToGameCamera();
+			coreEngine.setEditingPause(false, true);
 			break;
 		case STOP:
-			coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
-				@Override
-				public void run() {
-					coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
-					coreEngine.resetCurrentScene();
-					createEntityList();
-					if (!coreEngine.isEditingPause()) {
-						coreEngine.setEditingPause(true, true);
-						swapToSceneEditorCamera();
-					}
-				}
-			});
+			swapToSceneEditorCamera();
+			coreEngine.resetCurrentScene();
+			createEntityList();
+			coreEngine.setEditingPause(true, true);
+
+			if (coreEngine.isInError()) {
+				setGameState(EditorState.ERROR);
+			}
+
+			break;
+		case ERROR:
+			swapToSceneEditorCamera();
+			createEntityList();
+			coreEngine.setEditingPause(true, true);
 			break;
 		default:
 			break;
-
 		}
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -142,6 +126,14 @@ public class SceneEditor {
 	 * Swap game camera to use the one from the editor
 	 */
 	private static void swapToSceneEditorCamera() {
+		// No change if we are already paused
+		if (coreEngine.isEditingPause()) {
+			return;
+		}
+
+		// Change black bar color to indicate scene camera
+		coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
+
 		gameCamera = SceneEditor.coreEngine.getCamera();
 
 		// SMOOOOTH MC GROOOVE
@@ -159,6 +151,20 @@ public class SceneEditor {
 	 * Swap editor camera to use the one from the game
 	 */
 	private static void swapToGameCamera() {
+		// Something went wrong with the game too early and we don't have the game
+		// camera yet
+		if (gameCamera == null) {
+			return;
+		}
+
+		// No change if we are already playing
+		if (!coreEngine.isEditingPause()) {
+			return;
+		}
+
+		// Restore black bar for game camera
+		coreEngine.setBlackBarsColor(new Color(0, 0, 0));
+
 		// We allow ourselves to touch the player camera if it's set to reset itself
 		if (gameCamera.getTranslateMode() != Mode.INSTANT || gameCamera.getTranslateMode() != Mode.NO_FOLLOW) {
 			gameCamera.setPosition(camera.getPosition().getX(), camera.getPosition().getY());

@@ -293,13 +293,13 @@ public class CoreEngine extends JPanel {
 	 */
 	private void handleLuaErrors() {
 		if (gameError != null) {
-			setEditingPause(true);
 			// Try to continue
 			if (input.isKeyDown(KeyEvent.VK_SPACE)) {
 				setEditingPause(false);
-				gameError = null;
+				clearError();
 			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
 				reloadSystemsFromDisk();
+				clearError();
 				setEditingPause(false);
 			}
 			input.resetAllKeys();
@@ -307,15 +307,18 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * Clear current game error
+	 */
+	public void clearError() {
+		gameError = null;
+	}
+	
+	/**
 	 * Reload systems from disk, live
 	 */
 	public void reloadSystemsFromDisk() {
 		if (editingSystems != null) {
 			editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
-		}
-
-		if (gameError != null) {
-			gameError = null; // Let's remove the error as reloading systems may fix it
 		}
 
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
@@ -376,16 +379,13 @@ public class CoreEngine extends JPanel {
 	 * Change the editingPause without trigger the scheduler
 	 *
 	 * @param pause
-	 * @param noTrigger set to trure to not trigger the scheduler
+	 * @param noTrigger set to true to not trigger the scheduler
 	 */
 	public void setEditingPause(boolean pause, boolean noTrigger) {
 		if (!noTrigger) {
 			scheduler.trigger(Trigger.EDITING_STATE_CHANGED, pause);
 		}
-		// Error cleared with no trigger => error clearing from SE
-		if (!pause) {
-			gameError = null;
-		}
+
 		editingPause = pause;
 	}
 
@@ -441,10 +441,6 @@ public class CoreEngine extends JPanel {
 	 * Reset the current scene. To call be call before updating
 	 */
 	public void resetCurrentScene() {
-		if (!pause) {
-			gameError = null;
-		}
-
 		this.editingTick = 0;
 
 		currentScene.reset();
@@ -911,15 +907,14 @@ public class CoreEngine extends JPanel {
 		if (this.gameError == null) {
 			exception.printStackTrace();
 
-			scheduler.trigger(Trigger.EDITING_STATE_CHANGED, true);
 			scheduler.schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
-					setEditingPause(true, true);
+					gameError = exception;
+					setEditingPause(true);
 				}
 			});
 
-			this.gameError = exception;
 		}
 	}
 

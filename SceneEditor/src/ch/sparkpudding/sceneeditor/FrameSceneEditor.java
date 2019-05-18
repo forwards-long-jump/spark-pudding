@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.menu.MenuBar;
 import ch.sparkpudding.sceneeditor.panel.PanelGame;
@@ -50,7 +51,13 @@ public class FrameSceneEditor extends JFrame {
 
 		setVisible(true);
 
-		SceneEditor.setGameState(EditorState.STOP);
+		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+			@Override
+			public void run() {
+				SceneEditor.setGameState(EditorState.STOP);
+			}
+		});
+
 	}
 
 	/**
@@ -88,7 +95,7 @@ public class FrameSceneEditor extends JFrame {
 				SceneEditor.coreEngine.requestFocus();
 			}
 		});
-		
+
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
