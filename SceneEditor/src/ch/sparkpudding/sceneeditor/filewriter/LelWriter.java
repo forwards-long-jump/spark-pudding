@@ -41,7 +41,7 @@ public class LelWriter {
 			new File(directory + fileName).mkdir();
 		}
 		new File(directory + "metadata.xml").createNewFile();
-		Files.write(Paths.get(directory + "metadata.xml"), "TODO".getBytes());
+		Files.write(Paths.get(directory + "metadata.xml"), xmlFromMetadata().getBytes());
 
 		// Overwrite Scenes
 		for (Map.Entry<String, Scene> sceneEntry : scenes.entrySet()) {
@@ -59,13 +59,22 @@ public class LelWriter {
 
 		// Overwrite Components
 		for (Map.Entry<String, Component> componentEntry : Component.getTemplates().entrySet()) {
-			if(!componentEntry.getValue().getName().startsWith("se-")) {
+			if (!componentEntry.getValue().getName().startsWith("se-")) {
 				File fComponent = new File(directory + "/components/" + componentEntry.getKey() + ".xml");
 				String xmlComponent = xmlFromComponent(componentEntry.getValue());
-				Files.write(fComponent.toPath(), xmlComponent.getBytes());				
+				Files.write(fComponent.toPath(), xmlComponent.getBytes());
 			}
 		}
 
+	}
+
+	/**
+	 * Serialize XML from meta data TODO: Fix this
+	 * 
+	 * @return String to write to the xml metadata
+	 */
+	private String xmlFromMetadata() {
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<lel>\n" + "	<version>0.1</version>\n" + "</lel>";
 	}
 
 	/**
@@ -77,19 +86,23 @@ public class LelWriter {
 	private String xmlFromScene(Scene scene) {
 		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 		xml += "<scene name=\"" + scene.getName() + "\">\n";
-		for (Entity entity : scene.getEntities()) {
+		for (Entity entity : scene.getDefaultEntities()) {
 			xml += "\t<entity name=\"" + entity.getName() + "\" template=\"" + entity.getTemplate()
 					+ "\" z-index=\"1\">\n";
 			for (Component component : entity.getComponents().values()) {
-				xml += "\t\t<component template=\"" + component.getTemplateName() + "\">\n";
-				for (Field field : component.getFields().values()) {
-					xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
+				if (!component.getName().startsWith("se-")) {
+					xml += "\t\t<component template=\"" + component.getTemplateName() + "\">\n";
+					for (Field field : component.getFields().values()) {
+						xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
+					}
+					xml += "</component>\n";
 				}
-				xml += "</component>\n";
 			}
 			for (Entry<String, Component> component : Entity.getTemplates().get(entity.getTemplate())) {
-				if (!entity.getComponents().keySet().contains(component.getValue().getName())) {
-					xml += "<component name=\"" + component.getValue().getName() + "\" deleted=\"true\"/>";
+				if (!component.getValue().getName().startsWith("se-")) {
+					if (!entity.getComponents().keySet().contains(component.getValue().getName())) {
+						xml += "<component name=\"" + component.getValue().getName() + "\" deleted=\"true\"/>";
+					}
 				}
 			}
 			xml += "</entity>\n";
