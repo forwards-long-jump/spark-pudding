@@ -126,7 +126,12 @@ public class Field {
 			this.setValue(value);
 			break;
 		case INTEGER:
-			this.setValue(Integer.parseInt(value));
+			try {
+				this.setValue(Integer.parseInt(value));				
+			} catch (Exception e) {
+				// TODO: Fix integer that can be float because of lua
+				this.setValue(Double.parseDouble(value));
+			}
 			break;
 		default:
 			java.lang.System.err.println("Could not set field value from string");
