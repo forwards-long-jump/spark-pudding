@@ -105,7 +105,12 @@ public class PanelSidebarLeft extends JPanel {
 				switch (state) {
 				case PAUSE:
 					btnStop.setIcon(ImageStorage.STOP);
-					btnPausePlay.setIcon(ImageStorage.PLAY);
+					if(SceneEditor.coreEngine.isInError()) {
+						btnPausePlay.setIcon(ImageStorage.WARNING);						
+					}
+					else {
+						btnPausePlay.setIcon(ImageStorage.PLAY);												
+					}
 					break;
 				case PLAY:
 					btnStop.setIcon(ImageStorage.STOP);

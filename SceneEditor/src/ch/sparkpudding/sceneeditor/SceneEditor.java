@@ -25,7 +25,7 @@ import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
  */
 public class SceneEditor {
 	public enum EditorState {
-		PLAY, PAUSE, STOP;
+		PLAY, PAUSE, STOP, ERROR;
 	}
 
 	public static FrameSceneEditor frameSceneEditor;
@@ -68,7 +68,7 @@ public class SceneEditor {
 				public void run() {
 					coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
 					if (!coreEngine.isEditingPause()) {
-						coreEngine.setEditingPause(true);
+						coreEngine.setEditingPause(true, true);
 						swapToSceneEditorCamera();
 					}
 				}
@@ -81,7 +81,7 @@ public class SceneEditor {
 				public void run() {
 					coreEngine.setBlackBarsColor(new Color(0, 0, 0));
 					if (coreEngine.isEditingPause()) {
-						coreEngine.setEditingPause(false);
+						coreEngine.setEditingPause(false, true);
 						swapToGameCamera();
 					}
 				}
@@ -95,7 +95,7 @@ public class SceneEditor {
 					coreEngine.resetCurrentScene();
 					createEntityList();
 					if (!coreEngine.isEditingPause()) {
-						coreEngine.setEditingPause(true);
+						coreEngine.setEditingPause(true, true);
 						swapToSceneEditorCamera();
 					}
 				}
