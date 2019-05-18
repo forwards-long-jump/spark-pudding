@@ -22,7 +22,6 @@ import java.util.concurrent.Semaphore;
 import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.luaj.vm2.LuaError;
 import org.xml.sax.SAXException;
 
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
@@ -74,7 +73,7 @@ public class CoreEngine extends JPanel {
 
 	private Scheduler scheduler;
 
-	private LuaError luaError;
+	private Exception gameError;
 
 	/**
 	 * The heart of the Ludic Engine in Lua
@@ -285,15 +284,15 @@ public class CoreEngine extends JPanel {
 	 * To be called before upading, handle lua error actions
 	 */
 	private void handleLuaErrors() {
-		if (luaError != null) {
-			editingPause = true;
+		if (gameError != null) {
+			setEditingPause(true);
 			// Try to continue
 			if (input.isKeyDown(KeyEvent.VK_SPACE)) {
-				editingPause = false;
-				luaError = null;
+				setEditingPause(false);
+				gameError = null;
 			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
 				reloadSystemsFromDisk();
-				editingPause = false;
+				setEditingPause(false);
 			}
 			input.resetAllKeys();
 		}
@@ -307,8 +306,8 @@ public class CoreEngine extends JPanel {
 			editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
 		}
 
-		if (luaError != null) {
-			luaError = null; // Let's remove the error as reloading systems may fix it
+		if (gameError != null) {
+			gameError = null; // Let's remove the error as reloading systems may fix it
 		}
 
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
@@ -335,8 +334,6 @@ public class CoreEngine extends JPanel {
 				system.update();
 			}
 		}
-
-		scheduler.trigger(Trigger.AFTER_UPDATE);
 	}
 
 	/**
@@ -344,13 +341,6 @@ public class CoreEngine extends JPanel {
 	 */
 	private void render() {
 		repaint();
-	}
-
-	/**
-	 * Pauses all systems indescriminately
-	 */
-	public void toggleEditingPause() {
-		editingPause = !editingPause;
 	}
 
 	/**
@@ -554,7 +544,7 @@ public class CoreEngine extends JPanel {
 	 * @param g2d graphics context
 	 */
 	private void renderLuaError(Graphics2D g2d) {
-		if (luaError != null) {
+		if (gameError != null) {
 			int x = 20;
 			int y = 40;
 			int maxWidth = getWidth() - x;
@@ -575,7 +565,7 @@ public class CoreEngine extends JPanel {
 			g2d.setColor(Color.RED);
 			g2d.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, smallFontSize));
 
-			y = Drawing.drawWrappedString(luaError.getMessage(), x, y, maxWidth, g2d);
+			y = Drawing.drawWrappedString(gameError.getMessage(), x, y, maxWidth, g2d);
 			y += smallFontSize;
 
 			g2d.setColor(Color.LIGHT_GRAY);
@@ -877,12 +867,12 @@ public class CoreEngine extends JPanel {
 	 * 
 	 * @param LuaError to display
 	 */
-	public void notifyLuaError(LuaError error) {
+	public void notifyGameError(Exception exception) {
 		// We only display the first error encountered so we can fix it first
-		if (this.luaError == null) {
-			error.printStackTrace();
-			editingPause = true;
-			this.luaError = error;
+		if (this.gameError == null) {
+			exception.printStackTrace();
+			setEditingPause(true);
+			this.gameError = exception;
 		}
 	}
 
