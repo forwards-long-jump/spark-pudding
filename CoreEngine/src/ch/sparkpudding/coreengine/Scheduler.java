@@ -16,7 +16,7 @@ import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
  */
 public class Scheduler {
 	public enum Trigger {
-		BEFORE_UPDATE, GAME_LOOP_START, COMPONENT_ADDED, EDITING_STATE_CHANGED;
+		BEFORE_UPDATE, GAME_LOOP_START, COMPONENT_ADDED, EDITING_STATE_CHANGED, FIELD_VALUE_CHANGED;
 	};
 
 	private Map<Trigger, List<Runnable>> tasks;
@@ -119,5 +119,14 @@ public class Scheduler {
 		}
 		notifications.get(trigger).add(runnable);
 		semaphore.release();
+	}
+	
+	/**
+	 * Remove specified runnabled
+	 * 
+	 * @param runnable
+	 */
+	public void removeNotify(Trigger trigger, Runnable runnable) {
+		notifications.get(trigger).remove(runnable);
 	}
 }
