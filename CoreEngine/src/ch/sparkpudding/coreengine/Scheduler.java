@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 
@@ -20,12 +21,15 @@ public class Scheduler {
 
 	private Map<Trigger, List<Runnable>> tasks;
 	private Map<Trigger, List<Runnable>> notifications;
+	private Semaphore semaphore;
 
 	/**
 	 * ctor
 	 */
 	public Scheduler() {
 		tasks = new HashMap<Trigger, List<Runnable>>();
+		semaphore = new Semaphore(1);
+
 		for (Trigger trig : Trigger.values()) {
 			tasks.put(trig, new ArrayList<Runnable>());
 		}
@@ -39,35 +43,45 @@ public class Scheduler {
 	 * Runs all tasks and notifications associated with the given trigger
 	 * 
 	 * @param trigger method type to run
+	 * @throws InterruptedException
 	 */
-	public synchronized void trigger(Trigger trigger) {
-		for (Runnable task : tasks.get(trigger)) {
-			task.run();
-		}
-		tasks.get(trigger).clear();
-
-		for (Runnable notif : notifications.get(trigger)) {
-			notif.run();
-		}
+	public void trigger(Trigger trigger) {
+		this.trigger(trigger, null);
 	}
 
 	/**
 	 * Runs all tasks and notifications associated with the given trigger
 	 * 
 	 * @param trigger method type to run
-	 * @param object to give to the triggerred object
+	 * @param object  to give to the triggerred object
+	 * @throws InterruptedException
 	 */
-	public synchronized void trigger(Trigger trigger, Object object) {
+	public void trigger(Trigger trigger, Object object) {
+		// First, copy all planned tasks
+		List<Runnable> taskCopy = new ArrayList<Runnable>();
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		for (Runnable task : tasks.get(trigger)) {
-			if (task instanceof RunnableOneParameter) {
+			if (object != null && task instanceof RunnableOneParameter) {
 				((RunnableOneParameter) task).setObject(object);
 			}
-			task.run();
+			taskCopy.add(task);
 		}
 		tasks.get(trigger).clear();
+		semaphore.release();
 
+		// Execute all planned tasks
+		for (Runnable task : taskCopy) {
+			task.run();
+		}
+
+		// TODO: Copy notifications if it's necessary
 		for (Runnable notif : notifications.get(trigger)) {
-			if (notif instanceof RunnableOneParameter) {
+			if (object != null && notif instanceof RunnableOneParameter) {
 				((RunnableOneParameter) notif).setObject(object);
 			}
 			notif.run();
@@ -79,19 +93,16 @@ public class Scheduler {
 	 * 
 	 * @param trigger  trigger that will run the task
 	 * @param runnable task to run
+	 * @throws InterruptedException
 	 */
-	public synchronized void schedule(Trigger trigger, Runnable runnable) {
+	public void schedule(Trigger trigger, Runnable runnable) {
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		tasks.get(trigger).add(runnable);
-	}
-
-	/**
-	 * Add a task to be ran the next time the given trigger is activated
-	 * 
-	 * @param trigger  trigger that will run the task
-	 * @param runnable task to run
-	 */
-	public synchronized void schedule(Trigger trigger, RunnableOneParameter runnable) {
-		tasks.get(trigger).add(runnable);
+		semaphore.release();
 	}
 
 	/**
@@ -100,7 +111,13 @@ public class Scheduler {
 	 * @param trigger  trigger that will run the notification
 	 * @param runnable notification to run
 	 */
-	public synchronized void notify(Trigger trigger, Runnable runnable) {
+	public void notify(Trigger trigger, Runnable runnable) {
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		notifications.get(trigger).add(runnable);
+		semaphore.release();
 	}
 }
