@@ -15,6 +15,7 @@ import ch.sparkpudding.sceneeditor.menu.MenuBar;
 import ch.sparkpudding.sceneeditor.panel.PanelGame;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
+import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
 /**
  * Main frame containing the SceneEditor and a static reference to the core
@@ -26,7 +27,7 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
  */
 @SuppressWarnings("serial")
 public class FrameSceneEditor extends JFrame {
-	private final String TITLE = "Scene Editor";
+	private final String TITLE = "Live Editor for LEL";
 	private final int WIDTH = 1280;
 	private final int HEIGHT = 720;
 
@@ -112,6 +113,7 @@ public class FrameSceneEditor extends JFrame {
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle(TITLE);
+		setIconImage(ImageStorage.ICON.getImage());
 		setJMenuBar(menuBar);
 		setLocationRelativeTo(null);
 	}
