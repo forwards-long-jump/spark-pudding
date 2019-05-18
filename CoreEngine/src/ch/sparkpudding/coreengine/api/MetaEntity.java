@@ -29,7 +29,7 @@ public class MetaEntity {
 	 * Sets the caller entity to be deleted at the end of the update
 	 */
 	public void delete() {
-		Lel.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 
 			@Override
 			public void run() {

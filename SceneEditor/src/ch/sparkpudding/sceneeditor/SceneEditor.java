@@ -63,7 +63,7 @@ public class SceneEditor {
 		gameState = state;
 		switch (state) {
 		case PAUSE:
-			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+			coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
 					coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
@@ -76,7 +76,7 @@ public class SceneEditor {
 
 			break;
 		case PLAY:
-			coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
+			coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
 					coreEngine.setBlackBarsColor(new Color(0, 0, 0));
@@ -88,7 +88,7 @@ public class SceneEditor {
 			});
 			break;
 		case STOP:
-			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+			coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
 					coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
@@ -105,8 +105,8 @@ public class SceneEditor {
 			break;
 
 		}
-		
-		SwingUtilities.invokeLater(new Runnable() {		
+
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				fireGameStateChanged();
@@ -130,7 +130,7 @@ public class SceneEditor {
 			}
 		}
 
-		SwingUtilities.invokeLater(new Runnable() {		
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				fireEntityListChanged();
@@ -251,7 +251,7 @@ public class SceneEditor {
 			listener.changeSelectedEntity(selectedEntity);
 		}
 	}
-	
+
 	/**
 	 * Allow to fire an event when the selected entity change
 	 */

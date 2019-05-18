@@ -15,7 +15,7 @@ import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
  */
 public class Scheduler {
 	public enum Trigger {
-		BEFORE_UPDATE, AFTER_UPDATE, GAME_LOOP_START, COMPONENT_ADDED;
+		BEFORE_UPDATE, GAME_LOOP_START, COMPONENT_ADDED, EDITING_STATE_CHANGED;
 	};
 
 	private Map<Trigger, List<Runnable>> tasks;
