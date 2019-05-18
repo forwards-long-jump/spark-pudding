@@ -40,6 +40,15 @@ public class Core {
 	}
 
 	/**
+	 * Get current editing tick
+	 * 
+	 * @return current editing tick
+	 */
+	public int getEditingTick() {
+		return Lel.coreEngine.getEditingTick();
+	}
+
+	/**
 	 * Get game width
 	 * 
 	 * @return game width
@@ -98,14 +107,14 @@ public class Core {
 	 */
 	public LuaValue createEntity(String templateName) {
 		Entity e = new Entity(Entity.getTemplates().get(templateName));
-		
+
 		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 			@Override
 			public void run() {
 				Lel.coreEngine.addEntity(e);
 			}
 		});
-		
+
 		return e.getLuaEntity();
 	}
 }

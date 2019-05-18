@@ -70,6 +70,7 @@ public class CoreEngine extends JPanel {
 
 	private int fpsCount;
 	private int fps;
+	private int editingTick;
 
 	private Scheduler scheduler;
 
@@ -122,6 +123,8 @@ public class CoreEngine extends JPanel {
 		this.fpsCount = 0;
 		this.msPerUpdate = (1000 / 60);
 		this.exit = false;
+
+		this.editingTick = 0;
 
 		this.pause = false;
 		this.editingPause = false;
@@ -329,6 +332,8 @@ public class CoreEngine extends JPanel {
 
 		// Only update editing systems when the game is paused
 		if (editingPause && editingSystems != null) {
+			this.editingTick++;
+
 			for (UpdateSystem system : editingSystems) {
 				system.update();
 			}
@@ -439,6 +444,8 @@ public class CoreEngine extends JPanel {
 		if (!pause) {
 			gameError = null;
 		}
+
+		this.editingTick = 0;
 
 		currentScene.reset();
 		setCurrentScene(currentScene);
@@ -932,5 +939,14 @@ public class CoreEngine extends JPanel {
 	 */
 	public boolean isInError() {
 		return gameError != null;
+	}
+
+	/**
+	 * Get editing tick
+	 * 
+	 * @return editing tick
+	 */
+	public int getEditingTick() {
+		return editingTick;
 	}
 }
