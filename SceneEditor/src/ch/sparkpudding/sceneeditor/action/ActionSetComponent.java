@@ -60,12 +60,12 @@ public class ActionSetComponent extends AbstractAction {
 
 			@Override
 			public void run() {
-				Lel.coreEngine.removeComponent(entity, component.getName());
+				SceneEditor.coreEngine.removeComponent(entity, component.getName());
 				if (previousComponent != null) {
 					entity.add(previousComponent);
 					// This below *may* be useful but at the moment it will just spawn a lifeless
 					// entity and we don't want to spawn defaults entities
-					// Lel.coreEngine.notifySystemsOfNewComponent(entity, component);
+					// SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);
 				}
 				SwingUtilities.invokeLater(new Runnable() {
 
