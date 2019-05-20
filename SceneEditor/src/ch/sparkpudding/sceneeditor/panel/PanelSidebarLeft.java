@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
@@ -27,6 +28,7 @@ public class PanelSidebarLeft extends JPanel {
 
 	private JButton btnPausePlay;
 	private JButton btnStop;
+	private JButton btnReset;
 
 	private BoxLayout layout;
 
@@ -47,18 +49,25 @@ public class PanelSidebarLeft extends JPanel {
 
 		btnPausePlay = new JButton();
 		btnStop = new JButton();
-		
+		btnReset = new JButton();
+
 		btnPausePlay.setIcon(ImageStorage.PLAY);
 		btnStop.setIcon(ImageStorage.STOP_DISABLED);
+		btnReset.setIcon(ImageStorage.RELOAD);
 
 		btnStop.setEnabled(false);
 
 		btnPausePlay.setOpaque(false);
 		btnPausePlay.setContentAreaFilled(false);
 		btnPausePlay.setBorderPainted(false);
+
 		btnStop.setOpaque(false);
 		btnStop.setContentAreaFilled(false);
 		btnStop.setBorderPainted(false);
+
+		btnReset.setContentAreaFilled(false);
+		btnReset.setBorderPainted(false);
+		btnReset.setOpaque(false);
 	}
 
 	/**
@@ -69,6 +78,7 @@ public class PanelSidebarLeft extends JPanel {
 
 		add(btnPausePlay);
 		add(btnStop);
+		add(btnReset);
 
 		setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(), new EmptyBorder(10, 10, 10, 10)));
 	}
@@ -80,11 +90,24 @@ public class PanelSidebarLeft extends JPanel {
 		btnPausePlay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (SceneEditor.getGameState() == EditorState.PLAY) {
-					SceneEditor.setGameState(EditorState.PAUSE);
-				} else {
-					SceneEditor.setGameState(EditorState.PLAY);
-				}
+				SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+					@Override
+					public void run() {
+						switch (SceneEditor.getGameState()) {
+						case PLAY:
+							SceneEditor.setGameState(EditorState.PAUSE);
+							break;
+						case ERROR:
+							SceneEditor.coreEngine.clearError();
+							SceneEditor.setGameState(EditorState.PAUSE);
+							break;
+						default:
+							SceneEditor.setGameState(EditorState.PLAY);
+							break;
+						}
+					}
+				});
+
 				SceneEditor.coreEngine.requestFocus();
 			}
 		});
@@ -93,8 +116,30 @@ public class PanelSidebarLeft extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SceneEditor.setGameState(EditorState.STOP);
+				SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+					@Override
+					public void run() {
+						SceneEditor.setGameState(EditorState.STOP);
+					}
+				});
 				SceneEditor.coreEngine.requestFocus();
+			}
+		});
+
+		btnReset.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+					@Override
+					public void run() {
+						SceneEditor.coreEngine.reloadSystemsFromDisk();
+						if(SceneEditor.coreEngine.isInError()) {
+							SceneEditor.setGameState(EditorState.PLAY);
+							SceneEditor.coreEngine.clearError();
+						}
+					}
+				});
 			}
 		});
 
@@ -116,6 +161,11 @@ public class PanelSidebarLeft extends JPanel {
 					btnStop.setIcon(ImageStorage.STOP_DISABLED);
 					btnPausePlay.setIcon(ImageStorage.PLAY);
 					btnStop.setEnabled(false);
+					break;
+				case ERROR:
+					btnPausePlay.setIcon(ImageStorage.WARNING);
+					btnStop.setIcon(ImageStorage.STOP);
+					btnStop.setEnabled(true);
 					break;
 				default:
 					break;

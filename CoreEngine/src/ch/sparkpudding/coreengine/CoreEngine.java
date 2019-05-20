@@ -22,7 +22,6 @@ import java.util.concurrent.Semaphore;
 import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.luaj.vm2.LuaError;
 import org.xml.sax.SAXException;
 
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
@@ -71,14 +70,15 @@ public class CoreEngine extends JPanel {
 
 	private int fpsCount;
 	private int fps;
+	private int editingTick;
 
 	private Scheduler scheduler;
 
-	private LuaError luaError;
+	private Exception gameError;
 
 	/**
 	 * The heart of the Ludic Engine in Lua
-	 * 
+	 *
 	 * @param gameFolder Location of the game file
 	 * @throws Exception All kind of things, really. Ranging from thread to lua
 	 *                   errors.
@@ -90,8 +90,8 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Create a CoreEngine which goal is to be run inside of scene editor
-	 * 
+	 * Create a CoreEngine whose goal is to be run inside of scene editor
+	 *
 	 * @param gameFolder         Location of the game file
 	 * @param editingToolsFolder The path to a folder containing "editing" systems
 	 *                           and components
@@ -111,7 +111,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Shared constructor
-	 * 
+	 *
 	 * @param gameFolder Location of the game file
 	 * @throws Exception
 	 */
@@ -123,6 +123,8 @@ public class CoreEngine extends JPanel {
 		this.fpsCount = 0;
 		this.msPerUpdate = (1000 / 60);
 		this.exit = false;
+
+		this.editingTick = 0;
 
 		this.pause = false;
 		this.editingPause = false;
@@ -148,7 +150,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Create System from files and place them in a container, return the render
 	 * system
-	 * 
+	 *
 	 * @param systemContainer
 	 * @param systemList
 	 * @return RenderSystem to be stored somewhere
@@ -215,7 +217,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Populates component templates list with component template files <br>
 	 * TODO: Merge this function and the one above
-	 * 
+	 *
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
@@ -229,7 +231,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Runs update and render loops
-	 * 
+	 *
 	 * @throws InterruptedException
 	 */
 	private void startGame() throws InterruptedException {
@@ -244,7 +246,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Run the game loop until the game ends
-	 * 
+	 *
 	 * @throws InterruptedException
 	 */
 	private void runGameLoop() throws InterruptedException {
@@ -264,9 +266,14 @@ public class CoreEngine extends JPanel {
 			while (lag >= msPerUpdate) {
 				input.update();
 
-				handleLuaErrors();
+				// We let external great power handle this
+				if (editingSystems == null) {
+					handleLuaErrors();
+				}
 
-				update();
+				if (gameError == null) {
+					update();
+				}
 				lag -= msPerUpdate;
 			}
 
@@ -285,30 +292,33 @@ public class CoreEngine extends JPanel {
 	 * To be called before upading, handle lua error actions
 	 */
 	private void handleLuaErrors() {
-		if (luaError != null) {
-			editingPause = true;
+		if (gameError != null) {
 			// Try to continue
 			if (input.isKeyDown(KeyEvent.VK_SPACE)) {
-				editingPause = false;
-				luaError = null;
+				setEditingPause(false);
+				clearError();
 			} else if (input.isKeyDown(KeyEvent.VK_ENTER)) {
 				reloadSystemsFromDisk();
-				editingPause = false;
+				clearError();
+				setEditingPause(false);
 			}
 			input.resetAllKeys();
 		}
 	}
 
 	/**
+	 * Clear current game error
+	 */
+	public void clearError() {
+		gameError = null;
+	}
+	
+	/**
 	 * Reload systems from disk, live
 	 */
 	public void reloadSystemsFromDisk() {
 		if (editingSystems != null) {
 			editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
-		}
-
-		if (luaError != null) {
-			luaError = null; // Let's remove the error as reloading systems may fix it
 		}
 
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
@@ -325,6 +335,8 @@ public class CoreEngine extends JPanel {
 
 		// Only update editing systems when the game is paused
 		if (editingPause && editingSystems != null) {
+			this.editingTick++;
+
 			for (UpdateSystem system : editingSystems) {
 				system.update();
 			}
@@ -335,8 +347,6 @@ public class CoreEngine extends JPanel {
 				system.update();
 			}
 		}
-
-		scheduler.trigger(Trigger.AFTER_UPDATE);
 	}
 
 	/**
@@ -347,15 +357,8 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Pauses all systems indescriminately
-	 */
-	public void toggleEditingPause() {
-		editingPause = !editingPause;
-	}
-
-	/**
 	 * Return true if paused for editing
-	 * 
+	 *
 	 * @return true if paused for editing
 	 */
 	public boolean isEditingPause() {
@@ -364,10 +367,25 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Change the editingPause state
-	 * 
+	 *
 	 * @param pause
 	 */
 	public void setEditingPause(boolean pause) {
+		scheduler.trigger(Trigger.EDITING_STATE_CHANGED, pause);
+		editingPause = pause;
+	}
+
+	/**
+	 * Change the editingPause without trigger the scheduler
+	 *
+	 * @param pause
+	 * @param noTrigger set to true to not trigger the scheduler
+	 */
+	public void setEditingPause(boolean pause, boolean noTrigger) {
+		if (!noTrigger) {
+			scheduler.trigger(Trigger.EDITING_STATE_CHANGED, pause);
+		}
+
 		editingPause = pause;
 	}
 
@@ -380,7 +398,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Return all the scenes
-	 * 
+	 *
 	 * @return Scenes
 	 */
 	public Map<String, Scene> getScenes() {
@@ -423,13 +441,15 @@ public class CoreEngine extends JPanel {
 	 * Reset the current scene. To call be call before updating
 	 */
 	public void resetCurrentScene() {
+		this.editingTick = 0;
+
 		currentScene.reset();
 		setCurrentScene(currentScene);
 	}
 
 	/**
 	 * Get the task scheduler
-	 * 
+	 *
 	 * @return the task scheduler
 	 */
 	public Scheduler getScheduler() {
@@ -438,7 +458,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Get the current scene
-	 * 
+	 *
 	 * @return the current scene
 	 */
 	public Scene getCurrentScene() {
@@ -447,7 +467,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Change current scene to new scene
-	 * 
+	 *
 	 * @param newScene to switch to
 	 */
 	public void setCurrentScene(Scene newScene) {
@@ -472,7 +492,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Return the translation of the game (the one that keep it centered in the
 	 * middle of black bars)
-	 * 
+	 *
 	 * @return Point the translation of the game (the one using black bars)
 	 */
 	private Point getGameTranslation() {
@@ -489,7 +509,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Calculate scale ratio
-	 * 
+	 *
 	 * @return the max w/h or h/w scale ratio
 	 */
 	private double getScaleRatio() {
@@ -513,7 +533,7 @@ public class CoreEngine extends JPanel {
 		super.paintComponent(g);
 
 		Graphics2D g2d = (Graphics2D) g;
-		AffineTransform transformationState = g2d.getTransform();
+		AffineTransform defaultTransformationState = g2d.getTransform();
 
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -526,14 +546,16 @@ public class CoreEngine extends JPanel {
 		g2d.translate(translation.getX(), translation.getY());
 		g2d.scale(scaleRatio, scaleRatio);
 
+		AffineTransform gameTransformationState = g2d.getTransform();
 		fps++;
 		renderSystem.render(g2d);
 
 		if (editingPause && editingRenderSystem != null) {
+			g2d.setTransform(gameTransformationState);
 			editingRenderSystem.render(g2d);
 		}
 
-		g2d.setTransform(transformationState);
+		g2d.setTransform(defaultTransformationState);
 
 		// Draw black bars
 		drawBlackBars(g2d, scaleRatio, translation);
@@ -550,11 +572,11 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Render an overlay giving help about a lua error that could've occurer
-	 * 
+	 *
 	 * @param g2d graphics context
 	 */
 	private void renderLuaError(Graphics2D g2d) {
-		if (luaError != null) {
+		if (gameError != null) {
 			int x = 20;
 			int y = 40;
 			int maxWidth = getWidth() - x;
@@ -575,19 +597,22 @@ public class CoreEngine extends JPanel {
 			g2d.setColor(Color.RED);
 			g2d.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, smallFontSize));
 
-			y = Drawing.drawWrappedString(luaError.getMessage(), x, y, maxWidth, g2d);
-			y += smallFontSize;
+			y = Drawing.drawWrappedString(gameError.getMessage(), x, y, maxWidth, g2d);
+			// Let external great forces of nature handling this if they exists
+			if (editingSystems == null) {
+				y += smallFontSize;
 
-			g2d.setColor(Color.LIGHT_GRAY);
-			y = Drawing.drawWrappedString("Press [SPACE] to ignore this error and attempt to continue.", x, y, maxWidth,
-					g2d);
-			Drawing.drawWrappedString("Press [ENTER] to reload systems from disk.", x, y, maxWidth, g2d);
+				g2d.setColor(Color.LIGHT_GRAY);
+				y = Drawing.drawWrappedString("Press [SPACE] to ignore this error and attempt to continue.", x, y,
+						maxWidth, g2d);
+				Drawing.drawWrappedString("Press [ENTER] to reload systems from disk.", x, y, maxWidth, g2d);
+			}
 		}
 	}
 
 	/**
 	 * Draw black bars hiding the game
-	 * 
+	 *
 	 * @param g2d
 	 * @param scaleRatio  current scale ratio used for the game
 	 * @param translation translation used for the game
@@ -615,7 +640,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Getter for camera.
-	 * 
+	 *
 	 * @return camera attached for current scene
 	 */
 	public Camera getCamera() {
@@ -624,7 +649,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Getter for input.
-	 * 
+	 *
 	 * @return input api
 	 */
 	public Input getInput() {
@@ -633,7 +658,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Getter for resourceLocator
-	 * 
+	 *
 	 * @return resourceLocator
 	 */
 	public ResourceLocator getResourceLocator() {
@@ -642,7 +667,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Add an entity to current scene and notify systems
-	 * 
+	 *
 	 * @param e entity to add
 	 */
 	public void addEntity(Entity e) {
@@ -665,7 +690,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Get current framerate of the game
-	 * 
+	 *
 	 * @return current framerate
 	 */
 	public int getFPS() {
@@ -674,7 +699,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Delete an entity and removes it from the scene and systems
-	 * 
+	 *
 	 * @param entity Entity to be deleted
 	 */
 	public void deleteEntity(Entity entity) {
@@ -697,7 +722,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Removes the named component from the entity, and removes the entity from
 	 * systems where it is no longer needed
-	 * 
+	 *
 	 * @param entity        Entity to work on
 	 * @param componentName Name of the component to remove
 	 */
@@ -722,7 +747,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * When an entity receives a new component, notify the systems of this in case
 	 * they now need it
-	 * 
+	 *
 	 * @param entity        Entity which has received a component
 	 * @param componentName Name of the new component
 	 */
@@ -745,7 +770,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Get game height (not jpanel height)
-	 * 
+	 *
 	 * @return game height
 	 */
 	public double getGameHeight() {
@@ -754,7 +779,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Get game width (not jpanel height)
-	 * 
+	 *
 	 * @return game width
 	 */
 	public double getGameWidth() {
@@ -763,7 +788,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Convert a panel position to the game (UI) position
-	 * 
+	 *
 	 * @param p position to convert
 	 * @return Point2D new position
 	 */
@@ -786,7 +811,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Convert a panel position to the game world position
-	 * 
+	 *
 	 * @param p point to convert
 	 * @return Point2D point converted
 	 */
@@ -806,7 +831,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Convert a vector in pixels (panel units) to the game (UI) unit
-	 * 
+	 *
 	 * @param v vector to convert
 	 * @return Point2D new vector
 	 */
@@ -825,7 +850,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Convert a vector in pixels (panel units) to the game world unit
-	 * 
+	 *
 	 * @param v vector to convert
 	 * @return Point2D new vector
 	 */
@@ -843,7 +868,7 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Get all entities intersecting given point. Note that the point should usually
 	 * be converted manually into world coordinates
-	 * 
+	 *
 	 * @param p point to get entities at
 	 * @return List<Entity> all entities below the mouse
 	 */
@@ -874,24 +899,49 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Notify the engine that a lua error occured. Pause the game and display the
 	 * error
-	 * 
+	 *
 	 * @param LuaError to display
 	 */
-	public void notifyLuaError(LuaError error) {
+	public void notifyGameError(Exception exception) {
 		// We only display the first error encountered so we can fix it first
-		if (this.luaError == null) {
-			error.printStackTrace();
-			editingPause = true;
-			this.luaError = error;
+		if (this.gameError == null) {
+			exception.printStackTrace();
+
+			scheduler.schedule(Trigger.GAME_LOOP_START, new Runnable() {
+				@Override
+				public void run() {
+					gameError = exception;
+					setEditingPause(true);
+				}
+			});
+
 		}
 	}
 
 	/**
 	 * Set black bars color
-	 * 
+	 *
 	 * @param color of the black bar
 	 */
 	public void setBlackBarsColor(Color color) {
 		blackBarColor = color;
+	}
+
+	/**
+	 * Return true if the game has an uncleared error
+	 *
+	 * @return true if the game has an uncleared error
+	 */
+	public boolean isInError() {
+		return gameError != null;
+	}
+
+	/**
+	 * Get editing tick
+	 * 
+	 * @return editing tick
+	 */
+	public int getEditingTick() {
+		return editingTick;
 	}
 }

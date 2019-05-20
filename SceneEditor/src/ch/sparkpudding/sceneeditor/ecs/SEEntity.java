@@ -67,7 +67,7 @@ public class SEEntity {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 		if (selected) {
-			SceneEditor.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+			SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
 					if (getLiveEntity().add("se-selected")) {
@@ -76,7 +76,7 @@ public class SEEntity {
 				}
 			});
 		} else {
-			SceneEditor.coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+			SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
 					SceneEditor.coreEngine.removeComponent(getLiveEntity(), "se-selected");

@@ -169,8 +169,8 @@ public class PanelEntity extends JPanel {
 	 */
 	private void setEntity(SEEntity seEntity) {
 		currentEntity = seEntity;
-		initialPanelComponent.setEntity(currentEntity.getDefaultEntity());
-		livePanelComponent.setEntity(currentEntity.getLiveEntity());
+		initialPanelComponent.setEntity(seEntity, currentEntity.getDefaultEntity());
+		livePanelComponent.setEntity(seEntity, currentEntity.getLiveEntity());
 		resetBorderTitle();
 		resetEnabledPane();
 	}

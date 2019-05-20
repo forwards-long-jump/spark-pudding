@@ -124,10 +124,10 @@ public abstract class System {
 			globals.get("dofile").call(LuaValue.valueOf(filepath));
 			return true;
 		} catch (LuaError error) {
-			Lel.coreEngine.notifyLuaError(error);
+			Lel.coreEngine.notifyGameError(error);
 		}
 		catch (Exception error) {
-			Lel.coreEngine.notifyLuaError(new LuaError(error.toString()));
+			Lel.coreEngine.notifyGameError(error);
 		}
 
 		return false;
@@ -151,11 +151,11 @@ public abstract class System {
 		try {
 			list = (LuaTable) getRequiredComponentsMethod.call(); // Return { entity = {"comp1", "comp2"}}
 		} catch (ClassCastException error) {
-			Lel.coreEngine.notifyLuaError(new LuaError(filepath + ": could not parse required components."));
+			Lel.coreEngine.notifyGameError(new Exception(filepath + ": could not parse required components."));
 			loadingFailed = true;
 			return;
 		} catch (LuaError error) {
-			Lel.coreEngine.notifyLuaError(new LuaError(filepath + ": missing function getRequiredComponents."));
+			Lel.coreEngine.notifyGameError(new Exception(filepath + ": missing function getRequiredComponents."));
 			loadingFailed = true;
 			return;
 		}

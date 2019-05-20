@@ -2,7 +2,6 @@ package ch.sparkpudding.sceneeditor.action;
 
 import javax.swing.SwingUtilities;
 
-import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
@@ -33,6 +32,9 @@ public class ActionAddComponent extends AbstractAction {
 		this.entity = entity;
 	}
 
+	/**
+	 * Add the component to the entity and notify CE
+	 */
 	@Override
 	public boolean doAction() {
 		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
@@ -40,7 +42,7 @@ public class ActionAddComponent extends AbstractAction {
 			@Override
 			public void run() {
 				entity.add(component);
-				Lel.coreEngine.notifySystemsOfNewComponent(entity, component);
+				SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);
 				SwingUtilities.invokeLater(new Runnable() {
 
 					@Override
@@ -53,13 +55,16 @@ public class ActionAddComponent extends AbstractAction {
 		return true;
 	}
 
+	/**
+	 * Remove the component from the entity and notify CE
+	 */
 	@Override
 	public void undoAction() {
 		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 
 			@Override
 			public void run() {
-				Lel.coreEngine.removeComponent(entity, component.getName());
+				SceneEditor.coreEngine.removeComponent(entity, component.getName());
 				SwingUtilities.invokeLater(new Runnable() {
 					
 					@Override

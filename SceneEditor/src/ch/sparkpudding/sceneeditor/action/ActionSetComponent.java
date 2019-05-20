@@ -8,32 +8,33 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 
 /**
- * Action to delete a component
+ * Action to set a component
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br />
  *         Creation Date : 16 May 2019
  * 
  */
 @SuppressWarnings("serial")
-public class ActionDeleteComponent extends AbstractAction {
+public class ActionSetComponent extends AbstractAction {
 	Component component;
+	Component previousComponent;
 	Entity entity;
 
 	/**
 	 * ctor
 	 * 
-	 * @param name of the action
-	 * @param entity affected by the component deletion
-	 * @param component to delete
+	 * @param name      of the action
+	 * @param entity    to set the component
+	 * @param component to set
 	 */
-	public ActionDeleteComponent(String name, Entity entity, Component component) {
+	public ActionSetComponent(String name, Entity entity, Component component) {
 		super(name);
 		this.component = component;
 		this.entity = entity;
 	}
 
 	/**
-	 * Delete component from entity and notify CE
+	 * Give the component to the entity - CE is not notified
 	 */
 	@Override
 	public boolean doAction() {
@@ -41,21 +42,16 @@ public class ActionDeleteComponent extends AbstractAction {
 
 			@Override
 			public void run() {
-				SceneEditor.coreEngine.removeComponent(entity, component.getName());
-				SwingUtilities.invokeLater(new Runnable() {
-					
-					@Override
-					public void run() {						
-						SceneEditor.fireSelectedEntityChanged();
-					}
-				});
+				previousComponent = entity.getComponents().get(component.getName());
+				entity.remove(component.getName());
+				entity.add(new Component(component));
 			}
 		});
 		return true;
 	}
 
 	/**
-	 * Add component back to entity and notify CE
+	 * Remove the component from the entity ang give it its  old version if any - CE is not notified
 	 */
 	@Override
 	public void undoAction() {
@@ -63,12 +59,17 @@ public class ActionDeleteComponent extends AbstractAction {
 
 			@Override
 			public void run() {
-				entity.add(component);
-				SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);
+				SceneEditor.coreEngine.removeComponent(entity, component.getName());
+				if (previousComponent != null) {
+					entity.add(previousComponent);
+					// This below *may* be useful but at the moment it will just spawn a lifeless
+					// entity and we don't want to spawn defaults entities
+					// SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);
+				}
 				SwingUtilities.invokeLater(new Runnable() {
-					
+
 					@Override
-					public void run() {						
+					public void run() {
 						SceneEditor.fireSelectedEntityChanged();
 					}
 				});

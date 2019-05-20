@@ -1,10 +1,17 @@
 package ch.sparkpudding.sceneeditor.menu;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+
+import ch.sparkpudding.sceneeditor.Main;
+import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.filewriter.LelWriter;
 
 /**
  * Represent the MenuFile of the SceneEditor
@@ -46,6 +53,18 @@ public class MenuFile extends JMenu {
 	 */
 	private void addAction() {
 		// TODO: Implement method
+		itemSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				LelWriter lel = new LelWriter();
+				try {
+					lel.write(SceneEditor.coreEngine, Main.class.getResource("/emptygame").getPath() + "/");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**

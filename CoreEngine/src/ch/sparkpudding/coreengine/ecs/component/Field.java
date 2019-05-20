@@ -1,5 +1,8 @@
 package ch.sparkpudding.coreengine.ecs.component;
 
+import ch.sparkpudding.coreengine.Lel;
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
+
 /**
  * Piece of data to be contained by a component, described by its name, the type
  * of its value, and the value itself.
@@ -106,6 +109,12 @@ public class Field {
 	 */
 	public void setValue(Object value) {
 		this.value = value;
+		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+			@Override
+			public void run() {
+				Lel.coreEngine.getScheduler().trigger(Trigger.FIELD_VALUE_CHANGED, Field.this);
+			}
+		});
 	}
 
 	/**
@@ -126,7 +135,12 @@ public class Field {
 			this.setValue(value);
 			break;
 		case INTEGER:
-			this.setValue(Integer.parseInt(value));
+			try {
+				this.setValue(Integer.parseInt(value));				
+			} catch (Exception e) {
+				// TODO: Fix integer that can be float because of lua
+				this.setValue(Double.parseDouble(value));
+			}
 			break;
 		default:
 			java.lang.System.err.println("Could not set field value from string");
