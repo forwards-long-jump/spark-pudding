@@ -8,32 +8,32 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 
 /**
- * Action to delete a component
+ * Action to add a component
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br />
  *         Creation Date : 16 May 2019
  * 
  */
 @SuppressWarnings("serial")
-public class ActionDeleteComponent extends AbstractAction {
+public class ActionAddComponent extends AbstractAction {
 	Component component;
 	Entity entity;
 
 	/**
 	 * ctor
 	 * 
-	 * @param name of the action
-	 * @param entity affected by the component deletion
+	 * @param name      of the action
+	 * @param entity    affected by the component deletion
 	 * @param component to delete
 	 */
-	public ActionDeleteComponent(String name, Entity entity, Component component) {
+	public ActionAddComponent(String name, Entity entity, Component component) {
 		super(name);
 		this.component = component;
 		this.entity = entity;
 	}
 
 	/**
-	 * Delete component from entity and notify CE
+	 * Add the component to the entity and notify CE
 	 */
 	@Override
 	public boolean doAction() {
@@ -41,11 +41,12 @@ public class ActionDeleteComponent extends AbstractAction {
 
 			@Override
 			public void run() {
-				SceneEditor.coreEngine.removeComponent(entity, component.getName());
+				entity.add(component);
+				SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);
 				SwingUtilities.invokeLater(new Runnable() {
-					
+
 					@Override
-					public void run() {						
+					public void run() {
 						SceneEditor.fireSelectedEntityChanged();
 					}
 				});
@@ -55,7 +56,7 @@ public class ActionDeleteComponent extends AbstractAction {
 	}
 
 	/**
-	 * Add component back to entity and notify CE
+	 * Remove the component from the entity and notify CE
 	 */
 	@Override
 	public void undoAction() {
@@ -63,8 +64,7 @@ public class ActionDeleteComponent extends AbstractAction {
 
 			@Override
 			public void run() {
-				entity.add(component);
-				SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);
+				SceneEditor.coreEngine.removeComponent(entity, component.getName());
 				SwingUtilities.invokeLater(new Runnable() {
 					
 					@Override

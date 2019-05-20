@@ -75,16 +75,14 @@ public class RenderSystem extends System {
 				// Join the "thread"
 				future.get(MAX_EXECUTION_TIME_IN_SECONDS, TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
-				java.lang.System.out.println(e.getCause());
-				Lel.coreEngine.notifyLuaError(new LuaError("A LEL internal error occured."));
+				Lel.coreEngine.notifyGameError(new Exception("A LEL internal error occured."));
 			} catch (ExecutionException e) {
-				java.lang.System.out.println(e.getCause());
-				Lel.coreEngine.notifyLuaError(new LuaError("A LEL internal error occured."));
+				Lel.coreEngine.notifyGameError(new Exception("A LEL internal error occured."));
 			} catch (TimeoutException e) {
 				// Interrupt our thread
 				loadingFailed = true;
 				future.cancel(true);
-				Lel.coreEngine.notifyLuaError(new LuaError("renderer system took more than the "
+				Lel.coreEngine.notifyGameError(new Exception(filepath + " took more than the "
 						+ MAX_EXECUTION_TIME_IN_SECONDS + " seconds allowed to render."));
 			}
 		}
@@ -101,10 +99,10 @@ public class RenderSystem extends System {
 			renderMethod.call();
 			Graphics.getInstance().dispose();
 		} catch (LuaError error) {
-			Lel.coreEngine.notifyLuaError(error);
+			Lel.coreEngine.notifyGameError(error);
 		} catch (StackOverflowError error) {
-			Lel.coreEngine.notifyLuaError(new LuaError(
-					"Stack overflow in the renderer system. This sometimes happens when trying to read an inexisting field from a component."));
+			Lel.coreEngine.notifyGameError(new Exception("Stack overflow in " + filepath
+					+ ". This sometimes happens when trying to read an inexisting field from a component."));
 		}
 	}
 }

@@ -1,16 +1,22 @@
 package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
+import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
 
 /**
  * Contains the different parameter of an entity
@@ -25,6 +31,7 @@ public class PanelEntity extends JPanel {
 	private PanelComponent initialPanelComponent;
 	private PanelComponent livePanelComponent;
 	private JTabbedPane jTabbedPane;
+	private JButton btnAddComponent;
 
 	private SEEntity currentEntity;
 
@@ -46,6 +53,7 @@ public class PanelEntity extends JPanel {
 		this.initialPanelComponent = new PanelComponent();
 		this.livePanelComponent = new PanelComponent();
 		this.jTabbedPane = new JTabbedPane();
+		this.btnAddComponent = new JButton("Add component");
 	}
 
 	/**
@@ -57,7 +65,10 @@ public class PanelEntity extends JPanel {
 		jTabbedPane.addTab("Initial", initialPanelComponent);
 		jTabbedPane.addTab("Live", livePanelComponent);
 
+		this.btnAddComponent.setEnabled(false);
+
 		add(jTabbedPane, BorderLayout.CENTER);
+		add(btnAddComponent, BorderLayout.SOUTH);
 
 		resetBorderTitle();
 	}
@@ -81,6 +92,43 @@ public class PanelEntity extends JPanel {
 				setEntity(entity);
 			}
 		});
+		
+		btnAddComponent.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				switch (jTabbedPane.getSelectedIndex()) {
+				case 0:
+					new ModalComponent(SceneEditor.selectedEntity.getDefaultEntity());
+					break;
+				case 1:
+					new ModalComponent(SceneEditor.selectedEntity.getLiveEntity());
+					break;
+				default:
+					System.err.println("Invalid selected panel");
+					break;
+				}
+			}
+		});
+
+		jTabbedPane.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				switch (jTabbedPane.getSelectedIndex()) {
+				case 0:
+					btnAddComponent.setEnabled(SceneEditor.selectedEntity != null && SceneEditor.getGameState() == EditorState.STOP);
+					break;
+				case 1:
+					btnAddComponent.setEnabled(SceneEditor.selectedEntity != null && SceneEditor.getGameState() != EditorState.STOP);
+					break;
+				default:
+					System.err.println("Invalid selected panel");
+					break;
+				}
+				// btnAddComponent.setEnabled(jTabbedPane.getTabComponentAt(0));
+			}
+		});
 	}
 
 	/**
@@ -102,13 +150,16 @@ public class PanelEntity extends JPanel {
 		case STOP:
 			initialPanelComponent.setEnabled(true);
 			livePanelComponent.setEnabled(false);
+			jTabbedPane.setSelectedIndex(0);
 			break;
 		default:
 			initialPanelComponent.setEnabled(false);
 			livePanelComponent.setEnabled(true);
+			jTabbedPane.setSelectedIndex(1);
 			break;
-
 		}
+
+		btnAddComponent.setEnabled(SceneEditor.selectedEntity != null);
 	}
 
 	/**
@@ -118,8 +169,8 @@ public class PanelEntity extends JPanel {
 	 */
 	private void setEntity(SEEntity seEntity) {
 		currentEntity = seEntity;
-		initialPanelComponent.setEntity(currentEntity.getDefaultEntity());
-		livePanelComponent.setEntity(currentEntity.getLiveEntity());
+		initialPanelComponent.setEntity(seEntity, currentEntity.getDefaultEntity());
+		livePanelComponent.setEntity(seEntity, currentEntity.getLiveEntity());
 		resetBorderTitle();
 		resetEnabledPane();
 	}

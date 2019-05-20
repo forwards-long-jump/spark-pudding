@@ -1,5 +1,7 @@
 package ch.sparkpudding.sceneeditor.menu;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JMenu;
@@ -11,6 +13,7 @@ import ch.sparkpudding.sceneeditor.action.ActionRedo;
 import ch.sparkpudding.sceneeditor.action.ActionUndo;
 import ch.sparkpudding.sceneeditor.action.ActionsHistory;
 import ch.sparkpudding.sceneeditor.listener.HistoryEventListener;
+import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
 
 /**
  * Represent the MenuEdit of the SceneEditor
@@ -24,6 +27,7 @@ public class MenuEdit extends JMenu {
 
 	private JMenuItem itemUndo;
 	private JMenuItem itemRedo;
+	private JMenuItem itemCreateComponent;
 
 	/**
 	 * ctor
@@ -43,6 +47,7 @@ public class MenuEdit extends JMenu {
 
 		itemUndo = new JMenuItem("Undo");
 		itemRedo = new JMenuItem("Redo");
+		itemCreateComponent = new JMenuItem("Create component");
 	}
 
 	/**
@@ -54,6 +59,14 @@ public class MenuEdit extends JMenu {
 
 		itemUndo.setEnabled(false);
 		itemRedo.setEnabled(false);
+
+		itemCreateComponent.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new ModalComponent(null);
+			}
+		});
 
 		ActionsHistory.getInstance().addHistoryEventListener(new HistoryEventListener() {
 			@Override
@@ -89,6 +102,8 @@ public class MenuEdit extends JMenu {
 	private void addItem() {
 		add(itemUndo);
 		add(itemRedo);
+		addSeparator();
+		add(itemCreateComponent);
 		addSeparator();
 	}
 

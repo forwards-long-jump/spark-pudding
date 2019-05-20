@@ -41,20 +41,6 @@ public class Field {
 		this.type = FieldType.valueOf(type);
 		this.setValueFromString(value);
 	}
-	
-	/**
-	 * Constructor using Strings only
-	 * 
-	 * @param name  Name of the field
-	 * @param type  Type of the data
-	 * @param value Data
-	 */
-	public Field(String name, FieldType type, Object value) {
-		this.name = name;
-		this.type = type;
-		this.value =value;
-	}
-
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
@@ -140,7 +126,12 @@ public class Field {
 			this.setValue(value);
 			break;
 		case INTEGER:
-			this.setValue(Integer.parseInt(value));
+			try {
+				this.setValue(Integer.parseInt(value));				
+			} catch (Exception e) {
+				// TODO: Fix integer that can be float because of lua
+				this.setValue(Double.parseDouble(value));
+			}
 			break;
 		default:
 			java.lang.System.err.println("Could not set field value from string");

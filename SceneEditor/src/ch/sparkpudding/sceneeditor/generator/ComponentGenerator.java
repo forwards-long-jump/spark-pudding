@@ -2,8 +2,6 @@ package ch.sparkpudding.sceneeditor.generator;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,6 +17,8 @@ import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.action.ActionDeleteComponent;
+import ch.sparkpudding.sceneeditor.action.ActionSetComponent;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
 
 /**
@@ -36,16 +36,22 @@ public class ComponentGenerator extends JPanel {
 	private JScrollPane jScrollPane;
 	private Collection<Component> components;
 
+	private SEEntity seEntity;
+	private Entity entity;
+
 	/**
 	 * ctor
 	 * 
 	 * @param components Collection of all the components of an entity
 	 */
-	public ComponentGenerator(Entity entity) {
+	public ComponentGenerator(SEEntity seEntity, Entity entity) {
 		this.components = entity.getComponents().values();
 
+		this.seEntity = seEntity;
+		this.entity = entity;
+
 		init();
-		createComponents(entity);
+		createComponents();
 		setupLayout();
 	}
 
@@ -74,11 +80,11 @@ public class ComponentGenerator extends JPanel {
 	 * Create and recreate all the representation of the components stored in
 	 * <code>this.components</code>
 	 */
-	private void createComponents(Entity entity) {
+	private void createComponents() {
 		removeAll();
 		for (Component component : components) {
 			if (!component.getName().startsWith("se-")) {
-				setupComponentsLayout(entity, component);
+				setupComponentsLayout(component);
 			}
 		}
 		revalidate();
@@ -89,11 +95,19 @@ public class ComponentGenerator extends JPanel {
 	 * 
 	 * @param component The component to consider
 	 */
-	private void setupComponentsLayout(Entity entity, Component component) {
+	private void setupComponentsLayout(Component component) {
 		Box titleBar = new Box(BoxLayout.X_AXIS);
 		JLabel titleComp = new JLabel(component.getName());
 		JButton btnDelete = new JButton("Delete");
-		JButton btnDetach = new JButton("Detach");
+		JButton btnDetachOrCopy;
+		if (seEntity.getLiveEntity() == entity) {
+			btnDetachOrCopy = new JButton("Copy to default");
+			btnDetachOrCopy.addActionListener(
+					new ActionSetComponent("Set " + component.getName() + " fields as initial for " + entity.getName(),
+							seEntity.getDefaultEntity(), component));
+		} else {
+			btnDetachOrCopy = new JButton("Detach");
+		}
 
 		titleComp.setFont(titleComp.getFont().deriveFont(Font.BOLD));
 
@@ -104,7 +118,7 @@ public class ComponentGenerator extends JPanel {
 				new ActionDeleteComponent("delete component " + component.getName(), entity, component));
 
 		titleBar.add(btnDelete);
-		titleBar.add(btnDetach);
+		titleBar.add(btnDetachOrCopy);
 		this.contentPanel.add(titleBar);
 		this.contentPanel.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values())));
 		this.contentPanel.add(new JSeparator());

@@ -2,9 +2,9 @@ function getRequiredComponents()
   return {entities = {"size", "position"}, selectedEntities = {"size", "position", "se-selected"}, hoveredEntities =  {"size", "position", "se-hover"}}
 end
 
-local editingTick = 0
 function render()
-  editingTick = editingTick + 1
+  editingTick = game.core:getEditingTick()
+  
   game.camera:applyTransforms(g:getContext())
 
   local penWidth = 2 / game.camera:getScaling()
