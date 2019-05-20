@@ -30,6 +30,7 @@ import ch.sparkpudding.sceneeditor.action.ActionRemoveEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
+import ch.sparkpudding.sceneeditor.panel.modal.ModalEntity;
 
 /**
  * Show the different entity of a Scene as a list
@@ -46,7 +47,7 @@ public class PanelEntityTree extends JPanel {
 	private DefaultListModel<SEEntity> listModelEntities;
 	private JList<SEEntity> jListEntities;
 	private JScrollPane listScroller;
-
+	
 	private JPanel panelButtons;
 	private JButton buttonAdd;
 	private JButton buttonRemove;
@@ -160,6 +161,14 @@ public class PanelEntityTree extends JPanel {
 						}
 					}
 				}
+			}
+		});
+		
+		buttonAdd.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ModalEntity();
 			}
 		});
 		
