@@ -2,7 +2,6 @@ package ch.sparkpudding.sceneeditor.action;
 
 import javax.swing.SwingUtilities;
 
-import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
