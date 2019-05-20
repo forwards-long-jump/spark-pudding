@@ -53,7 +53,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	public Component(String name, Map<String, Field> fields) {
 		this.name = name;
 		this.fields = fields;
-		this.templateName = null;
+		this.templateName = name;
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	public Component(Document document) {
 		this.fields = new HashMap<String, Field>();
 		this.name = document.getDocumentElement().getAttribute("name");
-		this.templateName = null;
+		this.templateName = this.name;
 
 		NodeList fields = document.getDocumentElement().getChildNodes();
 		for (int i = 0; i < fields.getLength(); i++) {
