@@ -36,6 +36,16 @@ public class Scene {
 	}
 
 	/**
+	 * Create an empty scene, but with a given name
+	 * 
+	 * @param name name of the scene
+	 */
+	public Scene(String name) {
+		this();
+		this.name = name;
+	}
+
+	/**
 	 * Create a scene from a parsed XML Document and populates its entities
 	 * 
 	 * @param document A properly formated Document to get entities from
@@ -124,6 +134,15 @@ public class Scene {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Set the name of the scene
+	 * 
+	 * @param name new name of the scene
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

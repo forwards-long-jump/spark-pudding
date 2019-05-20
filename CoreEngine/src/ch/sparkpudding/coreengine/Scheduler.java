@@ -16,7 +16,7 @@ import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
  */
 public class Scheduler {
 	public enum Trigger {
-		BEFORE_UPDATE, GAME_LOOP_START, COMPONENT_ADDED, EDITING_STATE_CHANGED, FIELD_VALUE_CHANGED;
+		BEFORE_UPDATE, GAME_LOOP_START, COMPONENT_ADDED, EDITING_STATE_CHANGED, FIELD_VALUE_CHANGED, SCENE_CHANGED, SCENE_LIST_CHANGE;
 	};
 
 	private Map<Trigger, List<Runnable>> tasks;
@@ -33,6 +33,7 @@ public class Scheduler {
 		for (Trigger trig : Trigger.values()) {
 			tasks.put(trig, new ArrayList<Runnable>());
 		}
+		
 		notifications = new HashMap<Trigger, List<Runnable>>();
 		for (Trigger trig : Trigger.values()) {
 			notifications.put(trig, new ArrayList<Runnable>());
