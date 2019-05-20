@@ -29,6 +29,7 @@ import ch.sparkpudding.sceneeditor.action.AbstractAction;
 import ch.sparkpudding.sceneeditor.action.ActionRemoveEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
+import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 
 /**
  * Show the different entity of a Scene as a list
@@ -93,6 +94,7 @@ public class PanelEntityTree extends JPanel {
 		panelButtons = new JPanel();
 		buttonAdd = new JButton("+");
 		buttonRemove = new JButton("-");
+		buttonRemove.setEnabled(false);
 	}
 
 	/**
@@ -167,6 +169,17 @@ public class PanelEntityTree extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				AbstractAction action = new ActionRemoveEntity("Remove", SceneEditor.selectedEntity, SceneEditor.currentScene.getLiveScene());
 				action.actionPerformed(e);
+			}
+		});
+		
+		SceneEditor.addEntityEventListener(new EntityEventAdapter() {
+			@Override
+			public void changeSelectedEntity(SEEntity entity) {
+				if (entity != null) {
+					buttonRemove.setEnabled(true);
+				} else {
+					buttonRemove.setEnabled(false);
+				}
 			}
 		});
 	}
