@@ -1,8 +1,5 @@
 package ch.sparkpudding.coreengine.ecs.component;
 
-import ch.sparkpudding.coreengine.Lel;
-import ch.sparkpudding.coreengine.Scheduler.Trigger;
-
 /**
  * Piece of data to be contained by a component, described by its name, the type
  * of its value, and the value itself.
@@ -109,12 +106,6 @@ public class Field {
 	 */
 	public void setValue(Object value) {
 		this.value = value;
-		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
-			@Override
-			public void run() {
-				Lel.coreEngine.getScheduler().trigger(Trigger.FIELD_VALUE_CHANGED, Field.this);
-			}
-		});
 	}
 
 	/**
