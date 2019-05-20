@@ -395,6 +395,29 @@ public class CoreEngine extends JPanel {
 	 */
 	public void addScene(String name, Scene s) {
 		scenes.put(name, s);
+		scheduler.trigger(Trigger.SCENE_LIST_CHANGED);
+	}
+
+	/**
+	 * Removes scene from scenes list
+	 * 
+	 * @param name Name of the scene
+	 */
+	public void removeScene(String name) {
+		if (currentScene.getName().equals(name)) {
+			scheduler.schedule(Trigger.GAME_LOOP_START, new Runnable() {
+
+				@Override
+				public void run() {
+					setCurrentScene(scenes.get("main"));
+					scenes.remove(name);
+					scheduler.trigger(Trigger.SCENE_LIST_CHANGED);
+				}
+			});
+		} else {
+			scenes.remove(name);
+			scheduler.trigger(Trigger.SCENE_LIST_CHANGED);
+		}
 	}
 
 	/**
@@ -425,6 +448,25 @@ public class CoreEngine extends JPanel {
 	public void resetCurrentScene() {
 		currentScene.reset();
 		setCurrentScene(currentScene);
+	}
+
+	/**
+	 * Renames the scene of the given name with the new name
+	 * 
+	 * @param oldName name of the scene to rename
+	 * @param newName new name for the scene
+	 * @return true if such a scene was found, false else
+	 */
+	public boolean renameScene(String oldName, String newName) {
+		Scene scene = scenes.get(oldName);
+		if (scene != null) {
+			scenes.remove(oldName);
+			scene.setName(newName);
+			scenes.put(newName, scene);
+			scheduler.trigger(Trigger.SCENE_LIST_CHANGED);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -467,6 +509,7 @@ public class CoreEngine extends JPanel {
 		if (editingRenderSystem != null) {
 			editingRenderSystem.setEntities(newScene.getEntities());
 		}
+		scheduler.trigger(Trigger.SCENE_CHANGED, newScene);
 	}
 
 	/**

@@ -2,6 +2,7 @@ package ch.sparkpudding.sceneeditor;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.SwingUtilities;
@@ -63,7 +64,7 @@ public class SceneEditor {
 		gameState = state;
 		switch (state) {
 		case PAUSE:
-			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+			coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
 					coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
@@ -76,7 +77,7 @@ public class SceneEditor {
 
 			break;
 		case PLAY:
-			coreEngine.getScheduler().schedule(Trigger.BEFORE_UPDATE, new Runnable() {
+			coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
 					coreEngine.setBlackBarsColor(new Color(0, 0, 0));
@@ -88,7 +89,7 @@ public class SceneEditor {
 			});
 			break;
 		case STOP:
-			coreEngine.getScheduler().schedule(Trigger.AFTER_UPDATE, new Runnable() {
+			coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
 					coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
@@ -194,6 +195,38 @@ public class SceneEditor {
 	 */
 	public static void setCurrentScene(SEScene newScene) {
 		currentScene = newScene;
+	}
+	
+	/**
+	 * Set current scene by name
+	 * 
+	 * @param newSceneName name of the new current scene
+	 */
+	public static void setCurrentScene(String newSceneName) {
+		currentScene = seScenes.get(newSceneName);
+	}
+	
+	/**
+	 * Loads and unloads scenes which differ from those of the Core Engine
+	 * 
+	 * To be called whenever the scenes list of Core Engine changes
+	 */
+	public static void updateSeSceneList() {
+		// Add missing scenes
+		for (Scene scene : coreEngine.getScenes().values()) {
+			if (!seScenes.containsKey(scene.getName()))
+			{
+				seScenes.put(scene.getName(), new SEScene(scene));
+			}
+		}
+		
+		// Remove excedent scenes
+		Iterator<String> it = seScenes.keySet().iterator();
+		while (it.hasNext()) {
+			if (!coreEngine.getScenes().containsKey(it.next())) {
+				it.remove();
+			}
+		}
 	}
 
 	/**
