@@ -90,7 +90,7 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Create a CoreEngine which goal is to be run inside of scene editor
+	 * Create a CoreEngine whose goal is to be run inside of scene editor
 	 *
 	 * @param gameFolder         Location of the game file
 	 * @param editingToolsFolder The path to a folder containing "editing" systems
