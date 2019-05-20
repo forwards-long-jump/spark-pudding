@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
 
 /**
@@ -68,10 +69,10 @@ public class PanelComponent extends JPanel {
 	 * 
 	 * @param entity The entity represented by this panel
 	 */
-	public void setEntity(Entity entity) {
+	public void setEntity(SEEntity seEntity, Entity entity) {
 		fieldList.clear();
 		removeAll();
-		add(new ComponentGenerator(entity), BorderLayout.CENTER);
+		add(new ComponentGenerator(seEntity, entity), BorderLayout.CENTER);
 		revalidate();
 	}
 

@@ -36,6 +36,9 @@ public class ActionRedo extends AbstractAction {
 		this.rollback = rollback;
 	}
 
+	/**
+	 * Execute the action
+	 */
 	@Override
 	public boolean doAction() {
 		if (rollback == null) {

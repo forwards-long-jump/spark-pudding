@@ -2,8 +2,12 @@ package ch.sparkpudding.sceneeditor.generator;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -11,8 +15,12 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.SwingUtilities;
 
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
+import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.action.ActionChangeCheckBox;
 import ch.sparkpudding.sceneeditor.action.ActionChangeTextField;
 import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
@@ -20,23 +28,25 @@ import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
 /**
  * Generate the interface for the fields passed in arguments. Since it inherits
  * JComponent, it can be used as one.
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 8 April 2019
- * 
+ *
  */
 @SuppressWarnings("serial")
 public class FieldGenerator extends JComponent {
 
 	private Collection<Field> fields;
+	private List<RunnableOneParameter> onFieldsChanged;
 
 	/**
 	 * ctor
-	 * 
+	 *
 	 * @param fields Collection of all the components of an entity
 	 */
 	public FieldGenerator(Collection<Field> fields) {
 		this.fields = fields;
+		this.onFieldsChanged = new ArrayList<RunnableOneParameter>();
 
 		createFields();
 		setupLayout();
@@ -64,10 +74,18 @@ public class FieldGenerator extends JComponent {
 		}
 	}
 
+	@Override
+	public void removeNotify() {
+		for (RunnableOneParameter onFieldChanged : onFieldsChanged) {
+			SceneEditor.coreEngine.getScheduler().removeNotify(Trigger.GAME_LOOP_START, onFieldChanged);
+		}
+		super.removeNotify();
+	}
+
 	/**
 	 * Generate the right JComponent and it's parameters following the type of the
 	 * field.
-	 * 
+	 *
 	 * @param field The field to consider
 	 * @return The input generated
 	 */
@@ -109,27 +127,76 @@ public class FieldGenerator extends JComponent {
 
 	/**
 	 * Create the listener for a textField
-	 * 
+	 *
 	 * @param input the input which contains the new value
 	 * @param field the field represented by this input
 	 */
 	private void createTextFieldListener(JTextField input, Field field) {
+		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
+			@Override
+			public void run() {
+				if (!field.getValue().toString().equals(input.getText()) && !input.hasFocus()) {
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							input.setText(field.getValue().toString());
+						}
+					});
+				}
+			}
+		};
+
+		onFieldsChanged.add(onFieldChange);
+		SceneEditor.coreEngine.getScheduler().notify(Trigger.GAME_LOOP_START, onFieldChange);
+
 		input.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ActionChangeTextField action = new ActionChangeTextField("", field, input);
 				action.actionPerformed(e);
 			}
 		});
+
+		input.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				input.selectAll();
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				ActionChangeTextField action = new ActionChangeTextField("", field, input);
+				action.actionPerformed(null);
+			}
+		});
 	}
 
 	/**
 	 * Create the listener for a checkBox
-	 * 
+	 *
 	 * @param input the input which contains the new value
 	 * @param field the field represented by this input
 	 */
 	private void createCheckBoxListener(JCheckBox input, Field field) {
+		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
+			@Override
+			public void run() {
+				if (input.isSelected() != (boolean) field.getValue() && !input.hasFocus()) {
+
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							input.setSelected((boolean) field.getValue());
+						}
+					});
+				}
+			}
+		};
+
+		onFieldsChanged.add(onFieldChange);
+		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, onFieldChange);
+
 		input.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
