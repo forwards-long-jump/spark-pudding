@@ -33,6 +33,9 @@ public class ActionAddComponent extends AbstractAction {
 		this.entity = entity;
 	}
 
+	/**
+	 * Add the component to the entity and notify CE
+	 */
 	@Override
 	public boolean doAction() {
 		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
@@ -53,6 +56,9 @@ public class ActionAddComponent extends AbstractAction {
 		return true;
 	}
 
+	/**
+	 * Remove the component from the entity and notify CE
+	 */
 	@Override
 	public void undoAction() {
 		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {

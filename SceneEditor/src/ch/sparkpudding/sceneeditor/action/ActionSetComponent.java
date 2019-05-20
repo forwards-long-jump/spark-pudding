@@ -34,6 +34,9 @@ public class ActionSetComponent extends AbstractAction {
 		this.entity = entity;
 	}
 
+	/**
+	 * Give the component to the entity - CE is not notified
+	 */
 	@Override
 	public boolean doAction() {
 		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
@@ -48,6 +51,9 @@ public class ActionSetComponent extends AbstractAction {
 		return true;
 	}
 
+	/**
+	 * Remove the component from the entity ang give it its  old version if any - CE is not notified
+	 */
 	@Override
 	public void undoAction() {
 		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
