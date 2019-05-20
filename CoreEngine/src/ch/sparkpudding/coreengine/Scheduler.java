@@ -80,12 +80,18 @@ public class Scheduler {
 		}
 
 		// TODO: Copy notifications if it's necessary
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		for (Runnable notif : notifications.get(trigger)) {
 			if (object != null && notif instanceof RunnableOneParameter) {
 				((RunnableOneParameter) notif).setObject(object);
 			}
 			notif.run();
 		}
+		semaphore.release();
 	}
 
 	/**
