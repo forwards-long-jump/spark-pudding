@@ -223,6 +223,15 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	public void setZIndex(int zIndex) {
 		this.zIndex = zIndex;
 	}
+	
+	/**
+	 * Sets the name
+	 * 
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	/**
 	 * Gets components
