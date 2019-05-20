@@ -30,6 +30,7 @@ public class SceneEditor {
 
 	public static FrameSceneEditor frameSceneEditor;
 	public static CoreEngine coreEngine;
+	public static String gamePath;
 	public static Map<String, SEScene> seScenes;
 	public static SEScene currentScene;
 	public static SEEntity selectedEntity;

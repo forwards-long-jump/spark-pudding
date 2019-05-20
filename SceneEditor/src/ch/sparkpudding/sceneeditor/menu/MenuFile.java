@@ -5,10 +5,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import ch.sparkpudding.coreengine.CoreEngine;
+import ch.sparkpudding.sceneeditor.FrameSceneEditor;
 import ch.sparkpudding.sceneeditor.Main;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.filewriter.LelWriter;
@@ -58,11 +61,29 @@ public class MenuFile extends JMenu {
 			public void actionPerformed(ActionEvent arg0) {
 				LelWriter lel = new LelWriter();
 				try {
-					lel.write(SceneEditor.coreEngine, Main.class.getResource("/emptygame").getPath() + "/");
+					lel.save(SceneEditor.coreEngine, SceneEditor.gamePath + "/");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
+		});
+
+		itemNew.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				LelWriter lel = new LelWriter();
+				String newGamePath;
+
+				JFileChooser folderChooser = new JFileChooser();
+				folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+				int returnVal = folderChooser.showSaveDialog(SceneEditor.frameSceneEditor);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					newGamePath = folderChooser.getSelectedFile().getAbsolutePath();
+				} else
+					return;
+
+				lel.create(newGamePath + "/");			
 			}
 		});
 	}
