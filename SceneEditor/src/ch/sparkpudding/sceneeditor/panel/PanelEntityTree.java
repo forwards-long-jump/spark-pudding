@@ -3,10 +3,14 @@ package ch.sparkpudding.sceneeditor.panel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -21,6 +25,8 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.utils.Pair;
 import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.action.AbstractAction;
+import ch.sparkpudding.sceneeditor.action.ActionRemoveEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 
@@ -39,6 +45,10 @@ public class PanelEntityTree extends JPanel {
 	private DefaultListModel<SEEntity> listModelEntities;
 	private JList<SEEntity> jListEntities;
 	private JScrollPane listScroller;
+
+	private JPanel panelButtons;
+	private JButton buttonAdd;
+	private JButton buttonRemove;
 
 	private static final String TITLE = "Entity list";
 
@@ -79,6 +89,10 @@ public class PanelEntityTree extends JPanel {
 		});
 
 		listScroller = new JScrollPane(jListEntities);
+		
+		panelButtons = new JPanel();
+		buttonAdd = new JButton("+");
+		buttonRemove = new JButton("-");
 	}
 
 	/**
@@ -93,6 +107,11 @@ public class PanelEntityTree extends JPanel {
 				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
 
 		add(listScroller, BorderLayout.CENTER);
+		add(panelButtons, BorderLayout.SOUTH);
+		
+		panelButtons.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		panelButtons.add(buttonRemove);
+		panelButtons.add(buttonAdd);
 
 		setBorder(BorderFactory.createTitledBorder(TITLE));
 	}
@@ -139,6 +158,15 @@ public class PanelEntityTree extends JPanel {
 						}
 					}
 				}
+			}
+		});
+		
+		buttonRemove.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AbstractAction action = new ActionRemoveEntity("Remove", SceneEditor.selectedEntity, SceneEditor.currentScene.getLiveScene());
+				action.actionPerformed(e);
 			}
 		});
 	}
