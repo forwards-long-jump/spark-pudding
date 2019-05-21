@@ -32,6 +32,8 @@ public class Component implements Iterable<Entry<String, Field>> {
 	private String templateName;
 	private Map<String, Field> fields;
 
+	private boolean attached;
+
 	/**
 	 * Create an empty component with a reference on it's template
 	 * 
@@ -39,6 +41,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 * @param template : The component template
 	 */
 	public Component(String name, String template) {
+		this.attached = true;
 		this.name = name;
 		this.templateName = template;
 		this.fields = new HashMap<String, Field>();
@@ -51,6 +54,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 * @param fields : The components fields
 	 */
 	public Component(String name, Map<String, Field> fields) {
+		this.attached = true;
 		this.name = name;
 		this.fields = fields;
 		this.templateName = name;
@@ -62,6 +66,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 * @param component : The component to copy
 	 */
 	public Component(Component component) {
+		this.attached = true;
 		this.name = component.name;
 		this.templateName = component.templateName;
 		this.fields = new HashMap<String, Field>();
@@ -79,6 +84,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 * @param document A properly formated Document to get fields from
 	 */
 	public Component(Document document) {
+		this.attached = true;
 		this.fields = new HashMap<String, Field>();
 		this.name = document.getDocumentElement().getAttribute("name");
 		this.templateName = this.name;
@@ -87,6 +93,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 		for (int i = 0; i < fields.getLength(); i++) {
 			Node node = fields.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				this.attached = false;
 				Element fieldElement = (Element) fields.item(i);
 				this.fields.put(fieldElement.getAttribute("name"), new Field(fieldElement.getAttribute("name"),
 						fieldElement.getAttribute("type"), fieldElement.getTextContent()));
@@ -107,6 +114,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 		for (int i = 0; i < fields.getLength(); i++) {
 			Node node = fields.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				this.attached = false;
 				Element fieldElement = (Element) fields.item(i);
 				this.fields.get(fieldElement.getAttribute("name")).setValueFromString(fieldElement.getTextContent());
 			}
@@ -192,6 +200,30 @@ public class Component implements Iterable<Entry<String, Field>> {
 		}
 
 		metatableSetterMethod.call(componentLua);
-		return componentLua;	
+		return componentLua;
+	}
+
+	/**
+	 * Return attached
+	 * 
+	 * @return is attached
+	 */
+	public boolean isAttached() {
+		return attached;
+	}
+
+	/**
+	 * Set whether the component is attached
+	 * 
+	 * @param attached attached
+	 */
+	public void setAttached(boolean attached) {
+		this.attached = attached;
+		if (attached) {
+			// reset the values according to the template
+			for (Field field : fields.values()) {
+				field.setValue(templates.get(name).getField(field.getName()).getValue());
+			}
+		}
 	}
 }
