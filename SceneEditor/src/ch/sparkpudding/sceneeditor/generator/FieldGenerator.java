@@ -38,15 +38,21 @@ public class FieldGenerator extends JComponent {
 
 	private Collection<Field> fields;
 	private List<RunnableOneParameter> onFieldsChanged;
+	private List<JComponent> fieldsInput;
+
+	private boolean enableable;
 
 	/**
 	 * ctor
 	 *
-	 * @param fields Collection of all the components of an entity
+	 * @param fields   Collection of all the components of an entity
+	 * @param enableable Whether the component can be enabled
 	 */
-	public FieldGenerator(Collection<Field> fields) {
+	public FieldGenerator(Collection<Field> fields, boolean enableable) {
 		this.fields = fields;
+		this.fieldsInput = new ArrayList<JComponent>();
 		this.onFieldsChanged = new ArrayList<RunnableOneParameter>();
+		this.enableable = enableable;
 
 		createFields();
 		setupLayout();
@@ -122,6 +128,8 @@ public class FieldGenerator extends JComponent {
 			break;
 		}
 		labelField.setLabelFor(input);
+		input.setEnabled(enableable);
+		fieldsInput.add(input);
 		return input;
 	}
 
@@ -204,5 +212,18 @@ public class FieldGenerator extends JComponent {
 				action.actionPerformed(e);
 			}
 		});
+	}
+
+	/**
+	 * Override setEnabled in order to prevent attached components to be changed
+	 */
+	@Override
+	public void setEnabled(boolean enabled) {
+		if (enableable) {
+			for (JComponent comp : fieldsInput) {
+				comp.setEnabled(enabled);			
+			}
+		}
+		super.setEnabled(enabled);
 	}
 }
