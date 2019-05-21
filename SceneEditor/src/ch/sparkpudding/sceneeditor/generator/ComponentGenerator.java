@@ -142,20 +142,24 @@ public class ComponentGenerator extends JPanel {
 		Box titleBar = new Box(BoxLayout.X_AXIS);
 		JLabel titleComp = new JLabel(component.getName());
 		JButton btnDelete = new JButton("Delete");
-		JButton btnDetachOrCopy;
+		JButton btnDetachOrCopy = null;
+
 		boolean isLive = (seEntity.getLiveEntity() == entity);
-		if (isLive) {
-			btnDetachOrCopy = new JButton("Copy to default");
-			btnDetachOrCopy.addActionListener(
-					new ActionSetComponent("Set " + component.getName() + " fields as initial for " + entity.getName(),
-							seEntity.getDefaultEntity(), component));
-		} else {
-			if (component.isAttached()) {
-				btnDetachOrCopy = new JButton("Detach");
-				btnDetachOrCopy.addActionListener(new ActionDetach(component));
+		boolean isSpawned = seEntity.getDefaultEntity() == null; 
+		if (!isSpawned) {
+			if (isLive) {
+				btnDetachOrCopy = new JButton("Copy to default");
+				btnDetachOrCopy.addActionListener(new ActionSetComponent(
+						"Set " + component.getName() + " fields as initial for " + entity.getName(),
+						seEntity.getDefaultEntity(), component));
 			} else {
-				btnDetachOrCopy = new JButton("Attach");
-				btnDetachOrCopy.addActionListener(new ActionAttach(component));
+				if (component.isAttached()) {
+					btnDetachOrCopy = new JButton("Detach");
+					btnDetachOrCopy.addActionListener(new ActionDetach(component));
+				} else {
+					btnDetachOrCopy = new JButton("Attach");
+					btnDetachOrCopy.addActionListener(new ActionAttach(component));
+				}
 			}
 		}
 
@@ -168,14 +172,19 @@ public class ComponentGenerator extends JPanel {
 				new ActionDeleteComponent("delete component " + component.getName(), entity, component));
 
 		titleBar.add(btnDelete);
-		titleBar.add(btnDetachOrCopy);
+		
+		if(!isSpawned) {			
+			titleBar.add(btnDetachOrCopy);
+		}
+		
 		this.contentPanel.add(titleBar);
-		FieldGenerator field = new FieldGenerator(new ArrayList<Field>(component.getFields().values()), isLive || !component.isAttached());
+		FieldGenerator field = new FieldGenerator(new ArrayList<Field>(component.getFields().values()),
+				isLive || !component.isAttached());
 		this.fieldGenerators.add(field);
 		this.contentPanel.add(field);
 		this.contentPanel.add(new JSeparator());
 	}
-	
+
 	@Override
 	public void setEnabled(boolean enabled) {
 		for (FieldGenerator fieldGenerator : fieldGenerators) {
