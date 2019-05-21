@@ -33,6 +33,7 @@ public class SceneEditor {
 	public static Map<String, SEScene> seScenes;
 	public static SEScene currentScene;
 	public static SEEntity selectedEntity;
+	public static SEEntity clipboardEntity;
 
 	private static EventListenerList listenerList;
 
