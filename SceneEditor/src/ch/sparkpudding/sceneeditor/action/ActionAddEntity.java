@@ -7,6 +7,7 @@ import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 
 /**
  * The action to register the addition of a new entity
@@ -31,7 +32,7 @@ public class ActionAddEntity extends AbstractAction {
 		super("Add entity (" + name + ")");
 		this.newDefaultEntity = new Entity(Entity.getTemplates().get(templateName));
 		this.newDefaultEntity.setName(name);
-		
+
 		if (this.newDefaultEntity.hasComponent("position") && this.newDefaultEntity.hasComponent("size")) {
 			Camera camera = SceneEditor.coreEngine.getCamera();
 			Component size = this.newDefaultEntity.getComponents().get("size");
@@ -58,11 +59,25 @@ public class ActionAddEntity extends AbstractAction {
 			public void run() {
 				SceneEditor.coreEngine.addEntity(newLiveEntity);
 				SceneEditor.coreEngine.getCurrentScene().addDefault(newDefaultEntity);
+
 				SwingUtilities.invokeLater(new Runnable() {
 
 					@Override
 					public void run() {
 						SceneEditor.createEntityList();
+						SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+
+							@Override
+							public void run() {
+								for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
+									if (seEntity.getLiveEntity() == newLiveEntity) {
+										seEntity.setSelected(true);
+										break;
+									}
+								}
+							}
+
+						});
 					}
 				});
 			}
