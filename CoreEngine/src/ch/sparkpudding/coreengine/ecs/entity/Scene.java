@@ -126,6 +126,15 @@ public class Scene {
 	public void remove(Entity e) {
 		entities.remove(e);
 	}
+	
+	/**
+	 * Removes a default entity from the scene
+	 * 
+	 * @param e Default entity to remove
+	 */
+	public void removeDefault(Entity e) {
+		defaultEntities.remove(e);
+	}
 
 	/**
 	 * Return the name of this scene

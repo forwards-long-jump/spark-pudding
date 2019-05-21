@@ -3,10 +3,14 @@ package ch.sparkpudding.sceneeditor.panel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -21,8 +25,12 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.utils.Pair;
 import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.action.AbstractAction;
+import ch.sparkpudding.sceneeditor.action.ActionRemoveEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
+import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
+import ch.sparkpudding.sceneeditor.panel.modal.ModalEntity;
 
 /**
  * Show the different entity of a Scene as a list
@@ -39,6 +47,10 @@ public class PanelEntityTree extends JPanel {
 	private DefaultListModel<SEEntity> listModelEntities;
 	private JList<SEEntity> jListEntities;
 	private JScrollPane listScroller;
+
+	private JPanel panelButtons;
+	private JButton buttonAdd;
+	private JButton buttonRemove;
 
 	private static final String TITLE = "Entity list";
 
@@ -79,6 +91,11 @@ public class PanelEntityTree extends JPanel {
 		});
 
 		listScroller = new JScrollPane(jListEntities);
+
+		panelButtons = new JPanel();
+		buttonAdd = new JButton("+");
+		buttonRemove = new JButton("-");
+		buttonRemove.setEnabled(false);
 	}
 
 	/**
@@ -93,6 +110,11 @@ public class PanelEntityTree extends JPanel {
 				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, PanelSidebarRight.BASIC_ELEMENT_HEIGHT));
 
 		add(listScroller, BorderLayout.CENTER);
+		add(panelButtons, BorderLayout.SOUTH);
+
+		panelButtons.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		panelButtons.add(buttonRemove);
+		panelButtons.add(buttonAdd);
 
 		setBorder(BorderFactory.createTitledBorder(TITLE));
 	}
@@ -141,6 +163,35 @@ public class PanelEntityTree extends JPanel {
 				}
 			}
 		});
+
+		buttonAdd.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ModalEntity();
+			}
+		});
+
+		buttonRemove.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AbstractAction action = new ActionRemoveEntity(SceneEditor.selectedEntity,
+						SceneEditor.currentScene.getLiveScene());
+				action.actionPerformed(e);
+			}
+		});
+
+		SceneEditor.addEntityEventListener(new EntityEventAdapter() {
+			@Override
+			public void changeSelectedEntity(SEEntity entity) {
+				if (entity != null) {
+					buttonRemove.setEnabled(true);
+				} else {
+					buttonRemove.setEnabled(false);
+				}
+			}
+		});
 	}
 
 	/**
@@ -155,7 +206,7 @@ public class PanelEntityTree extends JPanel {
 		for (SEEntity entity : scene.getSEEntities()) {
 			listModelEntities.addElement(entity);
 		}
-		
+
 		jListEntities.setSelectedIndex(previousIndex);
 
 		revalidate();

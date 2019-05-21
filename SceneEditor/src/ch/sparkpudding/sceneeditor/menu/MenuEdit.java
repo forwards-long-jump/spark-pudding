@@ -8,12 +8,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.action.AbstractAction;
+import ch.sparkpudding.sceneeditor.action.ActionPasteEntity;
 import ch.sparkpudding.sceneeditor.action.ActionRedo;
+import ch.sparkpudding.sceneeditor.action.ActionRemoveEntity;
 import ch.sparkpudding.sceneeditor.action.ActionUndo;
 import ch.sparkpudding.sceneeditor.action.ActionsHistory;
 import ch.sparkpudding.sceneeditor.listener.HistoryEventListener;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
+import ch.sparkpudding.sceneeditor.panel.modal.ModalEntity;
 
 /**
  * Represent the MenuEdit of the SceneEditor
@@ -28,6 +32,10 @@ public class MenuEdit extends JMenu {
 	private JMenuItem itemUndo;
 	private JMenuItem itemRedo;
 	private JMenuItem itemCreateComponent;
+	private JMenuItem itemCreateEntity;
+	private JMenuItem itemDeleteEntity;
+	private JMenuItem itemCopyEntity;
+	private JMenuItem itemPasteEntity;
 
 	/**
 	 * ctor
@@ -48,6 +56,10 @@ public class MenuEdit extends JMenu {
 		itemUndo = new JMenuItem("Undo");
 		itemRedo = new JMenuItem("Redo");
 		itemCreateComponent = new JMenuItem("Create component");
+		itemCreateEntity = new JMenuItem("Create entity");
+		itemDeleteEntity = new JMenuItem("Delete entity");
+		itemCopyEntity = new JMenuItem("Copy entity");
+		itemPasteEntity = new JMenuItem("Paste entity");
 	}
 
 	/**
@@ -59,12 +71,53 @@ public class MenuEdit extends JMenu {
 
 		itemUndo.setEnabled(false);
 		itemRedo.setEnabled(false);
+		itemPasteEntity.setEnabled(false);
 
 		itemCreateComponent.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				new ModalComponent(null);
+			}
+		});
+
+		itemCreateEntity.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ModalEntity();
+			}
+		});
+
+		itemDeleteEntity.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AbstractAction action = new ActionRemoveEntity(SceneEditor.selectedEntity,
+						SceneEditor.currentScene.getLiveScene());
+				action.actionPerformed(e);
+			}
+		});
+
+		itemCopyEntity.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (SceneEditor.selectedEntity != null) {
+					SceneEditor.clipboardEntity = SceneEditor.selectedEntity;
+					itemPasteEntity.setEnabled(true);
+				}
+			}
+		});
+
+		itemPasteEntity.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (SceneEditor.clipboardEntity != null) {
+					AbstractAction action = new ActionPasteEntity(SceneEditor.clipboardEntity);
+					action.actionPerformed(e);
+				}
 			}
 		});
 
@@ -94,6 +147,12 @@ public class MenuEdit extends JMenu {
 	private void addKeyStroke() {
 		itemUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
 		itemRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
+
+		itemCreateEntity.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.CTRL_DOWN_MASK));
+		itemDeleteEntity.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+		itemCopyEntity.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK));
+		itemPasteEntity.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK));
+
 	}
 
 	/**
@@ -104,6 +163,11 @@ public class MenuEdit extends JMenu {
 		add(itemRedo);
 		addSeparator();
 		add(itemCreateComponent);
+		addSeparator();
+		add(itemCreateEntity);
+		add(itemDeleteEntity);
+		add(itemCopyEntity);
+		add(itemPasteEntity);
 		addSeparator();
 	}
 
