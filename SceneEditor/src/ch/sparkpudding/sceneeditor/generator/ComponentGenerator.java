@@ -71,6 +71,24 @@ public class ComponentGenerator extends JPanel {
 	}
 
 	/**
+	 * Get scroll position
+	 * 
+	 * @return scroll position
+	 */
+	public int getScrollPosition() {
+		return this.jScrollPane.getVerticalScrollBar().getValue();
+	}
+
+	/**
+	 * Set scroll position
+	 * 
+	 * @param scroll position
+	 */
+	public void setScrollPosition(int value) {
+		this.jScrollPane.getVerticalScrollBar().setValue(value);
+	}
+
+	/**
 	 * Setup the layout of the panel
 	 */
 	private void setupLayout() {

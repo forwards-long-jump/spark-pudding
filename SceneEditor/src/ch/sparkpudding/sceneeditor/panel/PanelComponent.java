@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
@@ -21,8 +22,7 @@ import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
  */
 @SuppressWarnings("serial")
 public class PanelComponent extends JPanel {
-
-	private List<ComponentGenerator> fieldList;
+	private ComponentGenerator previousComponentGenerator;
 
 	/**
 	 * ctor
@@ -36,7 +36,7 @@ public class PanelComponent extends JPanel {
 	 * Initialize the different element of the panel
 	 */
 	private void init() {
-		fieldList = new ArrayList<ComponentGenerator>();
+
 	}
 
 	/**
@@ -70,10 +70,28 @@ public class PanelComponent extends JPanel {
 	 * @param entity The entity represented by this panel
 	 */
 	public void setEntity(SEEntity seEntity, Entity entity) {
-		fieldList.clear();
+		ComponentGenerator newComponentGenerator = new ComponentGenerator(seEntity, entity);
+		final int previousScroll;
+
+		if (previousComponentGenerator != null) {
+			previousScroll = previousComponentGenerator.getScrollPosition();
+		} else {
+			previousScroll = 0;
+		}
+
 		removeAll();
-		add(new ComponentGenerator(seEntity, entity), BorderLayout.CENTER);
+		add(newComponentGenerator, BorderLayout.CENTER);
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				newComponentGenerator.setScrollPosition(previousScroll);
+			}
+		});
 		revalidate();
+
+		previousComponentGenerator = newComponentGenerator;
 	}
 
 	/**
