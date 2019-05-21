@@ -1,5 +1,7 @@
 package ch.sparkpudding.sceneeditor;
 
+import java.util.Locale;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -16,6 +18,9 @@ import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 public class Main {
 
 	public static void main(String[] args) {
+
+		// Set the default locale to english because everything is in english
+		Locale.setDefault(Locale.ENGLISH);
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -40,7 +45,8 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		// EDITING_STATE_CHANGED is called in GAME_LOOP_START so no need to add another scheduling
+		// EDITING_STATE_CHANGED is called in GAME_LOOP_START so no need to add another
+		// scheduling
 		// adding a new scheduling would break the camera
 		SceneEditor.coreEngine.getScheduler().notify(Trigger.EDITING_STATE_CHANGED, new RunnableOneParameter() {
 			@Override

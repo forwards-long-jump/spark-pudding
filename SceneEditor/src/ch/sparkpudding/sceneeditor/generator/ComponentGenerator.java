@@ -18,7 +18,9 @@ import javax.swing.JSeparator;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.sceneeditor.action.ActionAttach;
 import ch.sparkpudding.sceneeditor.action.ActionDeleteComponent;
+import ch.sparkpudding.sceneeditor.action.ActionDetach;
 import ch.sparkpudding.sceneeditor.action.ActionSetComponent;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
@@ -37,6 +39,7 @@ public class ComponentGenerator extends JPanel {
 	private JPanel contentPanel;
 	private JScrollPane jScrollPane;
 	private Collection<Component> components;
+	private List<FieldGenerator> fieldGenerators;
 
 	private SEEntity seEntity;
 	private Entity entity;
@@ -48,6 +51,7 @@ public class ComponentGenerator extends JPanel {
 	 */
 	public ComponentGenerator(SEEntity seEntity, Entity entity) {
 		this.components = entity.getComponents().values();
+		this.fieldGenerators = new ArrayList<FieldGenerator>();
 
 		this.seEntity = seEntity;
 		this.entity = entity;
@@ -139,13 +143,20 @@ public class ComponentGenerator extends JPanel {
 		JLabel titleComp = new JLabel(component.getName());
 		JButton btnDelete = new JButton("Delete");
 		JButton btnDetachOrCopy;
-		if (seEntity.getLiveEntity() == entity) {
+		boolean isLive = (seEntity.getLiveEntity() == entity);
+		if (isLive) {
 			btnDetachOrCopy = new JButton("Copy to default");
 			btnDetachOrCopy.addActionListener(
 					new ActionSetComponent("Set " + component.getName() + " fields as initial for " + entity.getName(),
 							seEntity.getDefaultEntity(), component));
 		} else {
-			btnDetachOrCopy = new JButton("Detach");
+			if (component.isAttached()) {
+				btnDetachOrCopy = new JButton("Detach");
+				btnDetachOrCopy.addActionListener(new ActionDetach(component));
+			} else {
+				btnDetachOrCopy = new JButton("Attach");
+				btnDetachOrCopy.addActionListener(new ActionAttach(component));
+			}
 		}
 
 		titleComp.setFont(titleComp.getFont().deriveFont(Font.BOLD));
@@ -159,7 +170,17 @@ public class ComponentGenerator extends JPanel {
 		titleBar.add(btnDelete);
 		titleBar.add(btnDetachOrCopy);
 		this.contentPanel.add(titleBar);
-		this.contentPanel.add(new FieldGenerator(new ArrayList<Field>(component.getFields().values())));
+		FieldGenerator field = new FieldGenerator(new ArrayList<Field>(component.getFields().values()), isLive || !component.isAttached());
+		this.fieldGenerators.add(field);
+		this.contentPanel.add(field);
 		this.contentPanel.add(new JSeparator());
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		for (FieldGenerator fieldGenerator : fieldGenerators) {
+			fieldGenerator.setEnabled(enabled);
+		}
+		super.setEnabled(enabled);
 	}
 }

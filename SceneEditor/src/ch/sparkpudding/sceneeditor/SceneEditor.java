@@ -33,6 +33,7 @@ public class SceneEditor {
 	public static Map<String, SEScene> seScenes;
 	public static SEScene currentScene;
 	public static SEEntity selectedEntity;
+	public static SEEntity clipboardEntity;
 
 	private static EventListenerList listenerList;
 
@@ -103,7 +104,7 @@ public class SceneEditor {
 	 * Create the entity list for all scenes and update the display must be called
 	 * in sync in the core engine
 	 */
-	private static void createEntityList() {
+	public static void createEntityList() {
 		Map<String, Scene> scenes = coreEngine.getScenes();
 		seScenes.clear();
 		for (Scene scene : scenes.values()) {

@@ -312,7 +312,7 @@ public class CoreEngine extends JPanel {
 	public void clearError() {
 		gameError = null;
 	}
-	
+
 	/**
 	 * Reload systems from disk, live
 	 */
@@ -760,6 +760,15 @@ public class CoreEngine extends JPanel {
 		if (editingRenderSystem != null) {
 			editingRenderSystem.tryRemove(entity);
 		}
+	}
+
+	/**
+	 * Delete a default entity
+	 * 
+	 * @param defaultEntity Default entity to be deleted
+	 */
+	public void deleteDefaultEntity(Entity entity) {
+		currentScene.removeDefault(entity);
 	}
 
 	/**

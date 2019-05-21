@@ -92,8 +92,10 @@ public class LelWriter {
 			for (Component component : entity.getComponents().values()) {
 				if (!component.getName().startsWith("se-")) {
 					xml += "\t\t<component template=\"" + component.getTemplateName() + "\">\n";
-					for (Field field : component.getFields().values()) {
-						xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
+					if (!component.isAttached()) {
+						for (Field field : component.getFields().values()) {
+							xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
+						}
 					}
 					xml += "</component>\n";
 				}
