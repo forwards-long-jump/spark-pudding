@@ -23,7 +23,9 @@ public class ActionRemoveEntity extends AbstractAction {
 	/**
 	 * ctor
 	 * 
-	 * @param scene Scene to remove
+	 * @param name   The name of the entity
+	 * @param entity The SEEntity containing the two entities to remove
+	 * @param scene  The scene containing the entity
 	 */
 	public ActionRemoveEntity(String name, SEEntity entity, Scene scene) {
 		super(name + entity.getLiveEntity().getName());
