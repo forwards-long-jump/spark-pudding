@@ -34,8 +34,6 @@ public class ModalEntity extends Modal {
 
 	/**
 	 * ctor
-	 * 
-	 * @param parent Component to block while the modal is active
 	 */
 	public ModalEntity() {
 		super(SceneEditor.frameSceneEditor, "New entity", true);

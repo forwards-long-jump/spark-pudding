@@ -62,10 +62,6 @@ public class ModalComponent extends Modal {
 	 * Constructor for the modal to create a new component
 	 * 
 	 * @param entity to add component to
-	 * 
-	 * @param parent Component to block while the modal is active
-	 * @param title  Title of the modal
-	 * @param modal  True if the parent should be blocked while the modal is active
 	 */
 	public ModalComponent(Entity entity) {
 		super(SceneEditor.frameSceneEditor, "Add component", true);
