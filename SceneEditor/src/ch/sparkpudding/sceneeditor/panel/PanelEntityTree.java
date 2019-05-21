@@ -47,7 +47,7 @@ public class PanelEntityTree extends JPanel {
 	private DefaultListModel<SEEntity> listModelEntities;
 	private JList<SEEntity> jListEntities;
 	private JScrollPane listScroller;
-	
+
 	private JPanel panelButtons;
 	private JButton buttonAdd;
 	private JButton buttonRemove;
@@ -91,7 +91,7 @@ public class PanelEntityTree extends JPanel {
 		});
 
 		listScroller = new JScrollPane(jListEntities);
-		
+
 		panelButtons = new JPanel();
 		buttonAdd = new JButton("+");
 		buttonRemove = new JButton("-");
@@ -111,7 +111,7 @@ public class PanelEntityTree extends JPanel {
 
 		add(listScroller, BorderLayout.CENTER);
 		add(panelButtons, BorderLayout.SOUTH);
-		
+
 		panelButtons.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		panelButtons.add(buttonRemove);
 		panelButtons.add(buttonAdd);
@@ -163,24 +163,25 @@ public class PanelEntityTree extends JPanel {
 				}
 			}
 		});
-		
+
 		buttonAdd.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new ModalEntity();
 			}
 		});
-		
+
 		buttonRemove.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AbstractAction action = new ActionRemoveEntity("Remove", SceneEditor.selectedEntity, SceneEditor.currentScene.getLiveScene());
+				AbstractAction action = new ActionRemoveEntity(SceneEditor.selectedEntity,
+						SceneEditor.currentScene.getLiveScene());
 				action.actionPerformed(e);
 			}
 		});
-		
+
 		SceneEditor.addEntityEventListener(new EntityEventAdapter() {
 			@Override
 			public void changeSelectedEntity(SEEntity entity) {
@@ -205,7 +206,7 @@ public class PanelEntityTree extends JPanel {
 		for (SEEntity entity : scene.getSEEntities()) {
 			listModelEntities.addElement(entity);
 		}
-		
+
 		jListEntities.setSelectedIndex(previousIndex);
 
 		revalidate();
