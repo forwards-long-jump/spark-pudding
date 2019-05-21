@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -24,10 +26,10 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
 /**
  * Generate the interface for the components passed in arguments. Since it
  * inherits JComponent, it can be used as one.
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 8 April 2019
- * 
+ *
  */
 @SuppressWarnings("serial")
 public class ComponentGenerator extends JPanel {
@@ -41,7 +43,7 @@ public class ComponentGenerator extends JPanel {
 
 	/**
 	 * ctor
-	 * 
+	 *
 	 * @param components Collection of all the components of an entity
 	 */
 	public ComponentGenerator(SEEntity seEntity, Entity entity) {
@@ -82,17 +84,36 @@ public class ComponentGenerator extends JPanel {
 	 */
 	private void createComponents() {
 		removeAll();
+		List<Component> componentsToSort = new ArrayList<Component>();
 		for (Component component : components) {
 			if (!component.getName().startsWith("se-")) {
-				setupComponentsLayout(component);
+				componentsToSort.add(component);
 			}
 		}
+
+		componentsToSort.sort(new Comparator<Component>() {
+			@Override
+			public int compare(Component arg0, Component arg1) {
+				if (arg0.getName().equals("position") || arg0.getName().equals("size")) {
+					return -1;
+				}
+				if (arg1.getName().equals("position") || arg1.getName().equals("size")) {
+					return 1;
+				}
+				return arg0.getName().compareTo(arg1.getName());
+			}
+		});
+
+		for (Component component : componentsToSort) {
+			setupComponentsLayout(component);
+		}
+
 		revalidate();
 	}
 
 	/**
 	 * Create the representation of a component
-	 * 
+	 *
 	 * @param component The component to consider
 	 */
 	private void setupComponentsLayout(Component component) {
