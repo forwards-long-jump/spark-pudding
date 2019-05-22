@@ -45,7 +45,7 @@ public class FieldGenerator extends JComponent {
 	/**
 	 * ctor
 	 *
-	 * @param fields   Collection of all the components of an entity
+	 * @param fields     Collection of all the components of an entity
 	 * @param enableable Whether the component can be enabled
 	 */
 	public FieldGenerator(Collection<Field> fields, boolean enableable) {
@@ -169,7 +169,12 @@ public class FieldGenerator extends JComponent {
 		input.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				input.selectAll();
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						input.selectAll();
+					}
+				});
 			}
 
 			@Override
@@ -221,7 +226,7 @@ public class FieldGenerator extends JComponent {
 	public void setEnabled(boolean enabled) {
 		if (enableable) {
 			for (JComponent comp : fieldsInput) {
-				comp.setEnabled(enabled);			
+				comp.setEnabled(enabled);
 			}
 		}
 		super.setEnabled(enabled);
