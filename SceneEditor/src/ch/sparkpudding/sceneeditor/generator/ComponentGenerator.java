@@ -198,7 +198,9 @@ public class ComponentGenerator extends JPanel {
 			btn.setEnabled(enabled);
 		}
 		for (JButton btn : btnsDetachOrCopy) {
-			btn.setEnabled(enabled);
+			if(btn != null) {				
+				btn.setEnabled(enabled);
+			}
 		}
 		for (FieldGenerator fieldGenerator : fieldGenerators) {
 			fieldGenerator.setEnabled(enabled);
