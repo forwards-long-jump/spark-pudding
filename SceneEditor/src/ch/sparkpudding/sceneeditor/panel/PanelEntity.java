@@ -156,11 +156,13 @@ public class PanelEntity extends JPanel {
 		case STOP:
 			initialPanelComponent.setEnabled(true);
 			livePanelComponent.setEnabled(false);
+			jTabbedPane.setEnabledAt(1, false);
 			jTabbedPane.setSelectedIndex(0);
 			break;
 		default:
 			initialPanelComponent.setEnabled(false);
 			livePanelComponent.setEnabled(true);
+			jTabbedPane.setEnabledAt(1, true);
 			jTabbedPane.setSelectedIndex(1);
 			break;
 		}

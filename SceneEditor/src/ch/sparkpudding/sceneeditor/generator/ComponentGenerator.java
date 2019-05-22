@@ -39,6 +39,8 @@ public class ComponentGenerator extends JPanel {
 	private JPanel contentPanel;
 	private JScrollPane jScrollPane;
 	private Collection<Component> components;
+	private List<JButton> btnsDelete;
+	private List<JButton> btnsDetachOrCopy;
 	private List<FieldGenerator> fieldGenerators;
 
 	private SEEntity seEntity;
@@ -52,6 +54,8 @@ public class ComponentGenerator extends JPanel {
 	public ComponentGenerator(SEEntity seEntity, Entity entity) {
 		this.components = entity.getComponents().values();
 		this.fieldGenerators = new ArrayList<FieldGenerator>();
+		this.btnsDelete = new ArrayList<JButton>();
+		this.btnsDetachOrCopy = new ArrayList<JButton>();
 
 		this.seEntity = seEntity;
 		this.entity = entity;
@@ -143,6 +147,7 @@ public class ComponentGenerator extends JPanel {
 		JLabel titleComp = new JLabel(component.getName());
 		JButton btnDelete = new JButton("Delete");
 		JButton btnDetachOrCopy = null;
+		
 
 		boolean isLive = (seEntity.getLiveEntity() == entity);
 		boolean isSpawned = seEntity.getDefaultEntity() == null; 
@@ -181,12 +186,20 @@ public class ComponentGenerator extends JPanel {
 		FieldGenerator field = new FieldGenerator(new ArrayList<Field>(component.getFields().values()),
 				isLive || !component.isAttached());
 		this.fieldGenerators.add(field);
+		this.btnsDelete.add(btnDelete);
+		this.btnsDetachOrCopy.add(btnDetachOrCopy);
 		this.contentPanel.add(field);
 		this.contentPanel.add(new JSeparator());
 	}
 
 	@Override
 	public void setEnabled(boolean enabled) {
+		for (JButton btn : btnsDelete) {
+			btn.setEnabled(enabled);
+		}
+		for (JButton btn : btnsDetachOrCopy) {
+			btn.setEnabled(enabled);
+		}
 		for (FieldGenerator fieldGenerator : fieldGenerators) {
 			fieldGenerator.setEnabled(enabled);
 		}
