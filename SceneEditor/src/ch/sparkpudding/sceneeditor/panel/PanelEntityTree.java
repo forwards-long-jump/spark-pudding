@@ -52,6 +52,8 @@ public class PanelEntityTree extends JPanel {
 	private JButton buttonAdd;
 	private JButton buttonRemove;
 
+	private boolean canChange;
+
 	private static final String TITLE = "Entity list";
 
 	/**
@@ -62,7 +64,7 @@ public class PanelEntityTree extends JPanel {
 	 */
 	public PanelEntityTree(PanelEntity panelEntity) {
 		this.panelEntity = panelEntity;
-
+		this.canChange = true;
 		init();
 		setupLayout();
 		addListener();
@@ -149,12 +151,14 @@ public class PanelEntityTree extends JPanel {
 
 					for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
 						// FIXME: this *kinda* works but could be way better
-						if (seEntity.getLiveEntity() == entity) {
+						if (seEntity.getLiveEntity() == entity && canChange) {
 							if ((jListEntities.getSelectedValue() == null
 									|| jListEntities.getSelectedValue().getLiveEntity() != entity)) {
+								canChange = false;
 								SwingUtilities.invokeLater(new Runnable() {
 									@Override
 									public void run() {
+										canChange = true;
 										selectSEEntity(seEntity);
 									}
 								});
@@ -166,21 +170,23 @@ public class PanelEntityTree extends JPanel {
 					}
 
 					// Entity not found
-					SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+					if (canChange) {
+						SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 
-						@Override
-						public void run() {
-							SceneEditor.setSelectedEntity(new SEEntity(null, entity));
+							@Override
+							public void run() {
+								SceneEditor.setSelectedEntity(new SEEntity(null, entity));
 
-						}
-					});
+							}
+						});
 
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							jListEntities.removeSelectionInterval(0, jListEntities.getModel().getSize());
-						}
-					});
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								jListEntities.removeSelectionInterval(0, jListEntities.getModel().getSize());
+							}
+						});
+					}
 				}
 			}
 		});
@@ -239,7 +245,9 @@ public class PanelEntityTree extends JPanel {
 	 * @param entity to select
 	 */
 	public void selectSEEntity(SEEntity entity) {
-		jListEntities.setSelectedValue(entity, true);
+		if (jListEntities.getSelectedValue() != entity) {
+			jListEntities.setSelectedValue(entity, true);
+		}
 	}
 
 }

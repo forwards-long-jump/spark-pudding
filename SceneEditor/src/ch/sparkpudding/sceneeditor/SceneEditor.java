@@ -181,11 +181,11 @@ public class SceneEditor {
 	 * @param entity to set as selected
 	 */
 	public static void setSelectedEntity(SEEntity entity) {
-		if (entity == selectedEntity) {
-			return;
-		}
-
-		if (selectedEntity != null) {
+		if(selectedEntity != null) {
+			if (entity.getLiveEntity() == selectedEntity.getLiveEntity()) {
+				return;
+			}
+			
 			selectedEntity.setSelected(false);
 		}
 
