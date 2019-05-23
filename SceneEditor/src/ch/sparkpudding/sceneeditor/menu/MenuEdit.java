@@ -113,7 +113,6 @@ public class MenuEdit extends JMenu {
 		});
 
 		itemRedo.setAction(new ActionRedo());
-		itemRedo.setAction(new ActionRedo());
 
 		itemUndo.setEnabled(false);
 		itemRedo.setEnabled(false);
