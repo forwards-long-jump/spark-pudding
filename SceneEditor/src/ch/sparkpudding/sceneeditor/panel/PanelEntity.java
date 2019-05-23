@@ -20,7 +20,7 @@ import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
 
 /**
  * Contains the different parameter of an entity
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 29 April 2019
  *
@@ -36,6 +36,7 @@ public class PanelEntity extends JPanel {
 	private SEEntity currentEntity;
 
 	private static final String TITLE = "Entity";
+	private static final String TITLE_LIVE = "Live entity";
 
 	/**
 	 * ctor
@@ -92,9 +93,9 @@ public class PanelEntity extends JPanel {
 				setEntity(entity);
 			}
 		});
-		
+
 		btnAddComponent.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				switch (jTabbedPane.getSelectedIndex()) {
@@ -136,7 +137,12 @@ public class PanelEntity extends JPanel {
 	 */
 	private void resetBorderTitle() {
 		if (currentEntity != null) {
-			setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getDefaultEntity().getName()));
+			if(currentEntity.getDefaultEntity() != null) {
+				setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getDefaultEntity().getName()));
+			}
+			else {
+				setBorder(BorderFactory.createTitledBorder(TITLE_LIVE + " — " + currentEntity.getLiveEntity().getName()));
+			}
 		} else {
 			setBorder(BorderFactory.createTitledBorder(TITLE + " — null"));
 		}
@@ -150,11 +156,13 @@ public class PanelEntity extends JPanel {
 		case STOP:
 			initialPanelComponent.setEnabled(true);
 			livePanelComponent.setEnabled(false);
+			jTabbedPane.setEnabledAt(1, false);
 			jTabbedPane.setSelectedIndex(0);
 			break;
 		default:
 			initialPanelComponent.setEnabled(false);
 			livePanelComponent.setEnabled(true);
+			jTabbedPane.setEnabledAt(1, true);
 			jTabbedPane.setSelectedIndex(1);
 			break;
 		}
@@ -164,12 +172,20 @@ public class PanelEntity extends JPanel {
 
 	/**
 	 * Set the games entity represented by this panel
-	 * 
+	 *
 	 * @param seEntity The entity represented by this panel
 	 */
 	private void setEntity(SEEntity seEntity) {
 		currentEntity = seEntity;
-		initialPanelComponent.setEntity(seEntity, currentEntity.getDefaultEntity());
+		// Is there a default entity ?
+		if(seEntity.getDefaultEntity() != null) {
+			initialPanelComponent.setEntity(seEntity, currentEntity.getDefaultEntity());
+			this.jTabbedPane.setEnabledAt(0, true);
+		}
+		else {
+			this.jTabbedPane.setEnabledAt(0, false);
+		}
+
 		livePanelComponent.setEntity(seEntity, currentEntity.getLiveEntity());
 		resetBorderTitle();
 		resetEnabledPane();

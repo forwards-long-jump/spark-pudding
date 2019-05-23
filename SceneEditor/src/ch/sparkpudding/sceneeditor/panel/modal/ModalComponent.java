@@ -253,10 +253,13 @@ public class ModalComponent extends Modal {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = tableFields.getSelectedRow();
-				if (selectedRow == -1) {
-					tableModel.removeRow(tableModel.getRowCount() - 1);
+				if (tableModel.getRowCount() > 0) {
+					if (selectedRow == -1) {
+						tableModel.removeRow(tableModel.getRowCount() - 1);
+					} else {
+						tableModel.removeRow(selectedRow);
+					}
 				}
-				tableModel.removeRow(selectedRow);
 				pack();
 			}
 		});

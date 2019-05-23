@@ -34,7 +34,7 @@ import ch.sparkpudding.sceneeditor.panel.modal.ModalEntity;
 
 /**
  * Show the different entity of a Scene as a list
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 29 April 2019
  *
@@ -52,17 +52,19 @@ public class PanelEntityTree extends JPanel {
 	private JButton buttonAdd;
 	private JButton buttonRemove;
 
+	private boolean canChange;
+
 	private static final String TITLE = "Entity list";
 
 	/**
 	 * ctor
-	 * 
+	 *
 	 * @param panelEntity the panel where to show the informations of a selected
 	 *                    entity
 	 */
 	public PanelEntityTree(PanelEntity panelEntity) {
 		this.panelEntity = panelEntity;
-
+		this.canChange = true;
 		init();
 		setupLayout();
 		addListener();
@@ -149,16 +151,41 @@ public class PanelEntityTree extends JPanel {
 
 					for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
 						// FIXME: this *kinda* works but could be way better
-						if (seEntity.getLiveEntity() == entity && (jListEntities.getSelectedValue() == null
-								|| jListEntities.getSelectedValue().getLiveEntity() != entity)) {
-							SwingUtilities.invokeLater(new Runnable() {
-								@Override
-								public void run() {
-									selectSEEntity(seEntity);
-								}
-							});
-							return;
+						if (seEntity.getLiveEntity() == entity && canChange) {
+							if ((jListEntities.getSelectedValue() == null
+									|| jListEntities.getSelectedValue().getLiveEntity() != entity)) {
+								canChange = false;
+								SwingUtilities.invokeLater(new Runnable() {
+									@Override
+									public void run() {
+										canChange = true;
+										selectSEEntity(seEntity);
+									}
+								});
+								return;
+							} else {
+								return;
+							}
 						}
+					}
+
+					// Entity not found
+					if (canChange) {
+						SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+
+							@Override
+							public void run() {
+								SceneEditor.setSelectedEntity(new SEEntity(null, entity));
+
+							}
+						});
+
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								jListEntities.removeSelectionInterval(0, jListEntities.getModel().getSize());
+							}
+						});
 					}
 				}
 			}
@@ -196,7 +223,7 @@ public class PanelEntityTree extends JPanel {
 
 	/**
 	 * Update the entity list with a Scene
-	 * 
+	 *
 	 * @param scene The scene which contains the entities
 	 */
 	public void updateListEntities(SEScene scene) {
@@ -214,11 +241,13 @@ public class PanelEntityTree extends JPanel {
 
 	/**
 	 * Select the specified seEntity in the tree
-	 * 
+	 *
 	 * @param entity to select
 	 */
 	public void selectSEEntity(SEEntity entity) {
-		jListEntities.setSelectedValue(entity, true);
+		if (jListEntities.getSelectedValue() != entity) {
+			jListEntities.setSelectedValue(entity, true);
+		}
 	}
 
 }
