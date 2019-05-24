@@ -310,4 +310,13 @@ public class SceneEditor {
 	public static Camera getEditingCamera() {
 		return camera;
 	}
+
+	/**
+	 * Get game camera
+	 * 
+	 * @return game camera
+	 */
+	public static Camera getGameCamera() {
+		return gameCamera;
+	}
 }
