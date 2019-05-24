@@ -127,10 +127,13 @@ public class Field {
 			break;
 		case INTEGER:
 			try {
-				this.setValue(Integer.parseInt(value));				
+				this.setValue(Integer.parseInt(value));
 			} catch (Exception e) {
-				// TODO: Fix integer that can be float because of lua
-				this.setValue(Double.parseDouble(value));
+				try {
+					this.setValue(Double.parseDouble(value));
+				} catch (Exception e1) {
+					// don't change the value
+				}
 			}
 			break;
 		default:
