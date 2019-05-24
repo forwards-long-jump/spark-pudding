@@ -39,10 +39,12 @@ function update()
           -- top half
           if y + h + entity.speed.dy > y2 + wall.speed.dy and y + h < y2 + h2 / 2 then
             entity.position.y = y2 - h - math.abs(wall.speed.dy) - entity.speed.dy
+            entity.speed.dy = wall.speed.dy
           end
           -- bottom half
           if y + entity.speed.dy < y2 + h2 + wall.speed.dy and y > y2 + h2 / 2 then
             entity.position.y = y2 + h2 + math.abs(wall.speed.dy) - entity.speed.dy
+            entity.speed.dy = wall.speed.dy
           end
         end
       end
