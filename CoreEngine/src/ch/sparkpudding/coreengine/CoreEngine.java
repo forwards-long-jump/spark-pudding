@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -106,7 +107,11 @@ public class CoreEngine extends JPanel {
 		editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
 
 		startGame();
-		setCurrentScene(scenes.get("main"));
+		try {
+			setCurrentScene(scenes.get("main"));
+		} catch (Exception e) {
+			notifyErrorAndClose("Could not find main scene.");
+		}
 	}
 
 	/**
@@ -145,6 +150,11 @@ public class CoreEngine extends JPanel {
 
 		systems = new ArrayList<UpdateSystem>();
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
+
+		if (renderSystem == null) {
+			setEditingPause(true);
+			notifyErrorAndClose("No render system found. Make sure to create at least one system named render.lua");
+		}
 	}
 
 	/**
@@ -181,8 +191,16 @@ public class CoreEngine extends JPanel {
 		scenes = new HashMap<String, Scene>();
 
 		for (File xmlFile : lelFile.getScenesXML()) {
-			Scene scene = new Scene(XMLParser.parse(xmlFile));
-			addScene(scene.getName(), scene);
+			try {
+				Scene scene = new Scene(XMLParser.parse(xmlFile));
+				addScene(scene.getName(), scene);
+			} catch (Exception e) {
+				notifyErrorAndClose("The following error occured while parsing " + xmlFile + "\n\n" + e.getMessage());
+			}
+		}
+
+		if (scenes.size() == 0) {
+			notifyErrorAndClose("No scenes found. Please create at least one scene named main.xml");
 		}
 	}
 
@@ -195,8 +213,16 @@ public class CoreEngine extends JPanel {
 	 */
 	private void populateEntityTemplates() throws ParserConfigurationException, SAXException, IOException {
 		for (File xmlFile : lelFile.getEntityTemplatesXML()) {
-			Entity e = new Entity(XMLParser.parse(xmlFile));
-			Entity.addTemplate(e);
+			try {
+				Entity e = new Entity(XMLParser.parse(xmlFile));
+				Entity.addTemplate(e);
+			} catch (Exception e) {
+				notifyErrorAndClose("The following error occured while parsing " + xmlFile + "\n\n" + e.getMessage());
+			}
+		}
+
+		if (Entity.getTemplates().size() == 0) {
+			notifyErrorAndClose("No entity templates found. Please create at least one entity template.");
 		}
 	}
 
@@ -209,8 +235,16 @@ public class CoreEngine extends JPanel {
 	 */
 	private void populateComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
 		for (File xmlFile : lelFile.getComponentsXML()) {
-			Component c = new Component(XMLParser.parse(xmlFile));
-			Component.addTemplate(c);
+			try {
+				Component c = new Component(XMLParser.parse(xmlFile));
+				Component.addTemplate(c);
+			} catch (Exception e) {
+				notifyErrorAndClose("The following error occured while parsing " + xmlFile + "\n\n" + e.getMessage());
+			}
+		}
+
+		if (Component.getTemplates().size() == 0) {
+			notifyErrorAndClose("No component templates found. Please create at least one template.");
 		}
 	}
 
@@ -224,8 +258,13 @@ public class CoreEngine extends JPanel {
 	 */
 	private void populateEditingComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
 		for (File xmlFile : lelFile.getEditingComponentsXML()) {
-			Component c = new Component(XMLParser.parse(xmlFile));
-			Component.addTemplate(c);
+			try {
+				Component c = new Component(XMLParser.parse(xmlFile));
+				Component.addTemplate(c);
+			} catch (Exception e) {
+				notifyErrorAndClose("The following error occured while parsing " + xmlFile + "\n\n" + e.getMessage());
+			}
+
 		}
 	}
 
@@ -518,7 +557,9 @@ public class CoreEngine extends JPanel {
 			system.setEntities(newScene.getEntities());
 		}
 
-		renderSystem.setEntities(newScene.getEntities());
+		if (renderSystem != null) {
+			renderSystem.setEntities(newScene.getEntities());
+		}
 
 		if (editingSystems != null) {
 			for (UpdateSystem system : editingSystems) {
@@ -591,7 +632,9 @@ public class CoreEngine extends JPanel {
 
 		AffineTransform gameTransformationState = g2d.getTransform();
 		fps++;
-		renderSystem.render(g2d);
+		if (renderSystem != null) {
+			renderSystem.render(g2d);
+		}
 
 		if (editingPause && editingRenderSystem != null) {
 			g2d.setTransform(gameTransformationState);
@@ -968,6 +1011,16 @@ public class CoreEngine extends JPanel {
 			});
 
 		}
+	}
+
+	/**
+	 * Notify about a critical error and close the app
+	 * 
+	 * @param string message to show
+	 */
+	public void notifyErrorAndClose(String string) {
+		JOptionPane.showMessageDialog(this, string, "A fatal error occured", JOptionPane.ERROR_MESSAGE);
+		System.exit(1);
 	}
 
 	/**

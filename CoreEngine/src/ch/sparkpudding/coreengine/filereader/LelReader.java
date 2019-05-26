@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.sparkpudding.coreengine.Lel;
+
 /**
  * Manages Ludic Engine in Lua game files, supports reading from folder and from
  * .lel
@@ -101,12 +103,16 @@ public class LelReader {
 	 * @param list   List to populate
 	 */
 	private void populateList(File folder, List<File> list) {
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory()) {
-				populateList(file, list);
-			} else {
-				list.add(file);
+		try {
+			for (File file : folder.listFiles()) {
+				if (file.isDirectory()) {
+					populateList(file, list);
+				} else {
+					list.add(file);
+				}
 			}
+		} catch (NullPointerException e) {
+			Lel.coreEngine.notifyErrorAndClose("Missing folder " + folder);
 		}
 	}
 
@@ -117,12 +123,16 @@ public class LelReader {
 	 * @param map    Map to populate
 	 */
 	private void populateMaps(File folder, Map<String, File> map) {
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory()) {
-				populateMaps(file, map);
-			} else {
-				map.put(file.getAbsolutePath().substring(this.directory.length()), file);
+		try {
+			for (File file : folder.listFiles()) {
+				if (file.isDirectory()) {
+					populateMaps(file, map);
+				} else {
+					map.put(file.getAbsolutePath().substring(this.directory.length()), file);
+				}
 			}
+		} catch (NullPointerException e) {
+			Lel.coreEngine.notifyErrorAndClose("Missing folder " + folder);
 		}
 	}
 
