@@ -1,5 +1,6 @@
 package ch.sparkpudding.coreengine.api;
 
+import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 
 import ch.sparkpudding.coreengine.Lel;
@@ -207,5 +208,110 @@ public class Input {
 	public boolean isMouseInRectangle(double x, double y, double w, double h) {
 		Point2D mouseLocation = Lel.coreEngine.panelPositionToWorld(input.getMousePosition());
 		return Collision.intersectRect(mouseLocation.getX(), mouseLocation.getY(), x, y, w, h);
+	}
+
+	/**
+	 * Get a keycode from a given string Based on
+	 * 
+	 * @param str
+	 * @return keycode corresponding to a key
+	 */
+	public int keyFromString(String str) {
+		switch (str.toUpperCase().charAt(0)) {
+		case 'A':
+			return KeyEvent.VK_A;
+		case 'B':
+			return KeyEvent.VK_B;
+		case 'C':
+			return KeyEvent.VK_C;
+		case 'D':
+			return KeyEvent.VK_D;
+		case 'E':
+			return KeyEvent.VK_E;
+		case 'F':
+			return KeyEvent.VK_F;
+		case 'G':
+			return KeyEvent.VK_G;
+		case 'H':
+			return KeyEvent.VK_H;
+		case 'I':
+			return KeyEvent.VK_I;
+		case 'J':
+			return KeyEvent.VK_J;
+		case 'K':
+			return KeyEvent.VK_K;
+		case 'L':
+			return KeyEvent.VK_L;
+		case 'M':
+			return KeyEvent.VK_M;
+		case 'N':
+			return KeyEvent.VK_N;
+		case 'O':
+			return KeyEvent.VK_O;
+		case 'P':
+			return KeyEvent.VK_P;
+		case 'Q':
+			return KeyEvent.VK_Q;
+		case 'R':
+			return KeyEvent.VK_R;
+		case 'S':
+			return KeyEvent.VK_S;
+		case 'T':
+			return KeyEvent.VK_T;
+		case 'U':
+			return KeyEvent.VK_U;
+		case 'V':
+			return KeyEvent.VK_V;
+		case 'W':
+			return KeyEvent.VK_W;
+		case 'X':
+			return KeyEvent.VK_X;
+		case 'Y':
+			return KeyEvent.VK_Y;
+		case 'Z':
+			return KeyEvent.VK_Z;
+		case '0':
+			return KeyEvent.VK_0;
+		case '1':
+			return KeyEvent.VK_1;
+		case '2':
+			return KeyEvent.VK_2;
+		case '3':
+			return KeyEvent.VK_3;
+		case '4':
+			return KeyEvent.VK_4;
+		case '5':
+			return KeyEvent.VK_5;
+		case '6':
+			return KeyEvent.VK_6;
+		case '7':
+			return KeyEvent.VK_7;
+		case '8':
+			return KeyEvent.VK_8;
+		case '9':
+			return KeyEvent.VK_9;
+		default:
+			switch (str.toUpperCase()) {
+			case "UP":
+				return KeyEvent.VK_UP;
+			case "DOWN":
+				return KeyEvent.VK_DOWN;
+			case "LEFT":
+				return KeyEvent.VK_LEFT;
+			case "RIGHT":
+				return KeyEvent.VK_RIGHT;
+			case "SHIFT":
+				return KeyEvent.VK_SHIFT;
+			case "CTRL":
+				return KeyEvent.VK_CONTROL;
+			case "ESCAPE":
+				return KeyEvent.VK_ESCAPE;
+			case "SPACE":
+				return KeyEvent.VK_SPACE;
+			}
+			break;
+		}
+
+		return 0;
 	}
 }
