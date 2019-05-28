@@ -1,8 +1,6 @@
 package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 
