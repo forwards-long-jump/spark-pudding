@@ -16,6 +16,7 @@ import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.EntityEventListener;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
+import ch.sparkpudding.sceneeditor.listener.SystemEventListener;
 
 /**
  * The heart of the SceneEditor, emerged after a 40 min fight
@@ -293,11 +294,39 @@ public class SceneEditor {
 	}
 
 	/**
-	 * Allow to fire an event when the selected entity change
+	 * Allow to fire an event when the entity list change
 	 */
 	public static void fireEntityListChanged() {
 		for (EntityEventListener listener : listenerList.getListeners(EntityEventListener.class)) {
 			listener.entityListChanged(seScenes);
+		}
+	}
+	
+	/**
+	 * Add a system listener
+	 *
+	 * @param evtListener the listener
+	 */
+	public static void addSystemEventListener(SystemEventListener evtListener) {
+		listenerList.add(SystemEventListener.class, evtListener);
+	}
+
+	/**
+	 * Remove a system listener
+	 *
+	 * @param evtListener the listener to remove
+	 * @return {@code true} if the event exist
+	 */
+	public static void removeSystemEventListener(SystemEventListener evtListener) {
+		listenerList.remove(SystemEventListener.class, evtListener);
+	}
+	
+	/**
+	 * Allow to fire an event when the system list change
+	 */
+	public static void fireSystemListChanged() {
+		for (SystemEventListener listener : listenerList.getListeners(SystemEventListener.class)) {
+			listener.systemListChanged();
 		}
 	}
 }
