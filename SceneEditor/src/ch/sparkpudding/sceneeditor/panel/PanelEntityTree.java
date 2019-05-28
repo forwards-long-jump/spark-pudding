@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -230,7 +233,25 @@ public class PanelEntityTree extends JPanel {
 		int previousIndex = jListEntities.getSelectedIndex();
 		listModelEntities.removeAllElements();
 
+		List<SEEntity> sortedEntities = new ArrayList<SEEntity>();
 		for (SEEntity entity : scene.getSEEntities()) {
+			sortedEntities.add(entity);
+		}
+
+		sortedEntities.sort(new Comparator<SEEntity>() {
+			@Override
+			public int compare(SEEntity arg0, SEEntity arg1) {
+				if (arg0.getLiveEntity().getZIndex() > arg1.getLiveEntity().getZIndex()) {
+					return 1;
+				} else if (arg0.getLiveEntity().getZIndex() < arg1.getLiveEntity().getZIndex()) {
+					return -1;
+				} else {
+					return 0;
+				}
+			}
+		});
+
+		for (SEEntity entity : sortedEntities) {
 			listModelEntities.addElement(entity);
 		}
 
