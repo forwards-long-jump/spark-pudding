@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,9 +20,6 @@ import java.util.concurrent.Semaphore;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
@@ -182,12 +178,8 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Populates scenes list with scene files
-	 *
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
 	 */
-	private void populateScenes() throws ParserConfigurationException, SAXException, IOException {
+	private void populateScenes() {
 		scenes = new HashMap<String, Scene>();
 
 		for (File xmlFile : lelFile.getScenesXML()) {
@@ -206,12 +198,8 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Populates entity templates list with entity template files
-	 *
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
 	 */
-	private void populateEntityTemplates() throws ParserConfigurationException, SAXException, IOException {
+	private void populateEntityTemplates() {
 		for (File xmlFile : lelFile.getEntityTemplatesXML()) {
 			try {
 				Entity e = new Entity(XMLParser.parse(xmlFile));
@@ -228,12 +216,8 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Populates component templates list with component template files
-	 *
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
 	 */
-	private void populateComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
+	private void populateComponentTemplates() {
 		for (File xmlFile : lelFile.getComponentsXML()) {
 			try {
 				Component c = new Component(XMLParser.parse(xmlFile));
@@ -251,12 +235,8 @@ public class CoreEngine extends JPanel {
 	/**
 	 * Populates component templates list with component template files <br>
 	 * TODO: Merge this function and the one above
-	 *
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
 	 */
-	private void populateEditingComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
+	private void populateEditingComponentTemplates() {
 		for (File xmlFile : lelFile.getEditingComponentsXML()) {
 			try {
 				Component c = new Component(XMLParser.parse(xmlFile));
