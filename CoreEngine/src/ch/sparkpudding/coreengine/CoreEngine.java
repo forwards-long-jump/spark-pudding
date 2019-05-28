@@ -707,6 +707,24 @@ public class CoreEngine extends JPanel {
 	public ResourceLocator getResourceLocator() {
 		return resourceLocator;
 	}
+	
+	/**
+	 * Getter for the renderSystem
+	 * 
+	 * @return The renderSystem
+	 */
+	public RenderSystem getRenderSystems() {
+		return renderSystem;
+	}
+
+	/**
+	 * Getter for the different systems
+	 * 
+	 * @return The list of system
+	 */
+	public List<UpdateSystem> getSystems() {
+		return systems;
+	}
 
 	/**
 	 * Add an entity to current scene and notify systems
