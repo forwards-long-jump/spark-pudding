@@ -129,16 +129,10 @@ public class PanelEntityTree extends JPanel {
 	 */
 	private void addListener() {
 		jListEntities.addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting() && e.getSource() instanceof JList<?>
-						&& ((JList<?>) e.getSource()).getSelectedValue() instanceof SEEntity) {
-
-					SceneEditor.setSelectedEntity(((SEEntity) ((JList<?>) e.getSource()).getSelectedValue()));
-
-				} else {
-					panelEntity.removeEntity();
+				if(jListEntities.getSelectedIndex() != -1) {
+					SceneEditor.setSelectedEntity(jListEntities.getSelectedValue());					
 				}
 			}
 		});
@@ -230,7 +224,7 @@ public class PanelEntityTree extends JPanel {
 	 * @param scene The scene which contains the entities
 	 */
 	public void updateListEntities(SEScene scene) {
-		int previousIndex = jListEntities.getSelectedIndex();
+		SEEntity previousEntity = jListEntities.getSelectedValue();
 		listModelEntities.removeAllElements();
 
 		List<SEEntity> sortedEntities = new ArrayList<SEEntity>();
@@ -255,7 +249,7 @@ public class PanelEntityTree extends JPanel {
 			listModelEntities.addElement(entity);
 		}
 
-		jListEntities.setSelectedIndex(previousIndex);
+		jListEntities.setSelectedValue(previousEntity, true);
 
 		revalidate();
 	}
@@ -269,6 +263,13 @@ public class PanelEntityTree extends JPanel {
 		if (jListEntities.getSelectedValue() != entity) {
 			jListEntities.setSelectedValue(entity, true);
 		}
+	}
+
+	/**
+	 * Remove selected entity components display 
+	 */
+	public void removeSelectedEntity() {
+		panelEntity.removeEntity();
 	}
 
 }
