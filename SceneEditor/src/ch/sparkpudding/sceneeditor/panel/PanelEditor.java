@@ -16,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import javax.swing.DefaultListCellRenderer;
@@ -33,7 +35,7 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import org.fife.ui.autocomplete.AutoCompletion;
-import org.fife.ui.autocomplete.Completion;
+import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
@@ -41,13 +43,13 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
+import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.system.System;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.action.ActionRemoveSystem;
 import ch.sparkpudding.sceneeditor.listener.SystemEventListener;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalSystem;
 import ch.sparkpudding.sceneeditor.utils.ButtonTabComponent;
-import ch.sparkpudding.sceneeditor.utils.luacompletion.StaticLuaCompletions;
 
 /**
  * The panel for the lua editor
@@ -82,6 +84,9 @@ public class PanelEditor extends JPanel {
 		addListener();
 	}
 
+	/**
+	 * Initialize the different element of the panel
+	 */
 	private void init() {
 		nameSystems = new ArrayList<String>();
 		jTabbedPane = new JTabbedPane();
@@ -198,14 +203,30 @@ public class PanelEditor extends JPanel {
 	}
 
 	private CompletionProvider createCompletionProviderForSystem(System system) {
-		DefaultCompletionProvider provider = new DefaultCompletionProvider();
-		List<Completion> completions = new ArrayList<Completion>();
-		StaticLuaCompletions luaCompletions = new StaticLuaCompletions(provider);
+		DefaultCompletionProvider codeCP = new DefaultCompletionProvider();
+		// List<Completion> completions = new ArrayList<Completion>();
+		// StaticLuaCompletions luaCompletions = new StaticLuaCompletions(codeCP);
+		Map<String, List<String>> componentGroups = system.getComponentGroups();
 
-		completions.addAll(luaCompletions.getCompletions());
-		provider.addCompletions(completions);
+		// Basic ECS completion
+		List<String> addedComponent = new ArrayList<String>();
+		for (String groupName : componentGroups.keySet()) {
+			for (String componentName : componentGroups.get(groupName)) {
+				if (!addedComponent.contains(componentName)) {
+					for (Entry<String, Field> field : ch.sparkpudding.coreengine.ecs.component.Component.getTemplates()
+							.get(componentName)) {
+						codeCP.addCompletion(new BasicCompletion(codeCP, componentName + "." + field.getKey(), ""));
+					}
+				}
+				addedComponent.add(componentName);
+			}
+		}
 
-		return provider;
+		// Basic lua completion
+		// completions.addAll(luaCompletions.getCompletions());
+		// codeCP.addCompletions(completions);
+
+		return codeCP;
 	}
 
 	/**

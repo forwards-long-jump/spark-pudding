@@ -347,4 +347,13 @@ public abstract class System {
 	public String getName() {
 		return name;
 	}
+
+	/**
+	 * Return the map of component group
+	 * 
+	 * @return the map of component group
+	 */
+	public Map<String, List<String>> getComponentGroups() {
+		return componentGroups;
+	}
 }
