@@ -87,8 +87,8 @@ public class LelWriter {
 		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 		xml += "<scene name=\"" + scene.getName() + "\">\n";
 		for (Entity entity : scene.getDefaultEntities()) {
-			xml += "\t<entity name=\"" + entity.getName() + "\" template=\"" + entity.getTemplate()
-					+ "\" z-index=\"1\">\n";
+			xml += "\t<entity name=\"" + entity.getName() + "\" template=\"" + entity.getTemplate() + "\" z-index=\""
+					+ entity.getZIndex() + "\">\n";
 			for (Component component : entity.getComponents().values()) {
 				if (!component.getName().startsWith("se-")) {
 					xml += "\t\t<component template=\"" + component.getTemplateName() + "\">\n";
