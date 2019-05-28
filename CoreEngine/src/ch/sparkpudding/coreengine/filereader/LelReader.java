@@ -215,4 +215,13 @@ public class LelReader {
 	public Collection<File> getEditingSystems() {
 		return listEditingSystems;
 	}
+
+	/**
+	 * Get the directory of the LelReader
+	 * 
+	 * @return the directory containing the files
+	 */
+	public String getDirectory() {
+		return directory;
+	}
 }

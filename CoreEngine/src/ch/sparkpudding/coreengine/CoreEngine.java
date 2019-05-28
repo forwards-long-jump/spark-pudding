@@ -1014,4 +1014,13 @@ public class CoreEngine extends JPanel {
 	public int getEditingTick() {
 		return editingTick;
 	}
+	
+	/**
+	 * Get the directory of the Game
+	 * 
+	 * @return the directory containing the game
+	 */
+	public String getGameFolder() {
+		return lelFile.getDirectory();
+	}
 }
