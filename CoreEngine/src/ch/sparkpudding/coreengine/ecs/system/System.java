@@ -2,6 +2,7 @@ package ch.sparkpudding.coreengine.ecs.system;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,24 @@ public abstract class System {
 	Thread sandboxThread;
 	protected ExecutorService executor;
 	protected static final int MAX_EXECUTION_TIME_IN_SECONDS = 3;
+
+	/**
+	 * Sort sortedEntities using zIndex
+	 */
+	private void sortEntities() {
+		sortedEntities.sort(new Comparator<Pair<String, Entity>>() {
+			@Override
+			public int compare(Pair<String, Entity> arg0, Pair<String, Entity> arg1) {
+				if (arg0.second().getZIndex() > arg1.second().getZIndex()) {
+					return 1;
+				} else if (arg0.second().getZIndex() < arg1.second().getZIndex()) {
+					return -1;
+				} else {
+					return 0;
+				}
+			}
+		});
+	}
 
 	/**
 	 * Constructs the system from the Lua file
@@ -229,7 +248,7 @@ public abstract class System {
 	private void setEntityList(List<Entity> newEntities, String listName) {
 		List<String> componentList = componentGroups.get(listName);
 		List<Entity> entities = new ArrayList<Entity>();
-		
+
 		// Check entities for compatibility with system
 		for (Entity entity : newEntities) {
 			if (entity.hasComponents(componentList)) {
@@ -239,6 +258,7 @@ public abstract class System {
 		}
 
 		entityGroups.put(listName, entities);
+		sortEntities();
 	}
 
 	/**
@@ -281,6 +301,8 @@ public abstract class System {
 				entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
 			}
 		}
+
+		sortEntities();
 	}
 
 	/**
@@ -350,6 +372,7 @@ public abstract class System {
 				entityGroups.get(listName).add(entity);
 				sortedEntities.add(new Pair<String, Entity>(listName, entity));
 				addEntityGroupToGlobals(listName);
+				sortEntities();
 				// LuaTable entityGroup = (LuaTable) globals.get(entityList.getKey());
 				// TODO prevent accessing all components
 				// entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
