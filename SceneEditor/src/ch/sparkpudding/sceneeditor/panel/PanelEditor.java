@@ -210,8 +210,6 @@ public class PanelEditor extends JPanel {
 	 */
 	private CompletionProvider createCompletionProviderForSystem(System system) {
 		DefaultCompletionProvider codeCP = new DefaultCompletionProvider();
-		// List<Completion> completions = new ArrayList<Completion>();
-		// StaticLuaCompletions luaCompletions = new StaticLuaCompletions(codeCP);
 		Map<String, List<String>> componentGroups = system.getComponentGroups();
 
 		// Basic ECS completion
@@ -227,10 +225,6 @@ public class PanelEditor extends JPanel {
 				addedComponent.add(componentName);
 			}
 		}
-
-		// Basic lua completion
-		// completions.addAll(luaCompletions.getCompletions());
-		// codeCP.addCompletions(completions);
 
 		return codeCP;
 	}
