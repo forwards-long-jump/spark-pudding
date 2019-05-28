@@ -327,6 +327,7 @@ public class SceneEditor {
 		for (SystemEventListener listener : listenerList.getListeners(SystemEventListener.class)) {
 			listener.systemListChanged();
 		}
+	}
 
 	/**
 	 * Get the editor camera
