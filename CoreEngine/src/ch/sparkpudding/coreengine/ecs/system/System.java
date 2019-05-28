@@ -328,4 +328,13 @@ public abstract class System {
 			}
 		}
 	}
+
+	/**
+	 * Return the filepath of the system
+	 * 
+	 * @return the filepath of the system
+	 */
+	public String getFilepath() {
+		return filepath;
+	}
 }
