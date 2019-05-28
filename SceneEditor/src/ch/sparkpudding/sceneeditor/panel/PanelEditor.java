@@ -202,6 +202,12 @@ public class PanelEditor extends JPanel {
 		}
 	}
 
+	/**
+	 * Create the completion provider for a given system
+	 * 
+	 * @param system The system that need a completion provider
+	 * @return The completion provider for the system
+	 */
 	private CompletionProvider createCompletionProviderForSystem(System system) {
 		DefaultCompletionProvider codeCP = new DefaultCompletionProvider();
 		// List<Completion> completions = new ArrayList<Completion>();
