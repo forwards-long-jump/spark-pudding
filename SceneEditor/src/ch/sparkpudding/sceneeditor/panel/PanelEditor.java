@@ -32,6 +32,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.Completion;
+import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
@@ -43,6 +47,7 @@ import ch.sparkpudding.sceneeditor.action.ActionRemoveSystem;
 import ch.sparkpudding.sceneeditor.listener.SystemEventListener;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalSystem;
 import ch.sparkpudding.sceneeditor.utils.ButtonTabComponent;
+import ch.sparkpudding.sceneeditor.utils.luacompletion.StaticLuaCompletions;
 
 /**
  * The panel for the lua editor
@@ -147,7 +152,9 @@ public class PanelEditor extends JPanel {
 
 		try {
 			ButtonTabComponent buttonTabComponent = new ButtonTabComponent(jTabbedPane);
-			
+			CompletionProvider provider = createCompletionProviderForSystem(system);
+			AutoCompletion autoCompletion = new AutoCompletion(provider);
+
 			TextEditorPane editorPane = new TextEditorPane(TextEditorPane.INSERT_MODE, false,
 					FileLocation.create(system.getFilepath()));
 			editorPane.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_LUA);
@@ -156,7 +163,7 @@ public class PanelEditor extends JPanel {
 			editorPane.setTabSize(2);
 			editorPane.convertSpacesToTabs();
 			editorPane.addCaretListener(new CaretListener() {
-				
+
 				@Override
 				public void caretUpdate(CaretEvent e) {
 					buttonTabComponent.setDirty(editorPane.isDirty());
@@ -178,6 +185,8 @@ public class PanelEditor extends JPanel {
 				}
 			});
 
+			autoCompletion.install(editorPane);
+
 			RTextScrollPane sp = new RTextScrollPane(editorPane);
 			jTabbedPane.addTab(system.getName(), sp);
 			jTabbedPane.setSelectedIndex(jTabbedPane.getTabCount() - 1);
@@ -186,6 +195,17 @@ public class PanelEditor extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private CompletionProvider createCompletionProviderForSystem(System system) {
+		DefaultCompletionProvider provider = new DefaultCompletionProvider();
+		List<Completion> completions = new ArrayList<Completion>();
+		StaticLuaCompletions luaCompletions = new StaticLuaCompletions(provider);
+
+		completions.addAll(luaCompletions.getCompletions());
+		provider.addCompletions(completions);
+
+		return provider;
 	}
 
 	/**
