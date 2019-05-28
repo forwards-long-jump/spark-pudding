@@ -6,8 +6,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -32,6 +34,8 @@ public class PanelEntity extends JPanel {
 	private PanelComponent livePanelComponent;
 	private JTabbedPane jTabbedPane;
 	private JButton btnAddComponent;
+	private JPanel entitySettings;
+	private JTextField entityZIndex;
 
 	private SEEntity currentEntity;
 
@@ -51,10 +55,12 @@ public class PanelEntity extends JPanel {
 	 * Initialize the different element of the panel
 	 */
 	private void init() {
+		this.entitySettings = new JPanel();
 		this.initialPanelComponent = new PanelComponent();
 		this.livePanelComponent = new PanelComponent();
 		this.jTabbedPane = new JTabbedPane();
 		this.btnAddComponent = new JButton("Add component");
+		this.entityZIndex = new JTextField();
 	}
 
 	/**
@@ -63,11 +69,17 @@ public class PanelEntity extends JPanel {
 	private void setupLayout() {
 		setLayout(new BorderLayout());
 
+		entitySettings.setLayout(new BorderLayout(10, 10));
+		entitySettings.add(new JLabel("Z-Index: "), BorderLayout.WEST);
+		entitySettings.add(entityZIndex, BorderLayout.CENTER);
+
 		jTabbedPane.addTab("Initial", initialPanelComponent);
 		jTabbedPane.addTab("Live", livePanelComponent);
 
-		this.btnAddComponent.setEnabled(false);
+		entityZIndex.setEnabled(false);
+		btnAddComponent.setEnabled(false);
 
+		add(entitySettings, BorderLayout.NORTH);
 		add(jTabbedPane, BorderLayout.CENTER);
 		add(btnAddComponent, BorderLayout.SOUTH);
 
@@ -118,10 +130,12 @@ public class PanelEntity extends JPanel {
 			public void stateChanged(ChangeEvent arg0) {
 				switch (jTabbedPane.getSelectedIndex()) {
 				case 0:
-					btnAddComponent.setEnabled(SceneEditor.selectedEntity != null && SceneEditor.getGameState() == EditorState.STOP);
+					btnAddComponent.setEnabled(
+							SceneEditor.selectedEntity != null && SceneEditor.getGameState() == EditorState.STOP);
 					break;
 				case 1:
-					btnAddComponent.setEnabled(SceneEditor.selectedEntity != null && SceneEditor.getGameState() != EditorState.STOP);
+					btnAddComponent.setEnabled(
+							SceneEditor.selectedEntity != null && SceneEditor.getGameState() != EditorState.STOP);
 					break;
 				default:
 					System.err.println("Invalid selected panel");
@@ -137,11 +151,11 @@ public class PanelEntity extends JPanel {
 	 */
 	private void resetBorderTitle() {
 		if (currentEntity != null) {
-			if(currentEntity.getDefaultEntity() != null) {
+			if (currentEntity.getDefaultEntity() != null) {
 				setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getDefaultEntity().getName()));
-			}
-			else {
-				setBorder(BorderFactory.createTitledBorder(TITLE_LIVE + " — " + currentEntity.getLiveEntity().getName()));
+			} else {
+				setBorder(
+						BorderFactory.createTitledBorder(TITLE_LIVE + " — " + currentEntity.getLiveEntity().getName()));
 			}
 		} else {
 			setBorder(BorderFactory.createTitledBorder(TITLE + " — null"));
@@ -167,6 +181,7 @@ public class PanelEntity extends JPanel {
 			break;
 		}
 
+		entityZIndex.setEnabled(SceneEditor.selectedEntity != null);
 		btnAddComponent.setEnabled(SceneEditor.selectedEntity != null);
 	}
 
@@ -178,11 +193,10 @@ public class PanelEntity extends JPanel {
 	private void setEntity(SEEntity seEntity) {
 		currentEntity = seEntity;
 		// Is there a default entity ?
-		if(seEntity.getDefaultEntity() != null) {
+		if (seEntity.getDefaultEntity() != null) {
 			initialPanelComponent.setEntity(seEntity, currentEntity.getDefaultEntity());
 			this.jTabbedPane.setEnabledAt(0, true);
-		}
-		else {
+		} else {
 			this.jTabbedPane.setEnabledAt(0, false);
 		}
 
@@ -197,6 +211,12 @@ public class PanelEntity extends JPanel {
 	public void removeEntity() {
 		currentEntity = null;
 		initialPanelComponent.removeAll();
+		initialPanelComponent.invalidate();
+		initialPanelComponent.repaint();
 		livePanelComponent.removeAll();
+		livePanelComponent.invalidate();
+		livePanelComponent.repaint();
+		entityZIndex.setEnabled(false);
+		btnAddComponent.setEnabled(false);
 	}
 }
