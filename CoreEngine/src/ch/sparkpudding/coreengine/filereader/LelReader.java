@@ -101,6 +101,8 @@ public class LelReader {
 	 * @param list   List to populate
 	 */
 	private void populateList(File folder, List<File> list) {
+		list.clear();
+		
 		for (File file : folder.listFiles()) {
 			if (file.isDirectory()) {
 				populateList(file, list);
@@ -117,6 +119,8 @@ public class LelReader {
 	 * @param map    Map to populate
 	 */
 	private void populateMaps(File folder, Map<String, File> map) {
+		map.clear();
+		
 		for (File file : folder.listFiles()) {
 			if (file.isDirectory()) {
 				populateMaps(file, map);
@@ -204,6 +208,7 @@ public class LelReader {
 	 * @return system files
 	 */
 	public Collection<File> getSystems() {
+		populateList(new File(directory + "/systems"), listSystems);
 		return listSystems;
 	}
 
@@ -214,5 +219,14 @@ public class LelReader {
 	 */
 	public Collection<File> getEditingSystems() {
 		return listEditingSystems;
+	}
+
+	/**
+	 * Get the directory of the LelReader
+	 * 
+	 * @return the directory containing the files
+	 */
+	public String getDirectory() {
+		return directory;
 	}
 }
