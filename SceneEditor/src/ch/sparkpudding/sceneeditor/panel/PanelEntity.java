@@ -3,6 +3,8 @@ package ch.sparkpudding.sceneeditor.panel;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -10,11 +12,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
+import ch.sparkpudding.sceneeditor.action.ActionSetZIndex;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
@@ -124,6 +128,38 @@ public class PanelEntity extends JPanel {
 			}
 		});
 
+		entityZIndex.addFocusListener(new FocusAdapter() {
+			public void focusGained(FocusEvent e) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						entityZIndex.selectAll();
+					}
+				});
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				try {
+					int zIndex = Integer.parseInt(entityZIndex.getText());
+					new ActionSetZIndex(SceneEditor.selectedEntity, zIndex).actionPerformed(null);
+				} catch (Exception e) {
+					entityZIndex.setText(SceneEditor.selectedEntity.getLiveEntity().getZIndex() + "");
+				}
+			}
+		});
+
+		entityZIndex.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					int zIndex = Integer.parseInt(entityZIndex.getText());
+					new ActionSetZIndex(SceneEditor.selectedEntity, zIndex).actionPerformed(null);
+				} catch (Exception e) {
+					entityZIndex.setText(SceneEditor.selectedEntity.getLiveEntity().getZIndex() + "");
+				}
+			}
+		});
+
 		jTabbedPane.addChangeListener(new ChangeListener() {
 
 			@Override
@@ -200,6 +236,7 @@ public class PanelEntity extends JPanel {
 			this.jTabbedPane.setEnabledAt(0, false);
 		}
 
+		entityZIndex.setText(seEntity.getLiveEntity().getZIndex() + "");
 		livePanelComponent.setEntity(seEntity, currentEntity.getLiveEntity());
 		resetBorderTitle();
 		resetEnabledPane();

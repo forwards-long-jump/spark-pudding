@@ -730,6 +730,16 @@ public class CoreEngine extends JPanel {
 
 		getCurrentScene().add(e);
 	}
+	
+	/**
+	 * Notify all systems that a z-index has changed
+	 */
+	public void notifyZIndexChange() {
+		renderSystem.sortEntities();
+		for (UpdateSystem system : systems) {
+			system.sortEntities();
+		}
+	}
 
 	/**
 	 * Get current framerate of the game

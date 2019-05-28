@@ -67,7 +67,7 @@ public abstract class System {
 	/**
 	 * Sort sortedEntities using zIndex
 	 */
-	private void sortEntities() {
+	public void sortEntities() {
 		sortedEntities.sort(new Comparator<Pair<String, Entity>>() {
 			@Override
 			public int compare(Pair<String, Entity> arg0, Pair<String, Entity> arg1) {
