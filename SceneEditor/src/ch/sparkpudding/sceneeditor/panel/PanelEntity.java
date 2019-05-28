@@ -247,6 +247,7 @@ public class PanelEntity extends JPanel {
 	 */
 	public void removeEntity() {
 		currentEntity = null;
+		setBorder(BorderFactory.createTitledBorder(TITLE + " — null"));
 		initialPanelComponent.removeAll();
 		initialPanelComponent.invalidate();
 		initialPanelComponent.repaint();
