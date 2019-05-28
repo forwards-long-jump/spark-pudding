@@ -28,6 +28,7 @@ import ch.sparkpudding.coreengine.api.Core;
 import ch.sparkpudding.coreengine.api.Resource;
 import ch.sparkpudding.coreengine.api.Sound;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
  * Read components required by a lua script, builds a list of entities affected
@@ -41,9 +42,14 @@ public abstract class System {
 	protected String filepath;
 
 	// named lists of required components
-	private Map<String, List<String>> componentGroups;
+	protected Map<String, List<String>> componentGroups;
 	// named lists of entities having the above required components
 	private Map<String, List<Entity>> entityGroups;
+
+	// list sorted by z-index, allowing to use render
+	protected List<Pair<String, Entity>> sortedEntities;
+	// map containing lua functions (if defined) associated to a group
+	protected Map<String, LuaValue> componentGroupsLuaFunctions;
 
 	private LuaValue getRequiredComponentsMethod;
 
@@ -77,6 +83,8 @@ public abstract class System {
 		globals = new Globals();
 		componentGroups = new HashMap<String, List<String>>();
 		entityGroups = new HashMap<String, List<Entity>>();
+		sortedEntities = new ArrayList<Pair<String, Entity>>();
+		componentGroupsLuaFunctions = new HashMap<String, LuaValue>();
 		loadingFailed = false;
 
 		loadLuaLibs();
@@ -125,8 +133,7 @@ public abstract class System {
 			return true;
 		} catch (LuaError error) {
 			Lel.coreEngine.notifyGameError(error);
-		}
-		catch (Exception error) {
+		} catch (Exception error) {
 			Lel.coreEngine.notifyGameError(error);
 		}
 
@@ -146,6 +153,7 @@ public abstract class System {
 	 */
 	private void loadRequiredComponents() {
 		componentGroups.clear();
+		componentGroupsLuaFunctions.clear();
 		LuaTable list = null;
 
 		try {
@@ -205,6 +213,7 @@ public abstract class System {
 	 * @param newEntities List of entities of the new scene
 	 */
 	public void setEntities(List<Entity> newEntities) {
+		sortedEntities.clear();
 		for (String listName : componentGroups.keySet()) {
 			setEntityList(newEntities, listName);
 			addEntityGroupToGlobals(listName);
@@ -220,13 +229,15 @@ public abstract class System {
 	private void setEntityList(List<Entity> newEntities, String listName) {
 		List<String> componentList = componentGroups.get(listName);
 		List<Entity> entities = new ArrayList<Entity>();
-
+		
 		// Check entities for compatibility with system
 		for (Entity entity : newEntities) {
 			if (entity.hasComponents(componentList)) {
 				entities.add(entity);
+				sortedEntities.add(new Pair<String, Entity>(listName, entity));
 			}
 		}
+
 		entityGroups.put(listName, entities);
 	}
 
@@ -263,6 +274,7 @@ public abstract class System {
 			// Check entities for compatibility with system
 			if (entity.hasComponents(componentList.getValue())) {
 				entityGroups.get(componentList.getKey()).add(entity);
+				sortedEntities.add(new Pair<String, Entity>(componentList.getKey(), entity));
 
 				LuaTable entityGroup = (LuaTable) globals.get(componentList.getKey());
 				// TODO prevent accessing all components
@@ -287,6 +299,14 @@ public abstract class System {
 				}
 			}
 		}
+
+		for (int i = 0; i < sortedEntities.size(); i++) {
+			Pair<String, Entity> entityPair = sortedEntities.get(i);
+			if (entityPair.second() == entity) {
+				sortedEntities.remove(i);
+				i--;
+			}
+		}
 	}
 
 	/**
@@ -302,6 +322,14 @@ public abstract class System {
 				// any system which requires the removed component will remove the entity
 				entityList.getValue().remove(entity);
 				addEntityGroupToGlobals(entityList.getKey());
+			}
+		}
+
+		for (int i = 0; i < sortedEntities.size(); i++) {
+			Pair<String, Entity> entityPair = sortedEntities.get(i);
+			if (entity == entityPair.second() && componentGroups.get(entityPair.first()).contains(componentName)) {
+				sortedEntities.remove(i);
+				i--;
 			}
 		}
 	}
@@ -320,7 +348,7 @@ public abstract class System {
 			List<String> componentList = componentGroups.get(listName);
 			if (componentList.contains(componentName) && entity.hasComponents(componentGroups.get(listName))) {
 				entityGroups.get(listName).add(entity);
-
+				sortedEntities.add(new Pair<String, Entity>(listName, entity));
 				addEntityGroupToGlobals(listName);
 				// LuaTable entityGroup = (LuaTable) globals.get(entityList.getKey());
 				// TODO prevent accessing all components

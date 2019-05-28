@@ -2,6 +2,8 @@ package ch.sparkpudding.coreengine.ecs.system;
 
 import java.awt.Graphics2D;
 import java.io.File;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +19,8 @@ import ch.sparkpudding.coreengine.api.Graphics;
 
 public class RenderSystem extends System {
 	public static final String LUA_FILE_NAME = "render.lua";
-	private LuaValue renderMethod;
+	private LuaValue renderStartMethod;
+	private LuaValue renderEndMethod;
 
 	/**
 	 * Constructs the render system from its lua file
@@ -36,7 +39,8 @@ public class RenderSystem extends System {
 	protected void readMethodsFromLua() {
 		super.readMethodsFromLua();
 
-		renderMethod = globals.get("render");
+		renderStartMethod = globals.get("renderStart");
+		renderEndMethod = globals.get("renderEnd");
 	}
 
 	/**
@@ -49,6 +53,14 @@ public class RenderSystem extends System {
 		if (!loadingFailed) {
 			readMethodsFromLua();
 			loadRenderApis();
+			// Find if user declared renderXxx functions
+			for (Entry<String, List<String>> entry : componentGroups.entrySet()) {
+				LuaValue func = globals
+						.get("render" + entry.getKey().substring(0, 1).toUpperCase() + entry.getKey().substring(1));
+				if (func != LuaValue.NIL) {
+					componentGroupsLuaFunctions.put(entry.getKey(), func);
+				}
+			}
 		}
 	}
 
@@ -96,7 +108,14 @@ public class RenderSystem extends System {
 	private void sandboxedRender(Graphics2D g) {
 		try {
 			Graphics.getInstance().setGraphicalContext(g);
-			renderMethod.call();
+			renderStartMethod.call();
+			for (int i = 0; i < sortedEntities.size(); i++) {
+				LuaValue func = componentGroupsLuaFunctions.get(sortedEntities.get(i).first());
+				if(func != null) {	
+					func.call(sortedEntities.get(i).second().getLuaEntity());
+				}				
+			}
+			renderEndMethod.call();
 			Graphics.getInstance().dispose();
 		} catch (LuaError error) {
 			Lel.coreEngine.notifyGameError(error);
