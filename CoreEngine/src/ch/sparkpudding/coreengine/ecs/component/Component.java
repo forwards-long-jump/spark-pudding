@@ -66,7 +66,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 * @param component : The component to copy
 	 */
 	public Component(Component component) {
-		this.attached = true;
+		this.attached = component.attached;
 		this.name = component.name;
 		this.templateName = component.templateName;
 		this.fields = new HashMap<String, Field>();
@@ -111,6 +111,8 @@ public class Component implements Iterable<Entry<String, Field>> {
 		this(templates.get(element.getAttribute("template")));
 		this.templateName = element.getAttribute("template");
 		NodeList fields = element.getChildNodes();
+		this.attached = true;
+		
 		for (int i = 0; i < fields.getLength(); i++) {
 			Node node = fields.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {

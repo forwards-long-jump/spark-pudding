@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.Box;
@@ -27,10 +28,10 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
 /**
  * Generate the interface for the components passed in arguments. Since it
  * inherits JComponent, it can be used as one.
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
  *         Creation Date : 8 April 2019
- * 
+ *
  */
 @SuppressWarnings("serial")
 public class ComponentGenerator extends JPanel {
@@ -38,6 +39,8 @@ public class ComponentGenerator extends JPanel {
 	private JPanel contentPanel;
 	private JScrollPane jScrollPane;
 	private Collection<Component> components;
+	private List<JButton> btnsDelete;
+	private List<JButton> btnsDetachOrCopy;
 	private List<FieldGenerator> fieldGenerators;
 
 	private SEEntity seEntity;
@@ -45,12 +48,14 @@ public class ComponentGenerator extends JPanel {
 
 	/**
 	 * ctor
-	 * 
+	 *
 	 * @param components Collection of all the components of an entity
 	 */
 	public ComponentGenerator(SEEntity seEntity, Entity entity) {
 		this.components = entity.getComponents().values();
 		this.fieldGenerators = new ArrayList<FieldGenerator>();
+		this.btnsDelete = new ArrayList<JButton>();
+		this.btnsDetachOrCopy = new ArrayList<JButton>();
 
 		this.seEntity = seEntity;
 		this.entity = entity;
@@ -74,6 +79,24 @@ public class ComponentGenerator extends JPanel {
 	}
 
 	/**
+	 * Get scroll position
+	 * 
+	 * @return scroll position
+	 */
+	public int getScrollPosition() {
+		return this.jScrollPane.getVerticalScrollBar().getValue();
+	}
+
+	/**
+	 * Set scroll position
+	 * 
+	 * @param scroll position
+	 */
+	public void setScrollPosition(int value) {
+		this.jScrollPane.getVerticalScrollBar().setValue(value);
+	}
+
+	/**
 	 * Setup the layout of the panel
 	 */
 	private void setupLayout() {
@@ -87,37 +110,61 @@ public class ComponentGenerator extends JPanel {
 	 */
 	private void createComponents() {
 		removeAll();
+		List<Component> componentsToSort = new ArrayList<Component>();
 		for (Component component : components) {
 			if (!component.getName().startsWith("se-")) {
-				setupComponentsLayout(component);
+				componentsToSort.add(component);
 			}
 		}
+
+		componentsToSort.sort(new Comparator<Component>() {
+			@Override
+			public int compare(Component arg0, Component arg1) {
+				if (arg0.getName().equals("position") || arg0.getName().equals("size")) {
+					return -1;
+				}
+				if (arg1.getName().equals("position") || arg1.getName().equals("size")) {
+					return 1;
+				}
+				return arg0.getName().compareTo(arg1.getName());
+			}
+		});
+
+		for (Component component : componentsToSort) {
+			setupComponentsLayout(component);
+		}
+
 		revalidate();
 	}
 
 	/**
 	 * Create the representation of a component
-	 * 
+	 *
 	 * @param component The component to consider
 	 */
 	private void setupComponentsLayout(Component component) {
 		Box titleBar = new Box(BoxLayout.X_AXIS);
 		JLabel titleComp = new JLabel(component.getName());
 		JButton btnDelete = new JButton("Delete");
-		JButton btnDetachOrCopy;
+		JButton btnDetachOrCopy = null;
+		
+
 		boolean isLive = (seEntity.getLiveEntity() == entity);
-		if (isLive) {
-			btnDetachOrCopy = new JButton("Copy to default");
-			btnDetachOrCopy.addActionListener(
-					new ActionSetComponent("Set " + component.getName() + " fields as initial for " + entity.getName(),
-							seEntity.getDefaultEntity(), component));
-		} else {
-			if (component.isAttached()) {
-				btnDetachOrCopy = new JButton("Detach");
-				btnDetachOrCopy.addActionListener(new ActionDetach(component));
+		boolean isSpawned = seEntity.getDefaultEntity() == null; 
+		if (!isSpawned) {
+			if (isLive) {
+				btnDetachOrCopy = new JButton("Copy to default");
+				btnDetachOrCopy.addActionListener(new ActionSetComponent(
+						"Set " + component.getName() + " fields as initial for " + entity.getName(),
+						seEntity.getDefaultEntity(), component));
 			} else {
-				btnDetachOrCopy = new JButton("Attach");
-				btnDetachOrCopy.addActionListener(new ActionAttach(component));
+				if (component.isAttached()) {
+					btnDetachOrCopy = new JButton("Detach");
+					btnDetachOrCopy.addActionListener(new ActionDetach(component));
+				} else {
+					btnDetachOrCopy = new JButton("Attach");
+					btnDetachOrCopy.addActionListener(new ActionAttach(component));
+				}
 			}
 		}
 
@@ -130,16 +177,31 @@ public class ComponentGenerator extends JPanel {
 				new ActionDeleteComponent("delete component " + component.getName(), entity, component));
 
 		titleBar.add(btnDelete);
-		titleBar.add(btnDetachOrCopy);
+		
+		if(!isSpawned) {			
+			titleBar.add(btnDetachOrCopy);
+		}
+		
 		this.contentPanel.add(titleBar);
-		FieldGenerator field = new FieldGenerator(new ArrayList<Field>(component.getFields().values()), isLive || !component.isAttached());
+		FieldGenerator field = new FieldGenerator(new ArrayList<Field>(component.getFields().values()),
+				isLive || !component.isAttached());
 		this.fieldGenerators.add(field);
+		this.btnsDelete.add(btnDelete);
+		this.btnsDetachOrCopy.add(btnDetachOrCopy);
 		this.contentPanel.add(field);
 		this.contentPanel.add(new JSeparator());
 	}
-	
+
 	@Override
 	public void setEnabled(boolean enabled) {
+		for (JButton btn : btnsDelete) {
+			btn.setEnabled(enabled);
+		}
+		for (JButton btn : btnsDetachOrCopy) {
+			if(btn != null) {				
+				btn.setEnabled(enabled);
+			}
+		}
 		for (FieldGenerator fieldGenerator : fieldGenerators) {
 			fieldGenerator.setEnabled(enabled);
 		}

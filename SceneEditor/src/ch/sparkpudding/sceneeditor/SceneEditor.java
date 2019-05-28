@@ -182,11 +182,11 @@ public class SceneEditor {
 	 * @param entity to set as selected
 	 */
 	public static void setSelectedEntity(SEEntity entity) {
-		if (entity == selectedEntity) {
-			return;
-		}
-
 		if (selectedEntity != null) {
+			if (entity.getLiveEntity() == selectedEntity.getLiveEntity()) {
+				return;
+			}
+
 			selectedEntity.setSelected(false);
 		}
 
@@ -204,7 +204,7 @@ public class SceneEditor {
 	public static void setCurrentScene(SEScene newScene) {
 		currentScene = newScene;
 	}
-	
+
 	/**
 	 * Set current scene by name
 	 * 
@@ -213,7 +213,7 @@ public class SceneEditor {
 	public static void setCurrentScene(String newSceneName) {
 		currentScene = seScenes.get(newSceneName);
 	}
-	
+
 	/**
 	 * Loads and unloads scenes which differ from those of the Core Engine
 	 * 
@@ -222,12 +222,11 @@ public class SceneEditor {
 	public static void updateSeSceneList() {
 		// Add missing scenes
 		for (Scene scene : coreEngine.getScenes().values()) {
-			if (!seScenes.containsKey(scene.getName()))
-			{
+			if (!seScenes.containsKey(scene.getName())) {
 				seScenes.put(scene.getName(), new SEScene(scene));
 			}
 		}
-		
+
 		// Remove excedent scenes
 		Iterator<String> it = seScenes.keySet().iterator();
 		while (it.hasNext()) {
@@ -328,5 +327,13 @@ public class SceneEditor {
 		for (SystemEventListener listener : listenerList.getListeners(SystemEventListener.class)) {
 			listener.systemListChanged();
 		}
+
+	/**
+	 * Get the editor camera
+	 * 
+	 * @return editing camera
+	 */
+	public static Camera getEditingCamera() {
+		return camera;
 	}
 }

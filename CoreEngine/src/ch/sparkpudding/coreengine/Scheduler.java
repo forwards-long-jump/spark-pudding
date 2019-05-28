@@ -66,33 +66,29 @@ public class Scheduler {
 			e.printStackTrace();
 		}
 
+		// Add tasks
 		for (Runnable task : tasks.get(trigger)) {
 			if (object != null && task instanceof RunnableOneParameter) {
 				((RunnableOneParameter) task).setObject(object);
 			}
 			taskCopy.add(task);
 		}
+		
+		// Add notifications
+		for (Runnable task : notifications.get(trigger)) {
+			if (object != null && task instanceof RunnableOneParameter) {
+				((RunnableOneParameter) task).setObject(object);
+			}
+			taskCopy.add(task);
+		}
+		
 		tasks.get(trigger).clear();
 		semaphore.release();
 
-		// Execute all planned tasks
+		// Execute all planned tasks & notifications
 		for (Runnable task : taskCopy) {
 			task.run();
-		}
-
-		// TODO: Copy notifications if it's necessary
-		try {
-			semaphore.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		for (Runnable notif : notifications.get(trigger)) {
-			if (object != null && notif instanceof RunnableOneParameter) {
-				((RunnableOneParameter) notif).setObject(object);
-			}
-			notif.run();
-		}
-		semaphore.release();
+		}		
 	}
 
 	/**

@@ -3,6 +3,7 @@ package ch.sparkpudding.sceneeditor.panel;
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
@@ -17,7 +18,6 @@ import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
  */
 @SuppressWarnings("serial")
 public class PanelComponent extends JPanel {
-
 	private ComponentGenerator componentGenerator;
 
 	/**
@@ -40,9 +40,26 @@ public class PanelComponent extends JPanel {
 	 * @param entity The entity represented by this panel
 	 */
 	public void setEntity(SEEntity seEntity, Entity entity) {
-		removeAll();
+		final int previousScroll;
+
+		if (componentGenerator != null) {
+			previousScroll = componentGenerator.getScrollPosition();
+		} else {
+			previousScroll = 0;
+		}
+
 		componentGenerator = new ComponentGenerator(seEntity, entity);
+
+		removeAll();
+
 		add(componentGenerator, BorderLayout.CENTER);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				componentGenerator.setScrollPosition(previousScroll);
+			}
+		});
 		revalidate();
 	}
 
