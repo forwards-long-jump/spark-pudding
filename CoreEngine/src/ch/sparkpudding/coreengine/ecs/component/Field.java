@@ -132,7 +132,10 @@ public class Field {
 				try {
 					this.setValue(Double.parseDouble(value));
 				} catch (Exception e1) {
-					// don't change the value
+					// don't change the value or set it back to 0
+					if(this.value == null) {
+						this.value = 0;
+					}
 				}
 			}
 			break;

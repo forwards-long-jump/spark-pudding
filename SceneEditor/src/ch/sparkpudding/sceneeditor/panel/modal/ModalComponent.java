@@ -292,6 +292,7 @@ public class ModalComponent extends Modal {
 						try {
 							String fieldName = (String) tableFields.getModel().getValueAt(i, 0);
 							String fieldType;
+
 							if (tableFields.getModel().getValueAt(i, 1) instanceof FieldType) {
 								fieldType = ((FieldType) tableFields.getModel().getValueAt(i, 1)).name();
 							} else {
@@ -300,7 +301,15 @@ public class ModalComponent extends Modal {
 
 							String fieldValue = (String) tableFields.getModel().getValueAt(i, 2);
 
-							if (fieldName != "" && fieldType != null) {
+							if (fieldType != null && fieldName != null) {
+								if (fieldValue == null) {
+									if (fieldType.equals("STRING") || fieldType.equals("FILE_PATH")) {
+										fieldValue = "";
+									} else {
+										fieldValue = "0";
+									}
+								}
+
 								fields.put(fieldName, new Field(fieldName, fieldType, fieldValue));
 							}
 						} catch (Exception exception) {

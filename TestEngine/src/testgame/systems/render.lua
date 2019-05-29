@@ -1,11 +1,11 @@
 function getRequiredComponents()
   return {colored = {"position", "size", "color"},
-          texts = {"color", "position", "text"},
-          textured = {"position", "size", "texture"},
-          triangles = {"triangle", "size", "position", "color"}}
+    texts = {"color", "position", "text"},
+    textured = {"position", "size", "texture"},
+    triangles = {"triangle", "size", "position", "color"}}
 end
 
-function render()
+function renderStart()
   game.camera:applyTransforms(g:getContext())
   renderCount = 0
 
@@ -17,8 +17,8 @@ function render()
     p1 = {pos.x + points.dx1, pos.y + points.dy1}
     p2 = {pos.x + points.dx2, pos.y + points.dy2}
     p3 = {pos.x + points.dx3, pos.y + points.dy3}
-    
-     if game.camera:isInView(pos.x, pos.y, size.width, size.height) then
+
+    if game.camera:isInView(pos.x, pos.y, size.width, size.height) then
       renderCount = renderCount + 1
       g:setColor(game.color:fromRGB(color.r, color.g, color.b))
       g:fillPolygon({p1,p2,p3})
@@ -31,7 +31,7 @@ function render()
       pos = entity.position
       size = entity.size
       color = entity.color
-  
+
       if game.camera:isInView(pos.x, pos.y, size.width, size.height) then
         renderCount = renderCount + 1
         g:setColor(game.color:fromRGB(color.r, color.g, color.b))
@@ -50,7 +50,7 @@ function render()
     g:setColor(game.color:fromRGB(color.r, color.g, color.b))
     g:drawString(entity.text.value, pos)
   end
-  
+
   -- Rectangles with texture
   for i, entity in ipairs(textured) do
     pos = entity.position
@@ -69,4 +69,7 @@ function render()
   g:drawString("FPS: " .. game.core:getFPS(), 20, 20)
   g:drawString("EC : " .. renderCount, 20, 40)
 
+end
+
+function renderEnd()
 end

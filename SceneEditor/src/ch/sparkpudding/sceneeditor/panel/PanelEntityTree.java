@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -126,16 +129,10 @@ public class PanelEntityTree extends JPanel {
 	 */
 	private void addListener() {
 		jListEntities.addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting() && e.getSource() instanceof JList<?>
-						&& ((JList<?>) e.getSource()).getSelectedValue() instanceof SEEntity) {
-
-					SceneEditor.setSelectedEntity(((SEEntity) ((JList<?>) e.getSource()).getSelectedValue()));
-
-				} else {
-					panelEntity.removeEntity();
+				if(jListEntities.getSelectedIndex() != -1) {
+					SceneEditor.setSelectedEntity(jListEntities.getSelectedValue());					
 				}
 			}
 		});
@@ -227,14 +224,32 @@ public class PanelEntityTree extends JPanel {
 	 * @param scene The scene which contains the entities
 	 */
 	public void updateListEntities(SEScene scene) {
-		int previousIndex = jListEntities.getSelectedIndex();
+		SEEntity previousEntity = jListEntities.getSelectedValue();
 		listModelEntities.removeAllElements();
 
+		List<SEEntity> sortedEntities = new ArrayList<SEEntity>();
 		for (SEEntity entity : scene.getSEEntities()) {
+			sortedEntities.add(entity);
+		}
+
+		sortedEntities.sort(new Comparator<SEEntity>() {
+			@Override
+			public int compare(SEEntity arg0, SEEntity arg1) {
+				if (arg0.getLiveEntity().getZIndex() > arg1.getLiveEntity().getZIndex()) {
+					return -1;
+				} else if (arg0.getLiveEntity().getZIndex() < arg1.getLiveEntity().getZIndex()) {
+					return 1;
+				} else {
+					return arg0.getLiveEntity().getName().compareTo(arg1.getLiveEntity().getName());
+				}
+			}
+		});
+
+		for (SEEntity entity : sortedEntities) {
 			listModelEntities.addElement(entity);
 		}
 
-		jListEntities.setSelectedIndex(previousIndex);
+		jListEntities.setSelectedValue(previousEntity, true);
 
 		revalidate();
 	}
@@ -248,6 +263,13 @@ public class PanelEntityTree extends JPanel {
 		if (jListEntities.getSelectedValue() != entity) {
 			jListEntities.setSelectedValue(entity, true);
 		}
+	}
+
+	/**
+	 * Remove selected entity components display 
+	 */
+	public void clearSelectedEntity() {
+		panelEntity.clearTabbedPanes();
 	}
 
 }

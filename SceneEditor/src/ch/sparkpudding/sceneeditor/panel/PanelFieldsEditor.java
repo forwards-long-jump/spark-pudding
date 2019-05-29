@@ -1,4 +1,4 @@
-package ch.sparkpudding.sceneeditor.generator;
+package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +7,7 @@ import java.awt.event.FocusEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JCheckBox;
@@ -34,7 +35,7 @@ import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
  *
  */
 @SuppressWarnings("serial")
-public class FieldGenerator extends JComponent {
+public class PanelFieldsEditor extends JComponent {
 
 	private Collection<Field> fields;
 	private List<RunnableOneParameter> onFieldsChanged;
@@ -48,7 +49,7 @@ public class FieldGenerator extends JComponent {
 	 * @param fields     Collection of all the components of an entity
 	 * @param enableable Whether the component can be enabled
 	 */
-	public FieldGenerator(Collection<Field> fields, boolean enableable) {
+	public PanelFieldsEditor(Collection<Field> fields, boolean enableable) {
 		this.fields = fields;
 		this.fieldsInput = new ArrayList<JComponent>();
 		this.onFieldsChanged = new ArrayList<RunnableOneParameter>();
@@ -73,7 +74,15 @@ public class FieldGenerator extends JComponent {
 	 * <code>this.fields</code>
 	 */
 	private void createFields() {
-		for (Field field : fields) {
+		List<Field> sortedFields = new ArrayList<Field>(fields);
+		sortedFields.sort(new Comparator<Field>() {
+			@Override
+			public int compare(Field arg0, Field arg1) {
+				return arg0.getName().compareTo(arg1.getName());
+			}
+		});
+		
+		for (Field field : sortedFields) {
 			JLabel labelField = new JLabel(field.getName());
 			add(labelField);
 			add(createValueField(field, labelField));
@@ -104,31 +113,32 @@ public class FieldGenerator extends JComponent {
 			integerFormatter.setGroupingUsed(false);
 			input = new JFormattedTextField(integerFormatter);
 			((JFormattedTextField) input).setValue(field.getInt());
-			createTextFieldListener((JTextField) input, field);
+			addTextFieldListener((JTextField) input, field);
 			break;
 		case DOUBLE:
 			input = new JFormattedTextField(NumberFormat.getInstance());
 			((JFormattedTextField) input).setValue(field.getDouble());
-			createTextFieldListener((JTextField) input, field);
+			addTextFieldListener((JTextField) input, field);
 			break;
 		default: // Permits to avoid double-initialization of input.
 		case STRING:
 			input = new JTextField();
 			((JTextField) input).setText(field.getValue().toString());
-			createTextFieldListener((JTextField) input, field);
+			addTextFieldListener((JTextField) input, field);
 			break;
 		case FILE_PATH:
 			input = new JFormattedTextField();
 			((JFormattedTextField) input).setValue(field.getValue());
-			createTextFieldListener((JTextField) input, field);
+			addTextFieldListener((JTextField) input, field);
 			break;
 		case BOOLEAN:
 			input = new JCheckBox("", (boolean) field.getValue());
-			createCheckBoxListener((JCheckBox) input, field);
+			addCheckBoxListener((JCheckBox) input, field);
 			break;
 		}
 		labelField.setLabelFor(input);
 		input.setEnabled(enableable);
+
 		fieldsInput.add(input);
 		return input;
 	}
@@ -139,7 +149,7 @@ public class FieldGenerator extends JComponent {
 	 * @param input the input which contains the new value
 	 * @param field the field represented by this input
 	 */
-	private void createTextFieldListener(JTextField input, Field field) {
+	private void addTextFieldListener(JTextField input, Field field) {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {
@@ -186,12 +196,12 @@ public class FieldGenerator extends JComponent {
 	}
 
 	/**
-	 * Create the listener for a checkBox
+	 * Add the listener for a checkBox
 	 *
 	 * @param input the input which contains the new value
 	 * @param field the field represented by this input
 	 */
-	private void createCheckBoxListener(JCheckBox input, Field field) {
+	private void addCheckBoxListener(JCheckBox input, Field field) {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {

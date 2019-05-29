@@ -93,7 +93,7 @@ public class PanelScene extends JPanel {
 			public void run() {
 				if (SceneEditor.currentScene != null) {
 					SwingUtilities.invokeLater(new Runnable() {
-						
+
 						@Override
 						public void run() {
 							comboBoxScenes.setSelectedItem(((Scene) getObject()).getName());
@@ -109,7 +109,7 @@ public class PanelScene extends JPanel {
 			public void run() {
 				SceneEditor.updateSeSceneList();
 				SwingUtilities.invokeLater(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						populateComboBox(SceneEditor.seScenes);
@@ -140,8 +140,13 @@ public class PanelScene extends JPanel {
 					buttonRemoveScene.setEnabled(alterable);
 
 					SEScene newScene = SceneEditor.seScenes.get(selected);
+
 					// Change scene if it exists
 					if (newScene != null) {
+						if (newScene != SceneEditor.currentScene) {
+							panelEntityTree.clearSelectedEntity();
+						}
+
 						SceneEditor.setCurrentScene(newScene);
 						SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
 						panelEntityTree.updateListEntities(newScene);
@@ -172,7 +177,7 @@ public class PanelScene extends JPanel {
 		});
 
 	}
-	
+
 	private void populateComboBox(Map<String, SEScene> seScenes) {
 		Scene lastScene = SceneEditor.coreEngine.getCurrentScene();
 

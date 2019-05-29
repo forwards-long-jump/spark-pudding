@@ -1,6 +1,8 @@
 package ch.sparkpudding.coreengine.ecs.system;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -48,6 +50,10 @@ public class UpdateSystem extends System {
 
 		updateMethod = globals.get("update");
 		isPausableMethod = globals.get("isPausable");
+
+		if (updateMethod.isnil()) {
+			updateMethod = null;
+		}
 	}
 
 	/**
@@ -67,6 +73,15 @@ public class UpdateSystem extends System {
 			}
 
 			loadUpdateApis();
+
+			// Find if user declared updateXxx functions
+			for (Entry<String, List<String>> entry : componentGroups.entrySet()) {
+				LuaValue func = globals
+						.get("update" + entry.getKey().substring(0, 1).toUpperCase() + entry.getKey().substring(1));
+				if (func != LuaValue.NIL) {
+					componentGroupsLuaFunctions.put(entry.getKey(), func);
+				}
+			}
 		}
 	}
 
@@ -91,7 +106,16 @@ public class UpdateSystem extends System {
 	 */
 	private void sandboxedUpdate() {
 		try {
-			updateMethod.call();
+			for (int i = 0; i < sortedEntities.size(); i++) {
+				LuaValue func = componentGroupsLuaFunctions.get(sortedEntities.get(i).first());
+				if (func != null) {
+					func.call(sortedEntities.get(i).second().getLuaEntity());
+				}
+			}
+
+			if (updateMethod != null) {
+				updateMethod.call();
+			}
 		} catch (LuaError error) {
 			Lel.coreEngine.notifyGameError(error);
 		} catch (StackOverflowError error) {

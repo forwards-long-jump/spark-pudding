@@ -43,8 +43,8 @@ public class ActionSetComponent extends AbstractAction {
 			@Override
 			public void run() {
 				previousComponent = entity.getComponents().get(component.getName());
-				entity.remove(component.getName());
-				entity.add(new Component(component));
+				entity.removeComponent(component.getName());
+				entity.addComponent(new Component(component));
 			}
 		});
 		return true;
@@ -59,9 +59,9 @@ public class ActionSetComponent extends AbstractAction {
 
 			@Override
 			public void run() {
-				SceneEditor.coreEngine.removeComponent(entity, component.getName());
+				SceneEditor.coreEngine.deleteComponent(entity, component.getName());
 				if (previousComponent != null) {
-					entity.add(previousComponent);
+					entity.addComponent(previousComponent);
 					// This below *may* be useful but at the moment it will just spawn a lifeless
 					// entity and we don't want to spawn defaults entities
 					// SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);

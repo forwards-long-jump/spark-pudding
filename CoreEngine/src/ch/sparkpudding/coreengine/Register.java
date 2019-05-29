@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ch.sparkpudding.coreengine.ecs.component.Field;
 
+// TODO: Implement this class in an API, use a singleton and fix it
 /**
  * Owns a map of persistent data to be used at the user's discretion in systems.
  * 

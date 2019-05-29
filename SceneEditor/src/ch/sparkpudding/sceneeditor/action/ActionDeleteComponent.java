@@ -41,7 +41,7 @@ public class ActionDeleteComponent extends AbstractAction {
 
 			@Override
 			public void run() {
-				SceneEditor.coreEngine.removeComponent(entity, component.getName());
+				SceneEditor.coreEngine.deleteComponent(entity, component.getName());
 				SwingUtilities.invokeLater(new Runnable() {
 					
 					@Override
@@ -63,7 +63,7 @@ public class ActionDeleteComponent extends AbstractAction {
 
 			@Override
 			public void run() {
-				entity.add(component);
+				entity.addComponent(component);
 				SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);
 				SwingUtilities.invokeLater(new Runnable() {
 					
