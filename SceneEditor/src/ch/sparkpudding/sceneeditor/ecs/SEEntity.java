@@ -70,7 +70,7 @@ public class SEEntity {
 			SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
-					if (getLiveEntity().add("se-selected")) {
+					if (getLiveEntity().addComponent("se-selected")) {
 						SceneEditor.coreEngine.notifySystemsOfNewComponent(getLiveEntity(), getLiveEntity().getComponents().get("se-selected"));
 					}
 				}
@@ -79,7 +79,7 @@ public class SEEntity {
 			SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
-					SceneEditor.coreEngine.removeComponent(getLiveEntity(), "se-selected");
+					SceneEditor.coreEngine.deleteComponent(getLiveEntity(), "se-selected");
 				}
 			});
 		}

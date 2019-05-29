@@ -68,6 +68,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public Entity(Entity entity) {
 		this(entity.name, entity.template, entity.zIndex, new HashMap<String, Component>());
+		
 		// copy components
 		this.components = new HashMap<String, Component>();
 		for (Component component : entity.getComponents().values()) {
@@ -88,7 +89,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		Element entityElement = document.getDocumentElement();
 
 		this.name = entityElement.getAttribute("name");
-		this.template = null;
+		this.template = this.name;
 
 		String zindex = entityElement.getAttribute("z-index");
 		if (zindex.length() > 0) {
@@ -103,7 +104,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 			Node node = componentsXML.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element componentElement = (Element) componentsXML.item(i);
-				this.add(new Component(componentElement));
+				this.addComponent(new Component(componentElement));
 			}
 		}
 	}
@@ -126,13 +127,13 @@ public class Entity implements Iterable<Entry<String, Component>> {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element componentElement = (Element) components.item(i);
 				if (componentElement.hasAttribute("delete")) {
-					this.remove(componentElement.getAttribute("template"));
+					this.removeComponent(componentElement.getAttribute("template"));
 				} else {
 					// Either edit or add this component
 					// Since this.remove does nothing on inexistent names,
 					// we can just remove and add anew
-					this.remove(componentElement.getAttribute("template"));
-					this.add(new Component(componentElement));
+					this.removeComponent(componentElement.getAttribute("template"));
+					this.addComponent(new Component(componentElement));
 				}
 			}
 		}
@@ -152,7 +153,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * 
 	 * @param c Component to be added
 	 */
-	public void add(Component c) {
+	public void addComponent(Component c) {
 		components.put(c.getName(), c);
 
 		Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED, new Pair<Entity, Component>(this, c));
@@ -167,10 +168,10 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * @param componentName the name of the component
 	 * @return true if the component was added
 	 */
-	public boolean add(String componentName) {
+	public boolean addComponent(String componentName) {
 		Component component = Component.getTemplates().get(componentName);
 		if (component != null && !components.containsKey(componentName)) {
-			add(component);
+			addComponent(component);
 
 			// update luaEntity
 			createLuaEntity();
@@ -186,7 +187,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * @param name Name of the component to be removed
 	 * @return true if the component was removed
 	 */
-	public boolean remove(String name) {
+	public boolean removeComponent(String name) {
 		if (components.containsKey(name)) {
 			components.remove(name);
 
@@ -222,6 +223,15 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public void setZIndex(int zIndex) {
 		this.zIndex = zIndex;
+	}
+	
+	/**
+	 * Sets the name
+	 * 
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

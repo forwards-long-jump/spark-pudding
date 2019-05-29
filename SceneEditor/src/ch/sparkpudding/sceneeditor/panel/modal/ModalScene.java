@@ -29,8 +29,6 @@ public class ModalScene extends Modal {
 
 	/**
 	 * ctor
-	 * 
-	 * @param parent Component to block while the modal is active
 	 */
 	public ModalScene() {
 		super(SceneEditor.frameSceneEditor, "New scene", true);

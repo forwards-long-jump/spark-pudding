@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,10 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
@@ -106,7 +103,11 @@ public class CoreEngine extends JPanel {
 		editingRenderSystem = loadSystemsFromFiles(editingSystems, lelFile.getEditingSystems());
 
 		startGame();
-		setCurrentScene(scenes.get("main"));
+		try {
+			setCurrentScene(scenes.get("main"));
+		} catch (Exception e) {
+			notifyErrorAndClose("Could not find main scene.");
+		}
 	}
 
 	/**
@@ -145,6 +146,11 @@ public class CoreEngine extends JPanel {
 
 		systems = new ArrayList<UpdateSystem>();
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
+
+		if (renderSystem == null) {
+			setEditingPause(true);
+			notifyErrorAndClose("No render system found. Make sure to create at least one system named render.lua");
+		}
 	}
 
 	/**
@@ -172,60 +178,73 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Populates scenes list with scene files
-	 *
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
 	 */
-	private void populateScenes() throws ParserConfigurationException, SAXException, IOException {
+	private void populateScenes() {
 		scenes = new HashMap<String, Scene>();
 
 		for (File xmlFile : lelFile.getScenesXML()) {
-			Scene scene = new Scene(XMLParser.parse(xmlFile));
-			addScene(scene.getName(), scene);
+			try {
+				Scene scene = new Scene(XMLParser.parse(xmlFile));
+				addScene(scene.getName(), scene);
+			} catch (Exception e) {
+				notifyErrorAndClose("The following error occured while parsing " + xmlFile + "\n\n" + e.getMessage());
+			}
+		}
+
+		if (scenes.size() == 0) {
+			notifyErrorAndClose("No scenes found. Please create at least one scene named main.xml");
 		}
 	}
 
 	/**
 	 * Populates entity templates list with entity template files
-	 *
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
 	 */
-	private void populateEntityTemplates() throws ParserConfigurationException, SAXException, IOException {
+	private void populateEntityTemplates() {
 		for (File xmlFile : lelFile.getEntityTemplatesXML()) {
-			Entity e = new Entity(XMLParser.parse(xmlFile));
-			Entity.addTemplate(e);
+			try {
+				Entity e = new Entity(XMLParser.parse(xmlFile));
+				Entity.addTemplate(e);
+			} catch (Exception e) {
+				notifyErrorAndClose("The following error occured while parsing " + xmlFile + "\n\n" + e.getMessage());
+			}
+		}
+
+		if (Entity.getTemplates().size() == 0) {
+			notifyErrorAndClose("No entity templates found. Please create at least one entity template.");
 		}
 	}
 
 	/**
 	 * Populates component templates list with component template files
-	 *
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
 	 */
-	private void populateComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
+	private void populateComponentTemplates() {
 		for (File xmlFile : lelFile.getComponentsXML()) {
-			Component c = new Component(XMLParser.parse(xmlFile));
-			Component.addTemplate(c);
+			try {
+				Component c = new Component(XMLParser.parse(xmlFile));
+				Component.addTemplate(c);
+			} catch (Exception e) {
+				notifyErrorAndClose("The following error occured while parsing " + xmlFile + "\n\n" + e.getMessage());
+			}
+		}
+
+		if (Component.getTemplates().size() == 0) {
+			notifyErrorAndClose("No component templates found. Please create at least one template.");
 		}
 	}
 
 	/**
 	 * Populates component templates list with component template files <br>
 	 * TODO: Merge this function and the one above
-	 *
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
 	 */
-	private void populateEditingComponentTemplates() throws ParserConfigurationException, SAXException, IOException {
+	private void populateEditingComponentTemplates() {
 		for (File xmlFile : lelFile.getEditingComponentsXML()) {
-			Component c = new Component(XMLParser.parse(xmlFile));
-			Component.addTemplate(c);
+			try {
+				Component c = new Component(XMLParser.parse(xmlFile));
+				Component.addTemplate(c);
+			} catch (Exception e) {
+				notifyErrorAndClose("The following error occured while parsing " + xmlFile + "\n\n" + e.getMessage());
+			}
+
 		}
 	}
 
@@ -312,7 +331,7 @@ public class CoreEngine extends JPanel {
 	public void clearError() {
 		gameError = null;
 	}
-	
+
 	/**
 	 * Reload systems from disk, live
 	 */
@@ -421,7 +440,7 @@ public class CoreEngine extends JPanel {
 	 * 
 	 * @param name Name of the scene
 	 */
-	public void removeScene(String name) {
+	public void deleteScene(String name) {
 		if (currentScene.getName().equals(name)) {
 			scheduler.schedule(Trigger.GAME_LOOP_START, new Runnable() {
 
@@ -518,7 +537,9 @@ public class CoreEngine extends JPanel {
 			system.setEntities(newScene.getEntities());
 		}
 
-		renderSystem.setEntities(newScene.getEntities());
+		if (renderSystem != null) {
+			renderSystem.setEntities(newScene.getEntities());
+		}
 
 		if (editingSystems != null) {
 			for (UpdateSystem system : editingSystems) {
@@ -591,7 +612,9 @@ public class CoreEngine extends JPanel {
 
 		AffineTransform gameTransformationState = g2d.getTransform();
 		fps++;
-		renderSystem.render(g2d);
+		if (renderSystem != null) {
+			renderSystem.render(g2d);
+		}
 
 		if (editingPause && editingRenderSystem != null) {
 			g2d.setTransform(gameTransformationState);
@@ -707,6 +730,24 @@ public class CoreEngine extends JPanel {
 	public ResourceLocator getResourceLocator() {
 		return resourceLocator;
 	}
+	
+	/**
+	 * Getter for the renderSystem
+	 * 
+	 * @return The renderSystem
+	 */
+	public RenderSystem getRenderSystems() {
+		return renderSystem;
+	}
+
+	/**
+	 * Getter for the different systems
+	 * 
+	 * @return The list of system
+	 */
+	public List<UpdateSystem> getSystems() {
+		return systems;
+	}
 
 	/**
 	 * Add an entity to current scene and notify systems
@@ -728,7 +769,17 @@ public class CoreEngine extends JPanel {
 			}
 		}
 
-		getCurrentScene().add(e);
+		getCurrentScene().addEntity(e);
+	}
+	
+	/**
+	 * Notify all systems that a z-index has changed
+	 */
+	public void notifyZIndexChange() {
+		renderSystem.sortEntities();
+		for (UpdateSystem system : systems) {
+			system.sortEntities();
+		}
 	}
 
 	/**
@@ -750,7 +801,7 @@ public class CoreEngine extends JPanel {
 			system.tryRemove(entity);
 		}
 		renderSystem.tryRemove(entity);
-		currentScene.remove(entity);
+		currentScene.removeEntity(entity);
 
 		if (editingSystems != null) {
 			for (UpdateSystem system : editingSystems) {
@@ -763,14 +814,23 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * Delete a default entity
+	 * 
+	 * @param defaultEntity Default entity to be deleted
+	 */
+	public void deleteDefaultEntity(Entity entity) {
+		currentScene.removeDefaultEntity(entity);
+	}
+
+	/**
 	 * Removes the named component from the entity, and removes the entity from
 	 * systems where it is no longer needed
 	 *
 	 * @param entity        Entity to work on
 	 * @param componentName Name of the component to remove
 	 */
-	public void removeComponent(Entity entity, String componentName) {
-		if (entity.remove(componentName)) {
+	public void deleteComponent(Entity entity, String componentName) {
+		if (entity.removeComponent(componentName)) {
 			for (UpdateSystem system : systems) {
 				system.notifyRemovedComponent(entity, componentName);
 			}
@@ -948,8 +1008,6 @@ public class CoreEngine extends JPanel {
 	public void notifyGameError(Exception exception) {
 		// We only display the first error encountered so we can fix it first
 		if (this.gameError == null) {
-			exception.printStackTrace();
-
 			scheduler.schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {
@@ -959,6 +1017,16 @@ public class CoreEngine extends JPanel {
 			});
 
 		}
+	}
+
+	/**
+	 * Notify about a critical error and close the app
+	 * 
+	 * @param string message to show
+	 */
+	public void notifyErrorAndClose(String string) {
+		JOptionPane.showMessageDialog(this, string, "A fatal error occured", JOptionPane.ERROR_MESSAGE);
+		System.exit(1);
 	}
 
 	/**
@@ -986,5 +1054,14 @@ public class CoreEngine extends JPanel {
 	 */
 	public int getEditingTick() {
 		return editingTick;
+	}
+	
+	/**
+	 * Get the directory of the Game
+	 * 
+	 * @return the directory containing the game
+	 */
+	public String getGameFolder() {
+		return lelFile.getDirectory();
 	}
 }

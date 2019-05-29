@@ -12,10 +12,10 @@ function update()
   local dx = 0
   local dy = 0
   -- TODO: Reset camera position / scaling / move to selected entity / etc...
-  game.camera:setMode("NO_FOLLOW")
 
   -- Handle moving camera with left click
   if game.input:isMouseButtonDown(3) then
+    game.camera:setMode("NO_FOLLOW")
     if firstMousePressedTick then
       firstMousePressedTick = false
       sceneX = game.camera:getX() / game.camera:getScaling()
@@ -30,6 +30,7 @@ function update()
 
   -- Handle zooming
   if game.input:getMouseWheelRotation() ~= 0 then
+    game.camera:setMode("NO_FOLLOW")
     game.camera:setSmoothScaleSpeedCoeff(0.5)
     game.camera:setScalingPoint(game.input:getUIMouseX(), game.input:getUIMouseY())
     scaling = scaling * (1 - game.input:getMouseWheelRotation() * 0.15)
@@ -60,8 +61,6 @@ function update()
     game.camera:setMode("SMOOTH")
     game.camera:setTargetPosition(game.camera:getX() + dx * (game.camera:getScaling() * 1.2), game.camera:getY()
       + dy * (game.camera:getScaling() * 1.2))
-  else
-    game.camera:setMode("NO_FOLLOW")
   end
 
 

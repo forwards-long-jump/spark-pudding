@@ -17,9 +17,9 @@ import ch.sparkpudding.coreengine.utils.Lua;
 
 /**
  * Represents settings (key-value pairs) that can be attached to an entity
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
- * 
+ *
  */
 public class Component implements Iterable<Entry<String, Field>> {
 
@@ -32,13 +32,16 @@ public class Component implements Iterable<Entry<String, Field>> {
 	private String templateName;
 	private Map<String, Field> fields;
 
+	private boolean attached;
+
 	/**
 	 * Create an empty component with a reference on it's template
-	 * 
+	 *
 	 * @param name     : A unique name per component
 	 * @param template : The component template
 	 */
 	public Component(String name, String template) {
+		this.attached = true;
 		this.name = name;
 		this.templateName = template;
 		this.fields = new HashMap<String, Field>();
@@ -46,11 +49,12 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Template component constructor
-	 * 
+	 *
 	 * @param name   : A unique name per component
 	 * @param fields : The components fields
 	 */
 	public Component(String name, Map<String, Field> fields) {
+		this.attached = true;
 		this.name = name;
 		this.fields = fields;
 		this.templateName = name;
@@ -58,10 +62,11 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Copy constructor
-	 * 
+	 *
 	 * @param component : The component to copy
 	 */
 	public Component(Component component) {
+		this.attached = component.attached;
 		this.name = component.name;
 		this.templateName = component.templateName;
 		this.fields = new HashMap<String, Field>();
@@ -72,13 +77,14 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Create a component from a parsed XML Document and populate its fields.
-	 * 
+	 *
 	 * Note that if a document is to describe a component, then this component must
 	 * be a template.
-	 * 
+	 *
 	 * @param document A properly formated Document to get fields from
 	 */
 	public Component(Document document) {
+		this.attached = true;
 		this.fields = new HashMap<String, Field>();
 		this.name = document.getDocumentElement().getAttribute("name");
 		this.templateName = this.name;
@@ -87,6 +93,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 		for (int i = 0; i < fields.getLength(); i++) {
 			Node node = fields.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				this.attached = false;
 				Element fieldElement = (Element) fields.item(i);
 				this.fields.put(fieldElement.getAttribute("name"), new Field(fieldElement.getAttribute("name"),
 						fieldElement.getAttribute("type"), fieldElement.getTextContent()));
@@ -97,16 +104,19 @@ public class Component implements Iterable<Entry<String, Field>> {
 	/**
 	 * Create a component from a template, and adds changes described in the XML
 	 * element
-	 * 
+	 *
 	 * @param element A properly formatted XML element describing the component
 	 */
 	public Component(Element element) {
 		this(templates.get(element.getAttribute("template")));
 		this.templateName = element.getAttribute("template");
 		NodeList fields = element.getChildNodes();
+		this.attached = true;
+		
 		for (int i = 0; i < fields.getLength(); i++) {
 			Node node = fields.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				this.attached = false;
 				Element fieldElement = (Element) fields.item(i);
 				this.fields.get(fieldElement.getAttribute("name")).setValueFromString(fieldElement.getTextContent());
 			}
@@ -115,7 +125,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Add a field to this component
-	 * 
+	 *
 	 * @param field Field to add, name must not already exists
 	 */
 	public void addField(Field field) {
@@ -128,7 +138,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Fields getter
-	 * 
+	 *
 	 * @return Map<String, Field> containing all fields
 	 */
 	public Map<String, Field> getFields() {
@@ -142,7 +152,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Name getter
-	 * 
+	 *
 	 * @return name of the component
 	 */
 	public String getName() {
@@ -151,7 +161,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Get component templates
-	 * 
+	 *
 	 * @return Associative array name => component
 	 */
 	public static Map<String, Component> getTemplates() {
@@ -160,7 +170,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Add component template
-	 * 
+	 *
 	 * @param template Component template to add
 	 */
 	public static void addTemplate(Component template) {
@@ -169,7 +179,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Return the template name of this component
-	 * 
+	 *
 	 * @return
 	 */
 	public String getTemplateName() {
@@ -178,7 +188,7 @@ public class Component implements Iterable<Entry<String, Field>> {
 
 	/**
 	 * Convert this entity to a Luatable in the form of component.field
-	 * 
+	 *
 	 * @return Luatable in the form of component.field
 	 */
 	public LuaValue coerceToLua() {
@@ -192,6 +202,31 @@ public class Component implements Iterable<Entry<String, Field>> {
 		}
 
 		metatableSetterMethod.call(componentLua);
-		return componentLua;	
+		return componentLua;
+	}
+
+	/**
+	 * Return attached
+	 *
+	 * @return is attached
+	 */
+	public boolean isAttached() {
+		return attached;
+	}
+
+	/**
+	 * Set whether the component is attached</br>
+	 * Setting this to true also resets the fields to the default values
+	 *
+	 * @param attached attached
+	 */
+	public void setAttached(boolean attached) {
+		this.attached = attached;
+		if (attached) {
+			// reset the values according to the template
+			for (Field field : fields.values()) {
+				field.setValue(templates.get(name).getField(field.getName()).getValue());
+			}
+		}
 	}
 }

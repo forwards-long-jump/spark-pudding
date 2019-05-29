@@ -62,7 +62,7 @@ public class Scene {
 			Node node = entities.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element entityElement = (Element) entities.item(i);
-				this.add(new Entity(entityElement));
+				this.addEntity(new Entity(entityElement));
 				this.addDefault(new Entity(entityElement));
 			}
 		}
@@ -75,7 +75,7 @@ public class Scene {
 	 * 
 	 * @param e Entity to add
 	 */
-	public void add(Entity e) {
+	public void addEntity(Entity e) {
 		entities.add(e);
 	}
 
@@ -123,8 +123,17 @@ public class Scene {
 	 * 
 	 * @param e Entity to remove
 	 */
-	public void remove(Entity e) {
+	public void removeEntity(Entity e) {
 		entities.remove(e);
+	}
+	
+	/**
+	 * Removes a default entity from the scene
+	 * 
+	 * @param e Default entity to remove
+	 */
+	public void removeDefaultEntity(Entity e) {
+		defaultEntities.remove(e);
 	}
 
 	/**

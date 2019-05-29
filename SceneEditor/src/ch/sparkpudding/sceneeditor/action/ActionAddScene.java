@@ -56,7 +56,7 @@ public class ActionAddScene extends AbstractAction {
 			@Override
 			public void run() {
 				SceneEditor.coreEngine.setScene("main");
-				SceneEditor.coreEngine.removeScene(scene.getName());
+				SceneEditor.coreEngine.deleteScene(scene.getName());
 			}
 		});
 	}

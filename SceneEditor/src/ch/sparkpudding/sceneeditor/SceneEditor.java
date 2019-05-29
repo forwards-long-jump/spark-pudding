@@ -1,6 +1,7 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -16,6 +17,7 @@ import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.EntityEventListener;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
+import ch.sparkpudding.sceneeditor.listener.SystemEventListener;
 
 /**
  * The heart of the SceneEditor, emerged after a 40 min fight
@@ -34,6 +36,7 @@ public class SceneEditor {
 	public static Map<String, SEScene> seScenes;
 	public static SEScene currentScene;
 	public static SEEntity selectedEntity;
+	public static SEEntity clipboardEntity;
 
 	private static EventListenerList listenerList;
 
@@ -104,7 +107,7 @@ public class SceneEditor {
 	 * Create the entity list for all scenes and update the display must be called
 	 * in sync in the core engine
 	 */
-	private static void createEntityList() {
+	public static void createEntityList() {
 		Map<String, Scene> scenes = coreEngine.getScenes();
 		seScenes.clear();
 		for (Scene scene : scenes.values()) {
@@ -136,17 +139,18 @@ public class SceneEditor {
 		// Change black bar color to indicate scene camera
 		coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
 
-		gameCamera = SceneEditor.coreEngine.getCamera();
+		gameCamera = coreEngine.getCamera();
 
 		// SMOOOOTH MC GROOOVE
-		camera.setScaling(gameCamera.getScaling());
-		camera.setTargetScaling(gameCamera.getScaling() * 0.9f);
-		camera.setSmoothScaleSpeedCoeff(0.1f);
-		camera.setScalingPoint(gameCamera.getScalingPoint());
+		camera.setTranslateMode(Mode.NO_FOLLOW);
 		camera.setPosition(gameCamera.getPosition().getX(), gameCamera.getPosition().getY());
 		camera.setTargetToPosition();
+		camera.setScalingPoint(new Point2D.Double(coreEngine.getGameWidth() / 2, coreEngine.getGameHeight() / 2));
+		camera.setSmoothScaleSpeedCoeff(0.1f);
+		camera.setScaling(gameCamera.getScaling());
+		camera.setTargetScaling(gameCamera.getScaling() * 0.9f);
 
-		SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+		coreEngine.getCurrentScene().setCamera(camera);
 	}
 
 	/**
@@ -169,8 +173,8 @@ public class SceneEditor {
 
 		// We allow ourselves to touch the player camera if it's set to reset itself
 		if (gameCamera.getTranslateMode() != Mode.INSTANT || gameCamera.getTranslateMode() != Mode.NO_FOLLOW) {
-			gameCamera.setPosition(camera.getPosition().getX(), camera.getPosition().getY());
 			gameCamera.setScaling(camera.getScaling());
+			gameCamera.setPosition(camera.getPosition().getX(), camera.getPosition().getY());
 		}
 		SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
 	}
@@ -181,11 +185,11 @@ public class SceneEditor {
 	 * @param entity to set as selected
 	 */
 	public static void setSelectedEntity(SEEntity entity) {
-		if (entity == selectedEntity) {
-			return;
-		}
-
 		if (selectedEntity != null) {
+			if (entity.getLiveEntity() == selectedEntity.getLiveEntity()) {
+				return;
+			}
+
 			selectedEntity.setSelected(false);
 		}
 
@@ -203,7 +207,7 @@ public class SceneEditor {
 	public static void setCurrentScene(SEScene newScene) {
 		currentScene = newScene;
 	}
-	
+
 	/**
 	 * Set current scene by name
 	 * 
@@ -212,7 +216,7 @@ public class SceneEditor {
 	public static void setCurrentScene(String newSceneName) {
 		currentScene = seScenes.get(newSceneName);
 	}
-	
+
 	/**
 	 * Loads and unloads scenes which differ from those of the Core Engine
 	 * 
@@ -221,12 +225,11 @@ public class SceneEditor {
 	public static void updateSeSceneList() {
 		// Add missing scenes
 		for (Scene scene : coreEngine.getScenes().values()) {
-			if (!seScenes.containsKey(scene.getName()))
-			{
+			if (!seScenes.containsKey(scene.getName())) {
 				seScenes.put(scene.getName(), new SEScene(scene));
 			}
 		}
-		
+
 		// Remove excedent scenes
 		Iterator<String> it = seScenes.keySet().iterator();
 		while (it.hasNext()) {
@@ -293,11 +296,57 @@ public class SceneEditor {
 	}
 
 	/**
-	 * Allow to fire an event when the selected entity change
+	 * Allow to fire an event when the entity list change
 	 */
 	public static void fireEntityListChanged() {
 		for (EntityEventListener listener : listenerList.getListeners(EntityEventListener.class)) {
 			listener.entityListChanged(seScenes);
 		}
+	}
+	
+	/**
+	 * Add a system listener
+	 *
+	 * @param evtListener the listener
+	 */
+	public static void addSystemEventListener(SystemEventListener evtListener) {
+		listenerList.add(SystemEventListener.class, evtListener);
+	}
+
+	/**
+	 * Remove a system listener
+	 *
+	 * @param evtListener the listener to remove
+	 * @return {@code true} if the event exist
+	 */
+	public static void removeSystemEventListener(SystemEventListener evtListener) {
+		listenerList.remove(SystemEventListener.class, evtListener);
+	}
+	
+	/**
+	 * Allow to fire an event when the system list change
+	 */
+	public static void fireSystemListChanged() {
+		for (SystemEventListener listener : listenerList.getListeners(SystemEventListener.class)) {
+			listener.systemListChanged();
+		}
+	}
+
+	/**
+	 * Get the editor camera
+	 * 
+	 * @return editing camera
+	 */
+	public static Camera getEditingCamera() {
+		return camera;
+	}
+
+	/**
+	 * Get game camera
+	 * 
+	 * @return game camera
+	 */
+	public static Camera getGameCamera() {
+		return gameCamera;
 	}
 }

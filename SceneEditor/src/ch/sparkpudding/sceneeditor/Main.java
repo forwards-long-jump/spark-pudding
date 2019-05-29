@@ -1,7 +1,8 @@
 package ch.sparkpudding.sceneeditor;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import java.nio.file.Paths;
+import java.util.Locale;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -21,6 +22,9 @@ public class Main {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 
+		// Set the default locale to english because everything is in english
+		Locale.setDefault(Locale.ENGLISH);
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e1) {
@@ -37,47 +41,11 @@ public class Main {
 			e1.printStackTrace();
 		}
 
-		String gamePath;
-		while (true) {
-			if (args.length > 0) {
-				gamePath = args[0];
-			} else {
-				JFileChooser fileChooser = new JFileChooser();
-				LelWriter lel = new LelWriter();
-				// TODO :When passing to .lel files, uncomment the next two lines and remove the
-				// next uncommented line.
-				// fc.setAcceptAllFileFilterUsed(false);
-				// fc.addChoosableFileFilter(FileChooserUtils.getFilter());
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-				if (1 == 1) {
-					int returnVal = fileChooser.showOpenDialog(null);
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						gamePath = fileChooser.getSelectedFile().getAbsolutePath();
-					} else
-						return;
-				} else {
-					int returnVal = fileChooser.showSaveDialog(SceneEditor.frameSceneEditor);
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						gamePath = fileChooser.getSelectedFile().getAbsolutePath();
-					} else
-						return;
-					lel.create(gamePath + "/");
-				}
-
-				
-
-			}
-			try {
-				SceneEditor.coreEngine = new CoreEngine(gamePath, Main.class.getResource("/leleditor").getPath());
-				break;
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "The selected file is not valid");
-				if (args.length > 0)
-					return;
-				e.printStackTrace();
-			}
-
+		try {
+			SceneEditor.coreEngine = new CoreEngine(Paths.get(Main.class.getResource("/emptygame").toURI()).toString(),
+					Paths.get(Main.class.getResource("/leleditor").toURI()).toString());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		SceneEditor.gamePath = gamePath;
 

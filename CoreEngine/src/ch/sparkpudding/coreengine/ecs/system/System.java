@@ -2,6 +2,7 @@ package ch.sparkpudding.coreengine.ecs.system;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import ch.sparkpudding.coreengine.api.Core;
 import ch.sparkpudding.coreengine.api.Resource;
 import ch.sparkpudding.coreengine.api.Sound;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.coreengine.utils.Pair;
 
 /**
  * Read components required by a lua script, builds a list of entities affected
@@ -39,11 +41,17 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
  */
 public abstract class System {
 	protected String filepath;
+	private String name;
 
 	// named lists of required components
-	private Map<String, List<String>> componentGroups;
+	protected Map<String, List<String>> componentGroups;
 	// named lists of entities having the above required components
 	private Map<String, List<Entity>> entityGroups;
+
+	// list sorted by z-index, allowing to use render
+	protected List<Pair<String, Entity>> sortedEntities;
+	// map containing lua functions (if defined) associated to a group
+	protected Map<String, LuaValue> componentGroupsLuaFunctions;
 
 	private LuaValue getRequiredComponentsMethod;
 
@@ -58,12 +66,31 @@ public abstract class System {
 	protected static final int MAX_EXECUTION_TIME_IN_SECONDS = 3;
 
 	/**
+	 * Sort sortedEntities using zIndex
+	 */
+	public void sortEntities() {
+		sortedEntities.sort(new Comparator<Pair<String, Entity>>() {
+			@Override
+			public int compare(Pair<String, Entity> arg0, Pair<String, Entity> arg1) {
+				if (arg0.second().getZIndex() > arg1.second().getZIndex()) {
+					return 1;
+				} else if (arg0.second().getZIndex() < arg1.second().getZIndex()) {
+					return -1;
+				} else {
+					return arg1.second().getName().compareTo(arg0.second().getName());
+				}
+			}
+		});
+	}
+
+	/**
 	 * Constructs the system from the Lua file
 	 * 
 	 * @param file Lua script file
 	 */
 	public System(File file) {
 		this.filepath = file.getAbsolutePath();
+		this.name = file.getName();
 		executor = Executors.newFixedThreadPool(1);
 
 		// (re)Load this system
@@ -77,6 +104,8 @@ public abstract class System {
 		globals = new Globals();
 		componentGroups = new HashMap<String, List<String>>();
 		entityGroups = new HashMap<String, List<Entity>>();
+		sortedEntities = new ArrayList<Pair<String, Entity>>();
+		componentGroupsLuaFunctions = new HashMap<String, LuaValue>();
 		loadingFailed = false;
 
 		loadLuaLibs();
@@ -125,8 +154,7 @@ public abstract class System {
 			return true;
 		} catch (LuaError error) {
 			Lel.coreEngine.notifyGameError(error);
-		}
-		catch (Exception error) {
+		} catch (Exception error) {
 			Lel.coreEngine.notifyGameError(error);
 		}
 
@@ -146,6 +174,7 @@ public abstract class System {
 	 */
 	private void loadRequiredComponents() {
 		componentGroups.clear();
+		componentGroupsLuaFunctions.clear();
 		LuaTable list = null;
 
 		try {
@@ -205,6 +234,7 @@ public abstract class System {
 	 * @param newEntities List of entities of the new scene
 	 */
 	public void setEntities(List<Entity> newEntities) {
+		sortedEntities.clear();
 		for (String listName : componentGroups.keySet()) {
 			setEntityList(newEntities, listName);
 			addEntityGroupToGlobals(listName);
@@ -225,9 +255,12 @@ public abstract class System {
 		for (Entity entity : newEntities) {
 			if (entity.hasComponents(componentList)) {
 				entities.add(entity);
+				sortedEntities.add(new Pair<String, Entity>(listName, entity));
 			}
 		}
+
 		entityGroups.put(listName, entities);
+		sortEntities();
 	}
 
 	/**
@@ -263,12 +296,15 @@ public abstract class System {
 			// Check entities for compatibility with system
 			if (entity.hasComponents(componentList.getValue())) {
 				entityGroups.get(componentList.getKey()).add(entity);
+				sortedEntities.add(new Pair<String, Entity>(componentList.getKey(), entity));
 
 				LuaTable entityGroup = (LuaTable) globals.get(componentList.getKey());
 				// TODO prevent accessing all components
 				entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
 			}
 		}
+
+		sortEntities();
 	}
 
 	/**
@@ -285,6 +321,14 @@ public abstract class System {
 					addEntityGroupToGlobals(entityList.getKey());
 					break;
 				}
+			}
+		}
+
+		for (int i = 0; i < sortedEntities.size(); i++) {
+			Pair<String, Entity> entityPair = sortedEntities.get(i);
+			if (entityPair.second() == entity) {
+				sortedEntities.remove(i);
+				i--;
 			}
 		}
 	}
@@ -304,6 +348,14 @@ public abstract class System {
 				addEntityGroupToGlobals(entityList.getKey());
 			}
 		}
+
+		for (int i = 0; i < sortedEntities.size(); i++) {
+			Pair<String, Entity> entityPair = sortedEntities.get(i);
+			if (entity == entityPair.second() && componentGroups.get(entityPair.first()).contains(componentName)) {
+				sortedEntities.remove(i);
+				i--;
+			}
+		}
 	}
 
 	/**
@@ -320,12 +372,40 @@ public abstract class System {
 			List<String> componentList = componentGroups.get(listName);
 			if (componentList.contains(componentName) && entity.hasComponents(componentGroups.get(listName))) {
 				entityGroups.get(listName).add(entity);
-
+				sortedEntities.add(new Pair<String, Entity>(listName, entity));
 				addEntityGroupToGlobals(listName);
+				sortEntities();
 				// LuaTable entityGroup = (LuaTable) globals.get(entityList.getKey());
 				// TODO prevent accessing all components
 				// entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
 			}
 		}
+	}
+
+	/**
+	 * Return the filepath of the system
+	 * 
+	 * @return the filepath of the system
+	 */
+	public String getFilepath() {
+		return filepath;
+	}
+
+	/**
+	 * Return the name of the system
+	 * 
+	 * @return the name of the system
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Return the map of component group
+	 * 
+	 * @return the map of component group
+	 */
+	public Map<String, List<String>> getComponentGroups() {
+		return componentGroups;
 	}
 }
