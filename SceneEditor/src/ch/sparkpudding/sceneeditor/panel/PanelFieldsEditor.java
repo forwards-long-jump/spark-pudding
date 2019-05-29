@@ -19,11 +19,13 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
+import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.action.ActionChangeCheckBox;
 import ch.sparkpudding.sceneeditor.action.ActionChangeTextField;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
 
 /**
@@ -40,6 +42,8 @@ public class PanelFieldsEditor extends JComponent {
 	private Collection<Field> fields;
 	private List<RunnableOneParameter> onFieldsChanged;
 	private List<JComponent> fieldsInput;
+	private SEEntity seEntity;
+	private Component component;
 
 	private boolean enableable;
 
@@ -49,11 +53,13 @@ public class PanelFieldsEditor extends JComponent {
 	 * @param fields     Collection of all the components of an entity
 	 * @param enableable Whether the component can be enabled
 	 */
-	public PanelFieldsEditor(Collection<Field> fields, boolean enableable) {
-		this.fields = fields;
+	public PanelFieldsEditor(SEEntity seEntity, Component component, boolean enableable) {
+		this.fields = new ArrayList<Field>(component.getFields().values());
+		this.seEntity = seEntity;
 		this.fieldsInput = new ArrayList<JComponent>();
 		this.onFieldsChanged = new ArrayList<RunnableOneParameter>();
 		this.enableable = enableable;
+		this.component = component;
 
 		createFields();
 		setupLayout();
@@ -171,7 +177,7 @@ public class PanelFieldsEditor extends JComponent {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ActionChangeTextField action = new ActionChangeTextField("", field, input);
+				ActionChangeTextField action = new ActionChangeTextField(seEntity, field, input, component.getName());
 				action.actionPerformed(e);
 			}
 		});
@@ -189,7 +195,7 @@ public class PanelFieldsEditor extends JComponent {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				ActionChangeTextField action = new ActionChangeTextField("", field, input);
+				ActionChangeTextField action = new ActionChangeTextField(seEntity, field, input, component.getName());
 				action.actionPerformed(null);
 			}
 		});

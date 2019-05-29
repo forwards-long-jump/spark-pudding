@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 import ch.sparkpudding.coreengine.ecs.component.Component;
-import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.action.ActionAttach;
 import ch.sparkpudding.sceneeditor.action.ActionDeleteComponent;
@@ -188,8 +187,7 @@ public class PanelComponentEditor extends JPanel {
 		}
 
 		this.contentPanel.add(titleBar);
-		PanelFieldsEditor field = new PanelFieldsEditor(new ArrayList<Field>(component.getFields().values()),
-				isLive || !component.isAttached());
+		PanelFieldsEditor field = new PanelFieldsEditor(seEntity, component, isLive || !component.isAttached());
 		this.fieldGenerators.add(field);
 		this.btnsDelete.add(btnDelete);
 		this.btnsDetachOrCopy.add(btnDetachOrCopy);
