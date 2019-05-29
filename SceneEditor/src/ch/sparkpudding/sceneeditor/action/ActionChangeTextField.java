@@ -67,7 +67,10 @@ public class ActionChangeTextField extends AbstractAction {
 
 		// If the game is stopped we also update the live entity
 		if (SceneEditor.getGameState() == EditorState.STOP) {
-			seEntity.getLiveEntity().getComponents().get(componentName).getField(oldValue).setValueFromString(oldValue);
+			seEntity.getLiveEntity().getComponents().get(componentName).getField(field.getName())
+					.setValueFromString(oldValue);
+			seEntity.getDefaultEntity().getComponents().get(componentName).getField(field.getName())
+					.setValueFromString(oldValue);
 		}
 	}
 
@@ -84,6 +87,12 @@ public class ActionChangeTextField extends AbstractAction {
 		// If the game is stopped we also update the live entity
 		if (SceneEditor.getGameState() == EditorState.STOP) {
 			seEntity.getLiveEntity().getComponents().get(componentName).getField(field.getName())
+					.setValueFromString(value);
+			// We need to do this because live values may be modified and we want to
+			// replicate them into the default component as well
+			// honestly I think it's bad and it will probably break something once but
+			// time^tm
+			seEntity.getDefaultEntity().getComponents().get(componentName).getField(field.getName())
 					.setValueFromString(value);
 		}
 

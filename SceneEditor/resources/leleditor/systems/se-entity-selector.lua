@@ -1,5 +1,7 @@
 function getRequiredComponents()
-  return {entities = {"position", "size"}, selectedEntities = {"position", "size", "se-selected"}}
+  return {transformDone = {"se-entity-transform-done"},
+    entities = {"position", "size"},
+    selectedEntities = {"position", "size", "se-selected"}}
 end
 
 -- TODO: Use components and separate selection and resize
@@ -11,6 +13,11 @@ local draggingStartOffset = {x = 0, y = 0}
 function update()
   local cursorSize = 10 / game.camera:getScaling()
   local draggerSelected = false
+
+  for i, entity in ipairs(transformDone) do
+    -- we only need to notify the SE for one tick
+    entity._meta:removeComponent("se-entity-transform-done")
+  end
 
   -- For each selected entities
   for i, entity in ipairs(selectedEntities) do
@@ -101,13 +108,21 @@ function update()
 
     entity.size.width = math.max(entity.size.width, 0)
     entity.size.height = math.max(entity.size.height, 0)
+
+    -- Mouse is released => no dragging actions
+    if not game.input:isMouseButtonDown(1) then
+      if draggingAction ~= - 1 then
+        entity._meta:addComponent("se-entity-transform-done")
+      end
+      draggingAction = -1
+    end
   end
 
   -- Mouse is released => no dragging actions
   if not game.input:isMouseButtonDown(1) then
+    -- We reset it here just in case no selected entities are selected
     draggingAction = -1
   end
-
 
   -- Not dragging, select an entity
   if(draggingAction == -1) then
