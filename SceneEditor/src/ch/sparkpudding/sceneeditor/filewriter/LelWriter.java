@@ -121,9 +121,9 @@ public class LelWriter {
 	 */
 	private String xmlFromEntityTemplate(Entity entity) {
 		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-		xml += "<entity-template name=\"" + entity.getName() + "\">\n";
+		xml += "<entity-template name=\"" + entity.getTemplate() + "\">\n";
 		for (Component component : entity.getComponents().values()) {
-			xml += "\t<component template=\"" + component.getName() + "\">\n";
+			xml += "\t<component template=\"" + component.getTemplateName() + "\">\n";
 			for (Field field : component.getFields().values()) {
 				xml += "\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
 			}
