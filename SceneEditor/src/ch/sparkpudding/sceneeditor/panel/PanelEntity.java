@@ -159,6 +159,9 @@ public class PanelEntity extends JPanel {
 			jTabbedPane.setEnabledAt(1, false);
 			jTabbedPane.setSelectedIndex(0);
 			break;
+		case ERROR:
+			// Keep previous state in case of error
+			break;
 		default:
 			initialPanelComponent.setEnabled(false);
 			livePanelComponent.setEnabled(true);

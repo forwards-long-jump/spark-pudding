@@ -37,6 +37,9 @@ public class RenderSystem extends System {
 		super.readMethodsFromLua();
 
 		renderMethod = globals.get("render");
+		if(renderMethod.isnil()) {
+			Lel.coreEngine.notifyGameError(new Exception("render function missing in " + filepath));
+		}
 	}
 
 	/**

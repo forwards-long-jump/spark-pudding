@@ -1,6 +1,7 @@
 package ch.sparkpudding.sceneeditor;
 
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -137,17 +138,18 @@ public class SceneEditor {
 		// Change black bar color to indicate scene camera
 		coreEngine.setBlackBarsColor(new Color(0, 0, 0, 127));
 
-		gameCamera = SceneEditor.coreEngine.getCamera();
+		gameCamera = coreEngine.getCamera();
 
 		// SMOOOOTH MC GROOOVE
-		camera.setScaling(gameCamera.getScaling());
-		camera.setTargetScaling(gameCamera.getScaling() * 0.9f);
-		camera.setSmoothScaleSpeedCoeff(0.1f);
-		camera.setScalingPoint(gameCamera.getScalingPoint());
+		camera.setTranslateMode(Mode.NO_FOLLOW);
 		camera.setPosition(gameCamera.getPosition().getX(), gameCamera.getPosition().getY());
 		camera.setTargetToPosition();
+		camera.setScalingPoint(new Point2D.Double(coreEngine.getGameWidth() / 2, coreEngine.getGameHeight() / 2));
+		camera.setSmoothScaleSpeedCoeff(0.1f);
+		camera.setScaling(gameCamera.getScaling());
+		camera.setTargetScaling(gameCamera.getScaling() * 0.9f);
 
-		SceneEditor.coreEngine.getCurrentScene().setCamera(camera);
+		coreEngine.getCurrentScene().setCamera(camera);
 	}
 
 	/**
@@ -170,8 +172,8 @@ public class SceneEditor {
 
 		// We allow ourselves to touch the player camera if it's set to reset itself
 		if (gameCamera.getTranslateMode() != Mode.INSTANT || gameCamera.getTranslateMode() != Mode.NO_FOLLOW) {
-			gameCamera.setPosition(camera.getPosition().getX(), camera.getPosition().getY());
 			gameCamera.setScaling(camera.getScaling());
+			gameCamera.setPosition(camera.getPosition().getX(), camera.getPosition().getY());
 		}
 		SceneEditor.coreEngine.getCurrentScene().setCamera(gameCamera);
 	}
@@ -336,5 +338,14 @@ public class SceneEditor {
 	 */
 	public static Camera getEditingCamera() {
 		return camera;
+	}
+
+	/**
+	 * Get game camera
+	 * 
+	 * @return game camera
+	 */
+	public static Camera getGameCamera() {
+		return gameCamera;
 	}
 }

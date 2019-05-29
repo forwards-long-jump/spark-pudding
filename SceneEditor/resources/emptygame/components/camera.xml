@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="camera">
-	<field type="DOUBLE" name="scale">0.5</field>
-	<field type="BOOLEAN" name="enabled">0</field>
-</component>

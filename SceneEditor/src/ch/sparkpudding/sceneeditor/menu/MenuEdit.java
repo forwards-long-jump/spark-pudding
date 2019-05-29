@@ -113,6 +113,7 @@ public class MenuEdit extends JMenu {
 		});
 
 		itemRedo.setAction(new ActionRedo());
+		itemUndo.setAction(new ActionUndo());
 
 		itemUndo.setEnabled(false);
 		itemRedo.setEnabled(false);
@@ -125,7 +126,7 @@ public class MenuEdit extends JMenu {
 				new ModalComponent(null);
 			}
 		});
-
+		
 		itemCreateEntity.addActionListener(new ActionListener() {
 
 			@Override
