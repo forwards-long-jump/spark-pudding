@@ -1,5 +1,6 @@
 package ch.sparkpudding.sceneeditor;
 
+import java.nio.file.Paths;
 import java.util.Locale;
 
 import javax.swing.UIManager;
@@ -39,8 +40,8 @@ public class Main {
 		}
 
 		try {
-			SceneEditor.coreEngine = new CoreEngine(Main.class.getResource("/emptygame").getPath(),
-					Main.class.getResource("/leleditor").getPath());
+			SceneEditor.coreEngine = new CoreEngine(Paths.get(Main.class.getResource("/emptygame").toURI()).toString(),
+					Paths.get(Main.class.getResource("/leleditor").toURI()).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

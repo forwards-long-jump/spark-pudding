@@ -730,6 +730,24 @@ public class CoreEngine extends JPanel {
 	public ResourceLocator getResourceLocator() {
 		return resourceLocator;
 	}
+	
+	/**
+	 * Getter for the renderSystem
+	 * 
+	 * @return The renderSystem
+	 */
+	public RenderSystem getRenderSystems() {
+		return renderSystem;
+	}
+
+	/**
+	 * Getter for the different systems
+	 * 
+	 * @return The list of system
+	 */
+	public List<UpdateSystem> getSystems() {
+		return systems;
+	}
 
 	/**
 	 * Add an entity to current scene and notify systems
@@ -1028,5 +1046,14 @@ public class CoreEngine extends JPanel {
 	 */
 	public int getEditingTick() {
 		return editingTick;
+	}
+	
+	/**
+	 * Get the directory of the Game
+	 * 
+	 * @return the directory containing the game
+	 */
+	public String getGameFolder() {
+		return lelFile.getDirectory();
 	}
 }

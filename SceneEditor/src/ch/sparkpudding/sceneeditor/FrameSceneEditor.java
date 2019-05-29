@@ -12,6 +12,7 @@ import javax.swing.JSplitPane;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.menu.MenuBar;
+import ch.sparkpudding.sceneeditor.panel.PanelEditor;
 import ch.sparkpudding.sceneeditor.panel.PanelGame;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarLeft;
 import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
@@ -35,14 +36,13 @@ public class FrameSceneEditor extends JFrame {
 	private PanelSidebarRight panelSidebarRight;
 	private PanelSidebarLeft panelSidebarLeft;
 	private PanelGame panelGame;
+	private PanelEditor panelEditor;
 	private BorderLayout borderLayout;
-	private JSplitPane splitPanel;
+	private JSplitPane verticalSplitPanel;
+	private JSplitPane horizontalSplitPanel;
 
 	/**
 	 * ctor
-	 * 
-	 * @param gameFolder the path to the folder containing the current game
-	 * @throws Exception thrown if the coreEngine can't read the gameFolder
 	 */
 	public FrameSceneEditor() {
 		init();
@@ -72,6 +72,7 @@ public class FrameSceneEditor extends JFrame {
 		panelSidebarRight = new PanelSidebarRight();
 		panelSidebarLeft = new PanelSidebarLeft();
 		panelGame = new PanelGame();
+		panelEditor = new PanelEditor();
 	}
 
 	/**
@@ -82,8 +83,9 @@ public class FrameSceneEditor extends JFrame {
 		setJMenuBar(menuBar);
 
 		add(panelSidebarLeft, BorderLayout.WEST);
-		splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelGame, panelSidebarRight);
-		add(splitPanel, BorderLayout.CENTER);
+		horizontalSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panelGame, panelEditor);
+		verticalSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, horizontalSplitPanel, panelSidebarRight);
+		add(verticalSplitPanel, BorderLayout.CENTER);
 	}
 
 	/**
@@ -100,7 +102,9 @@ public class FrameSceneEditor extends JFrame {
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				splitPanel.setDividerLocation(e.getComponent().getWidth() - PanelSidebarRight.DEFAULT_PANEL_SIZE);
+				verticalSplitPanel
+						.setDividerLocation(e.getComponent().getWidth() - PanelSidebarRight.DEFAULT_PANEL_SIZE);
+				horizontalSplitPanel.setDividerLocation(e.getComponent().getHeight() - PanelEditor.DEFAULT_PANEL_HEIGHT);
 			}
 		});
 	}

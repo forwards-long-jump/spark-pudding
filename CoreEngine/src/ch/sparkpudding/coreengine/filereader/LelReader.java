@@ -14,7 +14,7 @@ import ch.sparkpudding.coreengine.Lel;
 /**
  * Manages Ludic Engine in Lua game files, supports reading from folder and from
  * .lel
- * 
+ *
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  */
 public class LelReader {
@@ -38,7 +38,7 @@ public class LelReader {
 
 	/**
 	 * Reads a game file and exposes all of the files in differents maps
-	 * 
+	 *
 	 * @param directory The path to the directory or LEL file
 	 * @throws Exception
 	 */
@@ -73,7 +73,7 @@ public class LelReader {
 
 	/**
 	 * Sort systems according to their name
-	 * 
+	 *
 	 * @param list of file to sort
 	 */
 	private void sortSystem(List<File> list) {
@@ -84,7 +84,7 @@ public class LelReader {
 	/**
 	 * Load editing systems and components from folder (editing folder must have
 	 * /components and /systems)
-	 * 
+	 *
 	 * @param directory Path to the directory
 	 */
 	public void loadEditingTools(String directory) {
@@ -98,11 +98,12 @@ public class LelReader {
 
 	/**
 	 * Populate lists from the files present in the game folder
-	 * 
+	 *
 	 * @param folder Folder to read the files from
 	 * @param list   List to populate
 	 */
 	private void populateList(File folder, List<File> list) {
+		list.clear();
 		try {
 			for (File file : folder.listFiles()) {
 				if (file.isDirectory()) {
@@ -118,11 +119,12 @@ public class LelReader {
 
 	/**
 	 * Populate maps from the files present in the game folder
-	 * 
+	 *
 	 * @param folder Folder to read the files from
 	 * @param map    Map to populate
 	 */
 	private void populateMaps(File folder, Map<String, File> map) {
+		map.clear();
 		try {
 			for (File file : folder.listFiles()) {
 				if (file.isDirectory()) {
@@ -138,7 +140,7 @@ public class LelReader {
 
 	/**
 	 * Check whether a LEL folder is valid or not using its metadata.xml file
-	 * 
+	 *
 	 * @return validity of the LEL folder
 	 */
 	private boolean isValidLel() {
@@ -147,7 +149,7 @@ public class LelReader {
 
 	/**
 	 * Get components files
-	 * 
+	 *
 	 * @return component files
 	 */
 	public Collection<File> getComponentsXML() {
@@ -156,7 +158,7 @@ public class LelReader {
 
 	/**
 	 * Get components files
-	 * 
+	 *
 	 * @return component files
 	 */
 	public Collection<File> getEditingComponentsXML() {
@@ -165,7 +167,7 @@ public class LelReader {
 
 	/**
 	 * Get scenes files
-	 * 
+	 *
 	 * @return scenes files
 	 */
 	public Collection<File> getScenesXML() {
@@ -174,7 +176,7 @@ public class LelReader {
 
 	/**
 	 * Get entity templates files
-	 * 
+	 *
 	 * @return entity templates files
 	 */
 	public Collection<File> getEntityTemplatesXML() {
@@ -183,7 +185,7 @@ public class LelReader {
 
 	/**
 	 * Get textures files
-	 * 
+	 *
 	 * @return textures files
 	 */
 	public Collection<File> getTextures() {
@@ -192,7 +194,7 @@ public class LelReader {
 
 	/**
 	 * Get musics files
-	 * 
+	 *
 	 * @return music files
 	 */
 	public Collection<File> getMusics() {
@@ -201,7 +203,7 @@ public class LelReader {
 
 	/**
 	 * Get sounds files
-	 * 
+	 *
 	 * @return sounds files
 	 */
 	public Collection<File> getSounds() {
@@ -210,19 +212,29 @@ public class LelReader {
 
 	/**
 	 * Get system files
-	 * 
+	 *
 	 * @return system files
 	 */
 	public Collection<File> getSystems() {
+		populateList(new File(directory + "/systems"), listSystems);
 		return listSystems;
 	}
 
 	/**
 	 * Get editing system files
-	 * 
+	 *
 	 * @return editing system files
 	 */
 	public Collection<File> getEditingSystems() {
 		return listEditingSystems;
+	}
+
+	/**
+	 * Get the directory of the LelReader
+	 *
+	 * @return the directory containing the files
+	 */
+	public String getDirectory() {
+		return directory;
 	}
 }
