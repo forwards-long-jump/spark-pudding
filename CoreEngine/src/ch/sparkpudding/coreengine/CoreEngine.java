@@ -440,7 +440,7 @@ public class CoreEngine extends JPanel {
 	 * 
 	 * @param name Name of the scene
 	 */
-	public void removeScene(String name) {
+	public void deleteScene(String name) {
 		if (currentScene.getName().equals(name)) {
 			scheduler.schedule(Trigger.GAME_LOOP_START, new Runnable() {
 
@@ -769,7 +769,7 @@ public class CoreEngine extends JPanel {
 			}
 		}
 
-		getCurrentScene().add(e);
+		getCurrentScene().addEntity(e);
 	}
 	
 	/**
@@ -801,7 +801,7 @@ public class CoreEngine extends JPanel {
 			system.tryRemove(entity);
 		}
 		renderSystem.tryRemove(entity);
-		currentScene.remove(entity);
+		currentScene.removeEntity(entity);
 
 		if (editingSystems != null) {
 			for (UpdateSystem system : editingSystems) {
@@ -819,7 +819,7 @@ public class CoreEngine extends JPanel {
 	 * @param defaultEntity Default entity to be deleted
 	 */
 	public void deleteDefaultEntity(Entity entity) {
-		currentScene.removeDefault(entity);
+		currentScene.removeDefaultEntity(entity);
 	}
 
 	/**
@@ -829,8 +829,8 @@ public class CoreEngine extends JPanel {
 	 * @param entity        Entity to work on
 	 * @param componentName Name of the component to remove
 	 */
-	public void removeComponent(Entity entity, String componentName) {
-		if (entity.remove(componentName)) {
+	public void deleteComponent(Entity entity, String componentName) {
+		if (entity.removeComponent(componentName)) {
 			for (UpdateSystem system : systems) {
 				system.notifyRemovedComponent(entity, componentName);
 			}
@@ -1008,8 +1008,6 @@ public class CoreEngine extends JPanel {
 	public void notifyGameError(Exception exception) {
 		// We only display the first error encountered so we can fix it first
 		if (this.gameError == null) {
-			exception.printStackTrace();
-
 			scheduler.schedule(Trigger.GAME_LOOP_START, new Runnable() {
 				@Override
 				public void run() {

@@ -52,7 +52,7 @@ public class Input {
 	public Input(JPanel panel) {
 		this.panel = panel;
 		this.panel.setFocusable(true);
-		createListeners();
+		addListeners();
 
 		keysPressed = new ArrayList<Integer>();
 		keysReleased = new ArrayList<Integer>();
@@ -122,7 +122,7 @@ public class Input {
 	/**
 	 * Add listeners to the panel
 	 */
-	public void createListeners() {
+	public void addListeners() {
 		panel.addKeyListener(new KeyAdapter() {
 
 			@Override

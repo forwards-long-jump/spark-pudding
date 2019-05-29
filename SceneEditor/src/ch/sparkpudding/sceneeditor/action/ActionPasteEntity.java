@@ -31,7 +31,7 @@ public class ActionPasteEntity extends AbstractAction {
 	public ActionPasteEntity(SEEntity entity) {
 		super("Paste entity (" + entity.getLiveEntity().getName() + ")");
 		this.newDefaultEntity = new Entity(entity.getLiveEntity());
-		this.newDefaultEntity.remove("se-selected");
+		this.newDefaultEntity.removeComponent("se-selected");
 
 		if (this.newDefaultEntity.hasComponent("position") && this.newDefaultEntity.hasComponent("size")) {
 			Component size = this.newDefaultEntity.getComponents().get("size");

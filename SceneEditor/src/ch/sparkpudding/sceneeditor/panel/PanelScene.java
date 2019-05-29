@@ -144,7 +144,7 @@ public class PanelScene extends JPanel {
 					// Change scene if it exists
 					if (newScene != null) {
 						if (newScene != SceneEditor.currentScene) {
-							panelEntityTree.removeSelectedEntity();
+							panelEntityTree.clearSelectedEntity();
 						}
 
 						SceneEditor.setCurrentScene(newScene);

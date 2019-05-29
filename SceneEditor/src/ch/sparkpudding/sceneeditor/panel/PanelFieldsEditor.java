@@ -104,27 +104,27 @@ public class PanelFieldsEditor extends JComponent {
 			integerFormatter.setGroupingUsed(false);
 			input = new JFormattedTextField(integerFormatter);
 			((JFormattedTextField) input).setValue(field.getInt());
-			createTextFieldListener((JTextField) input, field);
+			addTextFieldListener((JTextField) input, field);
 			break;
 		case DOUBLE:
 			input = new JFormattedTextField(NumberFormat.getInstance());
 			((JFormattedTextField) input).setValue(field.getDouble());
-			createTextFieldListener((JTextField) input, field);
+			addTextFieldListener((JTextField) input, field);
 			break;
 		default: // Permits to avoid double-initialization of input.
 		case STRING:
 			input = new JTextField();
 			((JTextField) input).setText(field.getValue().toString());
-			createTextFieldListener((JTextField) input, field);
+			addTextFieldListener((JTextField) input, field);
 			break;
 		case FILE_PATH:
 			input = new JFormattedTextField();
 			((JFormattedTextField) input).setValue(field.getValue());
-			createTextFieldListener((JTextField) input, field);
+			addTextFieldListener((JTextField) input, field);
 			break;
 		case BOOLEAN:
 			input = new JCheckBox("", (boolean) field.getValue());
-			createCheckBoxListener((JCheckBox) input, field);
+			addCheckBoxListener((JCheckBox) input, field);
 			break;
 		}
 		labelField.setLabelFor(input);
@@ -139,7 +139,7 @@ public class PanelFieldsEditor extends JComponent {
 	 * @param input the input which contains the new value
 	 * @param field the field represented by this input
 	 */
-	private void createTextFieldListener(JTextField input, Field field) {
+	private void addTextFieldListener(JTextField input, Field field) {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {
@@ -186,12 +186,12 @@ public class PanelFieldsEditor extends JComponent {
 	}
 
 	/**
-	 * Create the listener for a checkBox
+	 * Add the listener for a checkBox
 	 *
 	 * @param input the input which contains the new value
 	 * @param field the field represented by this input
 	 */
-	private void createCheckBoxListener(JCheckBox input, Field field) {
+	private void addCheckBoxListener(JCheckBox input, Field field) {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {

@@ -41,7 +41,7 @@ public class ActionRemoveEntity extends AbstractAction {
 				if (entity.getDefaultEntity() != null) {
 					scene.addDefault(entity.getDefaultEntity());
 				}
-				scene.add(entity.getLiveEntity());
+				scene.addEntity(entity.getLiveEntity());
 
 				SwingUtilities.invokeLater(new Runnable() {
 

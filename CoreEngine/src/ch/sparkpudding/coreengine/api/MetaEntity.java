@@ -44,12 +44,12 @@ public class MetaEntity {
 	 * 
 	 * @param componentName to delete
 	 */
-	public void deleteComponent(String componentName) {
+	public void removeComponent(String componentName) {
 		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 
 			@Override
 			public void run() {
-				Lel.coreEngine.removeComponent(entity, componentName);
+				Lel.coreEngine.deleteComponent(entity, componentName);
 			}
 		});
 	}
@@ -68,7 +68,7 @@ public class MetaEntity {
 			@Override
 			public void run() {
 				if (!entity.hasComponent(componentName)) {
-					entity.add(component);
+					entity.addComponent(component);
 					Lel.coreEngine.notifySystemsOfNewComponent(entity, component);
 				}
 			}

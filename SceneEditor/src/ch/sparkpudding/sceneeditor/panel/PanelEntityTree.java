@@ -268,8 +268,8 @@ public class PanelEntityTree extends JPanel {
 	/**
 	 * Remove selected entity components display 
 	 */
-	public void removeSelectedEntity() {
-		panelEntity.removeEntity();
+	public void clearSelectedEntity() {
+		panelEntity.clearTabbedPanes();
 	}
 
 }
