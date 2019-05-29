@@ -146,10 +146,9 @@ public class PanelComponentEditor extends JPanel {
 		JLabel titleComp = new JLabel(component.getName());
 		JButton btnDelete = new JButton("Delete");
 		JButton btnDetachOrCopy = null;
-		
 
 		boolean isLive = (seEntity.getLiveEntity() == entity);
-		boolean isSpawned = seEntity.getDefaultEntity() == null; 
+		boolean isSpawned = seEntity.getDefaultEntity() == null;
 		if (!isSpawned) {
 			if (isLive) {
 				btnDetachOrCopy = new JButton("Copy to default");
@@ -157,12 +156,19 @@ public class PanelComponentEditor extends JPanel {
 						"Set " + component.getName() + " fields as initial for " + entity.getName(),
 						seEntity.getDefaultEntity(), component));
 			} else {
+				String actionAttachText = "Use component template";
+				String actionDetachText = "Detach from component template";
+				if (Entity.getTemplates().get(entity.getTemplate()).hasComponent(component.getName())) {
+					actionAttachText = "Use entity template";
+					actionDetachText = "Detach from entity template";
+				}
+
 				if (component.isAttached()) {
-					btnDetachOrCopy = new JButton("Detach");
+					btnDetachOrCopy = new JButton(actionDetachText);
 					btnDetachOrCopy.addActionListener(new ActionDetach(component));
 				} else {
-					btnDetachOrCopy = new JButton("Attach");
-					btnDetachOrCopy.addActionListener(new ActionAttach(component));
+					btnDetachOrCopy = new JButton(actionAttachText);
+					btnDetachOrCopy.addActionListener(new ActionAttach(entity, component));
 				}
 			}
 		}
@@ -176,11 +182,11 @@ public class PanelComponentEditor extends JPanel {
 				new ActionDeleteComponent("delete component " + component.getName(), entity, component));
 
 		titleBar.add(btnDelete);
-		
-		if(!isSpawned) {			
+
+		if (!isSpawned) {
 			titleBar.add(btnDetachOrCopy);
 		}
-		
+
 		this.contentPanel.add(titleBar);
 		PanelFieldsEditor field = new PanelFieldsEditor(new ArrayList<Field>(component.getFields().values()),
 				isLive || !component.isAttached());
@@ -197,7 +203,7 @@ public class PanelComponentEditor extends JPanel {
 			btn.setEnabled(enabled);
 		}
 		for (JButton btn : btnsDetachOrCopy) {
-			if(btn != null) {				
+			if (btn != null) {
 				btn.setEnabled(enabled);
 			}
 		}

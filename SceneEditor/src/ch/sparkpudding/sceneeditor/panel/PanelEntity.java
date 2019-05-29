@@ -1,6 +1,7 @@
 package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -23,6 +24,7 @@ import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 import ch.sparkpudding.sceneeditor.listener.GameStateEventListener;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
+import ch.sparkpudding.sceneeditor.panel.modal.ModalEntityTemplate;
 
 /**
  * Contains the different parameter of an entity
@@ -38,6 +40,7 @@ public class PanelEntity extends JPanel {
 	private PanelComponentsContainer livePanelComponent;
 	private JTabbedPane jTabbedPane;
 	private JButton btnAddComponent;
+	private JButton btnSaveAsTemplate;
 	private JPanel entitySettings;
 	private JTextField entityZIndex;
 
@@ -64,6 +67,7 @@ public class PanelEntity extends JPanel {
 		this.livePanelComponent = new PanelComponentsContainer();
 		this.jTabbedPane = new JTabbedPane();
 		this.btnAddComponent = new JButton("Add component");
+		this.btnSaveAsTemplate = new JButton("Save as template");
 		this.entityZIndex = new JTextField();
 	}
 
@@ -72,6 +76,9 @@ public class PanelEntity extends JPanel {
 	 */
 	private void setupLayout() {
 		setLayout(new BorderLayout());
+
+		JPanel bottomButtons = new JPanel();
+		bottomButtons.setLayout(new FlowLayout());
 
 		entitySettings.setLayout(new BorderLayout(10, 10));
 		entitySettings.add(new JLabel("Z-Index: "), BorderLayout.WEST);
@@ -82,10 +89,14 @@ public class PanelEntity extends JPanel {
 
 		entityZIndex.setEnabled(false);
 		btnAddComponent.setEnabled(false);
+		btnSaveAsTemplate.setEnabled(false);
 
 		add(entitySettings, BorderLayout.NORTH);
 		add(jTabbedPane, BorderLayout.CENTER);
-		add(btnAddComponent, BorderLayout.SOUTH);
+
+		bottomButtons.add(btnAddComponent);
+		bottomButtons.add(btnSaveAsTemplate);
+		add(bottomButtons, BorderLayout.SOUTH);
 
 		resetBorderTitle();
 	}
@@ -120,6 +131,24 @@ public class PanelEntity extends JPanel {
 					break;
 				case 1:
 					new ModalComponent(SceneEditor.selectedEntity.getLiveEntity());
+					break;
+				default:
+					System.err.println("Invalid selected panel");
+					break;
+				}
+			}
+		});
+
+		btnSaveAsTemplate.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				switch (jTabbedPane.getSelectedIndex()) {
+				case 0:
+					new ModalEntityTemplate(SceneEditor.selectedEntity.getDefaultEntity());
+					break;
+				case 1:
+					new ModalEntityTemplate(SceneEditor.selectedEntity.getLiveEntity());
 					break;
 				default:
 					System.err.println("Invalid selected panel");
@@ -164,20 +193,20 @@ public class PanelEntity extends JPanel {
 
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
+				boolean enabled = true;
 				switch (jTabbedPane.getSelectedIndex()) {
 				case 0:
-					btnAddComponent.setEnabled(
-							SceneEditor.selectedEntity != null && SceneEditor.getGameState() == EditorState.STOP);
+					enabled = SceneEditor.selectedEntity != null && SceneEditor.getGameState() == EditorState.STOP;
 					break;
 				case 1:
-					btnAddComponent.setEnabled(
-							SceneEditor.selectedEntity != null && SceneEditor.getGameState() != EditorState.STOP);
+					enabled = SceneEditor.selectedEntity != null && SceneEditor.getGameState() != EditorState.STOP;
 					break;
 				default:
 					System.err.println("Invalid selected panel");
 					break;
 				}
-				// btnAddComponent.setEnabled(jTabbedPane.getTabComponentAt(0));
+				btnAddComponent.setEnabled(enabled);
+				btnSaveAsTemplate.setEnabled(enabled);
 			}
 		});
 	}
@@ -188,13 +217,14 @@ public class PanelEntity extends JPanel {
 	private void resetBorderTitle() {
 		if (currentEntity != null) {
 			if (currentEntity.getDefaultEntity() != null) {
-				setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getDefaultEntity().getName()));
+				setBorder(BorderFactory.createTitledBorder(TITLE + " — " + currentEntity.getDefaultEntity().getName()
+						+ " (" + currentEntity.getDefaultEntity().getTemplate() + ")"));
 			} else {
-				setBorder(
-						BorderFactory.createTitledBorder(TITLE_LIVE + " — " + currentEntity.getLiveEntity().getName()));
+				setBorder(BorderFactory.createTitledBorder(TITLE_LIVE + " — " + currentEntity.getLiveEntity().getName()
+						+ " (" + currentEntity.getLiveEntity().getTemplate() + ")"));
 			}
 		} else {
-			setBorder(BorderFactory.createTitledBorder(TITLE + " — null"));
+			setBorder(BorderFactory.createTitledBorder(TITLE + " — (none)"));
 		}
 	}
 
@@ -222,6 +252,7 @@ public class PanelEntity extends JPanel {
 
 		entityZIndex.setEnabled(SceneEditor.selectedEntity != null);
 		btnAddComponent.setEnabled(SceneEditor.selectedEntity != null);
+		btnSaveAsTemplate.setEnabled(SceneEditor.selectedEntity != null);
 	}
 
 	/**
@@ -241,6 +272,7 @@ public class PanelEntity extends JPanel {
 
 		entityZIndex.setText(seEntity.getLiveEntity().getZIndex() + "");
 		livePanelComponent.setEntity(seEntity, currentEntity.getLiveEntity());
+
 		resetBorderTitle();
 		resetEnabledPane();
 	}
@@ -259,5 +291,6 @@ public class PanelEntity extends JPanel {
 		livePanelComponent.repaint();
 		entityZIndex.setEnabled(false);
 		btnAddComponent.setEnabled(false);
+		btnSaveAsTemplate.setEnabled(false);
 	}
 }
