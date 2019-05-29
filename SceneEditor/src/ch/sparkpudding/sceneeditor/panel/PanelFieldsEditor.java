@@ -7,6 +7,7 @@ import java.awt.event.FocusEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JCheckBox;
@@ -73,7 +74,15 @@ public class PanelFieldsEditor extends JComponent {
 	 * <code>this.fields</code>
 	 */
 	private void createFields() {
-		for (Field field : fields) {
+		List<Field> sortedFields = new ArrayList<Field>(fields);
+		sortedFields.sort(new Comparator<Field>() {
+			@Override
+			public int compare(Field arg0, Field arg1) {
+				return arg0.getName().compareTo(arg1.getName());
+			}
+		});
+		
+		for (Field field : sortedFields) {
 			JLabel labelField = new JLabel(field.getName());
 			add(labelField);
 			add(createValueField(field, labelField));
@@ -129,6 +138,7 @@ public class PanelFieldsEditor extends JComponent {
 		}
 		labelField.setLabelFor(input);
 		input.setEnabled(enableable);
+
 		fieldsInput.add(input);
 		return input;
 	}
