@@ -30,7 +30,6 @@ function update()
             if ex2 - esx > x1 - sx and ex1 - esx < x2 - sx then
               if ey2 - esy < y1 - sy and not wall.hitboxWall.noTopCollision then
                 -- top
-                print('ye')
                 entity.position.y = y1 - entity.size.height
                 -- TODO: Additional force entity.position.x = entity.position.x + sx -- todo * (1 - wall.hitboxWall.frictionX)
 
@@ -77,9 +76,9 @@ function update()
           if ex2 + esx > x1 and ex1 + esx < x2 and ey2 + esy > y1 and ey1 + esy < y2 then
             -- it intersect and it's inside in the x axis
             if ex2 > x1 and ex1 < x2 then
-              print(esy)
               if ey2 - esy < y1 and not wall.hitboxWall.noTopCollision then 
                 -- top
+                entity.acceleration.isOnGround = true
                 entity.position.y = y1 - entity.size.height
                 entity.speed.y = (entity.speed.y * -wall.hitboxWall.bounceCoeffY)
                 entity.speed.x = entity.speed.x * (1 - wall.hitboxWall.frictionX)
