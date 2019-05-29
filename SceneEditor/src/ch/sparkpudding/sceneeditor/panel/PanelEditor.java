@@ -43,6 +43,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
+import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.system.System;
 import ch.sparkpudding.sceneeditor.SceneEditor;
@@ -181,7 +182,13 @@ public class PanelEditor extends JPanel {
 						try {
 							editorPane.save();
 							buttonTabComponent.setDirty(editorPane.isDirty());
-							SceneEditor.coreEngine.reloadSystemsFromDisk();
+							SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
+
+								@Override
+								public void run() {
+									SceneEditor.coreEngine.reloadSystemsFromDisk();
+								}
+							});
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
