@@ -4,6 +4,7 @@
 	<field type="BOOLEAN" name="movingRight">0</field>
 	<field type="BOOLEAN" name="movingUp">0</field>
 	<field type="BOOLEAN" name="movingDown">0</field>
+	<field type="BOOLEAN" name="isOnGround">false</field>
 	<field type="DOUBLE" name="maxSpeedLeft">20</field>
 	<field type="DOUBLE" name="maxSpeedRight">20</field>
 	<field type="DOUBLE" name="maxSpeedUp">20</field>

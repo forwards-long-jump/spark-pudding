@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="jumpController">
-	<field type="STRING" name="keyTop">space</field>
+	<field type="STRING" name="key">space</field>
 </component>
