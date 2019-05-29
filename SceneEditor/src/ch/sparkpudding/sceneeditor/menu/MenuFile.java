@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -58,8 +60,8 @@ public class MenuFile extends JMenu {
 			public void actionPerformed(ActionEvent arg0) {
 				LelWriter lel = new LelWriter();
 				try {
-					lel.write(SceneEditor.coreEngine, Main.class.getResource("/emptygame").getPath() + "/");
-				} catch (IOException e) {
+					lel.write(SceneEditor.coreEngine, Paths.get(Main.class.getResource("/emptygame").toURI()).toString() + "/");
+				} catch (IOException | URISyntaxException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

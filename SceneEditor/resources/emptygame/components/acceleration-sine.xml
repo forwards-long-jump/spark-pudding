@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="acceleration-sine">
-	<field type="DOUBLE" name="coeffX">0</field>
-	<field type="DOUBLE" name="coeffY">5</field>
-	<field type="DOUBLE" name="coeffFrequence">0.005</field>
-</component>

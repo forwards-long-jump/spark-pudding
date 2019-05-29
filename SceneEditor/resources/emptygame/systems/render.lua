@@ -1,5 +1,5 @@
 function getRequiredComponents()
-  return {squares = {"size", "position", "color"}, directions = {"size", "position", "color", "direction"}}
+    return {}
 end
 
 function renderSquares(square)

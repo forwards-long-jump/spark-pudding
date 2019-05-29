@@ -29,6 +29,7 @@ public class MenuCamera extends JMenu {
 	private JMenuItem resetToOrigin;
 	private JMenuItem moveToEntity;
 	private JMenuItem moveEntityToCamera;
+	private JMenuItem moveToGameView;
 
 	/**
 	 * ctor
@@ -47,8 +48,9 @@ public class MenuCamera extends JMenu {
 		setText("Camera");
 
 		resetToOrigin = new JMenuItem("Move to origin", KeyEvent.VK_O);
-		moveToEntity = new JMenuItem("Move to selected entity", KeyEvent.VK_M);
-		moveEntityToCamera = new JMenuItem("Move selected entity to camera", KeyEvent.VK_S);
+		moveToEntity = new JMenuItem("Move to selected entity", KeyEvent.VK_E);
+		moveEntityToCamera = new JMenuItem("Move selected entity to camera", KeyEvent.VK_C);
+		moveToGameView = new JMenuItem("Move camera to game view", KeyEvent.VK_G);
 	}
 
 	/**
@@ -138,6 +140,22 @@ public class MenuCamera extends JMenu {
 				camera.setTargetScaling(1);
 			}
 		});
+		
+		moveToGameView.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Camera camera = SceneEditor.getEditingCamera();
+				Camera gameCamera = SceneEditor.getGameCamera();
+			
+				camera.setTranslateMode(Mode.NO_FOLLOW);
+				camera.setPosition(gameCamera.getPosition().getX(), gameCamera.getPosition().getY());
+				camera.setTargetToPosition();
+				camera.setScalingPoint(new Point2D.Double(SceneEditor.coreEngine.getGameWidth() / 2, SceneEditor.coreEngine.getGameHeight() / 2));
+				camera.setSmoothScaleSpeedCoeff(0.1f);
+				camera.setScaling(gameCamera.getScaling());
+				camera.setTargetScaling(gameCamera.getScaling());
+			}
+		});
 	}
 
 	/**
@@ -155,7 +173,8 @@ public class MenuCamera extends JMenu {
 	 * Add the shortcut to the different item
 	 */
 	private void addKeyStroke() {
-		resetToOrigin.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK));
+		moveToGameView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK));
+		resetToOrigin.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK));
 		moveToEntity.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, KeyEvent.CTRL_DOWN_MASK));
 		moveEntityToCamera.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_9, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK));
@@ -165,6 +184,7 @@ public class MenuCamera extends JMenu {
 	 * Add the item to the menu
 	 */
 	private void addItem() {
+		add(moveToGameView);
 		add(resetToOrigin);
 		add(moveToEntity);
 		add(moveEntityToCamera);

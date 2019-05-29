@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="shooter">
-	<field type="INTEGER" name="projectileSpeed">7</field>
-	<field type="INTEGER" name="shootingDelay">5</field>
-	<field type="INTEGER" name="currentShootingDelay">0</field>
-</component>

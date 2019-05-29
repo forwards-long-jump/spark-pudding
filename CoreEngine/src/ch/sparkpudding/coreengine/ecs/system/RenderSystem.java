@@ -41,6 +41,10 @@ public class RenderSystem extends System {
 
 		renderStartMethod = globals.get("renderStart");
 		renderEndMethod = globals.get("renderEnd");
+
+		if(renderStartMethod.isnil() || renderEndMethod.isnil()) {
+			Lel.coreEngine.notifyGameError(new Exception("renderStart or renderEnd function missing in " + filepath));
+		}
 	}
 
 	/**

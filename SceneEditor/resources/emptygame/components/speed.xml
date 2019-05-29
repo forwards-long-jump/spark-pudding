@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="speed">
-	<field type="DOUBLE" name="dx">0</field>
-	<field type="DOUBLE" name="dy">0</field>
-</component>

@@ -68,6 +68,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public Entity(Entity entity) {
 		this(entity.name, entity.template, entity.zIndex, new HashMap<String, Component>());
+		
 		// copy components
 		this.components = new HashMap<String, Component>();
 		for (Component component : entity.getComponents().values()) {
@@ -88,7 +89,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		Element entityElement = document.getDocumentElement();
 
 		this.name = entityElement.getAttribute("name");
-		this.template = null;
+		this.template = this.name;
 
 		String zindex = entityElement.getAttribute("z-index");
 		if (zindex.length() > 0) {

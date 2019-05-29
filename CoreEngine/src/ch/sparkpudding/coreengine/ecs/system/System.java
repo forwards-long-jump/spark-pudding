@@ -41,6 +41,7 @@ import ch.sparkpudding.coreengine.utils.Pair;
  */
 public abstract class System {
 	protected String filepath;
+	private String name;
 
 	// named lists of required components
 	protected Map<String, List<String>> componentGroups;
@@ -89,6 +90,7 @@ public abstract class System {
 	 */
 	public System(File file) {
 		this.filepath = file.getAbsolutePath();
+		this.name = file.getName();
 		executor = Executors.newFixedThreadPool(1);
 
 		// (re)Load this system
@@ -378,5 +380,32 @@ public abstract class System {
 				// entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
 			}
 		}
+	}
+
+	/**
+	 * Return the filepath of the system
+	 * 
+	 * @return the filepath of the system
+	 */
+	public String getFilepath() {
+		return filepath;
+	}
+
+	/**
+	 * Return the name of the system
+	 * 
+	 * @return the name of the system
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Return the map of component group
+	 * 
+	 * @return the map of component group
+	 */
+	public Map<String, List<String>> getComponentGroups() {
+		return componentGroups;
 	}
 }

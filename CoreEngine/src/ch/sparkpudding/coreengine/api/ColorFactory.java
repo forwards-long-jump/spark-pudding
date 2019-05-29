@@ -39,7 +39,7 @@ public class ColorFactory {
 	 * @return A Color of the specified color
 	 */
 	public Color fromRGB(float r, float g, float b) {
-		return new Color((int) r, (int) g, (int) b);
+		return new Color(convertColor(r), convertColor(g), convertColor(b));
 	}
 
 	/**
@@ -52,6 +52,16 @@ public class ColorFactory {
 	 * @return A Color of the specified color
 	 */
 	public Color fromRGBA(float r, float g, float b, float a) {
-		return new Color((int) r, (int) g, (int) b, (int) a);
+		return new Color(convertColor(r), convertColor(g), convertColor(b), convertColor(a));
+	}
+
+	/**
+	 * Convert a float to a integer between 0 and 255
+	 * 
+	 * @param c float value
+	 * @return a integer between 0 and 255
+	 */
+	private int convertColor(float c) {
+		return (int) Math.max(Math.min(c, 255), 0);
 	}
 }

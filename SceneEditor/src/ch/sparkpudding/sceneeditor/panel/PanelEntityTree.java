@@ -80,7 +80,7 @@ public class PanelEntityTree extends JPanel {
 		listModelEntities = new DefaultListModel<SEEntity>();
 
 		jListEntities = new JList<SEEntity>(listModelEntities);
-		jListEntities.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		jListEntities.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jListEntities.setLayoutOrientation(JList.VERTICAL);
 		jListEntities.setVisibleRowCount(-1);
 		jListEntities.setCellRenderer(new DefaultListCellRenderer() {
