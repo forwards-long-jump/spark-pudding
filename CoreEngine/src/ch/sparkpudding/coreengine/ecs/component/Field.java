@@ -116,7 +116,7 @@ public class Field {
 	public void setValueFromString(String value) {
 		switch (this.type) {
 		case BOOLEAN:
-			this.setValue(value == "true" ? true : false);
+			this.setValue(value.toUpperCase().equals("TRUE"));
 			break;
 		case DOUBLE:
 			this.setValue(Double.parseDouble(value));
