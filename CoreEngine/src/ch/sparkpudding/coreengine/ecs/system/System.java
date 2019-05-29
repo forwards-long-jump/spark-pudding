@@ -77,7 +77,7 @@ public abstract class System {
 				} else if (arg0.second().getZIndex() < arg1.second().getZIndex()) {
 					return -1;
 				} else {
-					return 0;
+					return arg1.second().getName().compareTo(arg0.second().getName());
 				}
 			}
 		});

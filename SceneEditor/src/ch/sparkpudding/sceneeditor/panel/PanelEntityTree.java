@@ -236,11 +236,11 @@ public class PanelEntityTree extends JPanel {
 			@Override
 			public int compare(SEEntity arg0, SEEntity arg1) {
 				if (arg0.getLiveEntity().getZIndex() > arg1.getLiveEntity().getZIndex()) {
-					return 1;
-				} else if (arg0.getLiveEntity().getZIndex() < arg1.getLiveEntity().getZIndex()) {
 					return -1;
+				} else if (arg0.getLiveEntity().getZIndex() < arg1.getLiveEntity().getZIndex()) {
+					return 1;
 				} else {
-					return 0;
+					return arg0.getLiveEntity().getName().compareTo(arg1.getLiveEntity().getName());
 				}
 			}
 		});
