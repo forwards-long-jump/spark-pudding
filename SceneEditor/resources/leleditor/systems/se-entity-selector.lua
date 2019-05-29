@@ -121,12 +121,12 @@ function update()
           selectedEntities[#selectedEntities + 1] = entity
         end
       else
-        entity._meta:deleteComponent("se-hover")
+        entity._meta:removeComponent("se-hover")
       end
 
       -- Remove selection from all selected entities
       if game.input:isMouseClicked() then
-        entity._meta:deleteComponent("se-selected")
+        entity._meta:removeComponent("se-selected")
       end
     end
 
