@@ -34,8 +34,8 @@ import ch.sparkpudding.sceneeditor.panel.modal.ModalComponent;
 @SuppressWarnings("serial")
 public class PanelEntity extends JPanel {
 
-	private PanelComponent initialPanelComponent;
-	private PanelComponent livePanelComponent;
+	private PanelComponentsContainer initialPanelComponent;
+	private PanelComponentsContainer livePanelComponent;
 	private JTabbedPane jTabbedPane;
 	private JButton btnAddComponent;
 	private JPanel entitySettings;
@@ -60,8 +60,8 @@ public class PanelEntity extends JPanel {
 	 */
 	private void init() {
 		this.entitySettings = new JPanel();
-		this.initialPanelComponent = new PanelComponent();
-		this.livePanelComponent = new PanelComponent();
+		this.initialPanelComponent = new PanelComponentsContainer();
+		this.livePanelComponent = new PanelComponentsContainer();
 		this.jTabbedPane = new JTabbedPane();
 		this.btnAddComponent = new JButton("Add component");
 		this.entityZIndex = new JTextField();

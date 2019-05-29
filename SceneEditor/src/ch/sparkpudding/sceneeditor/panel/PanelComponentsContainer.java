@@ -7,7 +7,6 @@ import javax.swing.SwingUtilities;
 
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
-import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
 
 /**
  * Display the components of the selected entity
@@ -17,13 +16,13 @@ import ch.sparkpudding.sceneeditor.generator.ComponentGenerator;
  * 
  */
 @SuppressWarnings("serial")
-public class PanelComponent extends JPanel {
-	private ComponentGenerator componentGenerator;
+public class PanelComponentsContainer extends JPanel {
+	private PanelComponentEditor componentGenerator;
 
 	/**
 	 * ctor
 	 */
-	public PanelComponent() {
+	public PanelComponentsContainer() {
 		setupLayout();
 	}
 
@@ -48,7 +47,7 @@ public class PanelComponent extends JPanel {
 			previousScroll = 0;
 		}
 
-		componentGenerator = new ComponentGenerator(seEntity, entity);
+		componentGenerator = new PanelComponentEditor(seEntity, entity);
 
 		removeAll();
 

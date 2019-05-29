@@ -1,4 +1,4 @@
-package ch.sparkpudding.sceneeditor.generator;
+package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -23,7 +23,6 @@ import ch.sparkpudding.sceneeditor.action.ActionDeleteComponent;
 import ch.sparkpudding.sceneeditor.action.ActionDetach;
 import ch.sparkpudding.sceneeditor.action.ActionSetComponent;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
-import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
 
 /**
  * Generate the interface for the components passed in arguments. Since it
@@ -34,14 +33,14 @@ import ch.sparkpudding.sceneeditor.panel.PanelSidebarRight;
  *
  */
 @SuppressWarnings("serial")
-public class ComponentGenerator extends JPanel {
+public class PanelComponentEditor extends JPanel {
 
 	private JPanel contentPanel;
 	private JScrollPane jScrollPane;
 	private Collection<Component> components;
 	private List<JButton> btnsDelete;
 	private List<JButton> btnsDetachOrCopy;
-	private List<FieldGenerator> fieldGenerators;
+	private List<PanelFieldsEditor> fieldGenerators;
 
 	private SEEntity seEntity;
 	private Entity entity;
@@ -51,9 +50,9 @@ public class ComponentGenerator extends JPanel {
 	 *
 	 * @param components Collection of all the components of an entity
 	 */
-	public ComponentGenerator(SEEntity seEntity, Entity entity) {
+	public PanelComponentEditor(SEEntity seEntity, Entity entity) {
 		this.components = entity.getComponents().values();
-		this.fieldGenerators = new ArrayList<FieldGenerator>();
+		this.fieldGenerators = new ArrayList<PanelFieldsEditor>();
 		this.btnsDelete = new ArrayList<JButton>();
 		this.btnsDetachOrCopy = new ArrayList<JButton>();
 
@@ -183,7 +182,7 @@ public class ComponentGenerator extends JPanel {
 		}
 		
 		this.contentPanel.add(titleBar);
-		FieldGenerator field = new FieldGenerator(new ArrayList<Field>(component.getFields().values()),
+		PanelFieldsEditor field = new PanelFieldsEditor(new ArrayList<Field>(component.getFields().values()),
 				isLive || !component.isAttached());
 		this.fieldGenerators.add(field);
 		this.btnsDelete.add(btnDelete);
@@ -202,7 +201,7 @@ public class ComponentGenerator extends JPanel {
 				btn.setEnabled(enabled);
 			}
 		}
-		for (FieldGenerator fieldGenerator : fieldGenerators) {
+		for (PanelFieldsEditor fieldGenerator : fieldGenerators) {
 			fieldGenerator.setEnabled(enabled);
 		}
 		super.setEnabled(enabled);

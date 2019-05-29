@@ -1,4 +1,4 @@
-package ch.sparkpudding.sceneeditor.generator;
+package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,7 +34,7 @@ import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
  *
  */
 @SuppressWarnings("serial")
-public class FieldGenerator extends JComponent {
+public class PanelFieldsEditor extends JComponent {
 
 	private Collection<Field> fields;
 	private List<RunnableOneParameter> onFieldsChanged;
@@ -48,7 +48,7 @@ public class FieldGenerator extends JComponent {
 	 * @param fields     Collection of all the components of an entity
 	 * @param enableable Whether the component can be enabled
 	 */
-	public FieldGenerator(Collection<Field> fields, boolean enableable) {
+	public PanelFieldsEditor(Collection<Field> fields, boolean enableable) {
 		this.fields = fields;
 		this.fieldsInput = new ArrayList<JComponent>();
 		this.onFieldsChanged = new ArrayList<RunnableOneParameter>();
