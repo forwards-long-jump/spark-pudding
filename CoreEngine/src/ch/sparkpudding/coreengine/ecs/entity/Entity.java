@@ -218,8 +218,11 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	}
 
 	/**
+	 * Attach/detach specified component to entity and use entity template if
+	 * specifable
 	 * 
-	 * @param componentName
+	 * @param componentName name of component to attach/detach
+	 * @param attach        boolean if component should be attached or detach
 	 */
 	public void setComponentAttached(String componentName, boolean attached) {
 		components.get(componentName).setAttached(attached, true);
@@ -292,7 +295,8 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	public static void addTemplate(Entity template) {
 		Entity newTemplate = new Entity(template);
 
-		// Force template to have all their components attached (without reseting from comp template)
+		// Force template to have all their components attached (without reseting from
+		// comp template)
 		for (Entry<String, Component> componentEntry : newTemplate.getComponents().entrySet()) {
 			componentEntry.getValue().setAttached(true, false);
 		}
