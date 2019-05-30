@@ -14,7 +14,6 @@ import ch.sparkpudding.sceneeditor.panel.modal.ModalStart;
  */
 public class Main {
 
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 
 		// Set the default locale to english because everything is in english
@@ -35,7 +34,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		ModalStart ms = new ModalStart();
+		new ModalStart();
 	}
 
 }

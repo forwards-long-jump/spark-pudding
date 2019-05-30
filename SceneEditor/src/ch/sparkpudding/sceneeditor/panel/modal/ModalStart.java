@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
@@ -19,6 +20,7 @@ import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.filewriter.LelWriter;
 
+@SuppressWarnings("serial")
 public class ModalStart extends Modal {
 
 	String gamePath;
@@ -90,7 +92,7 @@ public class ModalStart extends Modal {
 					try {
 						openGame();
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup", JOptionPane.ERROR_MESSAGE);
 					}
 				} else
 					return;
