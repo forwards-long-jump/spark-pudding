@@ -125,19 +125,19 @@ public class LelWriter {
 					+ entity.getZIndex() + "\">\n";
 			for (Component component : entity.getComponents().values()) {
 				if (!component.getName().startsWith("se-")) {
-					xml += "\t\t<component template=\"" + component.getTemplateName() + "\">\n";
 					if (!component.isAttached()) {
+						xml += "\t\t<component template=\"" + component.getTemplateName() + "\">\n";
 						for (Field field : component.getFields().values()) {
 							xml += "\t\t\t<field name=\"" + field.getName() + "\">" + field.getValue() + "</field>\n";
 						}
+						xml += "</component>\n";
 					}
-					xml += "</component>\n";
 				}
 			}
 			for (Entry<String, Component> component : Entity.getTemplates().get(entity.getTemplate())) {
 				if (!component.getValue().getName().startsWith("se-")) {
 					if (!entity.getComponents().keySet().contains(component.getValue().getName())) {
-						xml += "<component name=\"" + component.getValue().getName() + "\" deleted=\"true\"/>";
+						xml += "<component template=\"" + component.getValue().getName() + "\" deleted=\"true\"/>";
 					}
 				}
 			}
