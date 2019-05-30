@@ -57,10 +57,11 @@ public class Main {
 
 			SceneEditor.coreEngine = new CoreEngine(gamePath,
 					Paths.get(Main.class.getResource("/leleditor").toURI()).toString());
+			SceneEditor.gamePath = gamePath;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		SceneEditor.gamePath = gamePath;
+		
 
 		// EDITING_STATE_CHANGED is called in GAME_LOOP_START so no need to add another
 		// scheduling
