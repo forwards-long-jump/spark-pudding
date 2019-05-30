@@ -35,6 +35,9 @@ public class ModalStart extends Modal {
 	private JButton btnNewEmpty;
 	private JButton btnNewBasic;
 
+	/**
+	 * Constructor
+	 */
 	public ModalStart() {
 		super(null, "Create or open game", false);
 		init();
@@ -43,12 +46,18 @@ public class ModalStart extends Modal {
 		setupFrame();
 	}
 
+	/**
+	 * Initialize the ui components and their values
+	 */
 	private void init() {
 		btnOpen = new JButton("Open");
 		btnNewEmpty = new JButton("New empty game");
 		btnNewBasic = new JButton("New basic game");
 	}
 
+	/**
+	 * Set the display of the components
+	 */
 	private void setupLayout() {
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.add(btnOpen, BorderLayout.NORTH);
@@ -56,13 +65,19 @@ public class ModalStart extends Modal {
 		mainPanel.add(btnNewBasic, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Set the frame size and parameters
+	 */
 	private void setupFrame() {
 		pack();
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-
+	
+	/**
+	 * Setup the listeners for the components
+	 */
 	private void setupListener() {
 		btnOpen.addActionListener(new ActionListener() {
 			@Override

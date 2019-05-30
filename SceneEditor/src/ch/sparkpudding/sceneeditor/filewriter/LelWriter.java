@@ -89,8 +89,6 @@ public class LelWriter {
 				src = Paths.get(Main.class.getResource("/basicgame").toURI());
 			}
 			Path dest = Paths.get(directory);
-			System.out.println("source : " + src);
-			System.out.println("destination : " + dest);
 
 			Files.walk(src).forEach(source -> {
 				try {
