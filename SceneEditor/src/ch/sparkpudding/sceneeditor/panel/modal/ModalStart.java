@@ -3,6 +3,8 @@ package ch.sparkpudding.sceneeditor.panel.modal;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
@@ -74,7 +76,7 @@ public class ModalStart extends Modal {
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-	
+
 	/**
 	 * Setup the listeners for the components
 	 */
@@ -146,13 +148,21 @@ public class ModalStart extends Modal {
 				}
 			}
 		});
+
+		this.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				System.exit(0);
+			}
+		});
 	}
 
 	/**
 	 * Start the Scene editor with the game path
 	 * 
 	 * @throws URISyntaxException when the path is incorrect
-	 * @throws Exception If the CoreEngine can't start the game
+	 * @throws Exception          If the CoreEngine can't start the game
 	 */
 	private void openGame() throws URISyntaxException, Exception {
 		SceneEditor.coreEngine = new CoreEngine(gamePath,
@@ -176,5 +186,7 @@ public class ModalStart extends Modal {
 		});
 
 		SceneEditor.frameSceneEditor = new FrameSceneEditor();
+
+		dispose();
 	}
 }
