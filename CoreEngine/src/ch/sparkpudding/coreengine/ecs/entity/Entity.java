@@ -126,7 +126,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 			Node node = components.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element componentElement = (Element) components.item(i);
-				if (componentElement.hasAttribute("delete")) {
+				if (componentElement.hasAttribute("deleted")) {
 					this.removeComponent(componentElement.getAttribute("template"));
 				} else {
 					// Either edit or add this component
