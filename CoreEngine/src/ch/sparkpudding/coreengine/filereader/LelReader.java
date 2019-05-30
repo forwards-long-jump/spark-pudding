@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,6 @@ public class LelReader {
 
 		listSystems = new ArrayList<File>();
 		populateList(new File(directory + "/systems"), listSystems);
-		sortSystem(listSystems);
 
 		mapSounds = new HashMap<String, File>();
 		populateMaps(new File(directory + "/assets/sounds"), mapSounds);
@@ -78,7 +78,13 @@ public class LelReader {
 	 */
 	private void sortSystem(List<File> list) {
 		// TODO Better sort of the systems
-		Collections.sort(list);
+		list.sort(new Comparator<File>() {
+
+			@Override
+			public int compare(File o1, File o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
 	}
 
 	/**
@@ -93,7 +99,6 @@ public class LelReader {
 
 		listEditingSystems = new ArrayList<File>();
 		populateList(new File(directory + "/systems"), listEditingSystems);
-		sortSystem(listEditingSystems);
 	}
 
 	/**
@@ -115,6 +120,7 @@ public class LelReader {
 		} catch (NullPointerException e) {
 			Lel.coreEngine.notifyErrorAndClose("Missing folder " + folder);
 		}
+		sortSystem(listSystems);
 	}
 
 	/**
