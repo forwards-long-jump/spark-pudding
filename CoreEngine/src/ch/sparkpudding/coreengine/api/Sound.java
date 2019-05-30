@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 
 import ch.sparkpudding.coreengine.Lel;
@@ -20,6 +22,16 @@ import ch.sparkpudding.coreengine.ResourceLocator;
 public class Sound {
 	private static Sound instance;
 	private ResourceLocator resourceLocator;
+
+	private static final LineListener stopLineListener = new LineListener() {
+
+		@Override
+		public void update(LineEvent event) {
+			if (event.getType() == LineEvent.Type.STOP) {
+				event.getLine().close();
+			}
+		}
+	};
 
 	private Clip currentMusic;
 
@@ -102,6 +114,6 @@ public class Sound {
 		Clip clip = AudioSystem.getClip();
 		clip.open(audioInputStream);
 		clip.start();
-
+		clip.addLineListener(stopLineListener);
 	}
 }
