@@ -20,10 +20,17 @@ import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.filewriter.LelWriter;
 
+/**
+ * Starting modal for the scene editor
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ *         Creation Date : 30 May 2019
+ *
+ */
 @SuppressWarnings("serial")
 public class ModalStart extends Modal {
 
-	String gamePath;
+	private String gamePath;
 	private JButton btnOpen;
 	private JButton btnNewEmpty;
 	private JButton btnNewBasic;
@@ -45,8 +52,8 @@ public class ModalStart extends Modal {
 	private void setupLayout() {
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.add(btnOpen, BorderLayout.NORTH);
-		mainPanel.add(btnNewEmpty,  BorderLayout.CENTER);
-		mainPanel.add(btnNewBasic,  BorderLayout.SOUTH);
+		mainPanel.add(btnNewEmpty, BorderLayout.CENTER);
+		mainPanel.add(btnNewBasic, BorderLayout.SOUTH);
 	}
 
 	private void setupFrame() {
@@ -70,7 +77,8 @@ public class ModalStart extends Modal {
 					try {
 						openGame();
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup",
+								JOptionPane.ERROR_MESSAGE);
 					}
 				} else
 					return;
@@ -88,14 +96,16 @@ public class ModalStart extends Modal {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					gamePath = fc.getSelectedFile().getAbsolutePath();
 					LelWriter lel = new LelWriter();
-					lel.create(gamePath + '/', false); 
+					lel.create(gamePath + '/', false);
 					try {
 						openGame();
 					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup",
+								JOptionPane.ERROR_MESSAGE);
 					}
-				} else
+				} else {
 					return;
+				}
 			}
 		});
 		btnNewEmpty.addActionListener(new ActionListener() {
@@ -109,18 +119,26 @@ public class ModalStart extends Modal {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					gamePath = fc.getSelectedFile().getAbsolutePath();
 					LelWriter lel = new LelWriter();
-					lel.create(gamePath + '/', true); 
+					lel.create(gamePath + '/', true);
 					try {
 						openGame();
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup",
+								JOptionPane.ERROR_MESSAGE);
 					}
-				} else
+				} else {
 					return;
+				}
 			}
 		});
 	}
 
+	/**
+	 * Start the Scene editor with the game path
+	 * 
+	 * @throws URISyntaxException when the path is incorrect
+	 * @throws Exception If the CoreEngine can't start the game
+	 */
 	private void openGame() throws URISyntaxException, Exception {
 		SceneEditor.coreEngine = new CoreEngine(gamePath,
 				Paths.get(Main.class.getResource("/leleditor").toURI()).toString());
@@ -144,9 +162,4 @@ public class ModalStart extends Modal {
 
 		SceneEditor.frameSceneEditor = new FrameSceneEditor();
 	}
-
-	public String getPath() {
-		return gamePath;
-	}
-
 }

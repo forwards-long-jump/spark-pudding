@@ -10,6 +10,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.JOptionPane;
+
 import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
@@ -81,10 +83,11 @@ public class LelWriter {
 	public void create(String directory, boolean isEmptyGame) {
 		Path src;
 		try {
-			if (isEmptyGame)
+			if (isEmptyGame) {
 				src = Paths.get(Main.class.getResource("/emptygame").toURI());
-			else
+			} else {
 				src = Paths.get(Main.class.getResource("/basicgame").toURI());
+			}
 			Path dest = Paths.get(directory);
 			System.out.println("source : " + src);
 			System.out.println("destination : " + dest);
@@ -93,9 +96,11 @@ public class LelWriter {
 				try {
 					Files.copy(source, dest.resolve(src.relativize(source)), StandardCopyOption.REPLACE_EXISTING);
 				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, e.getStackTrace(), "IO Error", JOptionPane.ERROR_MESSAGE);
 				}
 			});
 		} catch (IOException | URISyntaxException e) {
+			JOptionPane.showMessageDialog(null, e.getStackTrace(), "IO Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

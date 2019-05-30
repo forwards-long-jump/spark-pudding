@@ -77,8 +77,9 @@ public class MenuFile extends JMenu {
 				int returnVal = folderChooser.showSaveDialog(SceneEditor.frameSceneEditor);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					newGamePath = folderChooser.getSelectedFile().getAbsolutePath();
-				} else
+				} else {
 					return;
+				}
 
 				lel.create(newGamePath + "/", true); // Not fully implemented yet. best not use it
 			}
