@@ -220,12 +220,12 @@ public class Component implements Iterable<Entry<String, Field>> {
 	 *
 	 * @param attached attached
 	 */
-	public void setAttached(boolean attached) {
+	public void setAttached(boolean attached, boolean reset) {
 		this.attached = attached;
-		if (attached) {
+		if (attached && reset) {
 			// reset the values according to the template
 			for (Field field : fields.values()) {
-				field.setValue(templates.get(name).getField(field.getName()).getValue());
+				field.setValue(templates.get(templateName).getField(field.getName()).getValue());
 			}
 		}
 	}

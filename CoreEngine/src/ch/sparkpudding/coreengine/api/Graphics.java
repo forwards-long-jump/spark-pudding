@@ -91,6 +91,17 @@ public class Graphics {
 	public void setColor(Color color) {
 		g2d.setColor(color);
 	}
+	
+	/**
+	 * Changes the current color used by the painter
+	 * 
+	 * @param int r
+	 * @param int g
+	 * @param int b
+	 */
+	public void setColor(int r, int g, int b) {
+		g2d.setColor(new Color(r, g, b));
+	}
 
 	/**
 	 * Changes the current width of the pen

@@ -135,8 +135,8 @@ public class PanelEditor extends JPanel {
 
 		jPanelList.setLayout(new BorderLayout());
 		jPanelButton.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		jPanelButton.add(buttonAdd);
 		jPanelButton.add(buttonRemove);
+		jPanelButton.add(buttonAdd);
 
 		jPanelList.add(listScroller, BorderLayout.CENTER);
 		jPanelList.add(jPanelButton, BorderLayout.SOUTH);
@@ -160,6 +160,8 @@ public class PanelEditor extends JPanel {
 			ButtonTabComponent buttonTabComponent = new ButtonTabComponent(jTabbedPane);
 			CompletionProvider provider = createCompletionProviderForSystem(system);
 			AutoCompletion autoCompletion = new AutoCompletion(provider);
+
+			buttonTabComponent.setDirty(false);
 
 			TextEditorPane editorPane = new TextEditorPane(TextEditorPane.INSERT_MODE, false,
 					FileLocation.create(system.getFilepath()));
@@ -187,6 +189,7 @@ public class PanelEditor extends JPanel {
 								@Override
 								public void run() {
 									SceneEditor.coreEngine.reloadSystemsFromDisk();
+									SceneEditor.clearError();
 								}
 							});
 						} catch (IOException e1) {
@@ -330,6 +333,11 @@ public class PanelEditor extends JPanel {
 	 * Populate the list of system
 	 */
 	private void populateSystemList() {
+		List<System> oldSystems = new ArrayList<System>();
+		for (int i = 0; i < ((DefaultListModel<System>) listModel).getSize(); i++) {
+			oldSystems.add(((DefaultListModel<System>) listModel).get(i));
+		}
+
 		((DefaultListModel<System>) listModel).removeAllElements();
 		nameSystems.clear();
 
@@ -337,6 +345,21 @@ public class PanelEditor extends JPanel {
 		for (System system : SceneEditor.coreEngine.getSystems()) {
 			((DefaultListModel<System>) listModel).addElement(system);
 			nameSystems.add(system.getName());
+		}
+
+		for (System newSystem : SceneEditor.coreEngine.getSystems()) {
+			boolean isNew = true;
+			for (System system : oldSystems) {
+				if (system.getName().equals(newSystem.getName())) {
+					isNew = false;
+					break;
+				}
+			}
+
+			if (isNew) {
+				addTab(newSystem);
+				break;
+			}
 		}
 
 		revalidate();

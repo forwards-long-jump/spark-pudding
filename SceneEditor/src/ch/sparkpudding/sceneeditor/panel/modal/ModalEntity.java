@@ -116,6 +116,13 @@ public class ModalEntity extends Modal {
 				dispose();
 			}
 		});
+		
+		textFieldName.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				buttonAdd.doClick();
+			}
+		});
 	}
 
 	/**

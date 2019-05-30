@@ -38,6 +38,16 @@ public class Input {
 	public boolean isKeyDown(int keyCode) {
 		return input.isKeyDown(keyCode);
 	}
+	
+	/**
+	 * Return the state of specified key
+	 * 
+	 * @param key
+	 * @return the state of specified key
+	 */
+	public boolean isKeyDown(String key) {
+		return input.isKeyDown(keyFromString(key));
+	}
 
 	/**
 	 * Return the state of specified mouse button

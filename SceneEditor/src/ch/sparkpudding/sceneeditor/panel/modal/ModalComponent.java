@@ -33,6 +33,7 @@ import ch.sparkpudding.coreengine.ecs.component.Field.FieldType;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.action.ActionAddComponent;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 
 /**
  * Create a new component for the current entity with the input in this modal
@@ -57,15 +58,17 @@ public class ModalComponent extends Modal {
 	private JButton buttonRemoveField;
 
 	private Entity entity;
+	private SEEntity seEntity;
 
 	/**
 	 * Constructor for the modal to create a new component
 	 * 
 	 * @param entity to add component to
 	 */
-	public ModalComponent(Entity entity) {
+	public ModalComponent(SEEntity seEntity, Entity entity) {
 		super(SceneEditor.frameSceneEditor, "Add component", true);
 		this.entity = entity;
+		this.seEntity = seEntity;
 
 		if (init()) {
 			setupLayout();
@@ -324,7 +327,7 @@ public class ModalComponent extends Modal {
 					if (entity == null) {
 						Component.addTemplate(component);
 					} else {
-						(new ActionAddComponent("Add component (" + component.getName() + ")", entity, component))
+						(new ActionAddComponent(seEntity, entity, component))
 								.actionPerformed(null);
 					}
 

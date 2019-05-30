@@ -68,7 +68,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 */
 	public Entity(Entity entity) {
 		this(entity.name, entity.template, entity.zIndex, new HashMap<String, Component>());
-		
+
 		// copy components
 		this.components = new HashMap<String, Component>();
 		for (Component component : entity.getComponents().values()) {
@@ -175,7 +175,8 @@ public class Entity implements Iterable<Entry<String, Component>> {
 
 			// update luaEntity
 			createLuaEntity();
-			Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED, new Pair<Entity, Component>(this, component));
+			Lel.coreEngine.getScheduler().trigger(Trigger.COMPONENT_ADDED,
+					new Pair<Entity, Component>(this, component));
 			return true;
 		}
 		return false;
@@ -217,6 +218,23 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	}
 
 	/**
+	 * Attach/detach specified component to entity and use entity template if
+	 * specifable
+	 * 
+	 * @param componentName name of component to attach/detach
+	 * @param attach        boolean if component should be attached or detach
+	 */
+	public void setComponentAttached(String componentName, boolean attached) {
+		components.get(componentName).setAttached(attached, true);
+		if (attached) {
+			if (templates.get(template).getComponents().get(componentName) != null) {
+				Component nc = new Component(templates.get(template).getComponents().get(componentName));
+				components.put(componentName, nc);
+			}
+		}
+	}
+
+	/**
 	 * Sets the z index
 	 * 
 	 * @param zIndex
@@ -224,7 +242,7 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	public void setZIndex(int zIndex) {
 		this.zIndex = zIndex;
 	}
-	
+
 	/**
 	 * Sets the name
 	 * 
@@ -275,11 +293,33 @@ public class Entity implements Iterable<Entry<String, Component>> {
 	 * @param template
 	 */
 	public static void addTemplate(Entity template) {
-		templates.put(template.getName(), template);
+		Entity newTemplate = new Entity(template);
+
+		// Force template to have all their components attached (without reseting from
+		// comp template)
+		for (Entry<String, Component> componentEntry : newTemplate.getComponents().entrySet()) {
+			componentEntry.getValue().setAttached(true, false);
+		}
+
+		templates.put(template.getTemplate(), newTemplate);
 	}
 
+	/**
+	 * Get entity template
+	 * 
+	 * @return string name of the template
+	 */
 	public String getTemplate() {
 		return template;
+	}
+
+	/**
+	 * Set the template used by this entity (has no effects on fields until reload)
+	 * 
+	 * @param template to set
+	 */
+	public void setTemplate(String template) {
+		this.template = template;
 	}
 
 	/**

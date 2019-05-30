@@ -21,8 +21,19 @@ import ch.sparkpudding.sceneeditor.SceneEditor;
 public class ActionAddSystem extends AbstractAction {
 
 	private String name;
-	private String content = "function getRequiredComponents()\n" + "	return {}\n" + "end\n" + "\n"
-			+ "function update()\n" + "	for i, entity in ipairs(entities) do\n" + "	end\n" + "end";
+	private String content =
+			"function getRequiredComponents()\n" +
+			"	return {\"position\", \"size\"}\n" 
+		  + "end\n" 
+		  + "\n" +
+		  "function updateEntities(entity)\n" +
+		  "	-- entity.position.x = entity.position.x + 1\n" +
+		  "end\n" +
+	      "\n" +
+		  "--[[ Uncomment to loop manually\nfunction update()\n" + 
+		  "	for i, entity in ipairs(entities) do\n" + 
+	      "	end\n" + 
+		  "end\n---]]";
 
 	/**
 	 * ctor

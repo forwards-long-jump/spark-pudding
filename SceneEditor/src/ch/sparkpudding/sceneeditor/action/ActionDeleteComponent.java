@@ -6,6 +6,7 @@ import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 
 /**
  * Action to delete a component
@@ -18,18 +19,20 @@ import ch.sparkpudding.sceneeditor.SceneEditor;
 public class ActionDeleteComponent extends AbstractAction {
 	Component component;
 	Entity entity;
+	SEEntity seEntity;
 
 	/**
 	 * ctor
 	 * 
-	 * @param name of the action
-	 * @param entity affected by the component deletion
+	 * @param name      of the action
+	 * @param entity    affected by the component deletion
 	 * @param component to delete
 	 */
-	public ActionDeleteComponent(String name, Entity entity, Component component) {
-		super(name);
+	public ActionDeleteComponent(SEEntity seEntity, Entity entity, Component component) {
+		super("Delete component " + component.getName());
 		this.component = component;
 		this.entity = entity;
+		this.seEntity = seEntity;
 	}
 
 	/**
@@ -43,9 +46,9 @@ public class ActionDeleteComponent extends AbstractAction {
 			public void run() {
 				SceneEditor.coreEngine.deleteComponent(entity, component.getName());
 				SwingUtilities.invokeLater(new Runnable() {
-					
+
 					@Override
-					public void run() {						
+					public void run() {
 						SceneEditor.fireSelectedEntityChanged();
 					}
 				});
@@ -66,9 +69,9 @@ public class ActionDeleteComponent extends AbstractAction {
 				entity.addComponent(component);
 				SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);
 				SwingUtilities.invokeLater(new Runnable() {
-					
+
 					@Override
-					public void run() {						
+					public void run() {
 						SceneEditor.fireSelectedEntityChanged();
 					}
 				});

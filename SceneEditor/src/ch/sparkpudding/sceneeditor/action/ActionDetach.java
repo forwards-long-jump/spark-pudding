@@ -22,20 +22,21 @@ public class ActionDetach extends AbstractAction {
 	 * @param component Component to detach
 	 */
 	public ActionDetach(Component component) {
+		// TODO: Use entity to attach	
 		super("Detach component " + component.getName());
 		this.component = component;
 	}
 
 	@Override
 	public boolean doAction() {
-		component.setAttached(false);
+		component.setAttached(false, true);
 		SceneEditor.fireSelectedEntityChanged();
 		return true;
 	}
 
 	@Override
 	public void undoAction() {
-		component.setAttached(true);
+		component.setAttached(true, true);
 		SceneEditor.fireSelectedEntityChanged();
 	}
 

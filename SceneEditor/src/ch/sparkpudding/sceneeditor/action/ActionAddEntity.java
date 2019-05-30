@@ -40,6 +40,8 @@ public class ActionAddEntity extends AbstractAction {
 			double width = size.getField("width").getDouble();
 			double height = size.getField("height").getDouble();
 
+			this.newDefaultEntity.getComponents().get("position").setAttached(false, false);
+			
 			this.newDefaultEntity.getComponents().get("position").getField("x")
 					.setValue((camera.getPosition().getX() + SceneEditor.coreEngine.getGameWidth() / 2 - width / 2)
 							/ camera.getScaling());

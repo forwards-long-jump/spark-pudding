@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 
 /**
@@ -20,6 +21,7 @@ import ch.sparkpudding.sceneeditor.SceneEditor;
 public class ActionAttach extends AbstractAction {
 
 	private Component component;
+	private Entity entity;
 	private Map<String, String> oldValues;
 
 	/**
@@ -27,9 +29,10 @@ public class ActionAttach extends AbstractAction {
 	 * 
 	 * @param component Component which will be attached
 	 */
-	public ActionAttach(Component component) {
+	public ActionAttach(Entity entity, Component component) {
 		super("Attach component " + component.getName());
 		this.component = component;
+		this.entity = entity;
 	}
 
 	@Override
@@ -42,7 +45,7 @@ public class ActionAttach extends AbstractAction {
 		}
 
 		// This already sets the template values back in the component
-		component.setAttached(true);
+		entity.setComponentAttached(component.getName(), true);
 
 		SceneEditor.fireSelectedEntityChanged();
 		return true;
@@ -50,7 +53,7 @@ public class ActionAttach extends AbstractAction {
 
 	@Override
 	public void undoAction() {
-		component.setAttached(false);
+		entity.setComponentAttached(component.getName(), false);
 
 		// Restore all fields to the previous values
 		for (Entry<String, String> field : oldValues.entrySet()) {

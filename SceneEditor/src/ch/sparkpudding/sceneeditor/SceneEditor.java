@@ -43,6 +43,7 @@ public class SceneEditor {
 	private static Camera gameCamera;
 
 	private static EditorState gameState;
+	private static EditorState previousState;
 
 	static {
 		listenerList = new EventListenerList();
@@ -60,10 +61,29 @@ public class SceneEditor {
 	}
 
 	/**
+	 * Clear core engine error and restore previous state
+	 */
+	public static void clearError() {
+		if (coreEngine.isInError()) {
+
+			coreEngine.clearError();
+			if (previousState != null) {
+				setGameState(previousState);
+			} else {
+				setGameState(EditorState.PAUSE);
+			}
+		}
+	}
+
+	/**
 	 * Change editor state This MUST be called in sync with something done in
 	 * GAME_LOOP_START
 	 */
 	public static void setGameState(EditorState state) {
+		if(gameState != EditorState.ERROR) {			
+			previousState = gameState;
+		}
+		
 		gameState = state;
 		switch (state) {
 		case PAUSE:
@@ -302,7 +322,7 @@ public class SceneEditor {
 			listener.entityListChanged(seScenes);
 		}
 	}
-	
+
 	/**
 	 * Add a system listener
 	 *
@@ -321,7 +341,7 @@ public class SceneEditor {
 	public static void removeSystemEventListener(SystemEventListener evtListener) {
 		listenerList.remove(SystemEventListener.class, evtListener);
 	}
-	
+
 	/**
 	 * Allow to fire an event when the system list change
 	 */
