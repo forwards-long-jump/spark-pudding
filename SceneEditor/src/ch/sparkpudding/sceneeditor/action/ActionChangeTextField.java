@@ -39,6 +39,20 @@ public class ActionChangeTextField extends AbstractAction {
 		this.seEntity = seEntity;
 		this.value = value;
 		this.oldValue = field.getValue().toString();
+
+		// If game is stopped we also update live entity so we decide to use
+		// the live entity value instead
+		// this is done to allow moving stuff in the map editor
+		// this should not be done here but time:tm:
+		if (SceneEditor.getGameState() == EditorState.STOP) {
+			this.oldValue = seEntity.getDefaultEntity().getComponents().get(componentName).getField(field.getName())
+					.getValue().toString();
+
+			if (seEntity.getDefaultEntity().getComponents().get(componentName).isAttached()) {
+				seEntity.getDefaultEntity().getComponents().get(componentName).setAttached(false, false);
+				SceneEditor.fireSelectedEntityChanged();
+			}
+		}
 	}
 
 	/**
@@ -62,8 +76,9 @@ public class ActionChangeTextField extends AbstractAction {
 	public void undoAction() {
 		field.setValueFromString(oldValue);
 
-		if (textField != null)
+		if (textField != null) {
 			textField.setText(oldValue);
+		}
 
 		// If the game is stopped we also update the live entity
 		if (SceneEditor.getGameState() == EditorState.STOP) {
@@ -79,15 +94,21 @@ public class ActionChangeTextField extends AbstractAction {
 	 */
 	@Override
 	public boolean doAction() {
+		if (this.oldValue.equals(value)) {
+			return false;
+		}
+
 		field.setValueFromString(value);
 
-		if (textField != null)
+		if (textField != null) {
 			textField.setText(value);
+		}
 
 		// If the game is stopped we also update the live entity
 		if (SceneEditor.getGameState() == EditorState.STOP) {
 			seEntity.getLiveEntity().getComponents().get(componentName).getField(field.getName())
 					.setValueFromString(value);
+
 			// We need to do this because live values may be modified and we want to
 			// replicate them into the default component as well
 			// honestly I think it's bad and it will probably break something once but

@@ -64,10 +64,10 @@ public abstract class AbstractAction extends javax.swing.AbstractAction implemen
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		doAction();
 
-		if (isTracked)
+		if (doAction() && isTracked) {			
 			ActionsHistory.getInstance().insertAction(this);
+		}
 	}
 
 }

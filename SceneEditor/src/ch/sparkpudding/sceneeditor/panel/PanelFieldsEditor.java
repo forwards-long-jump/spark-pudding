@@ -46,6 +46,7 @@ public class PanelFieldsEditor extends JComponent {
 	private List<RunnableOneParameter> onFieldsChanged;
 	private List<JComponent> fieldsInput;
 	private SEEntity seEntity;
+	private Entity entity;
 	private Component component;
 
 	private boolean enableable;
@@ -56,13 +57,14 @@ public class PanelFieldsEditor extends JComponent {
 	 * @param fields     Collection of all the components of an entity
 	 * @param enableable Whether the component can be enabled
 	 */
-	public PanelFieldsEditor(SEEntity seEntity, Component component, boolean enableable) {
+	public PanelFieldsEditor(SEEntity seEntity, Entity entity, Component component, boolean enableable) {
 		this.fields = new ArrayList<Field>(component.getFields().values());
 		this.seEntity = seEntity;
 		this.fieldsInput = new ArrayList<JComponent>();
 		this.onFieldsChanged = new ArrayList<RunnableOneParameter>();
 		this.enableable = enableable;
 		this.component = component;
+		this.entity = entity;
 
 		createFields();
 		setupLayout();
@@ -99,10 +101,10 @@ public class PanelFieldsEditor extends JComponent {
 
 			// Position and size *can* be modified while the game is editing paused so
 			// we track when they are changed and update them here
-			if (component.getName().equals("position")
+			if (seEntity.getLiveEntity() == entity && component.getName().equals("position")
 					&& (field.getName().equals("x") || field.getName().equals("y"))) {
 				addRunnableForLiveChanges("position", field, valueField);
-			} else if (component.getName().equals("size")
+			} else if (seEntity.getLiveEntity() == entity && component.getName().equals("size")
 					&& (field.getName().equals("width") || field.getName().equals("height"))) {
 				addRunnableForLiveChanges("size", field, valueField);
 			}
@@ -131,7 +133,7 @@ public class PanelFieldsEditor extends JComponent {
 
 						if (entity.hasComponent(componentName)
 								&& entity.getComponents().get(componentName).getField(field.getName()) != null) {
-							new ActionChangeTextField(seEntity, field, (JTextField) inputField, componentName)
+								new ActionChangeTextField(seEntity, field, (JTextField) inputField, componentName)
 									.actionPerformed(null);
 
 						}
