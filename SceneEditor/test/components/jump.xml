@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="jump">
+	<!-- info regarding multiple jumps -->
+	<field type="INTEGER" name="countMax">2</field>
+	<field type="INTEGER" name="count">0</field>
+	<field type="BOOLEAN" name="released">true</field>
+	<!-- info regarding the height nuances -->	
+	<field type="INTEGER" name="airDuration">0</field>
+	<field type="INTEGER" name="airDurationDefault">10</field>
+
+	<field type="DOUBLE" name="force">30</field>
+</component>

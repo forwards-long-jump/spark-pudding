@@ -187,7 +187,7 @@ public class PanelComponentEditor extends JPanel {
 		}
 
 		this.contentPanel.add(titleBar);
-		PanelFieldsEditor field = new PanelFieldsEditor(seEntity, entity, component, isLive || !component.isAttached());
+		PanelFieldsEditor field = new PanelFieldsEditor(component, isLive || !component.isAttached());
 		this.fieldGenerators.add(field);
 		this.btnsDelete.add(btnDelete);
 		this.btnsDetachOrCopy.add(btnDetachOrCopy);
