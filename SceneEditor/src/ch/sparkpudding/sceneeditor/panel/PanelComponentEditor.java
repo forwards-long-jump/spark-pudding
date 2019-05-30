@@ -178,7 +178,7 @@ public class PanelComponentEditor extends JPanel {
 		titleBar.add(titleComp);
 		titleBar.add(Box.createHorizontalGlue());
 		btnDelete.addActionListener(
-				new ActionDeleteComponent("delete component " + component.getName(), entity, component));
+				new ActionDeleteComponent(seEntity, entity, component));
 
 		titleBar.add(btnDelete);
 

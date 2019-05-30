@@ -123,7 +123,7 @@ public class MenuEdit extends JMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new ModalComponent(null);
+				new ModalComponent(null, null);
 			}
 		});
 		

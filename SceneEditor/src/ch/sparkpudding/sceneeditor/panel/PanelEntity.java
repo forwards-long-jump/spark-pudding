@@ -127,10 +127,10 @@ public class PanelEntity extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				switch (jTabbedPane.getSelectedIndex()) {
 				case 0:
-					new ModalComponent(SceneEditor.selectedEntity.getDefaultEntity());
+					new ModalComponent(SceneEditor.selectedEntity, SceneEditor.selectedEntity.getDefaultEntity());
 					break;
 				case 1:
-					new ModalComponent(SceneEditor.selectedEntity.getLiveEntity());
+					new ModalComponent(SceneEditor.selectedEntity, SceneEditor.selectedEntity.getLiveEntity());
 					break;
 				default:
 					System.err.println("Invalid selected panel");
