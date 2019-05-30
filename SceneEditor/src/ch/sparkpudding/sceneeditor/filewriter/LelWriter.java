@@ -2,8 +2,12 @@ package ch.sparkpudding.sceneeditor.filewriter;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,6 +16,7 @@ import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.sceneeditor.Main;
 
 /**
  * The class to write all the file of a game from the SceneEditor
@@ -25,15 +30,15 @@ public class LelWriter {
 	/**
 	 * Save all the specified CoreEngine in the specified directory
 	 * 
-	 * @param coreEngine is the core engine who will be saved in the Lel folder.
-	 * @param directory  is the Lel directory path
+	 * @param coreEngine Is the core engine who will be saved in the Lel folder. Can
+	 *                   be null to initialize a new game
+	 * @param directory  Is the Lel directory path
 	 * @throws IOException
 	 */
-	public void write(CoreEngine coreEngine, String directory) throws IOException {
+	public void save(CoreEngine coreEngine, String directory) throws IOException {
 		// TODO : Adapt the code when we have a proper way to deal with default entities
 		// values and metadata in core engine.
 
-		Map<String, Scene> scenes = coreEngine.getScenes();
 		// Check general architecture
 		String[] requiredFiles = { "", "assets", "assets/music", "assets/sounds", "assets/textures", "components",
 				"entitytemplates", "scenes", "systems" };
@@ -43,6 +48,7 @@ public class LelWriter {
 		new File(directory + "metadata.xml").createNewFile();
 		Files.write(Paths.get(directory + "metadata.xml"), xmlFromMetadata().getBytes());
 
+		Map<String, Scene> scenes = coreEngine.getScenes();
 		// Overwrite Scenes
 		for (Map.Entry<String, Scene> sceneEntry : scenes.entrySet()) {
 			File fScene = new File(directory + "/scenes/" + sceneEntry.getKey() + ".xml");
@@ -65,7 +71,30 @@ public class LelWriter {
 				Files.write(fComponent.toPath(), xmlComponent.getBytes());
 			}
 		}
+	}
 
+	/**
+	 * Create a new game folder on the specified directory, based on the empty game
+	 * of the SceneEditor
+	 * 
+	 * @param directory Is the location of the new game
+	 */
+	public void create(String directory) {
+		Path src;
+		try {
+			src = Paths.get(Main.class.getResource("/emptygame").toURI());
+			Path dest = Paths.get(directory);
+			System.out.println("source : " + src);
+			System.out.println("destination : " + dest);
+
+			Files.walk(src).forEach(source -> {
+				try {
+					Files.copy(source, dest.resolve(src.relativize(source)), StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+				}
+			});
+		} catch (IOException | URISyntaxException e) {
+		}
 	}
 
 	/**

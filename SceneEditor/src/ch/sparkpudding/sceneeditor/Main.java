@@ -12,6 +12,7 @@ import ch.sparkpudding.coreengine.CoreEngine;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
+import ch.sparkpudding.sceneeditor.filewriter.LelWriter;
 
 /**
  *
@@ -20,6 +21,7 @@ import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
  */
 public class Main {
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 
 		// Set the default locale to english because everything is in english
@@ -58,6 +60,7 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		SceneEditor.gamePath = gamePath;
 
 		// EDITING_STATE_CHANGED is called in GAME_LOOP_START so no need to add another
 		// scheduling
