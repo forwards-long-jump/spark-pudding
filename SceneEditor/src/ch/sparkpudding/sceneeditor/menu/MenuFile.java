@@ -4,17 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import ch.sparkpudding.coreengine.CoreEngine;
-import ch.sparkpudding.sceneeditor.FrameSceneEditor;
-import ch.sparkpudding.sceneeditor.Main;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.filewriter.LelWriter;
 
@@ -85,7 +80,7 @@ public class MenuFile extends JMenu {
 				} else
 					return;
 
-				lel.create(newGamePath + "/");			
+				lel.create(newGamePath + "/", true); // Not fully implemented yet. best not use it
 			}
 		});
 	}

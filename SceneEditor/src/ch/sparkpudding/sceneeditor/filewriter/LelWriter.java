@@ -3,7 +3,6 @@ package ch.sparkpudding.sceneeditor.filewriter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,10 +78,13 @@ public class LelWriter {
 	 * 
 	 * @param directory Is the location of the new game
 	 */
-	public void create(String directory) {
+	public void create(String directory, boolean isEmptyGame) {
 		Path src;
 		try {
-			src = Paths.get(Main.class.getResource("/emptygame").toURI());
+			if (isEmptyGame)
+				src = Paths.get(Main.class.getResource("/emptygame").toURI());
+			else
+				src = Paths.get(Main.class.getResource("/basicgame").toURI());
 			Path dest = Paths.get(directory);
 			System.out.println("source : " + src);
 			System.out.println("destination : " + dest);
