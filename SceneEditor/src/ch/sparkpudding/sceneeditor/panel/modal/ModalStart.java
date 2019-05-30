@@ -33,6 +33,7 @@ import ch.sparkpudding.sceneeditor.filewriter.LelWriter;
 public class ModalStart extends Modal {
 
 	private String gamePath;
+	private boolean gameStarted;
 	private JButton btnOpen;
 	private JButton btnNewEmpty;
 	private JButton btnNewBasic;
@@ -52,6 +53,7 @@ public class ModalStart extends Modal {
 	 * Initialize the ui components and their values
 	 */
 	private void init() {
+		gameStarted = false;
 		btnOpen = new JButton("Open");
 		btnNewEmpty = new JButton("New empty game");
 		btnNewBasic = new JButton("New basic game");
@@ -152,8 +154,10 @@ public class ModalStart extends Modal {
 		this.addWindowListener(new WindowAdapter() {
 
 			@Override
-			public void windowClosed(WindowEvent e) {
-				System.exit(0);
+			public void windowClosing(WindowEvent e) {
+				if (!gameStarted) {
+					System.exit(0);
+				}
 			}
 		});
 	}
@@ -187,6 +191,7 @@ public class ModalStart extends Modal {
 
 		SceneEditor.frameSceneEditor = new FrameSceneEditor();
 
+		gameStarted = true;
 		dispose();
 	}
 }
