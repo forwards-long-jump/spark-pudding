@@ -203,6 +203,7 @@ public class PanelEntityTree extends JPanel {
 				AbstractAction action = new ActionRemoveEntity(SceneEditor.selectedEntity,
 						SceneEditor.currentScene.getLiveScene());
 				action.actionPerformed(e);
+				buttonRemove.setEnabled(false);
 			}
 		});
 
