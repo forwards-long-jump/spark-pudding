@@ -223,7 +223,7 @@ public class PanelFieldsEditor extends JComponent {
 		};
 
 		onFieldsChanged.add(onFieldChange);
-		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, onFieldChange);
+		SceneEditor.coreEngine.getScheduler().notify(Trigger.GAME_LOOP_START, onFieldChange);
 
 		input.addActionListener(new ActionListener() {
 			@Override
