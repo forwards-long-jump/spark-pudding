@@ -21,14 +21,10 @@ import javax.swing.SwingUtilities;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
-import ch.sparkpudding.coreengine.ecs.entity.Entity;
-import ch.sparkpudding.coreengine.utils.Pair;
 import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor;
-import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.action.ActionChangeCheckBox;
 import ch.sparkpudding.sceneeditor.action.ActionChangeTextField;
-import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.utils.SpringUtilities;
 
 /**
@@ -45,8 +41,6 @@ public class PanelFieldsEditor extends JComponent {
 	private Collection<Field> fields;
 	private List<RunnableOneParameter> onFieldsChanged;
 	private List<JComponent> fieldsInput;
-	private SEEntity seEntity;
-	private Entity entity;
 	private Component component;
 
 	private boolean enableable;
@@ -57,14 +51,13 @@ public class PanelFieldsEditor extends JComponent {
 	 * @param fields     Collection of all the components of an entity
 	 * @param enableable Whether the component can be enabled
 	 */
-	public PanelFieldsEditor(SEEntity seEntity, Entity entity, Component component, boolean enableable) {
+	public PanelFieldsEditor(
+			Component component, boolean enableable) {
 		this.fields = new ArrayList<Field>(component.getFields().values());
-		this.seEntity = seEntity;
 		this.fieldsInput = new ArrayList<JComponent>();
 		this.onFieldsChanged = new ArrayList<RunnableOneParameter>();
 		this.enableable = enableable;
 		this.component = component;
-		this.entity = entity;
 
 		createFields();
 		setupLayout();
@@ -98,52 +91,7 @@ public class PanelFieldsEditor extends JComponent {
 			add(labelField);
 			JComponent valueField = createValueField(field, labelField);
 			add(valueField);
-
-			// Position and size *can* be modified while the game is editing paused so
-			// we track when they are changed and update them here
-			if (seEntity.getLiveEntity() == entity && component.getName().equals("position")
-					&& (field.getName().equals("x") || field.getName().equals("y"))) {
-				addRunnableForLiveChanges("position", field, valueField);
-			} else if (seEntity.getLiveEntity() == entity && component.getName().equals("size")
-					&& (field.getName().equals("width") || field.getName().equals("height"))) {
-				addRunnableForLiveChanges("size", field, valueField);
-			}
 		}
-	}
-
-	/**
-	 * Add a RunnableOneParameter to update default entity when the game is stopped
-	 * but live changes are made
-	 * 
-	 * @param componentName name of the component to track
-	 * @param field         the field to track
-	 * @param inputField    input to update when the value is changed
-	 */
-	private void addRunnableForLiveChanges(String componentName, Field field, JComponent inputField) {
-		RunnableOneParameter onComponentAdded = new RunnableOneParameter() {
-			@Override
-			public void run() {
-				// we only handle that when the game is stopped
-				if (SceneEditor.getGameState() == EditorState.STOP) {
-					Entity entity = (Entity) ((Pair<?, ?>) getObject()).first();
-					Component component = (Component) ((Pair<?, ?>) getObject()).second();
-
-					if (seEntity.getLiveEntity() == entity && component.getName().equals("se-entity-transform-done")
-							&& entity.hasComponent("se-selected")) {
-
-						if (entity.hasComponent(componentName)
-								&& entity.getComponents().get(componentName).getField(field.getName()) != null) {
-								new ActionChangeTextField(seEntity, field, (JTextField) inputField, componentName)
-									.actionPerformed(null);
-
-						}
-					}
-				}
-			}
-		};
-
-		SceneEditor.coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, onComponentAdded);
-		this.onFieldsChanged.add(onComponentAdded);
 	}
 
 	@Override
@@ -228,7 +176,7 @@ public class PanelFieldsEditor extends JComponent {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ActionChangeTextField action = new ActionChangeTextField(seEntity, field, input, component.getName());
+				ActionChangeTextField action = new ActionChangeTextField(field, input, component.getName());
 				action.actionPerformed(e);
 			}
 		});
@@ -246,7 +194,7 @@ public class PanelFieldsEditor extends JComponent {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				ActionChangeTextField action = new ActionChangeTextField(seEntity, field, input, component.getName());
+				ActionChangeTextField action = new ActionChangeTextField(field, input, component.getName());
 				action.actionPerformed(null);
 			}
 		});
@@ -275,7 +223,7 @@ public class PanelFieldsEditor extends JComponent {
 		};
 
 		onFieldsChanged.add(onFieldChange);
-		SceneEditor.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, onFieldChange);
+		SceneEditor.coreEngine.getScheduler().notify(Trigger.GAME_LOOP_START, onFieldChange);
 
 		input.addActionListener(new ActionListener() {
 			@Override

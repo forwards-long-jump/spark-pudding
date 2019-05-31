@@ -83,7 +83,7 @@ public class CoreEngine extends JPanel {
 	public CoreEngine(String gameFolder) throws Exception {
 		init(gameFolder);
 		startGame();
-		setCurrentScene(scenes.get("main"));
+		setCurrentScene(scenes.get("main"), false);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class CoreEngine extends JPanel {
 
 		startGame();
 		try {
-			setCurrentScene(scenes.get("main"));
+			setCurrentScene(scenes.get("main"), false);
 		} catch (Exception e) {
 			notifyErrorAndClose("Could not find main scene.");
 		}
@@ -348,7 +348,7 @@ public class CoreEngine extends JPanel {
 		}
 
 		renderSystem = loadSystemsFromFiles(systems, lelFile.getSystems());
-		setCurrentScene(getCurrentScene());
+		setCurrentScene(getCurrentScene(), false);
 	}
 
 	/**
@@ -453,7 +453,7 @@ public class CoreEngine extends JPanel {
 
 				@Override
 				public void run() {
-					setCurrentScene(scenes.get("main"));
+					setCurrentScene(scenes.get("main"), false);
 					scenes.remove(name);
 					scheduler.trigger(Trigger.SCENE_LIST_CHANGED);
 				}
@@ -469,8 +469,8 @@ public class CoreEngine extends JPanel {
 	 *
 	 * @param name Name of the scene
 	 */
-	public void setScene(String name) {
-		setScene(name, false);
+	public void setScene(String name, boolean useDirectlyDefaultEntities) {
+		setScene(name, useDirectlyDefaultEntities);
 	}
 
 	/**
@@ -479,21 +479,21 @@ public class CoreEngine extends JPanel {
 	 * @param name  Name of the Scene
 	 * @param reset The scene will be reloaded when set to true
 	 */
-	public void setScene(String name, boolean reset) {
+	public void setScene(String name, boolean reset, boolean useDirectlyDefaultEntities) {
 		if (reset) {
-			scenes.get(name).reset();
+			scenes.get(name).reset(useDirectlyDefaultEntities);
 		}
-		setCurrentScene(scenes.get(name));
+		setCurrentScene(scenes.get(name), useDirectlyDefaultEntities);
 	}
 
 	/**
 	 * Reset the current scene. To call be call before updating
 	 */
-	public void resetCurrentScene() {
+	public void resetCurrentScene(boolean useDirectlyDefaultEntities) {
 		this.editingTick = 0;
 
-		currentScene.reset();
-		setCurrentScene(currentScene);
+		currentScene.reset(useDirectlyDefaultEntities);
+		setCurrentScene(currentScene, useDirectlyDefaultEntities);
 	}
 
 	/**
@@ -538,24 +538,32 @@ public class CoreEngine extends JPanel {
 	 *
 	 * @param newScene to switch to
 	 */
-	public void setCurrentScene(Scene newScene) {
+	public void setCurrentScene(Scene newScene, boolean useDirectlyDefaultEntities) {
 		this.currentScene = newScene;
+		List<Entity> entities;
+		if(useDirectlyDefaultEntities) {
+			entities = newScene.getDefaultEntities();
+		}
+		else {
+			entities = newScene.getEntities();
+		}
+		
 		for (UpdateSystem system : systems) {
-			system.setEntities(newScene.getEntities());
+			system.setEntities(entities);
 		}
 
 		if (renderSystem != null) {
-			renderSystem.setEntities(newScene.getEntities());
+			renderSystem.setEntities(entities);
 		}
 
 		if (editingSystems != null) {
 			for (UpdateSystem system : editingSystems) {
-				system.setEntities(newScene.getEntities());
+				system.setEntities(entities);
 			}
 		}
 
 		if (editingRenderSystem != null) {
-			editingRenderSystem.setEntities(newScene.getEntities());
+			editingRenderSystem.setEntities(entities);
 		}
 		scheduler.trigger(Trigger.SCENE_CHANGED, newScene);
 	}

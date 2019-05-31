@@ -5,6 +5,8 @@ import java.util.List;
 
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 
 /**
  * Allow to track a game scene from the SceneEditor and duplicate it with it
@@ -38,8 +40,15 @@ public class SEScene {
 	public void populateSEEntities() {
 		List<Entity> defaultEntities = liveScene.getDefaultEntities();
 		List<Entity> liveEntities = liveScene.getEntities();
-		for (int i = 0; i < defaultEntities.size(); i++) {
-			seEntities.add(new SEEntity(defaultEntities.get(i), liveEntities.get(i)));
+
+		if (SceneEditor.getGameState() != EditorState.STOP) {
+			for (int i = 0; i < defaultEntities.size(); i++) {
+				seEntities.add(new SEEntity(defaultEntities.get(i), liveEntities.get(i)));
+			}
+		} else {
+			for (int i = 0; i < defaultEntities.size(); i++) {
+				seEntities.add(new SEEntity(defaultEntities.get(i), defaultEntities.get(i)));
+			}
 		}
 	}
 
