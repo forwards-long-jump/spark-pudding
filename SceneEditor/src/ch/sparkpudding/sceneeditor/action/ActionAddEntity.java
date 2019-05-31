@@ -7,6 +7,7 @@ import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 
 /**
@@ -41,7 +42,7 @@ public class ActionAddEntity extends AbstractAction {
 			double height = size.getField("height").getDouble();
 
 			this.newDefaultEntity.getComponents().get("position").setAttached(false, false);
-			
+
 			this.newDefaultEntity.getComponents().get("position").getField("x")
 					.setValue((camera.getPosition().getX() + SceneEditor.coreEngine.getGameWidth() / 2 - width / 2)
 							/ camera.getScaling());
@@ -72,9 +73,16 @@ public class ActionAddEntity extends AbstractAction {
 							@Override
 							public void run() {
 								for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
-									if (seEntity.getLiveEntity() == newLiveEntity) {
-										seEntity.setSelected(true);
-										break;
+									if (SceneEditor.getGameState() != EditorState.STOP) {
+										if (seEntity.getLiveEntity() == newLiveEntity) {
+											seEntity.setSelected(true);
+											break;
+										}
+									} else {
+										if (seEntity.getLiveEntity() == newDefaultEntity) {
+											seEntity.setSelected(true);
+											break;
+										}
 									}
 								}
 							}

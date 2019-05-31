@@ -40,11 +40,7 @@ public class SEScene {
 	public void populateSEEntities() {
 		List<Entity> defaultEntities = liveScene.getDefaultEntities();
 		List<Entity> liveEntities = liveScene.getEntities();
-		System.out.println("DEFAULT");
-		System.out.println(defaultEntities);
-		System.out.println("LIVE");
-		System.out.println(liveEntities);
-		System.out.println("STATE: " + SceneEditor.getGameState());
+
 		if (SceneEditor.getGameState() != EditorState.STOP) {
 			for (int i = 0; i < defaultEntities.size(); i++) {
 				seEntities.add(new SEEntity(defaultEntities.get(i), liveEntities.get(i)));
