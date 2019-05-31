@@ -15,6 +15,7 @@ public class MenuBar extends JMenuBar {
 	private MenuFile menuFile;
 	private MenuEdit menuEdit;
 	private MenuCamera menuCamera;
+	private MenuHelp menuHelp;
 
 	/**
 	 * ctor
@@ -31,6 +32,7 @@ public class MenuBar extends JMenuBar {
 		menuFile = new MenuFile();
 		menuEdit = new MenuEdit();
 		menuCamera = new MenuCamera();
+		menuHelp = new MenuHelp();
 	}
 
 	/**
@@ -40,5 +42,6 @@ public class MenuBar extends JMenuBar {
 		add(menuFile);
 		add(menuEdit);
 		add(menuCamera);
+		add(menuHelp);
 	}
 }

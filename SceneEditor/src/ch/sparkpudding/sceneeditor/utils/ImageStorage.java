@@ -18,5 +18,6 @@ public class ImageStorage {
 	public static final ImageIcon WARNING = ImageLoader.loadImage("warning.png");
 	public static final ImageIcon RELOAD = ImageLoader.loadImage("reload.png");
 	public static final ImageIcon ICON = ImageLoader.loadImage("icon.png");
+	public static final ImageIcon HEARCLOGO = ImageLoader.loadImage("hearclogo.png");
 
 }
