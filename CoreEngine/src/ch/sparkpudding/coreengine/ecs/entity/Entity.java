@@ -72,7 +72,9 @@ public class Entity implements Iterable<Entry<String, Component>> {
 		// copy components
 		this.components = new HashMap<String, Component>();
 		for (Component component : entity.getComponents().values()) {
-			this.components.put(component.getName(), new Component(component));
+			if (!component.getName().startsWith("se-")) {
+				this.components.put(component.getName(), new Component(component));
+			}
 		}
 
 		createLuaEntity();
