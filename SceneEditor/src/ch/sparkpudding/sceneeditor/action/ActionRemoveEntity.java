@@ -69,6 +69,10 @@ public class ActionRemoveEntity extends AbstractAction {
 
 					@Override
 					public void run() {
+						if (entity == SceneEditor.selectedEntity) {
+							SceneEditor.selectedEntity = null;
+							SceneEditor.fireSelectedEntityChanged();
+						}
 						SceneEditor.createEntityList();
 					}
 				});

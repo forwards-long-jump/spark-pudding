@@ -261,6 +261,10 @@ public class PanelEntity extends JPanel {
 	 * @param seEntity The entity represented by this panel
 	 */
 	private void setEntity(SEEntity seEntity) {
+		if (seEntity == null) {
+			clearTabbedPanes();
+			return;
+		}
 		currentEntity = seEntity;
 		// Is there a default entity ?
 		if (seEntity.getDefaultEntity() != null) {
