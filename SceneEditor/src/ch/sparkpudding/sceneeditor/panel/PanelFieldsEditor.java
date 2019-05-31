@@ -157,6 +157,7 @@ public class PanelFieldsEditor extends JComponent {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {
+				// TODO: implement better fix
 				try {
 					if (!field.getValue().toString().equals(input.getText()) && !input.hasFocus()) {
 						SwingUtilities.invokeLater(new Runnable() {
@@ -214,6 +215,7 @@ public class PanelFieldsEditor extends JComponent {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {
+				// TODO: implement better fix
 				try {
 					if (input.isSelected() != (boolean) field.getValue() && !input.hasFocus()) {
 
