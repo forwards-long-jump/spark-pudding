@@ -19,6 +19,8 @@ import javax.swing.JSeparator;
 
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
+import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.action.ActionAttach;
 import ch.sparkpudding.sceneeditor.action.ActionDeleteComponent;
 import ch.sparkpudding.sceneeditor.action.ActionDetach;
@@ -158,7 +160,7 @@ public class PanelComponentEditor extends JPanel {
 		JButton btnDelete = new JButton("Delete");
 		JButton btnDetachOrCopy = null;
 
-		boolean isLive = (seEntity.getLiveEntity() == entity);
+		boolean isLive = (seEntity.getLiveEntity() == entity) && SceneEditor.getGameState() != EditorState.STOP;
 		boolean isSpawned = seEntity.getDefaultEntity() == null;
 		if (!isSpawned) {
 			if (isLive) {
