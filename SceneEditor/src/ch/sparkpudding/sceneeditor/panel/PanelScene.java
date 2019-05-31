@@ -23,6 +23,7 @@ import ch.sparkpudding.sceneeditor.action.ActionRenameScene;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalScene;
+import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
 /**
  * The panel which show the different scene
@@ -61,8 +62,14 @@ public class PanelScene extends JPanel {
 	private void init() {
 		comboBoxScenes = new JComboBox<String>();
 
-		buttonAddScene = new JButton("+");
-		buttonRemoveScene = new JButton("-");
+		this.buttonAddScene = new JButton(ImageStorage.PLUS);
+		buttonAddScene.setBorderPainted(false);
+		buttonAddScene.setContentAreaFilled(false);
+		this.buttonRemoveScene = new JButton(ImageStorage.TRASH);
+		buttonRemoveScene.setBorderPainted(false);
+		buttonRemoveScene.setContentAreaFilled(false);
+		
+		
 		buttonRemoveScene.setPreferredSize(buttonAddScene.getPreferredSize());
 
 		comboBoxScenes.setEditable(true);
