@@ -2,6 +2,8 @@ package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -74,6 +76,16 @@ public class PanelComponentEditor extends JPanel {
 		this.jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		this.jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		this.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		// this is a fix for rendering issue we have when the system editor is displayed
+		// this is a patch rather than a clean fix and the real issue should be
+		// investigated in the addTab method of the lua editor
+		this.jScrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+			@Override
+			public void adjustmentValueChanged(AdjustmentEvent arg0) {
+				repaint();
+			}
+		});
 	}
 
 	/**
@@ -177,8 +189,7 @@ public class PanelComponentEditor extends JPanel {
 		titleBar.add(Box.createHorizontalStrut(PanelSidebarRight.BASIC_ELEMENT_MARGIN));
 		titleBar.add(titleComp);
 		titleBar.add(Box.createHorizontalGlue());
-		btnDelete.addActionListener(
-				new ActionDeleteComponent(seEntity, entity, component));
+		btnDelete.addActionListener(new ActionDeleteComponent(seEntity, entity, component));
 
 		titleBar.add(btnDelete);
 
