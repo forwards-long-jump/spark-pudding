@@ -41,6 +41,7 @@ function update()
 
         -- Mouse is down and a previous dragging action was not started, save start drag state
         if draggingAction == -1 and game.input:isMouseButtonDown(1) then
+          entity._meta:addComponent("se-entity-transform-start")
           draggingAction = i
           draggingStartEntitySize.w = entity.size.width
           draggingStartEntitySize.h = entity.size.height
