@@ -36,6 +36,7 @@ import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.action.ActionAddComponent;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
+import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
 /**
  * Create a new component for the current entity with the input in this modal
@@ -95,10 +96,15 @@ public class ModalComponent extends Modal {
 		this.panelFields = new JPanel();
 		this.panelFieldsScroll = new JScrollPane();
 		this.buttonValidate = new JButton("OK");
-		this.buttonAddField = new JButton("+");
-		this.buttonRemoveField = new JButton("-");
 		this.comboBoxFieldType = new JComboBox<FieldType>();
 		this.cmbComponents = new JComboBox<String>();
+		
+		this.buttonAddField = new JButton(ImageStorage.PLUS);
+		buttonAddField.setBorderPainted(false);
+		buttonAddField.setContentAreaFilled(false);
+		this.buttonRemoveField = new JButton(ImageStorage.TRASH);
+		buttonRemoveField.setBorderPainted(false);
+		buttonRemoveField.setContentAreaFilled(false);
 
 		comboBoxFieldType.addItem(FieldType.BOOLEAN);
 		comboBoxFieldType.addItem(FieldType.DOUBLE);
@@ -203,6 +209,25 @@ public class ModalComponent extends Modal {
 		// No entity => panel edition
 		if (entity == null) {
 			mainPanel.add(fieldComponentName, c);
+			panelFields.setLayout(new BorderLayout());
+			panelFields.add(tableFields.getTableHeader(), BorderLayout.PAGE_START);
+			panelFields.add(tableFields, BorderLayout.CENTER);
+			c.gridx = 0;
+			c.gridy = 1;
+			c.gridwidth = 3;
+			c.insets = new Insets(20, 0, 0, 0);
+			mainPanel.add(panelFields, c);
+			
+			c.gridy = 2;
+			c.gridx = 1;
+			c.gridwidth = 1;
+			c.fill = GridBagConstraints.NONE;
+			c.anchor = GridBagConstraints.EAST;
+			c.insets = new Insets(5, 0, 0, 0);
+			mainPanel.add(buttonRemoveField, c);
+			
+			c.gridx = 2;
+			mainPanel.add(buttonAddField, c);
 		} else {
 			mainPanel.add(cmbComponents);
 
@@ -210,26 +235,7 @@ public class ModalComponent extends Modal {
 			buttonRemoveField.setEnabled(false);
 		}
 
-		panelFields.setLayout(new BorderLayout());
-		panelFields.add(tableFields.getTableHeader(), BorderLayout.PAGE_START);
-		panelFields.add(tableFields, BorderLayout.CENTER);
 
-		c.gridx = 0;
-		c.gridy = 1;
-		c.gridwidth = 3;
-		c.insets = new Insets(20, 0, 0, 0);
-		mainPanel.add(panelFields, c);
-
-		c.gridy = 2;
-		c.gridx = 1;
-		c.gridwidth = 1;
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.EAST;
-		c.insets = new Insets(5, 0, 0, 0);
-		mainPanel.add(buttonRemoveField, c);
-
-		c.gridx = 2;
-		mainPanel.add(buttonAddField, c);
 
 		c.insets = new Insets(20, 0, 0, 0);
 		c.fill = GridBagConstraints.HORIZONTAL;
