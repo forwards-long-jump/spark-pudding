@@ -1,5 +1,6 @@
 function getRequiredComponents()
   return {transformDone = {"se-entity-transform-done"},
+    transformStart = {"se-entity-transform-start"},
     entities = {"position", "size"},
     selectedEntities = {"position", "size", "se-selected"}}
 end
@@ -17,6 +18,11 @@ function update()
   for i, entity in ipairs(transformDone) do
     -- we only need to notify the SE for one tick
     entity._meta:removeComponent("se-entity-transform-done")
+  end
+  
+  for i, entity in ipairs(transformStart) do
+    -- we only need to notify the SE for one tick
+    entity._meta:removeComponent("se-entity-transform-start")
   end
 
   -- For each selected entities
@@ -52,6 +58,7 @@ function update()
       draggingAction = 4
       draggingStartOffset.x = -entity.position.x + game.input:getMouseX()
       draggingStartOffset.y = -entity.position.y + game.input:getMouseY()
+      entity._meta:addComponent("se-entity-transform-start")
     end
 
     -- Apply effects on live entity

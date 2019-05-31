@@ -2,6 +2,7 @@ package ch.sparkpudding.sceneeditor.panel;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -15,12 +16,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
+import ch.sparkpudding.coreengine.ecs.component.Component;
+import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
+import ch.sparkpudding.coreengine.utils.Pair;
 import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor;
 import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.action.ActionRemoveScene;
 import ch.sparkpudding.sceneeditor.action.ActionRenameScene;
+import ch.sparkpudding.sceneeditor.action.ActionTransformEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalScene;
@@ -40,6 +45,8 @@ public class PanelScene extends JPanel {
 	private JComboBox<String> comboBoxScenes;
 	private JButton buttonRemoveScene;
 	private JButton buttonAddScene;
+
+	private Rectangle transformStartRectangle;
 
 	private static final String TITLE = "Scenes";
 
@@ -87,6 +94,9 @@ public class PanelScene extends JPanel {
 		setBorder(BorderFactory.createTitledBorder(TITLE));
 	}
 
+	/**
+	 * Add listeners
+	 */
 	private void addListener() {
 		SceneEditor.coreEngine.getScheduler().notify(Trigger.SCENE_CHANGED, new RunnableOneParameter() {
 
@@ -116,6 +126,29 @@ public class PanelScene extends JPanel {
 						populateComboBox(SceneEditor.seScenes);
 					}
 				});
+			}
+		});
+
+		SceneEditor.coreEngine.getScheduler().notify(Trigger.COMPONENT_ADDED, new RunnableOneParameter() {
+			@Override
+			public void run() {
+				Component component = (Component) ((Pair<?, ?>) getObject()).second();
+				Entity entity = (Entity) ((Pair<?, ?>) getObject()).first();
+
+				if (component.getName().equals("se-entity-transform-start")) {
+					transformStartRectangle = new Rectangle(
+							entity.getComponents().get("position").getField("x").getInt(),
+							entity.getComponents().get("position").getField("y").getInt(),
+							entity.getComponents().get("size").getField("width").getInt(),
+							entity.getComponents().get("size").getField("height").getInt());
+				} else if (component.getName().equals("se-entity-transform-done")) {
+					new ActionTransformEntity(entity, transformStartRectangle,
+							new Rectangle(entity.getComponents().get("position").getField("x").getInt(),
+									entity.getComponents().get("position").getField("y").getInt(),
+									entity.getComponents().get("size").getField("width").getInt(),
+									entity.getComponents().get("size").getField("height").getInt()))
+											.actionPerformed(null);
+				}
 			}
 		});
 
@@ -149,7 +182,8 @@ public class PanelScene extends JPanel {
 						}
 
 						SceneEditor.setCurrentScene(newScene);
-						SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene(), SceneEditor.getGameState() == EditorState.STOP);
+						SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene(),
+								SceneEditor.getGameState() == EditorState.STOP);
 						panelEntityTree.updateListEntities(newScene);
 					} else {
 						new ActionRenameScene(SceneEditor.currentScene.getLiveScene().getName(), selected)
