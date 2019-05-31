@@ -6,7 +6,7 @@ end
 
 function renderStart()
 	game.camera:applyTransforms(g:getContext())
-	g:setBackground(game.color:fromRGB(255, 255, 255))
+	g:setBackground(255, 255, 255, 255)
 end
 
 function renderTextures(e)
@@ -41,4 +41,7 @@ end
 
 function renderEnd()
 	game.camera:resetTransforms(g:getContext())
+	g:setColor(game.color:fromRGB(0, 0, 0))
+	g:drawString("Editing mode", 20, 20)
+	g:drawString("FPS:" .. game.core:getFPS(), 20, 40)
 end
