@@ -6,7 +6,6 @@ import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.sceneeditor.SceneEditor;
-import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 
 /**
@@ -47,11 +46,7 @@ public class ActionAddComponent extends AbstractAction {
 			public void run() {
 				entity.addComponent(component);
 				SceneEditor.coreEngine.notifySystemsOfNewComponent(entity, component);
-				// If the game is stopped we also update the live entity
-				if (SceneEditor.getGameState() == EditorState.STOP) {
-					seEntity.getLiveEntity().addComponent(component);
-					SceneEditor.coreEngine.notifySystemsOfNewComponent(seEntity.getLiveEntity(), component);
-				}
+
 				SwingUtilities.invokeLater(new Runnable() {
 
 					@Override
@@ -74,10 +69,7 @@ public class ActionAddComponent extends AbstractAction {
 			@Override
 			public void run() {
 				SceneEditor.coreEngine.deleteComponent(entity, component.getName());
-				// If the game is stopped we also update the live entity
-				if (SceneEditor.getGameState() == EditorState.STOP) {
-					SceneEditor.coreEngine.deleteComponent(seEntity.getLiveEntity(), component.getName());
-				}
+
 				SwingUtilities.invokeLater(new Runnable() {
 
 					@Override
