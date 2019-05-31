@@ -6,7 +6,6 @@ end
 
 function renderStart()
 	game.camera:applyTransforms(g:getContext())
-	g:setBackground(255, 255, 255, 255)
 end
 
 function renderTextures(e)
