@@ -91,7 +91,7 @@ public class Graphics {
 	public void setColor(Color color) {
 		g2d.setColor(color);
 	}
-	
+
 	/**
 	 * Changes the current color used by the painter
 	 * 
@@ -103,6 +103,18 @@ public class Graphics {
 		g2d.setColor(new Color(r, g, b));
 	}
 
+	/**
+	 * Changes the current color used by the painter
+	 * 
+	 * @param int r
+	 * @param int g
+	 * @param int b
+	 * @param int a
+	 */
+	public void setColor(int r, int g, int b, int a) {
+		g2d.setColor(new Color(r, g, b, a));
+	}
+	
 	/**
 	 * Changes the current width of the pen
 	 * 
@@ -174,11 +186,26 @@ public class Graphics {
 	/**
 	 * Sets the background color
 	 * 
-	 * @param color New color for the background
+	 * @param r red color (0-255)
+	 * @param g green color (0-255)
+	 * @param b blue color (0-255)
 	 */
-	public void setBackground(Color color) {
-		g2d.setBackground(color);
+	public void setBackground(int r, int g, int b) {
+		g2d.setBackground(new Color(r, g, b));
 	}
+	
+	/**
+	 * Sets the background color
+	 * 
+	 * @param r red color (0-255)
+	 * @param g green color (0-255)
+	 * @param b blue color (0-255)
+	 * @param a alpha (0-255)
+	 */
+	public void setBackground(int r, int g, int b, int a) {
+		g2d.setBackground(new Color(r, g, b, a));
+	}
+
 
 	/**
 	 * Clears the specified rectangle by filling it with the background color of the
