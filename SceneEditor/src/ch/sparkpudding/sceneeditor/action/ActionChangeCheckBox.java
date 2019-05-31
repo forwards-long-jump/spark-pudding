@@ -45,6 +45,7 @@ public class ActionChangeCheckBox extends AbstractAction {
 	 */
 	public ActionChangeCheckBox(String name, Field field, JCheckBox checkBox) {
 		this(name, field, checkBox.isSelected());
+		System.out.println(checkBox);
 		this.checkBox = checkBox;
 	}
 

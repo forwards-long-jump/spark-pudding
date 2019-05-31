@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="speed">
-	<field type="BOOLEAN" name="noclip">false</field>
-	<field type="DOUBLE" name="x">0</field>
-	<field type="DOUBLE" name="y">0</field>
-</component>

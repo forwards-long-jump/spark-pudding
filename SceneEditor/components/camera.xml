@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="camera">
-	<field type="STRING" name="mode">SPRING</field>
-	<field type="DOUBLE" name="scaling">0.8</field>
-	<field type="BOOLEAN" name="enabled">false</field>
-</component>
