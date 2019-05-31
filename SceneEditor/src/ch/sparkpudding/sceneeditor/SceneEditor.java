@@ -81,10 +81,10 @@ public class SceneEditor {
 	 * GAME_LOOP_START
 	 */
 	public static void setGameState(EditorState state) {
-		if(gameState != EditorState.ERROR) {			
+		if (gameState != EditorState.ERROR) {
 			previousState = gameState;
 		}
-		
+
 		gameState = state;
 		switch (state) {
 		case PAUSE:
@@ -92,12 +92,18 @@ public class SceneEditor {
 			coreEngine.setEditingPause(true, true);
 			break;
 		case PLAY:
+			if (previousState == EditorState.STOP) {
+				coreEngine.resetCurrentScene(false);
+				createEntityList();
+			}
+
 			swapToGameCamera();
 			coreEngine.setEditingPause(false, true);
 			break;
 		case STOP:
 			swapToSceneEditorCamera();
-			coreEngine.resetCurrentScene();
+			coreEngine.resetCurrentScene(true);
+
 			createEntityList();
 			coreEngine.setEditingPause(true, true);
 

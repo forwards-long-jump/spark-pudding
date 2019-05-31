@@ -90,13 +90,23 @@ public class Scene {
 
 	/**
 	 * Reset the current scene using its default entities
+	 * 
+	 * @param useDirectlyDefaultEntities Use that to directly edit default entities
+	 *                                   should only be used by SE
 	 */
-	public void reset() {
+	public void reset(boolean useDirectlyDefaultEntities) {
 		entities.clear();
 		this.tick = 0;
-		// Clone entities into the "live" list
-		for (Entity entity : defaultEntities) {
-			entities.add(new Entity(entity));
+
+		if (useDirectlyDefaultEntities) {
+			for (Entity entity : defaultEntities) {
+				entities.add(entity);
+			}
+		} else {
+			// Clone entities into the "live" list
+			for (Entity entity : defaultEntities) {
+				entities.add(new Entity(entity));
+			}
 		}
 	}
 
@@ -126,7 +136,7 @@ public class Scene {
 	public void removeEntity(Entity e) {
 		entities.remove(e);
 	}
-	
+
 	/**
 	 * Removes a default entity from the scene
 	 * 

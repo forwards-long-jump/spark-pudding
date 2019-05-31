@@ -3,6 +3,7 @@ package ch.sparkpudding.sceneeditor.action;
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 
 /**
  * The action to register the removal of a scene
@@ -39,7 +40,7 @@ public class ActionRemoveScene extends AbstractAction {
 
 			@Override
 			public void run() {
-				SceneEditor.coreEngine.setScene("main");
+				SceneEditor.coreEngine.setScene("main", SceneEditor.getGameState() == EditorState.STOP);
 				SceneEditor.coreEngine.deleteScene(scene.getName());
 			}
 		});
@@ -56,7 +57,7 @@ public class ActionRemoveScene extends AbstractAction {
 			@Override
 			public void run() {
 				SceneEditor.coreEngine.addScene(scene.getName(), scene);
-				SceneEditor.coreEngine.setCurrentScene(scene);
+				SceneEditor.coreEngine.setCurrentScene(scene, SceneEditor.getGameState() == EditorState.STOP);
 			}
 		});
 	}

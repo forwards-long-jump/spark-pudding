@@ -18,6 +18,7 @@ import ch.sparkpudding.coreengine.Scheduler.Trigger;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
 import ch.sparkpudding.coreengine.utils.RunnableOneParameter;
 import ch.sparkpudding.sceneeditor.SceneEditor;
+import ch.sparkpudding.sceneeditor.SceneEditor.EditorState;
 import ch.sparkpudding.sceneeditor.action.ActionRemoveScene;
 import ch.sparkpudding.sceneeditor.action.ActionRenameScene;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
@@ -148,7 +149,7 @@ public class PanelScene extends JPanel {
 						}
 
 						SceneEditor.setCurrentScene(newScene);
-						SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene());
+						SceneEditor.coreEngine.setCurrentScene(newScene.getLiveScene(), SceneEditor.getGameState() == EditorState.STOP);
 						panelEntityTree.updateListEntities(newScene);
 					} else {
 						new ActionRenameScene(SceneEditor.currentScene.getLiveScene().getName(), selected)
