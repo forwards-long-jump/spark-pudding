@@ -34,6 +34,7 @@ import ch.sparkpudding.sceneeditor.ecs.SEEntity;
 import ch.sparkpudding.sceneeditor.ecs.SEScene;
 import ch.sparkpudding.sceneeditor.listener.EntityEventAdapter;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalEntity;
+import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
 /**
  * Show the different entity of a Scene as a list
@@ -98,9 +99,14 @@ public class PanelEntityTree extends JPanel {
 		listScroller = new JScrollPane(jListEntities);
 
 		panelButtons = new JPanel();
-		buttonAdd = new JButton("+");
-		buttonRemove = new JButton("-");
+		buttonAdd = new JButton(ImageStorage.PLUS);
+		buttonAdd.setBorderPainted(false);
+		buttonAdd.setContentAreaFilled(false);
+		
+		buttonRemove = new JButton(ImageStorage.TRASH);
+		buttonRemove.setBorderPainted(false);
 		buttonRemove.setEnabled(false);
+		buttonRemove.setContentAreaFilled(false);
 	}
 
 	/**
@@ -203,6 +209,7 @@ public class PanelEntityTree extends JPanel {
 				AbstractAction action = new ActionRemoveEntity(SceneEditor.selectedEntity,
 						SceneEditor.currentScene.getLiveScene());
 				action.actionPerformed(e);
+				buttonRemove.setEnabled(false);
 			}
 		});
 

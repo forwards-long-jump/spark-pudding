@@ -100,6 +100,10 @@ public class ActionAddEntity extends AbstractAction {
 
 					@Override
 					public void run() {
+						if (newLiveEntity == SceneEditor.selectedEntity.getLiveEntity()) {
+							SceneEditor.selectedEntity = null;
+							SceneEditor.fireSelectedEntityChanged();
+						}
 						SceneEditor.createEntityList();
 					}
 				});

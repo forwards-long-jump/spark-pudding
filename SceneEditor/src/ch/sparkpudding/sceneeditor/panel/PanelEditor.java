@@ -51,6 +51,7 @@ import ch.sparkpudding.sceneeditor.action.ActionRemoveSystem;
 import ch.sparkpudding.sceneeditor.listener.SystemEventListener;
 import ch.sparkpudding.sceneeditor.panel.modal.ModalSystem;
 import ch.sparkpudding.sceneeditor.utils.ButtonTabComponent;
+import ch.sparkpudding.sceneeditor.utils.ImageStorage;
 
 /**
  * The panel for the lua editor
@@ -117,9 +118,13 @@ public class PanelEditor extends JPanel {
 		populateSystemList();
 
 		listScroller = new JScrollPane(jList);
-
-		buttonAdd = new JButton("+");
-		buttonRemove = new JButton("-");
+		
+		this.buttonAdd = new JButton(ImageStorage.PLUS);
+		buttonAdd.setBorderPainted(false);
+		buttonAdd.setContentAreaFilled(false);
+		this.buttonRemove = new JButton(ImageStorage.TRASH);
+		buttonRemove.setBorderPainted(false);
+		buttonRemove.setContentAreaFilled(false);
 	}
 
 	/**
