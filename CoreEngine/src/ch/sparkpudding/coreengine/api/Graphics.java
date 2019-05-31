@@ -71,6 +71,25 @@ public class Graphics {
 	}
 
 	/**
+	 * 
+	 * Draws the image on the given rectangle from the given source rectangle
+	 * 
+	 * @param name   Name of the image, must be in assets/textures directory
+	 * @param x      x coordinate of the top left corner of the rectangle
+	 * @param y      y coordinate of the top left corner of the rectangle
+	 * @param width  width of the rectangle
+	 * @param height height of the rectangle
+	 * @param sx     x coordinate of the top left corner of the source rectangle
+	 * @param sy     y coordinate of the top left corner of the source rectangle
+	 * @param sw     width of the source rectangle
+	 * @param sh     height of the source rectangle
+	 */
+	public void drawImage(String name, int x, int y, int width, int height, int sx, int sy, int sw, int sh) {
+		Image img = resourceLocator.getTexture(name);
+		g2d.drawImage(img, x, y, x + width, y + height, sx, sy, sx + sw, sy + sh, null);
+	}
+
+	/**
 	 * Draws the image on the given rectangle
 	 * 
 	 * @param name  Name of the image, must be in assets/textures directory
@@ -84,6 +103,23 @@ public class Graphics {
 	}
 
 	/**
+	 * Draws the image on the given rectangle
+	 * 
+	 * @param name  Name of the image, must be in assets/textures directory
+	 * @param lpos  LuaTable containing the position
+	 * @param lsize LuaTable containing the size
+	 * @param sx    x coordinate of the top left corner of the source rectangle
+	 * @param sy    y coordinate of the top left corner of the source rectangle
+	 * @param sw    width of the source rectangle
+	 * @param sh    height of the source rectangle
+	 */
+	public void drawImage(String name, LuaTable lpos, LuaTable lsize, int sx, int sy, int sw, int sh) {
+		Pair<Integer, Integer> pos = fromLuaTable(lpos);
+		Pair<Integer, Integer> size = fromLuaTable(lsize);
+		drawImage(name, pos.first(), pos.second(), size.first(), size.second(), sx, sy, sx + sw, sy + sh);
+	}
+
+	/**
 	 * Changes the current color used by the painter
 	 * 
 	 * @param color New color to use
@@ -91,7 +127,7 @@ public class Graphics {
 	public void setColor(Color color) {
 		g2d.setColor(color);
 	}
-	
+
 	/**
 	 * Changes the current color used by the painter
 	 * 
