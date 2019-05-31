@@ -5,8 +5,10 @@ end
 function update()
 	for i, entity in ipairs(entities) do
 		local jump = entity.jump
+		local canJump = false
 		
 		if entity.acceleration.touchWallLeft or entity.acceleration.touchWallRight or entity.acceleration.touchWallDown then
+			canJump = true
 			jump.count = 0
 			jump.airDuration = 0
 		end
@@ -16,7 +18,7 @@ function update()
 			if jump.airDuration > 0 then
 				-- continue current jump
 				entity.speed.y = - jump.force
-			elseif jump.count < jump.countMax and jump.released then
+			elseif canJump and jump.count < jump.countMax and jump.released then
 				-- start new jump
 				jump.released = false
 				entity.speed.y = - jump.force
