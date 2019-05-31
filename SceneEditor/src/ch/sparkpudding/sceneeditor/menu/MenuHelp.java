@@ -31,12 +31,18 @@ public class MenuHelp extends JMenu {
 		addItem();
 	}
 
+	/**
+	 * Initialize the menu
+	 */
 	private void init() {
 		setText("?");
 
 		itemAbout = new JMenuItem("About", KeyEvent.VK_A);
 	}
 
+	/**
+	 * Add actions to the elements
+	 */
 	private void addAction() {
 		itemAbout.addActionListener(new ActionListener() {
 
@@ -47,10 +53,16 @@ public class MenuHelp extends JMenu {
 		});
 	}
 
+	/**
+	 * Add shortcuts
+	 */
 	private void addKeyStroke() {
 		// No shortcut for about
 	}
 
+	/**
+	 * Add the elements to the menu
+	 */
 	private void addItem() {
 		add(itemAbout);
 	}

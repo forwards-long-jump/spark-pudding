@@ -32,6 +32,9 @@ public class ModalAbout extends Modal {
 	private JLabel labelText;
 	private JButton buttonOkay;
 
+	/**
+	 * ctor
+	 */
 	public ModalAbout() {
 		super(SceneEditor.frameSceneEditor, "About", true);
 
@@ -41,6 +44,9 @@ public class ModalAbout extends Modal {
 		setupFrame();
 	}
 
+	/**
+	 * Initialize components
+	 */
 	private void init() {
 		labelIcon = new JLabel(ImageStorage.HEARCLOGO);
 
@@ -49,6 +55,9 @@ public class ModalAbout extends Modal {
 		labelText = new JLabel(ABOUTTEXT);
 	}
 
+	/**
+	 * Setup the layouts of the dialog
+	 */
 	private void setupLayout() {
 		mainPanel.setLayout(new BorderLayout(0, 50));
 		mainPanel.add(labelIcon, BorderLayout.NORTH);
@@ -63,13 +72,19 @@ public class ModalAbout extends Modal {
 		mainPanel.add(contentPanel, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Setup the frame
+	 */
 	private void setupFrame() {
 		pack();
-		// setResizable(false);
+		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
+	/**
+	 * Add action and key listeners
+	 */
 	private void addListener() {
 		addKeyListener(new KeyAdapter() {
 
