@@ -272,6 +272,8 @@ public class CoreEngine extends JPanel {
 		double previous = java.lang.System.currentTimeMillis();
 		double lag = 0.0;
 
+		boolean needRender = true;
+
 		double lastFpsTime = java.lang.System.currentTimeMillis();
 
 		while (!exit) {
@@ -282,8 +284,11 @@ public class CoreEngine extends JPanel {
 			previous = current;
 			lag += elapsed;
 
+			needRender = false;
+
 			while (lag >= msPerUpdate) {
 				input.update();
+				needRender = true;
 
 				// We let external great power handle this
 				if (editingSystems == null) {
@@ -295,9 +300,11 @@ public class CoreEngine extends JPanel {
 				}
 				lag -= msPerUpdate;
 			}
-
-			render();
-			renderLock.acquire();
+			
+			if (needRender) {
+				render();
+				renderLock.acquire();
+			}
 
 			if (java.lang.System.currentTimeMillis() - lastFpsTime >= 1000) {
 				lastFpsTime = java.lang.System.currentTimeMillis();
@@ -730,7 +737,7 @@ public class CoreEngine extends JPanel {
 	public ResourceLocator getResourceLocator() {
 		return resourceLocator;
 	}
-	
+
 	/**
 	 * Getter for the renderSystem
 	 * 
@@ -771,7 +778,7 @@ public class CoreEngine extends JPanel {
 
 		getCurrentScene().addEntity(e);
 	}
-	
+
 	/**
 	 * Notify all systems that a z-index has changed
 	 */
@@ -1055,7 +1062,7 @@ public class CoreEngine extends JPanel {
 	public int getEditingTick() {
 		return editingTick;
 	}
-	
+
 	/**
 	 * Get the directory of the Game
 	 * 
