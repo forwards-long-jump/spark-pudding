@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="animatedTile">
+	<field type="INTEGER" name="currentDelay">20</field>
+	<field type="INTEGER" name="col">1</field>
+	<field type="FILE_PATH" name="file">blocks.png</field>
+	<field type="INTEGER" name="delay">20</field>
+	<field type="INTEGER" name="size">16</field>
+	<field type="INTEGER" name="frames">4</field>
+	<field type="INTEGER" name="row">1</field>
+	<field type="INTEGER" name="currentFrameIndex">0</field>
+</component>

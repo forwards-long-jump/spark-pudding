@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="tiledTexture">
+	<field type="INTEGER" name="x">0</field>>
+	<field type="INTEGER" name="size-target">16</field>
+	<field type="DOUBLE" name="auto-tile">1.0</field>
+	<field type="INTEGER" name="size-tile">16</field>
+	<field type="INTEGER" name="y">0</field>
+	<field type="STRING" name="file">tileset.png</field>
+</component>

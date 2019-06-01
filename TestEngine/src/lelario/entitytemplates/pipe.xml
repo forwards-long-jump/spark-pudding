@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="pipe">
+	<component template="size">
+		<field name="width">125</field>
+		<field name="height">175</field>
+	</component>
+	<component template="texture">
+		<field name="name">pipe.png</field>
+	</component>
+	<component template="position">
+		<field name="x">1449.0</field>
+		<field name="y">432.0</field>
+	</component>
+</entity-template>
