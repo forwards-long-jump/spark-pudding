@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="platform">
+	<component template="hitboxWall">
+		<field name="noLeftCollision">true</field>
+		<field name="noRightCollision">true</field>
+		<field name="frictionX">0.0</field>
+		<field name="frictionY">0.0</field>
+		<field name="bounceCoeffY">0.0</field>
+		<field name="noTopCollision">false</field>
+		<field name="bounceCoeffX">0.0</field>
+		<field name="noBottomCollision">true</field>
+	</component>
+	<component template="debug">
+		<field name="a">255</field>
+		<field name="r">127</field>
+		<field name="b">127</field>
+		<field name="g">127</field>
+	</component>
+	<component template="size">
+		<field name="width">1020.9635003191004</field>
+		<field name="height">100</field>
+	</component>
+	<component template="position">
+		<field name="x">332.07810090316855</field>
+		<field name="y">-440.0701988766134</field>
+	</component>
+</entity-template>

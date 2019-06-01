@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene name="main">
+	<entity name="player" template="player" z-index="0">
+</entity>
+	<entity name="ground" template="collision" z-index="0">
+</entity>
+	<entity name="wall" template="collision" z-index="0">
+		<component template="size">
+			<field name="width">2627.0300544171278</field>
+			<field name="height">6599.382532996852</field>
+		</component>
+		<component template="position">
+			<field name="x">1990.9902409678746</field>
+			<field name="y">-4420.619768952439</field>
+		</component>
+</entity>
+	<entity name="platform" template="platform" z-index="0">
+</entity>
+	<entity name="platform" template="platform" z-index="0">
+		<component template="size">
+			<field name="width">1401.9155958181584</field>
+			<field name="height">100</field>
+		</component>
+		<component template="position">
+			<field name="x">-1204.8159813975035</field>
+			<field name="y">-1009.066889688195</field>
+		</component>
+</entity>
+	<entity name="wall" template="collision" z-index="0">
+		<component template="size">
+			<field name="width">5232</field>
+			<field name="height">2443</field>
+		</component>
+		<component template="position">
+			<field name="x">-800.0</field>
+			<field name="y">-4498.0</field>
+		</component>
+</entity>
+	<entity name="wall" template="collision" z-index="0">
+		<component template="size">
+			<field name="width">2395.586911928659</field>
+			<field name="height">5342.460670204063</field>
+		</component>
+		<component template="position">
+			<field name="x">-4098.53652817717</field>
+			<field name="y">-6348.398903456098</field>
+		</component>
+</entity>
+	<entity name="wall" template="collision" z-index="0">
+		<component template="size">
+			<field name="width">8751.868742292452</field>
+			<field name="height">983.9252199299026</field>
+		</component>
+		<component template="position">
+			<field name="x">-4086.2582052025364</field>
+			<field name="y">-7338.965793672749</field>
+		</component>
+</entity>
+	<entity name="wall" template="collision" z-index="0">
+		<component template="size">
+			<field name="width">987.8358676548096</field>
+			<field name="height">4116.246784733143</field>
+		</component>
+		<component template="position">
+			<field name="x">3627.371239799986</field>
+			<field name="y">-7193.058825923681</field>
+		</component>
+</entity>
+	<entity name="goal" template="goal" z-index="0">
+</entity>
+	<entity name="death" template="death" z-index="-1">
+</entity>
+	<entity name="death" template="bounds" z-index="-1">
+</entity>
+	<entity name="death" template="bounds" z-index="-1">
+</entity>
+</scene>

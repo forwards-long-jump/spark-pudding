@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="death">
+	<component template="debug">
+		<field name="a">255</field>
+		<field name="r">255</field>
+		<field name="b">50</field>
+		<field name="g">50</field>
+	</component>
+	<component template="size">
+		<field name="width">1285</field>
+		<field name="height">664</field>
+	</component>
+	<component template="reactor">
+		<field name="type">hurt</field>
+	</component>
+	<component template="position">
+		<field name="x">-2294.0</field>
+		<field name="y">-428.0</field>
+	</component>
+</entity-template>
