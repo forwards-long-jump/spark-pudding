@@ -130,6 +130,12 @@ public class Scheduler {
 	 * @param runnable
 	 */
 	public void removeNotify(Trigger trigger, Runnable runnable) {
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		notifications.get(trigger).remove(runnable);
+		semaphore.release();
 	}
 }
