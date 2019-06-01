@@ -465,15 +465,6 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
-	 * Sets scene as current scene, without reloading
-	 *
-	 * @param name Name of the scene
-	 */
-	public void setScene(String name, boolean useDirectlyDefaultEntities) {
-		setScene(name, useDirectlyDefaultEntities);
-	}
-
-	/**
 	 * Sets scene as current scene, and reloads it if demanded
 	 *
 	 * @param name  Name of the Scene

@@ -44,6 +44,12 @@ function update()
 				
 				jump.count = jump.count + 1
 				jump.airDuration = jump.airDurationDefault
+
+				if entity.deformation ~= nil then
+					-- jumping makes you lose weight
+					entity.deformation.horizontal = entity.deformation.jumpingDeformation
+					entity.deformation.vertical = - entity.deformation.jumpingDeformation
+				end
 			end
 			
 			jump.airDuration = jump.airDuration - 1
