@@ -40,6 +40,16 @@ function renderEnd()
     g:setColor(game.color:fromRGBA(255, 255, 255, 50))
     g:fillRect(entity.position, entity.size)
   end
+  
+  if game.input:isKeyDown("shift") then
+   g:setAnimatedDashedLine(1, 1)
+    g:setColor(game.color:fromRGBA(255, 255, 255, 150))
+    for i= game.camera:getX() / game.camera:getScaling(), (game.core:getGameWidth() +  game.camera:getX()) / game.camera:getScaling(), 64 do
+      for j=game.camera:getY() / game.camera:getScaling(), (game.core:getGameHeight() +  game.camera:getY()) / game.camera:getScaling(), 64 do
+        g:drawRect(math.floor(i / 64) * 64, math.floor(j / 64) * 64, 64, 64)
+      end
+    end
+  end
 
   game.camera:resetTransforms(g:getContext())
 
