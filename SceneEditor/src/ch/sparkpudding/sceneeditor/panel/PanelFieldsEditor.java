@@ -51,8 +51,7 @@ public class PanelFieldsEditor extends JComponent {
 	 * @param fields     Collection of all the components of an entity
 	 * @param enableable Whether the component can be enabled
 	 */
-	public PanelFieldsEditor(
-			Component component, boolean enableable) {
+	public PanelFieldsEditor(Component component, boolean enableable) {
 		this.fields = new ArrayList<Field>(component.getFields().values());
 		this.fieldsInput = new ArrayList<JComponent>();
 		this.onFieldsChanged = new ArrayList<RunnableOneParameter>();
@@ -158,13 +157,19 @@ public class PanelFieldsEditor extends JComponent {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {
-				if (!field.getValue().toString().equals(input.getText()) && !input.hasFocus()) {
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							input.setText(field.getValue().toString());
-						}
-					});
+				// TODO: implement better fix
+				try {
+					if (!field.getValue().toString().equals(input.getText()) && !input.hasFocus()) {
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								input.setText(field.getValue().toString());
+							}
+						});
+					}
+				} catch (Exception e) {
+					System.err.println("Known issue");
+					e.printStackTrace();
 				}
 			}
 		};
@@ -210,14 +215,20 @@ public class PanelFieldsEditor extends JComponent {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {
-				if (input.isSelected() != (boolean) field.getValue() && !input.hasFocus()) {
+				// TODO: implement better fix
+				try {
+					if (input.isSelected() != (boolean) field.getValue() && !input.hasFocus()) {
 
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							input.setSelected((boolean) field.getValue());
-						}
-					});
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								input.setSelected((boolean) field.getValue());
+							}
+						});
+					}
+				} catch (Exception e) {
+					System.err.println("Known issue.");
+					e.printStackTrace();
 				}
 			}
 		};
