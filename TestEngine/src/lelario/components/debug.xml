@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="debug">
+	<field type="INTEGER" name="a">127</field>
+	<field type="INTEGER" name="r">50</field>
+	<field type="INTEGER" name="b">220</field>
+	<field type="INTEGER" name="g">110</field>
+</component>
