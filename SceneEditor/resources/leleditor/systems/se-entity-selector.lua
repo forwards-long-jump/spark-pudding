@@ -11,6 +11,10 @@ local draggingStartEntitySize = {w = 0, h = 0}
 local draggingStartEntityPosition = {x = 0, y = 0}
 local draggingStartOffset = {x = 0, y = 0}
 
+function applyGrid(val)
+  return math.floor(val / 64) * 64
+end
+
 function update()
   local cursorSize = 10 / game.camera:getScaling()
   local draggerSelected = false
@@ -19,7 +23,7 @@ function update()
     -- we only need to notify the SE for one tick
     entity._meta:removeComponent("se-entity-transform-done")
   end
-  
+
   for i, entity in ipairs(transformStart) do
     -- we only need to notify the SE for one tick
     entity._meta:removeComponent("se-entity-transform-start")
@@ -65,53 +69,103 @@ function update()
     -- Apply effects on live entity
     if draggingAction == 0 then
       -- Top left
-      entity.size.width = draggingStartEntitySize.w + draggingStartEntityPosition.x - game.input:getMouseX()
-      entity.size.height = draggingStartEntitySize.h + draggingStartEntityPosition.y - game.input:getMouseY()
+      if game.input:isKeyDown("shift") then
+        entity.size.width = applyGrid(draggingStartEntitySize.w + draggingStartEntityPosition.x - game.input:getMouseX())
+        entity.size.height = applyGrid(draggingStartEntitySize.h + draggingStartEntityPosition.y - game.input:getMouseY())
 
-      entity.position.x = game.input:getMouseX() - draggingStartOffset.x
-      entity.position.y = game.input:getMouseY() - draggingStartOffset.y
+        entity.position.x = applyGrid(game.input:getMouseX() - draggingStartOffset.x)
+        entity.position.y = applyGrid(game.input:getMouseY() - draggingStartOffset.y)
+      else
+        entity.size.width = draggingStartEntitySize.w + draggingStartEntityPosition.x - game.input:getMouseX()
+        entity.size.height = draggingStartEntitySize.h + draggingStartEntityPosition.y - game.input:getMouseY()
+
+        entity.position.x = game.input:getMouseX() - draggingStartOffset.x
+        entity.position.y = game.input:getMouseY() - draggingStartOffset.y
+      end
     end
     if draggingAction == 1 then
       -- Middle top
-      entity.size.height = draggingStartEntitySize.h + draggingStartEntityPosition.y - game.input:getMouseY()
-      entity.position.y = game.input:getMouseY()  - draggingStartOffset.y
+      if game.input:isKeyDown("shift") then
+        entity.size.height = applyGrid(draggingStartEntitySize.h + draggingStartEntityPosition.y - game.input:getMouseY())
+        entity.position.y = applyGrid(game.input:getMouseY() - draggingStartOffset.y)
+      else
+        entity.size.height = draggingStartEntitySize.h + draggingStartEntityPosition.y - game.input:getMouseY()
+        entity.position.y = game.input:getMouseY() - draggingStartOffset.y
+      end
     end
     if draggingAction == 2 then
       -- Top right
-      entity.size.height = draggingStartEntitySize.h + draggingStartEntityPosition.y - game.input:getMouseY()
-      entity.position.y = game.input:getMouseY() - draggingStartOffset.y
+      if game.input:isKeyDown("shift") then
+        entity.size.height = applyGrid(draggingStartEntitySize.h + draggingStartEntityPosition.y - game.input:getMouseY())
+        entity.position.y = applyGrid(game.input:getMouseY() - draggingStartOffset.y)
 
-      entity.size.width = -entity.position.x + game.input:getMouseX()
+        entity.size.width = applyGrid(-entity.position.x + game.input:getMouseX())
+      else
+        entity.size.height = draggingStartEntitySize.h + draggingStartEntityPosition.y - game.input:getMouseY()
+        entity.position.y = game.input:getMouseY() - draggingStartOffset.y
+
+        entity.size.width = -entity.position.x + game.input:getMouseX()
+      end
     end
     if draggingAction == 3 then
       -- Middle left
-      entity.size.width = draggingStartEntitySize.w + draggingStartEntityPosition.x - game.input:getMouseX()
-      entity.position.x = game.input:getMouseX() - draggingStartOffset.x
+      if game.input:isKeyDown("shift") then
+        entity.size.width = applyGrid(draggingStartEntitySize.w + draggingStartEntityPosition.x - game.input:getMouseX())
+        entity.position.x = applyGrid(game.input:getMouseX() - draggingStartOffset.x)
+      else
+        entity.size.width = draggingStartEntitySize.w + draggingStartEntityPosition.x - game.input:getMouseX()
+        entity.position.x = game.input:getMouseX() - draggingStartOffset.x
+      end
     end
     if draggingAction == 4 then
       -- Move entity
-      entity.position.x = game.input:getMouseX() - draggingStartOffset.x
-      entity.position.y = game.input:getMouseY() - draggingStartOffset.y
+      if game.input:isKeyDown("shift") then
+        entity.position.x = applyGrid(game.input:getMouseX()) - applyGrid(draggingStartOffset.x)
+        entity.position.y = applyGrid(game.input:getMouseY()) - applyGrid(draggingStartOffset.y)
+      else
+        entity.position.x = game.input:getMouseX() - draggingStartOffset.x
+        entity.position.y = game.input:getMouseY() - draggingStartOffset.y
+      end
     end
     if draggingAction == 5 then
       -- Middle right
-      entity.size.width = -entity.position.x + game.input:getMouseX() - draggingStartOffset.x + draggingStartEntitySize.w
+      if game.input:isKeyDown("shift") then
+        entity.size.width = applyGrid(-entity.position.x + game.input:getMouseX() - draggingStartOffset.x + draggingStartEntitySize.w)
+      else
+        entity.size.width = -entity.position.x + game.input:getMouseX() - draggingStartOffset.x + draggingStartEntitySize.w
+      end
     end
     if draggingAction == 6 then
       -- Bottom left
-      entity.size.width = draggingStartEntitySize.w + draggingStartEntityPosition.x - game.input:getMouseX()
-      entity.position.x = game.input:getMouseX() - draggingStartOffset.x
+      if game.input:isKeyDown("shift") then
+        entity.size.width = applyGrid(draggingStartEntitySize.w + draggingStartEntityPosition.x - game.input:getMouseX())
+        entity.position.x = applyGrid(game.input:getMouseX() - draggingStartOffset.x)
 
-      entity.size.height = -entity.position.y + game.input:getMouseY() - draggingStartOffset.y + draggingStartEntitySize.h
+        entity.size.height = applyGrid(-entity.position.y + game.input:getMouseY() - draggingStartOffset.y + draggingStartEntitySize.h)
+      else
+        entity.size.width = draggingStartEntitySize.w + draggingStartEntityPosition.x - game.input:getMouseX()
+        entity.position.x = game.input:getMouseX() - draggingStartOffset.x
+
+        entity.size.height = -entity.position.y + game.input:getMouseY() - draggingStartOffset.y + draggingStartEntitySize.h
+      end
     end
     if draggingAction == 7 then
       -- Middle bottom
-      entity.size.height = -entity.position.y + game.input:getMouseY() - draggingStartOffset.y + draggingStartEntitySize.h
+      if game.input:isKeyDown("shift") then
+        entity.size.height = applyGrid(-entity.position.y + game.input:getMouseY() - draggingStartOffset.y + draggingStartEntitySize.h)
+      else
+        entity.size.height = -entity.position.y + game.input:getMouseY() - draggingStartOffset.y + draggingStartEntitySize.h
+      end
     end
     if draggingAction == 8 then
       -- Bottom right
-      entity.size.width = -entity.position.x + game.input:getMouseX() - draggingStartOffset.x + draggingStartEntitySize.w
-      entity.size.height = -entity.position.y + game.input:getMouseY() - draggingStartOffset.y + draggingStartEntitySize.h
+      if game.input:isKeyDown("shift") then
+        entity.size.width = applyGrid(-entity.position.x + game.input:getMouseX() - draggingStartOffset.x + draggingStartEntitySize.w)
+        entity.size.height = applyGrid(-entity.position.y + game.input:getMouseY() - draggingStartOffset.y + draggingStartEntitySize.h)
+      else
+        entity.size.width = -entity.position.x + game.input:getMouseX() - draggingStartOffset.x + draggingStartEntitySize.w
+        entity.size.height = -entity.position.y + game.input:getMouseY() - draggingStartOffset.y + draggingStartEntitySize.h
+      end
     end
 
     entity.size.width = math.max(entity.size.width, 0)

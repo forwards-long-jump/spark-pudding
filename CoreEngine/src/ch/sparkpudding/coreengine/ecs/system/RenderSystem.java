@@ -16,6 +16,7 @@ import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.api.ColorFactory;
 import ch.sparkpudding.coreengine.api.Graphics;
+import ch.sparkpudding.coreengine.api.Input;
 
 public class RenderSystem extends System {
 	public static final String LUA_FILE_NAME = "render.lua";
@@ -74,6 +75,7 @@ public class RenderSystem extends System {
 	private void loadRenderApis() {
 		apiTable.set("color", CoerceJavaToLua.coerce(ColorFactory.getInstance()));
 		globals.set("g", CoerceJavaToLua.coerce(Graphics.getInstance()));
+		apiTable.set("input", CoerceJavaToLua.coerce(Input.getInstance()));
 	}
 
 	/**
