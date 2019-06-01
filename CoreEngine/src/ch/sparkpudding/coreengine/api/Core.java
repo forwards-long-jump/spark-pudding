@@ -94,9 +94,16 @@ public class Core {
 		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 			@Override
 			public void run() {
-				Lel.coreEngine.setScene(name, reset);
+				Lel.coreEngine.setScene(name, reset, false);
 			}
 		});
+	}
+	
+	/**
+	 * Reset the current scene
+	 */
+	public void resetScene() {
+		setScene(Lel.coreEngine.getCurrentScene().getName(), true);
 	}
 
 	/**
