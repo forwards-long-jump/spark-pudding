@@ -42,7 +42,7 @@ public class SEScene {
 		List<Entity> liveEntities = liveScene.getEntities();
 
 		if (SceneEditor.getGameState() != EditorState.STOP) {
-			for (int i = 0; i < defaultEntities.size(); i++) {
+			for (int i = 0; i < Math.min(defaultEntities.size(), liveEntities.size()); i++) {
 				seEntities.add(new SEEntity(defaultEntities.get(i), liveEntities.get(i)));
 			}
 		} else {
