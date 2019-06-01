@@ -116,7 +116,7 @@ public class Graphics {
 	public void drawImage(String name, LuaTable lpos, LuaTable lsize, int sx, int sy, int sw, int sh) {
 		Pair<Integer, Integer> pos = fromLuaTable(lpos);
 		Pair<Integer, Integer> size = fromLuaTable(lsize);
-		drawImage(name, pos.first(), pos.second(), size.first(), size.second(), sx, sy, sx + sw, sy + sh);
+		drawImage(name, pos.first(), pos.second(), size.first(), size.second(), sx, sy, sw, sh);
 	}
 
 	/**
