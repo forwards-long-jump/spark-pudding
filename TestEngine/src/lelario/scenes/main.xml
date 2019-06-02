@@ -24,8 +24,8 @@
 </entity>
 	<entity name="sky" template="empty" z-index="-10">
 		<component template="size">
-			<field name="width">1339</field>
-			<field name="height">816</field>
+			<field name="width">1344</field>
+			<field name="height">832</field>
 		</component>
 		<component template="color">
 			<field name="a">255</field>
@@ -40,8 +40,8 @@
 			<field name="initialX">-1</field>
 		</component>
 		<component template="position">
-			<field name="x">0</field>
-			<field name="y">0</field>
+			<field name="x">-64.0</field>
+			<field name="y">-64.0</field>
 		</component>
 </entity>
 	<entity name="player" template="empty" z-index="2">
@@ -94,7 +94,7 @@
 			<field name="height">25</field>
 		</component>
 		<component template="position">
-			<field name="x">640.0</field>
+			<field name="x">704.0</field>
 			<field name="y">448.0</field>
 		</component>
 		<component template="camera">
@@ -130,16 +130,6 @@
 		</component>
 </entity>
 	<entity name="note-block" template="note-block" z-index="-1">
-		<component template="hitboxWall">
-			<field name="noLeftCollision">false</field>
-			<field name="noRightCollision">false</field>
-			<field name="frictionX">0.0</field>
-			<field name="frictionY">0.0</field>
-			<field name="bounceCoeffY">5.0</field>
-			<field name="noTopCollision">false</field>
-			<field name="bounceCoeffX">0.0</field>
-			<field name="noBottomCollision">false</field>
-		</component>
 		<component template="size">
 			<field name="width">192</field>
 			<field name="height">192</field>
@@ -148,7 +138,7 @@
 			<field name="x">13376.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="texture" template="pipe" z-index="0">
 		<component template="size">
 			<field name="width">128</field>
@@ -724,7 +714,7 @@
 			<field name="x">8576.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -744,11 +734,11 @@
 			<field name="x">8640.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
-			<field name="width">64</field>
-			<field name="height">64</field>
+			<field name="width">64.0</field>
+			<field name="height">64.0</field>
 		</component>
 		<component template="tiledTexture">
 			<field name="size-tile">16</field>
@@ -764,7 +754,7 @@
 			<field name="x">8704.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -781,10 +771,10 @@
 			<field name="size-target">64</field>
 		</component>
 		<component template="position">
-			<field name="x">8704.0</field>
-			<field name="y">448.0</field>
+			<field name="x">8704</field>
+			<field name="y">448</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -804,7 +794,7 @@
 			<field name="x">8640.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -864,7 +854,7 @@
 			<field name="x">8704.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -884,7 +874,7 @@
 			<field name="x">8704.0</field>
 			<field name="y">320.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -901,14 +891,14 @@
 			<field name="size-target">64</field>
 		</component>
 		<component template="position">
-			<field name="x">8896.0</field>
-			<field name="y">320.0</field>
+			<field name="x">8896</field>
+			<field name="y">320</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
-			<field name="width">64</field>
-			<field name="height">64</field>
+			<field name="width">64.0</field>
+			<field name="height">64.0</field>
 		</component>
 		<component template="tiledTexture">
 			<field name="size-tile">16</field>
@@ -924,7 +914,7 @@
 			<field name="x">8896.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -944,7 +934,7 @@
 			<field name="x">8896.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -964,7 +954,7 @@
 			<field name="x">8896.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -984,7 +974,7 @@
 			<field name="x">8960.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1004,7 +994,7 @@
 			<field name="x">8960.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1064,7 +1054,7 @@
 			<field name="x">9024.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1124,7 +1114,7 @@
 			<field name="x">9472.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1144,7 +1134,7 @@
 			<field name="x">9536.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1164,7 +1154,7 @@
 			<field name="x">9600.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1184,7 +1174,7 @@
 			<field name="x">9664.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1204,7 +1194,7 @@
 			<field name="x">9664.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1224,7 +1214,7 @@
 			<field name="x">9600.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1244,7 +1234,7 @@
 			<field name="x">9536.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1304,7 +1294,7 @@
 			<field name="x">9600.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1324,7 +1314,7 @@
 			<field name="x">9664.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1344,7 +1334,7 @@
 			<field name="x">9664</field>
 			<field name="y">320</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1364,7 +1354,7 @@
 			<field name="x">9600.0</field>
 			<field name="y">320.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1384,7 +1374,7 @@
 			<field name="x">9920</field>
 			<field name="y">320</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1404,7 +1394,7 @@
 			<field name="x">9920</field>
 			<field name="y">384</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1464,7 +1454,7 @@
 			<field name="x">9984</field>
 			<field name="y">448</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1481,10 +1471,10 @@
 			<field name="size-target">64</field>
 		</component>
 		<component template="position">
-			<field name="x">9920</field>
-			<field name="y">448</field>
+			<field name="x">9920.0</field>
+			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1504,7 +1494,7 @@
 			<field name="x">9920</field>
 			<field name="y">512</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1524,7 +1514,7 @@
 			<field name="x">9984</field>
 			<field name="y">512</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1544,7 +1534,7 @@
 			<field name="x">10048</field>
 			<field name="y">512</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1724,7 +1714,7 @@
 			<field name="x">11968.0</field>
 			<field name="y">64.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1741,10 +1731,10 @@
 			<field name="size-target">64</field>
 		</component>
 		<component template="position">
-			<field name="x">12032.0</field>
-			<field name="y">64.0</field>
+			<field name="x">12032</field>
+			<field name="y">64</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1764,7 +1754,7 @@
 			<field name="x">12032.0</field>
 			<field name="y">128.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1784,7 +1774,7 @@
 			<field name="x">11968.0</field>
 			<field name="y">128.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1804,7 +1794,7 @@
 			<field name="x">11904.0</field>
 			<field name="y">192.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1824,7 +1814,7 @@
 			<field name="x">11968.0</field>
 			<field name="y">192.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1841,10 +1831,10 @@
 			<field name="size-target">64</field>
 		</component>
 		<component template="position">
-			<field name="x">12032.0</field>
-			<field name="y">192.0</field>
+			<field name="x">12032</field>
+			<field name="y">192</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1864,7 +1854,7 @@
 			<field name="x">12032.0</field>
 			<field name="y">256.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1884,7 +1874,7 @@
 			<field name="x">11968.0</field>
 			<field name="y">256.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1904,7 +1894,7 @@
 			<field name="x">11904.0</field>
 			<field name="y">256.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1924,7 +1914,7 @@
 			<field name="x">11840.0</field>
 			<field name="y">256.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1944,7 +1934,7 @@
 			<field name="x">11776.0</field>
 			<field name="y">320.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1964,7 +1954,7 @@
 			<field name="x">11840.0</field>
 			<field name="y">320.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -1984,7 +1974,7 @@
 			<field name="x">11904.0</field>
 			<field name="y">320.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2004,7 +1994,7 @@
 			<field name="x">11968.0</field>
 			<field name="y">320.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2024,7 +2014,7 @@
 			<field name="x">12032.0</field>
 			<field name="y">320.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2044,7 +2034,7 @@
 			<field name="x">12032.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2064,7 +2054,7 @@
 			<field name="x">11968.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2084,7 +2074,7 @@
 			<field name="x">11904.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2104,7 +2094,7 @@
 			<field name="x">11840.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2124,7 +2114,7 @@
 			<field name="x">11776.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2144,7 +2134,7 @@
 			<field name="x">11712.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2164,7 +2154,7 @@
 			<field name="x">11648.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2184,7 +2174,7 @@
 			<field name="x">11712.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2204,7 +2194,7 @@
 			<field name="x">11776.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2224,7 +2214,7 @@
 			<field name="x">11840.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2244,7 +2234,7 @@
 			<field name="x">11904.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2264,7 +2254,7 @@
 			<field name="x">11968.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2284,7 +2274,7 @@
 			<field name="x">12032.0</field>
 			<field name="y">448.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2304,7 +2294,7 @@
 			<field name="x">12032.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2324,7 +2314,7 @@
 			<field name="x">11968.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2344,7 +2334,7 @@
 			<field name="x">11904.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2364,7 +2354,7 @@
 			<field name="x">11840.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2384,7 +2374,7 @@
 			<field name="x">11776.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2404,7 +2394,7 @@
 			<field name="x">11712.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2424,7 +2414,7 @@
 			<field name="x">11648.0</field>
 			<field name="y">512.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2441,10 +2431,10 @@
 			<field name="size-target">64</field>
 		</component>
 		<component template="position">
-			<field name="x">11584.0</field>
-			<field name="y">512.0</field>
+			<field name="x">11584</field>
+			<field name="y">512</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="texture" template="pipe" z-index="3">
 		<component template="size">
 			<field name="width">141</field>
@@ -2611,18 +2601,18 @@
 			<field name="height">168</field>
 		</component>
 		<component template="position">
-			<field name="x">11776.0</field>
-			<field name="y">-960.0</field>
+			<field name="x">11968.0</field>
+			<field name="y">-768.0</field>
 		</component>
-</entity>
+<component template="tiledTexture" deleted="true"/></entity>
 	<entity name="mushroom" template="goomba" z-index="0">
 		<component template="size">
 			<field name="width">64</field>
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">2802</field>
-			<field name="y">512</field>
+			<field name="x">2802.0</field>
+			<field name="y">512.0</field>
 		</component>
 </entity>
 	<entity name="mushroom" template="goomba" z-index="0">
@@ -2765,16 +2755,6 @@
 			<field name="y">512</field>
 		</component>
 </entity>
-	<entity name="ground 1" template="ground-grass" z-index="-1">
-		<component template="size">
-			<field name="width">255</field>
-			<field name="height">959</field>
-		</component>
-		<component template="position">
-			<field name="x">12416.0</field>
-			<field name="y">-768.0</field>
-		</component>
-</entity>
 	<entity name="question-block" template="question-block" z-index="-1">
 		<component template="size">
 			<field name="width">64</field>
@@ -2819,8 +2799,8 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">1520.0</field>
-			<field name="y">493.0</field>
+			<field name="x">1536</field>
+			<field name="y">320</field>
 		</component>
 </entity>
 	<entity name="sky" template="empty" z-index="-9">
@@ -2971,10 +2951,10 @@
 			<field name="size-target">64</field>
 		</component>
 		<component template="position">
-			<field name="x">12992.0</field>
-			<field name="y">-384.0</field>
+			<field name="x">12608.0</field>
+			<field name="y">-768.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">192</field>
@@ -3054,7 +3034,7 @@
 			<field name="x">13568.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">192</field>
@@ -3074,7 +3054,7 @@
 			<field name="x">13184.0</field>
 			<field name="y">0.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">192</field>
@@ -3094,7 +3074,7 @@
 			<field name="x">12992.0</field>
 			<field name="y">-192.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">192</field>
@@ -3114,7 +3094,7 @@
 			<field name="x">13184.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">192</field>
@@ -3134,7 +3114,7 @@
 			<field name="x">13184.0</field>
 			<field name="y">192.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">192</field>
@@ -3154,7 +3134,7 @@
 			<field name="x">12992</field>
 			<field name="y">0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">192</field>
@@ -3174,7 +3154,7 @@
 			<field name="x">12992.0</field>
 			<field name="y">192.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
 			<field name="width">192</field>
@@ -3194,7 +3174,7 @@
 			<field name="x">12992.0</field>
 			<field name="y">384.0</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="wall" template="wall" z-index="0">
 		<component template="hitboxWall">
 			<field name="noLeftCollision">false</field>
@@ -3310,16 +3290,6 @@
 		</component>
 </entity>
 	<entity name="note-block" template="note-block" z-index="-1">
-		<component template="hitboxWall">
-			<field name="noLeftCollision">false</field>
-			<field name="noRightCollision">false</field>
-			<field name="frictionX">0.0</field>
-			<field name="frictionY">0.0</field>
-			<field name="bounceCoeffY">5.0</field>
-			<field name="noTopCollision">false</field>
-			<field name="bounceCoeffX">0.0</field>
-			<field name="noBottomCollision">false</field>
-		</component>
 		<component template="size">
 			<field name="width">192</field>
 			<field name="height">192</field>
@@ -3328,7 +3298,7 @@
 			<field name="x">13376</field>
 			<field name="y">192</field>
 		</component>
-</entity>
+<component template="hitboxWall" deleted="true"/></entity>
 	<entity name="note-block" template="note-block" z-index="-1">
 		<component template="hitboxWall">
 			<field name="noLeftCollision">false</field>
@@ -3352,34 +3322,6 @@
 	<entity name="scene-init" template="empty" z-index="9999">
 		<component template="play-music">
 			<field name="name">world1-1.wav</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="9">
-		<component template="size">
-			<field name="width">1334</field>
-			<field name="height">502</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.3</field>
-			<field name="cy">-0.3</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">-2.0</field>
-		</component>
-		<component template="position">
-			<field name="x">885.0</field>
-			<field name="y">-217.0</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
 		</component>
 </entity>
 	<entity name="sky" template="empty" z-index="-9">
@@ -3487,118 +3429,6 @@
 		<component template="position">
 			<field name="x">5123.0</field>
 			<field name="y">-6.0</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="9">
-		<component template="size">
-			<field name="width">1334</field>
-			<field name="height">502</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.3</field>
-			<field name="cy">-0.3</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">-2.0</field>
-		</component>
-		<component template="position">
-			<field name="x">2282</field>
-			<field name="y">-250</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="9">
-		<component template="size">
-			<field name="width">1334</field>
-			<field name="height">502</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.3</field>
-			<field name="cy">-0.3</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">-1.0</field>
-		</component>
-		<component template="position">
-			<field name="x">3678.0</field>
-			<field name="y">-272.0</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="9">
-		<component template="size">
-			<field name="width">1334</field>
-			<field name="height">502</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.3</field>
-			<field name="cy">-0.3</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">-0.5</field>
-		</component>
-		<component template="position">
-			<field name="x">5094.0</field>
-			<field name="y">-288.0</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="9">
-		<component template="size">
-			<field name="width">1334</field>
-			<field name="height">502</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.3</field>
-			<field name="cy">-0.3</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">0.0</field>
-		</component>
-		<component template="position">
-			<field name="x">6397.0</field>
-			<field name="y">-266.0</field>
 		</component>
 		<component template="speed">
 			<field name="x">0.0</field>
@@ -3751,30 +3581,6 @@
 		<component template="position">
 			<field name="x">17536.0</field>
 			<field name="y">512.0</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="9">
-		<component template="size">
-			<field name="width">1334</field>
-			<field name="height">502</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.3</field>
-			<field name="cy">-0.3</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="position">
-			<field name="x">17680.0</field>
-			<field name="y">-122.0</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
 		</component>
 </entity>
 	<entity name="sky" template="empty" z-index="9">
@@ -5290,7 +5096,7 @@
 			<field name="decelerationUp">0.0</field>
 			<field name="decelerationRight">1.0</field>
 			<field name="accelerationRight">1.0</field>
-			<field name="maxSpeedDown">20.0</field>
+			<field name="maxSpeedDown">5.0</field>
 			<field name="movingLeft">false</field>
 			<field name="movingDown">false</field>
 			<field name="maxSpeedUp">20.0</field>
@@ -5307,16 +5113,16 @@
 			<field name="noBottomCollision">false</field>
 		</component>
 		<component template="size">
-			<field name="width">128</field>
-			<field name="height">128</field>
+			<field name="width">64</field>
+			<field name="height">64</field>
 		</component>
 		<component template="speedForces">
 			<field name="gravity">1.5</field>
 			<field name="wind">0.0</field>
 		</component>
 		<component template="position">
-			<field name="x">13412.0</field>
-			<field name="y">-200.0</field>
+			<field name="x">13504</field>
+			<field name="y">-384</field>
 		</component>
 		<component template="speed">
 		</component>
@@ -5333,36 +5139,16 @@
 </entity>
 	<entity name="question-block" template="question-block" z-index="-1">
 		<component template="size">
-			<field name="width">192</field>
-			<field name="height">192</field>
+			<field name="width">64</field>
+			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">14144.0</field>
-			<field name="y">192.0</field>
+			<field name="x">14080</field>
+			<field name="y">320</field>
 		</component>
 		<component template="breakable">
 			<field name="delay">10</field>
 			<field name="type">question</field>
-		</component>
-</entity>
-	<entity name="ground 1" template="ground-grass" z-index="-1">
-		<component template="size">
-			<field name="width">192</field>
-			<field name="height">192</field>
-		</component>
-		<component template="tiledTexture">
-			<field name="size-tile">16</field>
-			<field name="file">blocks.png</field>
-			<field name="spacing">0</field>
-			<field name="has-borders">false</field>
-			<field name="x">0</field>
-			<field name="auto-tile">false</field>
-			<field name="y">4</field>
-			<field name="size-target">64</field>
-		</component>
-		<component template="position">
-			<field name="x">14528.0</field>
-			<field name="y">384.0</field>
 		</component>
 </entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
@@ -5381,7 +5167,7 @@
 			<field name="size-target">64</field>
 		</component>
 		<component template="position">
-			<field name="x">14976.0</field>
+			<field name="x">14720.0</field>
 			<field name="y">512.0</field>
 		</component>
 </entity>
@@ -5391,11 +5177,11 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">14825.0</field>
-			<field name="y">510.0</field>
+			<field name="x">14627.0</field>
+			<field name="y">488.0</field>
 		</component>
 </entity>
-	<entity name="mushroom" template="goomba" z-index="0">
+	<entity name="mushroom" template="goomba" z-index="1">
 		<component template="size">
 			<field name="width">64</field>
 			<field name="height">64</field>
@@ -5411,8 +5197,8 @@
 			<field name="size-target">16</field>
 		</component>
 		<component template="position">
-			<field name="x">14912</field>
-			<field name="y">512</field>
+			<field name="x">14587.0</field>
+			<field name="y">486.0</field>
 		</component>
 </entity>
 	<entity name="mushroom" template="goomba" z-index="-1">
@@ -5424,8 +5210,8 @@
 			<field name="name">schaffre.png</field>
 		</component>
 		<component template="position">
-			<field name="x">14852.0</field>
-			<field name="y">511.0</field>
+			<field name="x">14406.0</field>
+			<field name="y">495.0</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="mushroom" template="goomba" z-index="0">
@@ -5434,8 +5220,8 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">14720.0</field>
-			<field name="y">512.0</field>
+			<field name="x">14542.0</field>
+			<field name="y">497.0</field>
 		</component>
 </entity>
 	<entity name="mushroom" template="goomba" z-index="0">
@@ -5454,11 +5240,11 @@
 			<field name="size-target">16</field>
 		</component>
 		<component template="position">
-			<field name="x">14795.0</field>
-			<field name="y">512.0</field>
+			<field name="x">14444.0</field>
+			<field name="y">485.0</field>
 		</component>
 </entity>
-	<entity name="mushroom" template="goomba" z-index="0">
+	<entity name="mushroom" template="goomba" z-index="1">
 		<component template="size">
 			<field name="width">64</field>
 			<field name="height">64</field>
@@ -5474,8 +5260,8 @@
 			<field name="size-target">16</field>
 		</component>
 		<component template="position">
-			<field name="x">14784.0</field>
-			<field name="y">512.0</field>
+			<field name="x">14508.0</field>
+			<field name="y">502.0</field>
 		</component>
 </entity>
 	<entity name="mushroom" template="goomba" z-index="0">
@@ -5484,8 +5270,8 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">14720.0</field>
-			<field name="y">512.0</field>
+			<field name="x">14571.0</field>
+			<field name="y">492.0</field>
 		</component>
 </entity>
 	<entity name="mushroom" template="goomba" z-index="0">
@@ -5494,8 +5280,8 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">14720.0</field>
-			<field name="y">512.0</field>
+			<field name="x">14528.0</field>
+			<field name="y">480.0</field>
 		</component>
 </entity>
 	<entity name="mushroom" template="goomba" z-index="0">
@@ -5504,8 +5290,8 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">14720.0</field>
-			<field name="y">512.0</field>
+			<field name="x">14613.0</field>
+			<field name="y">500.0</field>
 		</component>
 </entity>
 	<entity name="mushroom" template="goomba" z-index="0">
@@ -5514,8 +5300,8 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">14720.0</field>
-			<field name="y">512.0</field>
+			<field name="x">14500.0</field>
+			<field name="y">478.0</field>
 		</component>
 </entity>
 	<entity name="ground 1" template="tiled-texture" z-index="7">
@@ -5660,8 +5446,8 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">21632.0</field>
-			<field name="y">256.0</field>
+			<field name="x">21668.0</field>
+			<field name="y">-142.0</field>
 		</component>
 		<component template="breakable">
 			<field name="delay">1</field>
@@ -5710,4 +5496,328 @@
 			<field name="type">goomba</field>
 		</component>
 <component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">440</field>
+			<field name="height">659</field>
+		</component>
+		<component template="position">
+			<field name="x">-433.0</field>
+			<field name="y">7.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">goomba</field>
+		</component>
+<component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="position">
+			<field name="x">8896</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="position">
+			<field name="x">9600.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="position">
+			<field name="x">9920.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">512</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">960</field>
+		</component>
+		<component template="position">
+			<field name="x">12992.0</field>
+			<field name="y">-384.0</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="position">
+			<field name="x">8704.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14336.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608</field>
+			<field name="y">192</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608.0</field>
+			<field name="y">0.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608.0</field>
+			<field name="y">-192.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608</field>
+			<field name="y">-384</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608.0</field>
+			<field name="y">-576.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">1152</field>
+		</component>
+		<component template="position">
+			<field name="x">12608.0</field>
+			<field name="y">-767.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12992</field>
+			<field name="y">-384</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="player" template="empty" z-index="2">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">1.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">false</field>
+			<field name="maxSpeedRight">5.0</field>
+			<field name="accelerationLeft">1.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">true</field>
+			<field name="touchWallDown">true</field>
+			<field name="maxSpeedLeft">5.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">1.0</field>
+			<field name="accelerationRight">1.0</field>
+			<field name="maxSpeedDown">5.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">20.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="speedForces">
+			<field name="gravity">1.5</field>
+			<field name="wind">0.0</field>
+		</component>
+		<component template="position">
+			<field name="x">13440</field>
+			<field name="y">-320</field>
+		</component>
+		<component template="speed">
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">20</field>
+			<field name="col">0</field>
+			<field name="file">blocks.png</field>
+			<field name="delay">20</field>
+			<field name="size">16</field>
+			<field name="frames">3</field>
+			<field name="row">1</field>
+			<field name="currentFrameIndex">0</field>
+		</component>
+</entity>
+	<entity name="player" template="empty" z-index="2">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">1.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">false</field>
+			<field name="maxSpeedRight">5.0</field>
+			<field name="accelerationLeft">1.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">true</field>
+			<field name="touchWallDown">true</field>
+			<field name="maxSpeedLeft">5.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">1.0</field>
+			<field name="accelerationRight">1.0</field>
+			<field name="maxSpeedDown">5.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">20.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="speedForces">
+			<field name="gravity">1.5</field>
+			<field name="wind">0.0</field>
+		</component>
+		<component template="position">
+			<field name="x">13376</field>
+			<field name="y">-256</field>
+		</component>
+		<component template="speed">
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">20</field>
+			<field name="col">0</field>
+			<field name="file">blocks.png</field>
+			<field name="delay">20</field>
+			<field name="size">16</field>
+			<field name="frames">3</field>
+			<field name="row">1</field>
+			<field name="currentFrameIndex">0</field>
+		</component>
+</entity>
 </scene>

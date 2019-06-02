@@ -61,12 +61,12 @@ function renderTiledTextures(e)
 	else
 		local ti = math.floor(e.size.width / e.tiledTexture["size-target"]) - 1
 		local tj =	math.floor(e.size.height / e.tiledTexture["size-target"]) - 1
-
+		
 		-- Render x y
 		for i = 0, ti do
 			for j = 0, tj do
-				local x = math.floor(e.position.x + i * e.tiledTexture["size-target"])
-				local y = math.floor(e.position.y + j * e.tiledTexture["size-target"])
+				local x = e.position.x + i * e.tiledTexture["size-target"]
+				local y = e.position.y + j * e.tiledTexture["size-target"]
 				local col = e.tiledTexture.x
 				local row = e.tiledTexture.y
 				if e.tiledTexture["has-borders"] then
@@ -92,8 +92,8 @@ function renderTiledTextures(e)
 		-- Last row
 		for i = 0, tj do
 			local targetSize = e.tiledTexture["size-target"] - (-e.size.width + e.tiledTexture["size-target"] * (ti + 2))
-			local x = math.floor(e.position.x + (ti + 1) * e.tiledTexture["size-target"])
-			local y = math.floor(e.position.y + i * e.tiledTexture["size-target"])
+			local x = e.position.x + (ti + 1) * e.tiledTexture["size-target"]
+			local y = e.position.y + i * e.tiledTexture["size-target"]
 			local col = e.tiledTexture.x
 			local row = e.tiledTexture.y
 			if e.tiledTexture["has-borders"] then
@@ -119,8 +119,8 @@ function renderTiledTextures(e)
 		-- Last col
 		for i = 0, ti do
 			local targetSize = e.tiledTexture["size-target"] - (-e.size.height + e.tiledTexture["size-target"] * (tj + 2))
-			local x = math.floor(e.position.x + i * e.tiledTexture["size-target"])
-			local y = math.floor(e.position.y + (tj + 1) * e.tiledTexture["size-target"])
+			local x = e.position.x + i * e.tiledTexture["size-target"]
+			local y = e.position.y + (tj + 1) * e.tiledTexture["size-target"]
 			local col = e.tiledTexture.x
 			local row = e.tiledTexture.y
 			if e.tiledTexture["has-borders"] then
@@ -173,9 +173,11 @@ end
 
 
 function renderEnd()
-	for i, entity in ipairs(debug) do
+	--[[for i, entity in ipairs(debug) do
 		g:setColor(entity.debug.r, entity.debug.g, entity.debug.b, 200)
-		--g:fillRect(entity.position, entity.size)
-	end
+		g:fillRect(entity.position, entity.size)
+	end---]]
 	game.camera:resetTransforms(g:getContext())
+	g:setColor(game.color:fromRGB(0, 0, 0))
+  g:drawString("FPS:" .. game.core:getFPS(), 20, 40)
 end
