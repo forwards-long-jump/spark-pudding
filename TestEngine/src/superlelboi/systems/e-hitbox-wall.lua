@@ -54,7 +54,6 @@ function update()
 						else
 							if ex1 - esx < x1 - sx and not wall.hitboxWall.noLeftCollision	then
 								-- left
-								print("waw")
 								entity.acceleration.touchWallRight = true
 								if entity.deformation ~= nil then
 									entity.deformation.left = entity.deformation.maxDeformation * math.abs(esx) / entity.acceleration.maxSpeedRight

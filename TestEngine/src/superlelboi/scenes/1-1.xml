@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene name="1-1">
 	<entity name="player" template="player" z-index="0">
+		<component template="position">
+			<field name="x">474</field>
+			<field name="y">99</field>
+		</component>
 </entity>
 	<entity name="ground" template="collision" z-index="0">
 		<component template="size">
 			<field name="width">2266</field>
-			<field name="height">4788</field>
+			<field name="height">9542</field>
 		</component>
 		<component template="position">
 			<field name="x">244.0</field>
@@ -15,27 +19,39 @@
 	<entity name="ground" template="collision" z-index="0">
 		<component template="size">
 			<field name="width">2266</field>
-			<field name="height">6419</field>
+			<field name="height">10917</field>
 		</component>
 		<component template="position">
-			<field name="x">7532.0</field>
-			<field name="y">-820.0</field>
+			<field name="x">6489.0</field>
+			<field name="y">-1411.0</field>
 		</component>
 </entity>
 	<entity name="bounds" template="bounds" z-index="-1">
 		<component template="position">
-			<field name="x">1088.893071274572</field>
-			<field name="y">-1101.7454158533326</field>
+			<field name="x">-15533.0</field>
+			<field name="y">4397.0</field>
 		</component>
 </entity>
 	<entity name="death" template="death" z-index="-1">
 		<component template="size">
-			<field name="width">6651</field>
-			<field name="height">4748</field>
+			<field name="width">5023</field>
+			<field name="height">8902</field>
 		</component>
 		<component template="position">
-			<field name="x">1772.0</field>
-			<field name="y">666.0</field>
+			<field name="x">1772</field>
+			<field name="y">666</field>
+		</component>
+</entity>
+	<entity name="goal" template="goal" z-index="0">
+		<component template="goal">
+			<field name="nextLevel">1-2</field>
+		</component>
+		<component template="texture">
+			<field name="name">goal.png</field>
+		</component>
+		<component template="position">
+			<field name="x">8045.0</field>
+			<field name="y">-1970.0</field>
 		</component>
 </entity>
 	<entity name="platform" template="platform" z-index="0">
@@ -44,14 +60,8 @@
 			<field name="height">100</field>
 		</component>
 		<component template="position">
-			<field name="x">4542.0</field>
-			<field name="y">508.0</field>
-		</component>
-</entity>
-	<entity name="goal" template="goal" z-index="0">
-		<component template="position">
-			<field name="x">8746.0</field>
-			<field name="y">-1681.0</field>
+			<field name="x">4237.713192377519</field>
+			<field name="y">613.9949889928781</field>
 		</component>
 </entity>
 </scene>

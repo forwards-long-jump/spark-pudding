@@ -1,74 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene name="main">
 	<entity name="player" template="player" z-index="0">
+		<component template="size">
+			<field name="width">149</field>
+			<field name="height">205</field>
+		</component>
+		<component template="position">
+			<field name="x">587.0</field>
+			<field name="y">163.0</field>
+		</component>
 </entity>
 	<entity name="ground" template="collision" z-index="0">
+		<component template="size">
+			<field name="width">4168</field>
+			<field name="height">316</field>
+		</component>
+		<component template="position">
+			<field name="x">-2043.0</field>
+			<field name="y">411.0</field>
+		</component>
 </entity>
 	<entity name="wall" template="collision" z-index="0">
 		<component template="size">
-			<field name="width">2627.0300544171278</field>
-			<field name="height">6599.382532996852</field>
+			<field name="width">493</field>
+			<field name="height">6440</field>
 		</component>
 		<component template="position">
-			<field name="x">1990.9902409678746</field>
-			<field name="y">-4420.619768952439</field>
+			<field name="x">1990.0</field>
+			<field name="y">-5713.0</field>
 		</component>
-</entity>
-	<entity name="platform" template="platform" z-index="0">
 </entity>
 	<entity name="platform" template="platform" z-index="0">
 		<component template="size">
-			<field name="width">1401.9155958181584</field>
+			<field name="width">1020</field>
 			<field name="height">100</field>
 		</component>
 		<component template="position">
-			<field name="x">-1204.8159813975035</field>
-			<field name="y">-1009.066889688195</field>
+			<field name="x">-402.0</field>
+			<field name="y">-434.0</field>
+		</component>
+</entity>
+	<entity name="platform" template="platform" z-index="0">
+		<component template="size">
+			<field name="width">790</field>
+			<field name="height">110</field>
+		</component>
+		<component template="position">
+			<field name="x">-1310.0</field>
+			<field name="y">-1024.0</field>
 		</component>
 </entity>
 	<entity name="wall" template="collision" z-index="0">
 		<component template="size">
-			<field name="width">5232</field>
-			<field name="height">2443</field>
+			<field name="width">3324</field>
+			<field name="height">2292</field>
 		</component>
 		<component template="position">
-			<field name="x">-800.0</field>
-			<field name="y">-4498.0</field>
+			<field name="x">-929.0</field>
+			<field name="y">-4379.0</field>
 		</component>
 </entity>
 	<entity name="wall" template="collision" z-index="0">
 		<component template="size">
-			<field name="width">2395.586911928659</field>
-			<field name="height">5342.460670204063</field>
+			<field name="width">503</field>
+			<field name="height">4485</field>
 		</component>
 		<component template="position">
-			<field name="x">-4098.53652817717</field>
-			<field name="y">-6348.398903456098</field>
+			<field name="x">-1998.0</field>
+			<field name="y">-5712.0</field>
 		</component>
 </entity>
 	<entity name="wall" template="collision" z-index="0">
 		<component template="size">
-			<field name="width">8751.868742292452</field>
-			<field name="height">983.9252199299026</field>
+			<field name="width">4475</field>
+			<field name="height">400</field>
 		</component>
 		<component template="position">
-			<field name="x">-4086.2582052025364</field>
-			<field name="y">-7338.965793672749</field>
-		</component>
-</entity>
-	<entity name="wall" template="collision" z-index="0">
-		<component template="size">
-			<field name="width">987.8358676548096</field>
-			<field name="height">4116.246784733143</field>
-		</component>
-		<component template="position">
-			<field name="x">3627.371239799986</field>
-			<field name="y">-7193.058825923681</field>
+			<field name="x">-1997.0</field>
+			<field name="y">-5713.0</field>
 		</component>
 </entity>
 	<entity name="goal" template="goal" z-index="0">
-</entity>
-	<entity name="death" template="death" z-index="-1">
+		<component template="goal">
+			<field name="nextLevel">1-1</field>
+		</component>
+		<component template="size">
+			<field name="width">500</field>
+			<field name="height">500</field>
+		</component>
+		<component template="position">
+			<field name="x">1436.0</field>
+			<field name="y">-4945.0</field>
+		</component>
 </entity>
 	<entity name="death" template="bounds" z-index="-1">
 </entity>

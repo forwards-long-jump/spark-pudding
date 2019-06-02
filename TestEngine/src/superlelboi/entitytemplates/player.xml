@@ -10,7 +10,7 @@
 		<field name="accelerationLeft">5.0</field>
 		<field name="accelerationDown">0.0</field>
 		<field name="touchWallLeft">false</field>
-		<field name="touchWallDown">true</field>
+		<field name="touchWallDown">false</field>
 		<field name="maxSpeedLeft">50.0</field>
 		<field name="accelerationUp">0.0</field>
 		<field name="decelerationUp">0.0</field>
@@ -22,21 +22,21 @@
 		<field name="maxSpeedUp">100.0</field>
 		<field name="touchWallUp">false</field>
 	</component>
-	<component template="jumpController">
-		<field name="key">space</field>
-	</component>
 	<component template="debug">
 		<field name="a">255</field>
 		<field name="r">50</field>
 		<field name="b">220</field>
 		<field name="g">110</field>
 	</component>
+	<component template="jumpController">
+		<field name="key">space</field>
+	</component>
 	<component template="size">
 		<field name="width">149.38620672442045</field>
 		<field name="height">205.43741008326148</field>
 	</component>
 	<component template="speedForces">
-		<field name="gravity">4.5</field>
+		<field name="gravity">6.0</field>
 		<field name="wind">0.0</field>
 	</component>
 	<component template="deformation">
@@ -48,8 +48,8 @@
 		<field name="currentHorizontal">0.0</field>
 	</component>
 	<component template="position">
-		<field name="x">634.2472755421857</field>
-		<field name="y">249.2820815822455</field>
+		<field name="x">6752.587054693627</field>
+		<field name="y">-1797.118715222961</field>
 	</component>
 	<component template="camera">
 		<field name="mode">SPRING</field>

@@ -35,7 +35,7 @@ function renderPlayers(e)
 	
 	g:setColor(game.color:fromRGBA(e.debug.r, e.debug.g, e.debug.b, e.debug.a))
 	g:fillRect(pos, size)
-	g:setColor(255, 0, 0)
+	g:setColor(0, 0, 125)
 	if e.acceleration.touchWallDown then
 		g:fillRect(pos.x, pos.y + 0.9 * size.height, size.width, size.height * 0.1)
 	end
@@ -52,7 +52,11 @@ end
 
 function renderEnd()
 	game.camera:resetTransforms(g:getContext())
-	g:setColor(game.color:fromRGB(255,255,255))
-	g:drawString("Editing mode", 20, 20)
-	g:drawString("FPS:" .. game.core:getFPS(), 20, 40)
+
+	-- game over text
+	if next(players) == nil then
+		g:setColor(0,0,0)
+		g:drawString("YOU DIED", 50, 50)
+		g:drawString("Press r to restart", 50, 70)
+	end
 end
