@@ -12,7 +12,9 @@ function renderStart()
 end
 
 function renderTextures(e)
-	g:drawImage(e.texture.name, e.position, e.size)
+	if game.camera:isInView(e.position.x, e.position.y, e.size.width, e.size.height) then
+		g:drawImage(e.texture.name, e.position, e.size)
+	end
 end
 
 function renderAnimatedTiles(e)
@@ -21,10 +23,12 @@ function renderAnimatedTiles(e)
 	local size = e.animatedTile.size
 
 	col = col + e.animatedTile.currentFrameIndex
-	
-	g:drawImage(e.animatedTile.file, e.position, e.size, 
-				col * size,
-				row * size, size, size)
+
+	if game.camera:isInView(e.position.x, e.position.y, e.size.width, col * size) then
+		g:drawImage(e.animatedTile.file, e.position, e.size, 
+					col * size,
+					row * size, size, size)
+	end
 end
 
 function renderAnimatedSprites(e)
@@ -49,9 +53,11 @@ function renderTiledTextures(e)
 	local spacing = e.tiledTexture.spacing
 
 	if not e.tiledTexture["auto-tile"] then
-		g:drawImage(e.tiledTexture.file, e.position, e.size, 
-			e.tiledTexture.x * (spacing + e.tiledTexture["size-tile"]),
-			e.tiledTexture.y * (spacing + e.tiledTexture["size-tile"]), e.tiledTexture["size-tile"], e.tiledTexture["size-tile"])
+			if game.camera:isInView(e.position.x, e.position.y, e.size.width, e.size.height) then
+				g:drawImage(e.tiledTexture.file, e.position, e.size, 
+					e.tiledTexture.x * (spacing + e.tiledTexture["size-tile"]),
+					e.tiledTexture.y * (spacing + e.tiledTexture["size-tile"]), e.tiledTexture["size-tile"], e.tiledTexture["size-tile"])
+			end
 	else
 		local ti = math.floor(e.size.width / e.tiledTexture["size-target"]) - 1
 		local tj =	math.floor(e.size.height / e.tiledTexture["size-target"]) - 1
@@ -165,28 +171,11 @@ function renderSquares(entity)
 	g:fillRect(entity.position, entity.size)
 end
 
-function renderPlayers(e)
-	g:setColor(game.color:fromRGBA(e.debug.r, e.debug.g, e.debug.b, e.debug.a))
-	g:fillRect(e.position, e.size)
-	g:setColor(255, 0, 0)
-	if e.acceleration.touchWallDown then
-		g:fillRect(e.position.x, e.position.y + 0.9 * e.size.height, e.size.width, e.size.height * 0.1)
-	end
-	if e.acceleration.touchWallUp then
-		g:fillRect(e.position.x, e.position.y, e.size.width, e.size.height * 0.1)
-	end
-	if e.acceleration.touchWallLeft then
-		g:fillRect(e.position.x, e.position.y, e.size.width * 0.1, e.size.height)
-	end
-	if e.acceleration.touchWallRight then
-		g:fillRect(e.position.x + 0.9 * e.size.width, e.position.y, e.size.width * 0.1, e.size.height)
-	end
-end
 
 function renderEnd()
 	for i, entity in ipairs(debug) do
 		g:setColor(entity.debug.r, entity.debug.g, entity.debug.b, 200)
-		-- g:fillRect(entity.position, entity.size)
+		--g:fillRect(entity.position, entity.size)
 	end
 	game.camera:resetTransforms(g:getContext())
 end
