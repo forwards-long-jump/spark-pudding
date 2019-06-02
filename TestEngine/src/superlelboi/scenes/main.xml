@@ -6,8 +6,8 @@
 			<field name="height">205</field>
 		</component>
 		<component template="position">
-			<field name="x">587.0</field>
-			<field name="y">163.0</field>
+			<field name="x">586.0</field>
+			<field name="y">136.0</field>
 		</component>
 </entity>
 	<entity name="ground" template="collision" z-index="0">
@@ -94,7 +94,13 @@
 		</component>
 </entity>
 	<entity name="death" template="bounds" z-index="-1">
-</entity>
-	<entity name="death" template="bounds" z-index="-1">
+		<component template="size">
+			<field name="width">34814</field>
+			<field name="height">664</field>
+		</component>
+		<component template="position">
+			<field name="x">-17285.0</field>
+			<field name="y">1892.0</field>
+		</component>
 </entity>
 </scene>

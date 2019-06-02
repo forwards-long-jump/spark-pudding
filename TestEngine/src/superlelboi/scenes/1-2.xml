@@ -17,6 +17,10 @@
 		</component>
 </entity>
 	<entity name="bounds" template="bounds" z-index="-1">
+		<component template="size">
+			<field name="width">50031</field>
+			<field name="height">943</field>
+		</component>
 		<component template="position">
 			<field name="x">-23357.0</field>
 			<field name="y">2715.0</field>
