@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-template name="goal">
+	<component template="goal">
+		<field name="nextLevel">1-1</field>
+	</component>
 	<component template="size">
-		<field name="width">985.1985076712058</field>
-		<field name="height">803.1173617694121</field>
+		<field name="width">500</field>
+		<field name="height">500</field>
 	</component>
 	<component template="texture">
-		<field name="name">ytmnd.png</field>
+		<field name="name">goal.png</field>
 	</component>
 	<component template="reactor">
 		<field name="type">levelEnd</field>
 	</component>
 	<component template="position">
-		<field name="x">2185.7569167887173</field>
-		<field name="y">-5686.757962148021</field>
+		<field name="x">2749.0</field>
+		<field name="y">-5001.0</field>
 	</component>
 </entity-template>
