@@ -70,14 +70,28 @@ public class Sound {
 
 		audioInputStream.reset();
 
-		if (currentMusic != null)
+		if (currentMusic != null) {
 			currentMusic.stop();
+			currentMusic.close();
+			currentMusic = null;
+		}
 
 		currentMusic = AudioSystem.getClip();
 		currentMusic.open(audioInputStream);
 		currentMusic.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
+	/**
+	 * Stop current music
+	 */
+	public void stopMusic() {
+		if (currentMusic != null) {
+			currentMusic.stop();
+			currentMusic.close();
+			currentMusic = null;
+		}
+	}
+	
 	/**
 	 * Pauses the currently playing music if there is one
 	 */
@@ -106,8 +120,9 @@ public class Sound {
 	public void play(String name) throws LineUnavailableException, IOException {
 		AudioInputStream audioInputStream = resourceLocator.getSound(name);
 
-		if (audioInputStream == null)
+		if (audioInputStream == null) {			
 			return;
+		}
 
 		audioInputStream.reset();
 

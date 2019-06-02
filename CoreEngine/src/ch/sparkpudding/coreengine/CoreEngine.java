@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import ch.sparkpudding.coreengine.Scheduler.Trigger;
+import ch.sparkpudding.coreengine.api.Sound;
 import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
@@ -413,6 +414,13 @@ public class CoreEngine extends JPanel {
 		}
 
 		editingPause = pause;
+		
+		if(editingPause) {
+			Sound.getInstance().pauseMusic();
+		}
+		else {
+			Sound.getInstance().resumeMusic();
+		}
 	}
 
 	/**
@@ -482,7 +490,7 @@ public class CoreEngine extends JPanel {
 	 */
 	public void resetCurrentScene(boolean useDirectlyDefaultEntities) {
 		this.editingTick = 0;
-
+		Sound.getInstance().stopMusic();
 		currentScene.reset(useDirectlyDefaultEntities);
 		setCurrentScene(currentScene, useDirectlyDefaultEntities);
 	}
