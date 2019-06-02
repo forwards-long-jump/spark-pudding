@@ -91,6 +91,10 @@ public class Core {
 	 * @param reset or not the new scene
 	 */
 	public void setScene(String name, boolean reset) {
+		if(!Lel.coreEngine.getScenes().containsKey(name)) {
+			Lel.coreEngine.notifyGameError(new Exception("Scene not found: " + name));
+			return;
+		}
 		Lel.coreEngine.getScheduler().schedule(Trigger.GAME_LOOP_START, new Runnable() {
 			@Override
 			public void run() {
