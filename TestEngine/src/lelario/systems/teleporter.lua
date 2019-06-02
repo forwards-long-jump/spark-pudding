@@ -1,5 +1,5 @@
 function getRequiredComponents()
-	return {portals = {"position", "size", "teleporter"}, entities = {"position", "size", "speed"}}
+	return {portals = {"position", "size", "teleporter"}, entities = {"position", "size", "speed", "animatedSprite"}}
 end
 
 function update()

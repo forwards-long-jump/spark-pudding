@@ -34,7 +34,7 @@ function update()
 								entity.position.y = y1 - entity.size.height
 								-- TODO: Additional force entity.position.x = entity.position.x + sx -- todo * (1 - wall.hitboxWall.frictionX)
 
-								entity.speed.y = sy -- todo handle bouncy
+								entity.speed.y = sy + (entity.speed.y * -wall.hitboxWall.bounceCoeffY)
 								entity.speed.x = entity.speed.x * (1 - wall.hitboxWall.frictionX)
 							elseif ey1 - esy > y2 - sy and not wall.hitboxWall.noBottomCollision	then
 								-- bottom
@@ -42,7 +42,7 @@ function update()
 								entity.position.y = y2
 								-- TODO: Additional force entity.position.x = entity.position.x + sx -- todo * (1 - wall.hitboxWall.frictionX)
 
-								entity.speed.y = sy -- todo handle bouncy
+								entity.speed.y = sy + (entity.speed.y * -wall.hitboxWall.bounceCoeffY)
 								entity.speed.x = entity.speed.x * (1 - wall.hitboxWall.frictionX)
 							end
 						else

@@ -15,11 +15,11 @@
 		<field name="height">64</field>
 	</component>
 	<component template="position">
-		<field name="x">608.0</field>
-		<field name="y">340</field>
+		<field name="x">1280.0</field>
+		<field name="y">320.0</field>
 	</component>
 	<component template="breakable">
-		<field name="delay">0</field>
+		<field name="delay">1</field>
 		<field name="type">question</field>
 	</component>
 	<component template="animatedTile">
