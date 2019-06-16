@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="resources"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CoreEngine"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="resources/lib/rsyntaxtextarea-3.0.4-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="resources/lib/autocomplete-3.0.0-20180910.022348-1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

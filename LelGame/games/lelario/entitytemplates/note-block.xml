@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="note-block">
+	<component template="hitboxWall">
+		<field name="noLeftCollision">false</field>
+		<field name="noRightCollision">false</field>
+		<field name="frictionX">0.0</field>
+		<field name="frictionY">0.0</field>
+		<field name="bounceCoeffY">0.95</field>
+		<field name="noTopCollision">false</field>
+		<field name="bounceCoeffX">0.0</field>
+		<field name="noBottomCollision">false</field>
+	</component>
+	<component template="debug">
+		<field name="a">100</field>
+		<field name="r">250</field>
+		<field name="b">250</field>
+		<field name="g">250</field>
+	</component>
+	<component template="size">
+		<field name="width">64</field>
+		<field name="height">64</field>
+	</component>
+	<component template="position">
+		<field name="x">2147.0</field>
+		<field name="y">244.0</field>
+	</component>
+	<component template="animatedTile">
+		<field name="currentDelay">0</field>
+		<field name="col">0</field>
+		<field name="file">blocks.png</field>
+		<field name="delay">17</field>
+		<field name="size">16</field>
+		<field name="frames">3</field>
+		<field name="row">3</field>
+		<field name="currentFrameIndex">0</field>
+	</component>
+</entity-template>

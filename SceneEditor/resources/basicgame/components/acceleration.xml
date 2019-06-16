@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="acceleration">
+	<field type="BOOLEAN" name="movingLeft">0</field>
+	<field type="BOOLEAN" name="movingRight">0</field>
+	<field type="BOOLEAN" name="movingUp">0</field>
+	<field type="BOOLEAN" name="movingDown">0</field>
+	<field type="BOOLEAN" name="touchWallLeft">false</field>
+	<field type="BOOLEAN" name="touchWallRight">false</field>
+	<field type="BOOLEAN" name="touchWallUp">false</field>
+	<field type="BOOLEAN" name="touchWallDown">false</field>
+	<field type="DOUBLE" name="maxSpeedLeft">30</field>
+	<field type="DOUBLE" name="maxSpeedRight">30</field>
+	<field type="DOUBLE" name="maxSpeedUp">100</field>
+	<field type="DOUBLE" name="maxSpeedDown">100</field>
+	<field type="DOUBLE" name="decelerationLeft">3.5</field>
+	<field type="DOUBLE" name="decelerationRight">3.5</field>
+	<field type="DOUBLE" name="decelerationUp">0</field>
+	<field type="DOUBLE" name="decelerationDown">1</field>
+	<field type="DOUBLE" name="accelerationLeft">5</field>
+	<field type="DOUBLE" name="accelerationRight">5</field>
+	<field type="DOUBLE" name="accelerationUp">0</field>
+	<field type="DOUBLE" name="accelerationDown">0</field>
+</component>

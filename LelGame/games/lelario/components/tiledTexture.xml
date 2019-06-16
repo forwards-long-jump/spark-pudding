@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="tiledTexture">
+	<field type="INTEGER" name="size-tile">16</field>
+	<field type="STRING" name="file">tileset.png</field>
+	<field type="INTEGER" name="spacing">0</field>
+	<field type="BOOLEAN" name="has-borders">false</field>
+	<field type="INTEGER" name="x">0</field>
+	<field type="BOOLEAN" name="auto-tile">false</field>
+	<field type="INTEGER" name="y">0</field>
+	<field type="INTEGER" name="size-target">16</field>
+</component>

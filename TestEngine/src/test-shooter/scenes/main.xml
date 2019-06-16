@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene name="main">
+	<entity name="press-start" template="label" z-index="1">
+		<component template="position">
+			<field name="x">580</field>
+			<field name="y">360</field>
+		</component>
+		<component template="color" />
+		<component template="text">
+			<field name="value">Press SPACE to play</field>
+		</component>
+	</entity>
+	<entity name="mouse" template="empty" z-index="1">
+		<component template="position" />
+		<component template="mouse" />
+		<component template="color">
+			<field name="r">50</field>
+			<field name="b">55</field>
+		</component>
+		<component template="size">
+			<field name="width">20</field>
+			<field name="height">20</field>
+		</component>
+	</entity>
+</scene>

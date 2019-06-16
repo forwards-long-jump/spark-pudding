@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="color">
+	<field type="INTEGER" name="a">255</field>
+	<field type="INTEGER" name="r">0</field>
+	<field type="INTEGER" name="b">0</field>
+	<field type="INTEGER" name="g">0</field>
+</component>

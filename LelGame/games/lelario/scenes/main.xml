@@ -1,0 +1,5281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene name="main">
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+		</component>
+		<component template="size">
+			<field name="width">4415</field>
+			<field name="height">128</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tileset.png</field>
+			<field name="spacing">1</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">-64</field>
+			<field name="y">576</field>
+		</component>
+</entity>
+	<entity name="sky" template="empty" z-index="-10">
+		<component template="size">
+			<field name="width">1911</field>
+			<field name="height">1298</field>
+		</component>
+		<component template="color">
+			<field name="a">255</field>
+			<field name="r">30</field>
+			<field name="b">255</field>
+			<field name="g">144</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">1.0</field>
+			<field name="cy">1.0</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="position">
+			<field name="x">-313.0</field>
+			<field name="y">-293.0</field>
+		</component>
+</entity>
+	<entity name="player" template="empty" z-index="2">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">1.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">false</field>
+			<field name="maxSpeedRight">10.0</field>
+			<field name="accelerationLeft">1.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">true</field>
+			<field name="touchWallDown">true</field>
+			<field name="maxSpeedLeft">10.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">1.0</field>
+			<field name="accelerationRight">1.0</field>
+			<field name="maxSpeedDown">200.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">50.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="debug">
+		</component>
+		<component template="jumpController">
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">128</field>
+		</component>
+		<component template="speedForces">
+			<field name="gravity">1.5</field>
+			<field name="wind">0.0</field>
+		</component>
+		<component template="animatedSprite">
+			<field name="currentDelay">2</field>
+			<field name="standIndex">9</field>
+			<field name="jumpFrames">1</field>
+			<field name="currentAnimation">stand</field>
+			<field name="mirrorX">false</field>
+			<field name="currentFrameIndex">9</field>
+			<field name="file">player.png</field>
+			<field name="delay">5</field>
+			<field name="standFrames">2</field>
+			<field name="width">16</field>
+			<field name="walkIndex">0</field>
+			<field name="jumpIndex">11</field>
+			<field name="walkFrames">8</field>
+			<field name="height">25</field>
+		</component>
+		<component template="position">
+			<field name="x">704.0</field>
+			<field name="y">256.0</field>
+		</component>
+		<component template="camera">
+			<field name="mode">SPRING</field>
+			<field name="scaling">1.0</field>
+			<field name="enabled">true</field>
+		</component>
+		<component template="accelerationController">
+		</component>
+		<component template="speed">
+		</component>
+		<component template="jump">
+			<field name="airDuration">0</field>
+			<field name="countMax">1</field>
+			<field name="count">0</field>
+			<field name="force">22.0</field>
+			<field name="airDurationDefault">10</field>
+			<field name="released">true</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">960.0</field>
+			<field name="y">320.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="note-block" template="note-block" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="position">
+			<field name="x">13376.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="texture" template="pipe" z-index="0">
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">131</field>
+		</component>
+		<component template="position">
+			<field name="x">1728.0</field>
+			<field name="y">448.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">1344.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">1216</field>
+			<field name="y">320</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">brick</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">1472.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">57</field>
+		</component>
+		<component template="position">
+			<field name="x">10368.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="texture" template="teleporter" z-index="0">
+		<component template="teleporter">
+			<field name="isEntrance">true</field>
+			<field name="id">pipe1</field>
+		</component>
+		<component template="size">
+			<field name="width">105</field>
+			<field name="height">79</field>
+		</component>
+		<component template="position">
+			<field name="x">2897.0</field>
+			<field name="y">506.0</field>
+		</component>
+</entity>
+	<entity name="texture" template="teleporter" z-index="0">
+		<component template="teleporter">
+			<field name="isEntrance">false</field>
+			<field name="id">pipe1</field>
+		</component>
+		<component template="size">
+			<field name="width">77</field>
+			<field name="height">58</field>
+		</component>
+		<component template="position">
+			<field name="x">10395.0</field>
+			<field name="y">225.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">1408.0</field>
+			<field name="y">320.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+		</component>
+		<component template="size">
+			<field name="width">959</field>
+			<field name="height">128</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tileset.png</field>
+			<field name="spacing">1</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">4480.0</field>
+			<field name="y">576.0</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="0">
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">196</field>
+		</component>
+		<component template="position">
+			<field name="x">2368.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">4032.0</field>
+			<field name="y">256.0</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">17</field>
+			<field name="col">0</field>
+			<field name="file">blocks.png</field>
+			<field name="delay">17</field>
+			<field name="size">16</field>
+			<field name="frames">0</field>
+			<field name="row">20</field>
+			<field name="currentFrameIndex">0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">4928.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">6720.0</field>
+			<field name="y">320.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">6912.0</field>
+			<field name="y">320.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">6912.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">7104.0</field>
+			<field name="y">320.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8192.0</field>
+			<field name="y">64.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8256.0</field>
+			<field name="y">64.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">10816.0</field>
+			<field name="y">320.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+		</component>
+		<component template="size">
+			<field name="width">4095</field>
+			<field name="height">128</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tileset.png</field>
+			<field name="spacing">1</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">5632.0</field>
+			<field name="y">576.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+		</component>
+		<component template="size">
+			<field name="width">5657</field>
+			<field name="height">128</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tileset.png</field>
+			<field name="spacing">1</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9920.0</field>
+			<field name="y">576.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">4864.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">4992.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">518</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">15</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">true</field>
+			<field name="y">2</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">5056.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">5760.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">5824.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">5888.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">5952.0</field>
+			<field name="y">64.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">6336.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">6400</field>
+			<field name="y">320</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">7488.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">7680.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">7744.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">7808.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8192.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8256.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8128.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8320.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">10688</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">10752.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="brick" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">10880.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8512.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8576.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8640.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8704.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8704</field>
+			<field name="y">448</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8640.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8576.0</field>
+			<field name="y">448.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8640.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8704.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8704.0</field>
+			<field name="y">320.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8896</field>
+			<field name="y">320</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64.0</field>
+			<field name="height">64.0</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8896.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8896.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8896.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8960.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8960.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">8960.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9024.0</field>
+			<field name="y">448.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9024.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9088.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9408.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9472.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9536.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9600.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9664.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9664.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9600.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9536.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9472.0</field>
+			<field name="y">448.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9536.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9600.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9664.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9664</field>
+			<field name="y">320</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9600.0</field>
+			<field name="y">320.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9920</field>
+			<field name="y">320</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9920</field>
+			<field name="y">384</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9984</field>
+			<field name="y">384</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">10048</field>
+			<field name="y">448</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9984</field>
+			<field name="y">448</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9920.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9920</field>
+			<field name="y">512</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">9984</field>
+			<field name="y">512</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">10048</field>
+			<field name="y">512</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">10112</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11520.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11584.0</field>
+			<field name="y">448.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11648.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11712.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11776.0</field>
+			<field name="y">256.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11840.0</field>
+			<field name="y">192.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11904.0</field>
+			<field name="y">128.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">64.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12032</field>
+			<field name="y">64</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12032.0</field>
+			<field name="y">128.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">128.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11904.0</field>
+			<field name="y">192.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">192.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12032</field>
+			<field name="y">192</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12032.0</field>
+			<field name="y">256.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">256.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11904.0</field>
+			<field name="y">256.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11840.0</field>
+			<field name="y">256.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11776.0</field>
+			<field name="y">320.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11840.0</field>
+			<field name="y">320.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11904.0</field>
+			<field name="y">320.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">320.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12032.0</field>
+			<field name="y">320.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12032.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11904.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11840.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11776.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11712.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11648.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11712.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11776.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11840.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11904.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12032.0</field>
+			<field name="y">448.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12032.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11904.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11840.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11776.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11712.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11648.0</field>
+			<field name="y">512.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">11584</field>
+			<field name="y">512</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="texture" template="pipe" z-index="3">
+		<component template="size">
+			<field name="width">141</field>
+			<field name="height">262</field>
+		</component>
+		<component template="position">
+			<field name="x">2880.0</field>
+			<field name="y">318.0</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="0">
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">262</field>
+		</component>
+		<component template="position">
+			<field name="x">3584.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="3">
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">196</field>
+		</component>
+		<component template="position">
+			<field name="x">10368</field>
+			<field name="y">384</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="0">
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">192</field>
+		</component>
+		<component template="position">
+			<field name="x">11392.0</field>
+			<field name="y">448.0</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">128</field>
+		</component>
+		<component template="position">
+			<field name="x">1728.0</field>
+			<field name="y">448.0</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">192</field>
+		</component>
+		<component template="position">
+			<field name="x">2368.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">140</field>
+			<field name="height">260</field>
+		</component>
+		<component template="position">
+			<field name="x">3584.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">19</field>
+			<field name="height">192</field>
+		</component>
+		<component template="position">
+			<field name="x">10368.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">128</field>
+		</component>
+		<component template="position">
+			<field name="x">11392.0</field>
+			<field name="y">448.0</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">17</field>
+			<field name="height">260</field>
+		</component>
+		<component template="position">
+			<field name="x">2880.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">648</field>
+			<field name="height">168</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">-768.0</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">2802.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">3082</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">7754</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">7562</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">20</field>
+			<field name="height">22</field>
+		</component>
+		<component template="position">
+			<field name="x">5636.0</field>
+			<field name="y">558.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">5665</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">5770</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">17</field>
+			<field name="height">260</field>
+		</component>
+		<component template="position">
+			<field name="x">3003.0</field>
+			<field name="y">319.0</field>
+		</component>
+</entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">19</field>
+			<field name="height">192</field>
+		</component>
+		<component template="position">
+			<field name="x">10478.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">10762</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">1344</field>
+			<field name="y">64</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">coin</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">5952.0</field>
+			<field name="y">320.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">15</field>
+			<field name="type">coin</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">0</field>
+			<field name="col">0</field>
+			<field name="file">blocks.png</field>
+			<field name="delay">0</field>
+			<field name="size">16</field>
+			<field name="frames">0</field>
+			<field name="row">2</field>
+			<field name="currentFrameIndex">0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">0.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">true</field>
+			<field name="maxSpeedRight">3.0</field>
+			<field name="accelerationLeft">5.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">false</field>
+			<field name="touchWallDown">true</field>
+			<field name="maxSpeedLeft">3.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">0.0</field>
+			<field name="accelerationRight">5.0</field>
+			<field name="maxSpeedDown">20.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">200.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">1344</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="sky" template="empty" z-index="-9">
+		<component template="size">
+			<field name="width">1198</field>
+			<field name="height">386</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">1.0</field>
+			<field name="cy">1.0</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="texture">
+			<field name="name">cloud.png</field>
+		</component>
+		<component template="position">
+			<field name="x">825.0</field>
+			<field name="y">-438.0</field>
+		</component>
+		<component template="speed">
+			<field name="x">2.0</field>
+			<field name="y">0.0</field>
+			<field name="noclip">true</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="-5">
+		<component template="size">
+			<field name="width">157</field>
+			<field name="height">433</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">0.3</field>
+			<field name="cy">0.3</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tileset.png</field>
+			<field name="spacing">1</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">25</field>
+		</component>
+		<component template="position">
+			<field name="x">562</field>
+			<field name="y">439</field>
+		</component>
+<component template="debug" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="10">
+		<component template="size">
+			<field name="width">538</field>
+			<field name="height">637</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">-0.2</field>
+			<field name="cy">-0.2</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tileset.png</field>
+			<field name="spacing">1</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">90</field>
+		</component>
+		<component template="position">
+			<field name="x">-195.0</field>
+			<field name="y">179.0</field>
+		</component>
+<component template="debug" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="-3">
+		<component template="size">
+			<field name="width">190</field>
+			<field name="height">445</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">0.2</field>
+			<field name="cy">0.2</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tileset.png</field>
+			<field name="spacing">1</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">30</field>
+		</component>
+		<component template="position">
+			<field name="x">395.0</field>
+			<field name="y">457.0</field>
+		</component>
+<component template="debug" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="-2">
+		<component template="size">
+			<field name="width">236</field>
+			<field name="height">458</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">0.1</field>
+			<field name="cy">0.1</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tileset.png</field>
+			<field name="spacing">1</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">40</field>
+		</component>
+		<component template="position">
+			<field name="x">521.0</field>
+			<field name="y">492.0</field>
+		</component>
+<component template="debug" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608.0</field>
+			<field name="y">-768.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">13184.0</field>
+			<field name="y">-192.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">13760.0</field>
+			<field name="y">384.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">13568.0</field>
+			<field name="y">192.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">13568.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">13184.0</field>
+			<field name="y">0.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12992.0</field>
+			<field name="y">-192.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">13184.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">13184.0</field>
+			<field name="y">192.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12992</field>
+			<field name="y">0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12992.0</field>
+			<field name="y">192.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12992.0</field>
+			<field name="y">384.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="wall" template="wall" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">true</field>
+		</component>
+		<component template="size">
+			<field name="width">33</field>
+			<field name="height">26</field>
+		</component>
+		<component template="position">
+			<field name="x">2878.0</field>
+			<field name="y">318.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">289</field>
+			<field name="height">233</field>
+		</component>
+		<component template="position">
+			<field name="x">9673.0</field>
+			<field name="y">696.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">goomba</field>
+		</component>
+<component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="10">
+		<component template="size">
+			<field name="width">1280</field>
+			<field name="height">1570</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">-0.2</field>
+			<field name="cy">-0.2</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">14</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">90</field>
+		</component>
+		<component template="position">
+			<field name="x">15302.0</field>
+			<field name="y">-385.0</field>
+		</component>
+<component template="debug" deleted="true"/></entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="debug">
+		</component>
+		<component template="size">
+			<field name="width">105</field>
+			<field name="height">1430</field>
+		</component>
+		<component template="position">
+			<field name="x">15744</field>
+			<field name="y">-768</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">gb-transform</field>
+		</component>
+<component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="debug">
+		</component>
+		<component template="size">
+			<field name="width">85</field>
+			<field name="height">1414</field>
+		</component>
+		<component template="position">
+			<field name="x">15552.0</field>
+			<field name="y">-768.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">mario-transform</field>
+		</component>
+<component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+		</component>
+		<component template="size">
+			<field name="width">4544</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">15</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">15552.0</field>
+			<field name="y">576.0</field>
+		</component>
+</entity>
+	<entity name="note-block" template="note-block" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="position">
+			<field name="x">13376</field>
+			<field name="y">192</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="note-block" template="note-block" z-index="-1">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">5.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="position">
+			<field name="x">13376.0</field>
+			<field name="y">0.0</field>
+		</component>
+</entity>
+	<entity name="scene-init" template="empty" z-index="9999">
+		<component template="play-music">
+			<field name="name">world1-1.wav</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="-5">
+		<component template="size">
+			<field name="width">1014</field>
+			<field name="height">770</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">0.5</field>
+			<field name="cy">0.5</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="texture">
+			<field name="name">mountains.png</field>
+		</component>
+		<component template="position">
+			<field name="x">17220</field>
+			<field name="y">213</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="5">
+		<component template="size">
+			<field name="width">1014</field>
+			<field name="height">770</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">-0.15</field>
+			<field name="cy">-0.15</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="texture">
+			<field name="name">trees.png</field>
+		</component>
+		<component template="position">
+			<field name="x">16005.0</field>
+			<field name="y">17.0</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="5">
+		<component template="size">
+			<field name="width">1014</field>
+			<field name="height">770</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">-0.15</field>
+			<field name="cy">-0.15</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="texture">
+			<field name="name">trees.png</field>
+		</component>
+		<component template="position">
+			<field name="x">16795</field>
+			<field name="y">14</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="-7">
+		<component template="size">
+			<field name="width">384</field>
+			<field name="height">384</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">0.7</field>
+			<field name="cy">0.7</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="texture">
+			<field name="name">sun.png</field>
+		</component>
+		<component template="position">
+			<field name="x">18352.0</field>
+			<field name="y">239.0</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="5">
+		<component template="size">
+			<field name="width">1014</field>
+			<field name="height">770</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">-0.15</field>
+			<field name="cy">-0.15</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="texture">
+			<field name="name">trees.png</field>
+		</component>
+		<component template="position">
+			<field name="x">17648.0</field>
+			<field name="y">20.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+		</component>
+		<component template="size">
+			<field name="width">320</field>
+			<field name="height">320</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">15</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">17664.0</field>
+			<field name="y">256.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">true</field>
+			<field name="noRightCollision">true</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">1.5</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">13</field>
+			<field name="auto-tile">false</field>
+			<field name="y">14</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">17536.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">7</field>
+			<field name="auto-tile">false</field>
+			<field name="y">6</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19328.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">7</field>
+			<field name="auto-tile">false</field>
+			<field name="y">5</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19328</field>
+			<field name="y">448</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">7</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19328</field>
+			<field name="y">384</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">7</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19328.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">6</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19392</field>
+			<field name="y">256</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">9</field>
+			<field name="auto-tile">false</field>
+			<field name="y">2</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19456.0</field>
+			<field name="y">256.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">10</field>
+			<field name="auto-tile">false</field>
+			<field name="y">2</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19520</field>
+			<field name="y">256</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">11</field>
+			<field name="auto-tile">false</field>
+			<field name="y">2</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19584</field>
+			<field name="y">256</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">12</field>
+			<field name="auto-tile">false</field>
+			<field name="y">2</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19648.0</field>
+			<field name="y">256.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">8</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19392</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">9</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19456</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">10</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19520</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">11</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19584</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">12</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19648</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">13</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19712</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">8</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19392</field>
+			<field name="y">384</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">8</field>
+			<field name="auto-tile">false</field>
+			<field name="y">5</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19392</field>
+			<field name="y">448</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">8</field>
+			<field name="auto-tile">false</field>
+			<field name="y">6</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19392</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">9</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19456</field>
+			<field name="y">384</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">10</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19520</field>
+			<field name="y">384</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">11</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19584</field>
+			<field name="y">384</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">9</field>
+			<field name="auto-tile">false</field>
+			<field name="y">5</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19456</field>
+			<field name="y">448</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">10</field>
+			<field name="auto-tile">false</field>
+			<field name="y">5</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19520</field>
+			<field name="y">448</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">11</field>
+			<field name="auto-tile">false</field>
+			<field name="y">5</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19584</field>
+			<field name="y">448</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">9</field>
+			<field name="auto-tile">false</field>
+			<field name="y">6</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19456</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">10</field>
+			<field name="auto-tile">false</field>
+			<field name="y">6</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19520</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">11</field>
+			<field name="auto-tile">false</field>
+			<field name="y">6</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19584</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">12</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19648</field>
+			<field name="y">384</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">13</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19712</field>
+			<field name="y">384</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">12</field>
+			<field name="auto-tile">false</field>
+			<field name="y">5</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19648</field>
+			<field name="y">448</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">13</field>
+			<field name="auto-tile">false</field>
+			<field name="y">5</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19712</field>
+			<field name="y">448</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">12</field>
+			<field name="auto-tile">false</field>
+			<field name="y">6</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19648</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">13</field>
+			<field name="auto-tile">false</field>
+			<field name="y">6</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19712</field>
+			<field name="y">512</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">6</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19264</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">14</field>
+			<field name="auto-tile">false</field>
+			<field name="y">3</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">19776</field>
+			<field name="y">320</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="5">
+		<component template="size">
+			<field name="width">1014</field>
+			<field name="height">770</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">-0.15</field>
+			<field name="cy">-0.15</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="texture">
+			<field name="name">trees.png</field>
+		</component>
+		<component template="position">
+			<field name="x">19263</field>
+			<field name="y">34</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="5">
+		<component template="size">
+			<field name="width">1386</field>
+			<field name="height">601</field>
+		</component>
+		<component template="parallax">
+			<field name="cx">-0.15</field>
+			<field name="cy">-0.15</field>
+			<field name="initialY">-1</field>
+			<field name="initialX">-1</field>
+		</component>
+		<component template="texture">
+			<field name="name">trees.png</field>
+		</component>
+		<component template="position">
+			<field name="x">20113.0</field>
+			<field name="y">207.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+		</component>
+		<component template="size">
+			<field name="width">512</field>
+			<field name="height">768</field>
+		</component>
+		<component template="position">
+			<field name="x">20083.0</field>
+			<field name="y">-62.0</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="10">
+		<component template="size">
+			<field name="width">427</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">15</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">9</field>
+			<field name="auto-tile">true</field>
+			<field name="y">0</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">17088.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="magnet-field" template="empty" z-index="0">
+		<component template="debug">
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">768</field>
+		</component>
+		<component template="positionMover">
+			<field name="fx">0.0</field>
+			<field name="fy">-5.0</field>
+		</component>
+		<component template="position">
+			<field name="x">18112.0</field>
+			<field name="y">-320.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+		</component>
+		<component template="size">
+			<field name="width">320</field>
+			<field name="height">768</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">15</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">true</field>
+			<field name="x">1</field>
+			<field name="auto-tile">true</field>
+			<field name="y">1</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18304.0</field>
+			<field name="y">-192.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">15</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112.0</field>
+			<field name="y">-384.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">-320</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">-256</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">-192</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">-128</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">-64</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">0</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">64</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112.0</field>
+			<field name="y">128.0</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">192</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">256</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">320</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">18112</field>
+			<field name="y">384</field>
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">2</field>
+			<field name="col">0</field>
+			<field name="file">magnet-wave.png</field>
+			<field name="delay">5</field>
+			<field name="size">16</field>
+			<field name="frames">2</field>
+			<field name="row">0</field>
+			<field name="currentFrameIndex">1</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="player" template="empty" z-index="2">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">1.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">false</field>
+			<field name="maxSpeedRight">5.0</field>
+			<field name="accelerationLeft">1.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">true</field>
+			<field name="touchWallDown">true</field>
+			<field name="maxSpeedLeft">5.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">1.0</field>
+			<field name="accelerationRight">1.0</field>
+			<field name="maxSpeedDown">5.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">20.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="speedForces">
+			<field name="gravity">1.5</field>
+			<field name="wind">0.0</field>
+		</component>
+		<component template="position">
+			<field name="x">13504</field>
+			<field name="y">-384</field>
+		</component>
+		<component template="speed">
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">16</field>
+			<field name="col">0</field>
+			<field name="file">blocks.png</field>
+			<field name="delay">20</field>
+			<field name="size">16</field>
+			<field name="frames">3</field>
+			<field name="row">1</field>
+			<field name="currentFrameIndex">0</field>
+		</component>
+</entity>
+	<entity name="question-block" template="question-block" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14016.0</field>
+			<field name="y">320.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">10</field>
+			<field name="type">question</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14720.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14627.0</field>
+			<field name="y">488.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">1</field>
+			<field name="auto-tile">false</field>
+			<field name="y">2</field>
+			<field name="size-target">16</field>
+		</component>
+		<component template="position">
+			<field name="x">14587.0</field>
+			<field name="y">486.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="texture">
+			<field name="name">schaffre.png</field>
+		</component>
+		<component template="position">
+			<field name="x">14416</field>
+			<field name="y">493</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14542.0</field>
+			<field name="y">497.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">2</field>
+			<field name="auto-tile">false</field>
+			<field name="y">5</field>
+			<field name="size-target">16</field>
+		</component>
+		<component template="position">
+			<field name="x">14444.0</field>
+			<field name="y">485.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">3</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">16</field>
+		</component>
+		<component template="position">
+			<field name="x">14508.0</field>
+			<field name="y">502.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14571.0</field>
+			<field name="y">492.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14528.0</field>
+			<field name="y">480.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14613.0</field>
+			<field name="y">500.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14500.0</field>
+			<field name="y">478.0</field>
+		</component>
+</entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">60</field>
+			<field name="height">129</field>
+		</component>
+		<component template="position">
+			<field name="x">19519.0</field>
+			<field name="y">449.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">door</field>
+		</component>
+<component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">289</field>
+			<field name="height">233</field>
+		</component>
+		<component template="position">
+			<field name="x">5387.0</field>
+			<field name="y">678.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">goomba</field>
+		</component>
+<component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">162</field>
+			<field name="height">233</field>
+		</component>
+		<component template="position">
+			<field name="x">4332</field>
+			<field name="y">692</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">goomba</field>
+		</component>
+<component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
+	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="size">
+			<field name="width">440</field>
+			<field name="height">659</field>
+		</component>
+		<component template="position">
+			<field name="x">-433.0</field>
+			<field name="y">7.0</field>
+		</component>
+		<component template="breakable">
+			<field name="delay">1</field>
+			<field name="type">goomba</field>
+		</component>
+<component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">256</field>
+		</component>
+		<component template="position">
+			<field name="x">8896.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="position">
+			<field name="x">9600.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="position">
+			<field name="x">9920.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">128</field>
+			<field name="height">512</field>
+		</component>
+		<component template="position">
+			<field name="x">11968.0</field>
+			<field name="y">64.0</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">960</field>
+		</component>
+		<component template="position">
+			<field name="x">12992.0</field>
+			<field name="y">-384.0</field>
+		</component>
+</entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">256</field>
+		</component>
+		<component template="position">
+			<field name="x">8704.0</field>
+			<field name="y">320.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">14336.0</field>
+			<field name="y">512.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608</field>
+			<field name="y">192</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608.0</field>
+			<field name="y">0.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608.0</field>
+			<field name="y">-192.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608</field>
+			<field name="y">-384</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12608.0</field>
+			<field name="y">-576.0</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">1152</field>
+		</component>
+		<component template="position">
+			<field name="x">12608.0</field>
+			<field name="y">-767.0</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="ground-grass" z-index="-1">
+		<component template="size">
+			<field name="width">192</field>
+			<field name="height">192</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">blocks.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">false</field>
+			<field name="y">4</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">12992</field>
+			<field name="y">-384</field>
+		</component>
+<component template="hitboxWall" deleted="true"/></entity>
+	<entity name="player" template="empty" z-index="2">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">1.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">false</field>
+			<field name="maxSpeedRight">5.0</field>
+			<field name="accelerationLeft">1.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">true</field>
+			<field name="touchWallDown">true</field>
+			<field name="maxSpeedLeft">5.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">1.0</field>
+			<field name="accelerationRight">1.0</field>
+			<field name="maxSpeedDown">5.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">20.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="speedForces">
+			<field name="gravity">1.5</field>
+			<field name="wind">0.0</field>
+		</component>
+		<component template="position">
+			<field name="x">13440</field>
+			<field name="y">-320</field>
+		</component>
+		<component template="speed">
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">16</field>
+			<field name="col">0</field>
+			<field name="file">blocks.png</field>
+			<field name="delay">20</field>
+			<field name="size">16</field>
+			<field name="frames">3</field>
+			<field name="row">1</field>
+			<field name="currentFrameIndex">0</field>
+		</component>
+</entity>
+	<entity name="player" template="empty" z-index="2">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">1.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">false</field>
+			<field name="maxSpeedRight">5.0</field>
+			<field name="accelerationLeft">1.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">true</field>
+			<field name="touchWallDown">true</field>
+			<field name="maxSpeedLeft">5.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">1.0</field>
+			<field name="accelerationRight">1.0</field>
+			<field name="maxSpeedDown">5.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">20.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">0.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">0.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">64</field>
+		</component>
+		<component template="speedForces">
+			<field name="gravity">1.5</field>
+			<field name="wind">0.0</field>
+		</component>
+		<component template="position">
+			<field name="x">13376.0</field>
+			<field name="y">-256.0</field>
+		</component>
+		<component template="speed">
+		</component>
+		<component template="animatedTile">
+			<field name="currentDelay">16</field>
+			<field name="col">0</field>
+			<field name="file">blocks.png</field>
+			<field name="delay">20</field>
+			<field name="size">16</field>
+			<field name="frames">3</field>
+			<field name="row">1</field>
+			<field name="currentFrameIndex">0</field>
+		</component>
+</entity>
+</scene>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene name="1-2">
+	<entity name="player" template="player" z-index="0">
+		<component template="position">
+			<field name="x">746.0</field>
+			<field name="y">70.0</field>
+		</component>
+</entity>
+	<entity name="ground" template="collision" z-index="0">
+		<component template="size">
+			<field name="width">185</field>
+			<field name="height">1292</field>
+		</component>
+		<component template="position">
+			<field name="x">213.0</field>
+			<field name="y">519.0</field>
+		</component>
+</entity>
+	<entity name="bounds" template="bounds" z-index="-1">
+		<component template="size">
+			<field name="width">50031</field>
+			<field name="height">943</field>
+		</component>
+		<component template="position">
+			<field name="x">-23357.0</field>
+			<field name="y">2715.0</field>
+		</component>
+</entity>
+	<entity name="death" template="death" z-index="-1">
+		<component template="size">
+			<field name="width">2376</field>
+			<field name="height">172</field>
+		</component>
+		<component template="position">
+			<field name="x">1745.0</field>
+			<field name="y">500.0</field>
+		</component>
+</entity>
+	<entity name="platform" template="platform" z-index="0">
+		<component template="size">
+			<field name="width">685</field>
+			<field name="height">100</field>
+		</component>
+		<component template="position">
+			<field name="x">4215.0</field>
+			<field name="y">654.0</field>
+		</component>
+</entity>
+	<entity name="goal" template="goal" z-index="0">
+		<component template="goal">
+			<field name="nextLevel">main</field>
+		</component>
+		<component template="position">
+			<field name="x">662.0</field>
+			<field name="y">974.0</field>
+		</component>
+</entity>
+	<entity name="platform" template="platform" z-index="0">
+		<component template="size">
+			<field name="width">685</field>
+			<field name="height">100</field>
+		</component>
+		<component template="position">
+			<field name="x">4247.0</field>
+			<field name="y">1768.0</field>
+		</component>
+</entity>
+	<entity name="ground" template="collision" z-index="0">
+		<component template="size">
+			<field name="width">2266</field>
+			<field name="height">304</field>
+		</component>
+		<component template="position">
+			<field name="x">217.0</field>
+			<field name="y">1681.0</field>
+		</component>
+</entity>
+	<entity name="death" template="death" z-index="-1">
+		<component template="size">
+			<field name="width">2321</field>
+			<field name="height">155</field>
+		</component>
+		<component template="position">
+			<field name="x">1837.0</field>
+			<field name="y">1772.0</field>
+		</component>
+</entity>
+	<entity name="ground" template="collision" z-index="0">
+		<component template="size">
+			<field name="width">2266</field>
+			<field name="height">304</field>
+		</component>
+		<component template="position">
+			<field name="x">211.0</field>
+			<field name="y">423.0</field>
+		</component>
+</entity>
+	<entity name="platform" template="platform" z-index="0">
+		<component template="size">
+			<field name="width">685</field>
+			<field name="height">100</field>
+		</component>
+		<component template="position">
+			<field name="x">3002.0</field>
+			<field name="y">1619.0</field>
+		</component>
+</entity>
+</scene>

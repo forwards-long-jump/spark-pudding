@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="speedForces">
+	<field type="DOUBLE" name="gravity">5.5</field>
+	<field type="DOUBLE" name="wind">0</field>
+</component>

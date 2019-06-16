@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="goal">
+	<field type="STRING" name="nextLevel">1-1</field>
+</component>
