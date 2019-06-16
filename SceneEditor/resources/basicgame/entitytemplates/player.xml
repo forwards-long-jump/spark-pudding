@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="player">
+	<component template="acceleration">
+		<field name="decelerationDown">1.0</field>
+		<field name="movingUp">false</field>
+		<field name="decelerationLeft">3.5</field>
+		<field name="touchWallRight">false</field>
+		<field name="movingRight">false</field>
+		<field name="maxSpeedRight">20.0</field>
+		<field name="accelerationLeft">5.0</field>
+		<field name="accelerationDown">0.0</field>
+		<field name="touchWallLeft">false</field>
+		<field name="touchWallDown">false</field>
+		<field name="maxSpeedLeft">20.0</field>
+		<field name="accelerationUp">0.0</field>
+		<field name="decelerationUp">0.0</field>
+		<field name="decelerationRight">3.5</field>
+		<field name="accelerationRight">5.0</field>
+		<field name="maxSpeedDown">100.0</field>
+		<field name="movingLeft">false</field>
+		<field name="movingDown">false</field>
+		<field name="maxSpeedUp">100.0</field>
+		<field name="touchWallUp">false</field>
+	</component>
+	<component template="debug">
+		<field name="a">127</field>
+		<field name="r">50</field>
+		<field name="b">220</field>
+		<field name="g">110</field>
+	</component>
+	<component template="jumpController">
+		<field name="key">space</field>
+	</component>
+	<component template="size">
+		<field name="width">52</field>
+		<field name="height">112</field>
+	</component>
+	<component template="speedForces">
+		<field name="gravity">4.0</field>
+		<field name="wind">0.0</field>
+	</component>
+	<component template="position">
+		<field name="x">0</field>
+		<field name="y">0</field>
+	</component>
+	<component template="camera">
+		<field name="mode">SPRING</field>
+		<field name="scaling">0.8</field>
+		<field name="enabled">true</field>
+	</component>
+	<component template="accelerationController">
+		<field name="keyLeft">a</field>
+		<field name="keyUp">w</field>
+		<field name="keyDown">s</field>
+		<field name="keyRight">d</field>
+	</component>
+	<component template="speed">
+		<field name="x">0.0</field>
+		<field name="y">0.0</field>
+		<field name="noclip">false</field>
+	</component>
+	<component template="jump">
+		<field name="airDuration">0</field>
+		<field name="timeSinceJumpable">0</field>
+		<field name="countMax">2</field>
+		<field name="count">0</field>
+		<field name="force">40.0</field>
+		<field name="leniencyDuration">5</field>
+		<field name="airDurationDefault">10</field>
+		<field name="released">true</field>
+	</component>
+</entity-template>

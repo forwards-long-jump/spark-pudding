@@ -2,5 +2,5 @@
 <component name="camera">
 	<field type="STRING" name="mode">SPRING</field>
 	<field type="DOUBLE" name="scaling">0.8</field>
-	<field type="BOOLEAN" name="enabled">false</field>
+	<field type="BOOLEAN" name="enabled">true</field>
 </component>
