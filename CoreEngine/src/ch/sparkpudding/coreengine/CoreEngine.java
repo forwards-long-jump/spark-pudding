@@ -403,6 +403,15 @@ public class CoreEngine extends JPanel {
 	}
 
 	/**
+	 * Change the pause state
+	 * 
+	 * @param isPause
+	 */
+	public void setPause(boolean isPause) {
+		pause = isPause;
+	}
+
+	/**
 	 * Change the editingPause without trigger the scheduler
 	 *
 	 * @param pause
@@ -1076,4 +1085,5 @@ public class CoreEngine extends JPanel {
 	public String getGameFolder() {
 		return lelFile.getDirectory();
 	}
+
 }
