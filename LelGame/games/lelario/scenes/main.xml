@@ -78,8 +78,8 @@
 		<component template="jumpController">
 		</component>
 		<component template="size">
-			<field name="width">213</field>
-			<field name="height">256</field>
+			<field name="width">64</field>
+			<field name="height">128</field>
 		</component>
 		<component template="animatedSprite">
 			<field name="currentDelay">2</field>
@@ -99,7 +99,7 @@
 		</component>
 		<component template="position">
 			<field name="x">704.0</field>
-			<field name="y">191.0</field>
+			<field name="y">256.0</field>
 		</component>
 		<component template="camera">
 			<field name="mode">SPRING</field>
