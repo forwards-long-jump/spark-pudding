@@ -235,7 +235,7 @@ public class CoreEngine extends JPanel {
 
 	/**
 	 * Populates component templates list with component template files <br>
-	 * TODO: Merge this function and the one above
+	 * TODO: Merge this function and the one above as they are very similar
 	 */
 	private void populateEditingComponentTemplates() {
 		for (File xmlFile : lelFile.getEditingComponentsXML()) {
@@ -301,7 +301,7 @@ public class CoreEngine extends JPanel {
 				}
 				lag -= msPerUpdate;
 			}
-			
+
 			if (needRender) {
 				render();
 				renderLock.acquire();
@@ -414,11 +414,10 @@ public class CoreEngine extends JPanel {
 		}
 
 		editingPause = pause;
-		
-		if(editingPause) {
+
+		if (editingPause) {
 			Sound.getInstance().pauseMusic();
-		}
-		else {
+		} else {
 			Sound.getInstance().resumeMusic();
 		}
 	}
@@ -540,13 +539,12 @@ public class CoreEngine extends JPanel {
 	public void setCurrentScene(Scene newScene, boolean useDirectlyDefaultEntities) {
 		this.currentScene = newScene;
 		List<Entity> entities;
-		if(useDirectlyDefaultEntities) {
+		if (useDirectlyDefaultEntities) {
 			entities = newScene.getDefaultEntities();
-		}
-		else {
+		} else {
 			entities = newScene.getEntities();
 		}
-		
+
 		for (UpdateSystem system : systems) {
 			system.setEntities(entities);
 		}

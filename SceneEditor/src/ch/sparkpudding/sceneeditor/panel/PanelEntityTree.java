@@ -153,7 +153,7 @@ public class PanelEntityTree extends JPanel {
 					Entity entity = (Entity) ((Pair<?, ?>) getObject()).first();
 
 					for (SEEntity seEntity : SceneEditor.currentScene.getSEEntities()) {
-						// FIXME: this *kinda* works but could be way better
+						// FIXME: This works, but if you keep down/up arrows pressed while selecting entities it's laggy
 						if (seEntity.getLiveEntity() == entity && canChange) {
 							if ((jListEntities.getSelectedValue() == null
 									|| jListEntities.getSelectedValue().getLiveEntity() != entity)) {

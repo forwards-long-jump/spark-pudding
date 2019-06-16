@@ -76,7 +76,7 @@ public class LelReader {
 	 * @param list of file to sort
 	 */
 	private void sortSystem(List<File> list) {
-		// TODO Better sort of the systems
+		// TODO: Sort system using a provided list in the metadata.xml of the game
 		list.sort(new Comparator<File>() {
 
 			@Override

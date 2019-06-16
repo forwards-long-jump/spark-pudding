@@ -56,7 +56,6 @@ public class MenuFile extends JMenu {
 	 * Add the shortcut to the different item
 	 */
 	private void addAction() {
-		// TODO: Implement method
 		itemSave.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

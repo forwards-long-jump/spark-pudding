@@ -198,7 +198,6 @@ public class PanelEditor extends JPanel {
 								}
 							});
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					}
@@ -212,7 +211,6 @@ public class PanelEditor extends JPanel {
 			jTabbedPane.setSelectedIndex(jTabbedPane.getTabCount() - 1);
 			jTabbedPane.setTabComponentAt(jTabbedPane.getTabCount() - 1, buttonTabComponent);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

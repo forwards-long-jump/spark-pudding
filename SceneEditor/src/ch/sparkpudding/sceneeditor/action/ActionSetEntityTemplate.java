@@ -39,6 +39,7 @@ public class ActionSetEntityTemplate extends AbstractAction {
 	 */
 	@Override
 	public boolean doAction() {
+		// TODO: Apply templates to all existing entities
 		this.newTemplateEntity.setTemplate(this.newTemplateName);
 		Entity.addTemplate(this.newTemplateEntity);
 
@@ -47,7 +48,6 @@ public class ActionSetEntityTemplate extends AbstractAction {
 		}
 
 		SceneEditor.fireSelectedEntityChanged();
-		// TODO: Reload game or apply templates everywhere
 		return true;
 	}
 
