@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="teleporter">
-	<field type="BOOLEAN" name="isEntrance">false</field>
-	<field type="STRING" name="id"></field>
-</component>

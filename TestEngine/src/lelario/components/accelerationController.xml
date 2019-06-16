@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="accelerationController">
-	<field type="STRING" name="keyLeft">a</field>
-	<field type="STRING" name="keyUp">w</field>
-	<field type="STRING" name="keyDown">s</field>
-	<field type="STRING" name="keyRight">d</field>
-</component>

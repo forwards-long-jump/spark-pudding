@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="accelerationAI">
-	<field type="STRING" name="type">mushroom</field>
-	<field type="BOOLEAN" name="enabled">false</field>
-</component>

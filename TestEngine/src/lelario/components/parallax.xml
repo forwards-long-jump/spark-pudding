@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="parallax">
-	<field type="DOUBLE" name="cx">1.0</field>
-	<field type="DOUBLE" name="cy">1.0</field>
-	<field type="INTEGER" name="initialY">-1</field>
-	<field type="INTEGER" name="initialX">-1</field>
-</component>

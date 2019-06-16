@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="deformation">
-	<field type="DOUBLE" name="horizontal">0.0</field>
-	<field type="DOUBLE" name="currentVertical">0.0</field>
-	<field type="DOUBLE" name="landingDeformation">0.1</field>
-	<field type="DOUBLE" name="jumpingDeformation">0.3</field>
-	<field type="DOUBLE" name="vertical">0.0</field>
-	<field type="DOUBLE" name="currentHorizontal">0.0</field>
-</component>
