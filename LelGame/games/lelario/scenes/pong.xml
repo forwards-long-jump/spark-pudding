@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene name="pong">
+	<entity name="sky" template="empty" z-index="-10">
+		<component template="size">
+			<field name="width">960</field>
+			<field name="height">549</field>
+		</component>
+		<component template="color">
+			<field name="a">255</field>
+			<field name="r">30</field>
+			<field name="b">255</field>
+			<field name="g">144</field>
+		</component>
+		<component template="position">
+			<field name="x">-30.0</field>
+			<field name="y">-77.0</field>
+		</component>
+</entity>
+	<entity name="texture" template="pipe" z-index="0">
+		<component template="size">
+			<field name="width">1014</field>
+			<field name="height">599</field>
+		</component>
+		<component template="texture">
+			<field name="name">factory-wall.png</field>
+		</component>
+		<component template="position">
+			<field name="x">-23.0</field>
+			<field name="y">-95.0</field>
+		</component>
+		<component template="camera">
+			<field name="mode">SPRING</field>
+			<field name="scaling">1.41</field>
+			<field name="enabled">true</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="7">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">4.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">false</field>
+			<field name="maxSpeedRight">4.0</field>
+			<field name="accelerationLeft">4.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">false</field>
+			<field name="touchWallDown">false</field>
+			<field name="maxSpeedLeft">4.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">4.0</field>
+			<field name="accelerationRight">4.0</field>
+			<field name="maxSpeedDown">0.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">0.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">1.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">1.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">131</field>
+			<field name="height">24</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">15</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">true</field>
+			<field name="y">2</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">468</field>
+			<field name="y">360</field>
+		</component>
+		<component template="accelerationController">
+			<field name="keyLeft">j</field>
+			<field name="keyUp">w</field>
+			<field name="keyDown">s</field>
+			<field name="keyRight">l</field>
+		</component>
+		<component template="speed">
+			<field name="x">0.0</field>
+			<field name="y">0.0</field>
+			<field name="noclip">false</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="7">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">4.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">false</field>
+			<field name="maxSpeedRight">4.0</field>
+			<field name="accelerationLeft">4.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">false</field>
+			<field name="touchWallDown">false</field>
+			<field name="maxSpeedLeft">4.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">4.0</field>
+			<field name="accelerationRight">4.0</field>
+			<field name="maxSpeedDown">0.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">0.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">1.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">1.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">129</field>
+			<field name="height">23</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">15</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">0</field>
+			<field name="auto-tile">true</field>
+			<field name="y">2</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">647</field>
+			<field name="y">0</field>
+		</component>
+		<component template="accelerationController">
+			<field name="keyLeft">left</field>
+			<field name="keyUp">w</field>
+			<field name="keyDown">s</field>
+			<field name="keyRight">right</field>
+		</component>
+		<component template="speed">
+			<field name="x">0.0</field>
+			<field name="y">0.0</field>
+			<field name="noclip">false</field>
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="7">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">0.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">false</field>
+			<field name="maxSpeedRight">20.0</field>
+			<field name="accelerationLeft">0.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">false</field>
+			<field name="touchWallDown">false</field>
+			<field name="maxSpeedLeft">20.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">0.0</field>
+			<field name="accelerationRight">0.0</field>
+			<field name="maxSpeedDown">20.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">20.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
+		<component template="size">
+			<field name="width">35</field>
+			<field name="height">37</field>
+		</component>
+		<component template="tiledTexture">
+			<field name="size-tile">16</field>
+			<field name="file">tilesetgb.png</field>
+			<field name="spacing">0</field>
+			<field name="has-borders">false</field>
+			<field name="x">14</field>
+			<field name="auto-tile">false</field>
+			<field name="y">14</field>
+			<field name="size-target">64</field>
+		</component>
+		<component template="position">
+			<field name="x">569</field>
+			<field name="y">253</field>
+		</component>
+		<component template="speed">
+			<field name="x">-4.0</field>
+			<field name="y">5.0</field>
+			<field name="noclip">false</field>
+		</component>
+		<component template="jump">
+		</component>
+</entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">1.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">1.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">512</field>
+			<field name="height">768</field>
+		</component>
+		<component template="position">
+			<field name="x">-482.0</field>
+			<field name="y">-188.0</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">1.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">1.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">512</field>
+			<field name="height">768</field>
+		</component>
+		<component template="position">
+			<field name="x">940.0</field>
+			<field name="y">-157.0</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">1.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">1.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">1112</field>
+			<field name="height">768</field>
+		</component>
+		<component template="position">
+			<field name="x">-43.0</field>
+			<field name="y">-818.0</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="ground 1" template="tiled-texture" z-index="0">
+		<component template="hitboxWall">
+			<field name="noLeftCollision">false</field>
+			<field name="noRightCollision">false</field>
+			<field name="frictionX">0.0</field>
+			<field name="frictionY">0.0</field>
+			<field name="bounceCoeffY">1.0</field>
+			<field name="noTopCollision">false</field>
+			<field name="bounceCoeffX">1.0</field>
+			<field name="noBottomCollision">false</field>
+		</component>
+		<component template="size">
+			<field name="width">1112</field>
+			<field name="height">768</field>
+		</component>
+		<component template="position">
+			<field name="x">-94.0</field>
+			<field name="y">459.0</field>
+		</component>
+<component template="tiledTexture" deleted="true"/></entity>
+	<entity name="sky" template="empty" z-index="-9">
+		<component template="size">
+			<field name="width">65</field>
+			<field name="height">66</field>
+		</component>
+		<component template="texture">
+			<field name="name">schaffre.png</field>
+		</component>
+		<component template="position">
+			<field name="x">688.0</field>
+			<field name="y">217.0</field>
+		</component>
+</entity>
+</scene>

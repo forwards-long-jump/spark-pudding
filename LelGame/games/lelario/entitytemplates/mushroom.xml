@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-template name="mushroom">
+	<component template="acceleration">
+		<field name="decelerationDown">0.0</field>
+		<field name="movingUp">false</field>
+		<field name="decelerationLeft">0.0</field>
+		<field name="touchWallRight">false</field>
+		<field name="movingRight">true</field>
+		<field name="maxSpeedRight">3.0</field>
+		<field name="accelerationLeft">5.0</field>
+		<field name="accelerationDown">0.0</field>
+		<field name="touchWallLeft">false</field>
+		<field name="touchWallDown">false</field>
+		<field name="maxSpeedLeft">3.0</field>
+		<field name="accelerationUp">0.0</field>
+		<field name="decelerationUp">0.0</field>
+		<field name="decelerationRight">0.0</field>
+		<field name="accelerationRight">5.0</field>
+		<field name="maxSpeedDown">20.0</field>
+		<field name="movingLeft">false</field>
+		<field name="movingDown">false</field>
+		<field name="maxSpeedUp">200.0</field>
+		<field name="touchWallUp">false</field>
+	</component>
+	<component template="size">
+		<field name="width">64</field>
+		<field name="height">64</field>
+	</component>
+	<component template="tiledTexture">
+		<field name="size-tile">16</field>
+		<field name="file">blocks.png</field>
+		<field name="spacing">0</field>
+		<field name="has-borders">false</field>
+		<field name="x">0</field>
+		<field name="auto-tile">false</field>
+		<field name="y">5</field>
+		<field name="size-target">16</field>
+	</component>
+	<component template="accelerationAI">
+		<field name="type">mushroom</field>
+		<field name="enabled">false</field>
+	</component>
+	<component template="speedForces">
+		<field name="gravity">0.4</field>
+		<field name="wind">0.0</field>
+	</component>
+	<component template="lifetime">
+		<field name="tick">500</field>
+	</component>
+	<component template="position">
+		<field name="x">620</field>
+		<field name="y">260</field>
+	</component>
+	<component template="breakable">
+		<field name="delay">1</field>
+		<field name="type">mushroom</field>
+	</component>
+	<component template="speed">
+		<field name="x">0.0</field>
+		<field name="y">0.0</field>
+		<field name="noclip">false</field>
+	</component>
+</entity-template>

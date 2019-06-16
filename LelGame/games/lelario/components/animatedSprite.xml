@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="animatedSprite">
+	<field type="INTEGER" name="currentDelay">0</field>
+	<field type="INTEGER" name="standIndex">2</field>
+	<field type="INTEGER" name="jumpFrames">1</field>
+	<field type="STRING" name="currentAnimation">stand</field>
+	<field type="BOOLEAN" name="mirrorX">false</field>
+	<field type="INTEGER" name="currentFrameIndex">0</field>
+	<field type="FILE_PATH" name="file">player.png</field>
+	<field type="INTEGER" name="delay">10</field>
+	<field type="INTEGER" name="standFrames">1</field>
+	<field type="INTEGER" name="width">16</field>
+	<field type="INTEGER" name="walkIndex">0</field>
+	<field type="INTEGER" name="jumpIndex">1</field>
+	<field type="INTEGER" name="walkFrames">1</field>
+	<field type="INTEGER" name="height">32</field>
+</component>
