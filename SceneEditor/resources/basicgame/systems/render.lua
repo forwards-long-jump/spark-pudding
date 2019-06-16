@@ -1,6 +1,7 @@
 function getRequiredComponents()
 	return {players = {"debug", "position", "size", "acceleration"},
 					squares = {"debug", "position", "size"},
+					texts = {"position", "size", "text"},
 					textures = {"texture", "position", "size"}}
 end
 
@@ -10,6 +11,10 @@ end
 
 function renderTextures(e)
 	g:drawImage(e.texture.name, e.position, e.size)
+end
+
+function renderTexts(e)
+  g:drawString(e.text.string, e.position.x, e.position.y + 10)
 end
 
 function renderSquares(entity)

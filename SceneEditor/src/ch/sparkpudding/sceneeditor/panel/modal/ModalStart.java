@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
@@ -93,14 +94,10 @@ public class ModalStart extends Modal {
 				int returnVal = fc.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					gamePath = fc.getSelectedFile().getAbsolutePath();
-					try {
-						openGame();
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup",
-								JOptionPane.ERROR_MESSAGE);
-					}
-				} else
+					openGame();
+				} else {
 					return;
+				}
 			}
 		});
 
@@ -116,12 +113,8 @@ public class ModalStart extends Modal {
 					gamePath = fc.getSelectedFile().getAbsolutePath();
 					LelWriter lel = new LelWriter();
 					lel.create(gamePath + '/', false);
-					try {
-						openGame();
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup",
-								JOptionPane.ERROR_MESSAGE);
-					}
+
+					openGame();
 				} else {
 					return;
 				}
@@ -139,12 +132,8 @@ public class ModalStart extends Modal {
 					gamePath = fc.getSelectedFile().getAbsolutePath();
 					LelWriter lel = new LelWriter();
 					lel.create(gamePath + '/', true);
-					try {
-						openGame();
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup",
-								JOptionPane.ERROR_MESSAGE);
-					}
+
+					openGame();
 				} else {
 					return;
 				}
@@ -168,9 +157,24 @@ public class ModalStart extends Modal {
 	 * @throws URISyntaxException when the path is incorrect
 	 * @throws Exception          If the CoreEngine can't start the game
 	 */
-	private void openGame() throws URISyntaxException, Exception {
-		SceneEditor.coreEngine = new CoreEngine(gamePath,
-				Paths.get(Main.class.getResource("/leleditor").toURI()).toString());
+	private void openGame() {
+		try {
+			SceneEditor.coreEngine = new CoreEngine(gamePath,
+					Paths.get(Main.class.getResource("/leleditor").toURI()).toString());
+		} catch (URISyntaxException e) {
+			JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(mainPanel, "No games found at this location.", "Error during editor startup",
+					JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(mainPanel,
+					"Cannot open game. Error: \n\n" + e.getMessage() + "\n\nCheck the console for more details.",
+					"Error during editor startup", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+			return;
+		}
 		SceneEditor.gamePath = gamePath;
 
 		// EDITING_STATE_CHANGED is called in GAME_LOOP_START so no need to add another

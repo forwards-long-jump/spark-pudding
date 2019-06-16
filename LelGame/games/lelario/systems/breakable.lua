@@ -6,6 +6,7 @@ end
 function update()
 	
 	for i, breakable in ipairs(animatedBreakables) do
+		if game.camera:isInView(breakable.position.x, breakable.position.y, breakable.size.width, breakable.size.height) then
 		for j, breaker in ipairs(breakers) do
 			if breaker.speed.y < 0 then
 				if breaker.position.x + breaker.size.width > breakable.position.x and 
@@ -56,6 +57,7 @@ function update()
 					end
 				end
 			end
+		end
 		end
 	end
 	
@@ -130,18 +132,7 @@ function update()
 						breakable._meta:delete()
 						break
 					elseif breakable.breakable.type == "door" then
-							breaker.accelerationController.keyLeft = false
-							breaker.accelerationController.keyRight = false
-							breaker.acceleration.movingLeft = false
-							breaker.acceleration.movingRight = false
-							breaker.speed.x = 0
-							-- Enable all other cameras
-							for j, cameras in ipairs(otherCameras) do
-								cameras.camera.enabled = true
-							end
-							breaker._meta:removeComponent("accelerationController")
-							breaker._meta:removeComponent("jumpController")
-							breaker._meta:removeComponent("camera")
+							game.core:setScene("pong")
 							break
 					end
 				end

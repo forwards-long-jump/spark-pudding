@@ -52,7 +52,6 @@ public class ResourceLocator {
 	private void loadTextures() throws IOException {
 		textures = new HashMap<String, Image>();
 		for (File file : lelReader.getTextures()) {
-			// TODO : remove as soon as .keep files are removed
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
@@ -71,7 +70,6 @@ public class ResourceLocator {
 	private void loadSounds() throws UnsupportedAudioFileException, IOException {
 		sounds = new HashMap<String, AudioInputStream>();
 		for (File file : lelReader.getSounds()) {
-			// TODO : remove as soon as .keep files are removed
 			if (file.getName().equals(".keep")) {
 				continue;
 			}
@@ -92,7 +90,6 @@ public class ResourceLocator {
 	private void loadMusics() throws UnsupportedAudioFileException, IOException {
 		musics = new HashMap<String, AudioInputStream>();
 		for (File file : lelReader.getMusics()) {
-			// TODO : remove as soon as .keep files are removed
 			if (file.getName().equals(".keep")) {
 				continue;
 			}

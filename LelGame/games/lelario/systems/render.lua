@@ -61,31 +61,33 @@ function renderTiledTextures(e)
 	else
 		local ti = math.floor(e.size.width / e.tiledTexture["size-target"]) - 1
 		local tj =	math.floor(e.size.height / e.tiledTexture["size-target"]) - 1
-		
-		-- Render x y
-		for i = 0, ti do
-			for j = 0, tj do
+		if game.camera:isInView(e.position.x, e.position.y, e.size.width, e.size.height) then
+			-- Render x y
+			for i = 0, ti do
 				local x = e.position.x + i * e.tiledTexture["size-target"]
-				local y = e.position.y + j * e.tiledTexture["size-target"]
-				local col = e.tiledTexture.x
-				local row = e.tiledTexture.y
-				if e.tiledTexture["has-borders"] then
-					if i == 0 and j == 0 then
-						col = col - 1
-						row = row - 1
-					elseif i == 0 then
-						col = col - 1
-					elseif j == 0 then
-						row = row - 1
+				if game.camera:isInView(x, e.position.y, e.tiledTexture["size-target"], e.size.height) then
+				for j = 0, tj do
+					local col = e.tiledTexture.x
+					local row = e.tiledTexture.y
+					local y = e.position.y + j * e.tiledTexture["size-target"]
+					if e.tiledTexture["has-borders"] then
+						if i == 0 and j == 0 then
+							col = col - 1
+							row = row - 1
+						elseif i == 0 then
+							col = col - 1
+						elseif j == 0 then
+							row = row - 1
+						end
 					end
+					if game.camera:isInView(x, y, e.tiledTexture["size-target"], e.tiledTexture["size-target"]) then
+						g:drawImage(e.tiledTexture.file, x, y, 
+							e.tiledTexture["size-target"], e.tiledTexture["size-target"],
+							1 + col * (spacing + e.tiledTexture["size-tile"]),
+							1 + row * (spacing + e.tiledTexture["size-tile"]), 
+							e.tiledTexture["size-tile"], e.tiledTexture["size-tile"])
+						end
 				end
-				if game.camera:isInView(x, y, e.tiledTexture["size-target"], e.tiledTexture["size-target"]) then
-					g:drawImage(e.tiledTexture.file, x, y, 
-						e.tiledTexture["size-target"], e.tiledTexture["size-target"],
-						1 + col * (spacing + e.tiledTexture["size-tile"]),
-						1 + row * (spacing + e.tiledTexture["size-tile"]), 
-						e.tiledTexture["size-tile"], e.tiledTexture["size-tile"])
-					end
 			end
 		end
 
@@ -163,6 +165,7 @@ function renderTiledTextures(e)
 			1 + row * (spacing + e.tiledTexture["size-tile"]),	
 			e.tiledTexture["size-tile"] * (targetSizeX / e.tiledTexture["size-target"]) + 1, 
 			e.tiledTexture["size-tile"] * (targetSizeY / e.tiledTexture["size-target"]) + 1)
+		end
 	end
 end
 
@@ -179,5 +182,5 @@ function renderEnd()
 	end---]]
 	game.camera:resetTransforms(g:getContext())
 	g:setColor(game.color:fromRGB(0, 0, 0))
-  g:drawString("FPS:" .. game.core:getFPS(), 20, 40)
+	g:drawString("FPS:" .. game.core:getFPS(), 20, 40)
 end

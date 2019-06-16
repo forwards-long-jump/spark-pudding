@@ -247,7 +247,7 @@ public class MenuEdit extends JMenu {
 		}
 
 		if (stackSize > 5) {
-			// TODO Allow to see all the history
+			// TODO: Allow to see all the history in a separate window
 			add("...");
 		}
 	}

@@ -31,9 +31,9 @@ function update()
 					elseif entity.acceleration.touchWallRight then
 						entity.speed.x = - jump.force
 					end
-					game.sound:play("wall-jump.wav")
+					--game.sound:play("wall-jump.wav")
 				else
-					game.sound:play("jump.wav")
+					--game.sound:play("jump.wav")
 				end
 				jump.count = jump.count + 1
 				jump.airDuration = jump.airDurationDefault

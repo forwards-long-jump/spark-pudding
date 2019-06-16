@@ -7,7 +7,9 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 
 // TODO: Implement this class in an API, use a singleton and fix it
 /**
- * Owns a map of persistent data to be used at the user's discretion in systems.
+ * Owns a map of persistent data to be used at the user's discretion in
+ * systems.<br>
+ * NOTE: This class is currently not in use
  * 
  * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba
  * 
@@ -15,7 +17,6 @@ import ch.sparkpudding.coreengine.ecs.component.Field;
 public class Register {
 
 	private Map<String, Field> fields;
-	// TODO: eventually add maps for entities and component
 
 	public Register() {
 		this.fields = new HashMap<String, Field>();

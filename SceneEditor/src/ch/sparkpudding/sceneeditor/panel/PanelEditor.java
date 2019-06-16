@@ -118,7 +118,7 @@ public class PanelEditor extends JPanel {
 		populateSystemList();
 
 		listScroller = new JScrollPane(jList);
-		
+
 		this.buttonAdd = new JButton(ImageStorage.PLUS);
 		buttonAdd.setBorderPainted(false);
 		buttonAdd.setContentAreaFilled(false);
@@ -198,7 +198,6 @@ public class PanelEditor extends JPanel {
 								}
 							});
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					}
@@ -212,7 +211,6 @@ public class PanelEditor extends JPanel {
 			jTabbedPane.setSelectedIndex(jTabbedPane.getTabCount() - 1);
 			jTabbedPane.setTabComponentAt(jTabbedPane.getTabCount() - 1, buttonTabComponent);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -232,9 +230,17 @@ public class PanelEditor extends JPanel {
 		for (String groupName : componentGroups.keySet()) {
 			for (String componentName : componentGroups.get(groupName)) {
 				if (!addedComponent.contains(componentName)) {
-					for (Entry<String, Field> field : ch.sparkpudding.coreengine.ecs.component.Component.getTemplates()
-							.get(componentName)) {
-						codeCP.addCompletion(new BasicCompletion(codeCP, componentName + "." + field.getKey(), ""));
+					try {
+						for (Entry<String, Field> field : ch.sparkpudding.coreengine.ecs.component.Component
+								.getTemplates().get(componentName)) {
+							codeCP.addCompletion(new BasicCompletion(codeCP, componentName + "." + field.getKey(), ""));
+						}
+					} catch (Exception e) {
+						JOptionPane
+								.showMessageDialog(
+										this, "System " + system.getName()
+												+ " is trying to require the inexisting component " + componentName,
+										"System warning", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 				addedComponent.add(componentName);

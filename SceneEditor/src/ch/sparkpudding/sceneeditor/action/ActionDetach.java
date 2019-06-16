@@ -22,7 +22,6 @@ public class ActionDetach extends AbstractAction {
 	 * @param component Component to detach
 	 */
 	public ActionDetach(Component component) {
-		// TODO: Use entity to attach	
 		super("Detach component " + component.getName());
 		this.component = component;
 	}

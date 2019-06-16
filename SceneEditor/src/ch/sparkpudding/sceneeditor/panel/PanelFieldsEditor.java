@@ -157,7 +157,7 @@ public class PanelFieldsEditor extends JComponent {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {
-				// TODO: implement better fix
+				// TODO: Handle thread synchronization correctly instead of this try catch
 				try {
 					if (!field.getValue().toString().equals(input.getText()) && !input.hasFocus()) {
 						SwingUtilities.invokeLater(new Runnable() {
@@ -215,7 +215,7 @@ public class PanelFieldsEditor extends JComponent {
 		RunnableOneParameter onFieldChange = new RunnableOneParameter() {
 			@Override
 			public void run() {
-				// TODO: implement better fix
+				// TODO: Handle thread synchronization correctly instead of this try catch
 				try {
 					if (input.isSelected() != (boolean) field.getValue() && !input.hasFocus()) {
 

@@ -37,9 +37,6 @@ public class LelWriter {
 	 * @throws IOException
 	 */
 	public void save(CoreEngine coreEngine, String directory) throws IOException {
-		// TODO : Adapt the code when we have a proper way to deal with default entities
-		// values and metadata in core engine.
-
 		// Check general architecture
 		String[] requiredFiles = { "", "assets", "assets/music", "assets/sounds", "assets/textures", "components",
 				"entitytemplates", "scenes", "systems" };
@@ -103,7 +100,8 @@ public class LelWriter {
 	}
 
 	/**
-	 * Serialize XML from meta data TODO: Fix this
+	 * Serialize XML from meta data<br>
+	 * TODO: Implement using metadata
 	 * 
 	 * @return String to write to the xml metadata
 	 */

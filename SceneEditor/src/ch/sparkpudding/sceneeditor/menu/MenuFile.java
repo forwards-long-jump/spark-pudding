@@ -46,13 +46,16 @@ public class MenuFile extends JMenu {
 		itemNew = new JMenuItem("New", KeyEvent.VK_N);
 		itemSave = new JMenuItem("Save", KeyEvent.VK_S);
 		itemExit = new JMenuItem("Exit", KeyEvent.VK_X);
+		
+		// TODO: This action is not working at this moment and have been disabled in the meantime
+		itemNew.setEnabled(false);
+		
 	}
 
 	/**
 	 * Add the shortcut to the different item
 	 */
 	private void addAction() {
-		// TODO: Implement method
 		itemSave.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

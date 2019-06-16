@@ -276,7 +276,7 @@ public abstract class System {
 		// Build Lua instances of entities
 		LuaTable entitiesTableLua = new LuaTable();
 		for (int i = 0; i < entities.size(); ++i) {
-			// TODO prevent accessing all components
+			// TODO: Prevent accessing all components if they are not required
 			// Lua table starts at 1
 			entitiesTableLua.set(i + 1, entities.get(i).getLuaEntity());
 		}
@@ -299,7 +299,6 @@ public abstract class System {
 				sortedEntities.add(new Pair<String, Entity>(componentList.getKey(), entity));
 
 				LuaTable entityGroup = (LuaTable) globals.get(componentList.getKey());
-				// TODO prevent accessing all components
 				entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
 			}
 		}
@@ -375,9 +374,6 @@ public abstract class System {
 				sortedEntities.add(new Pair<String, Entity>(listName, entity));
 				addEntityGroupToGlobals(listName);
 				sortEntities();
-				// LuaTable entityGroup = (LuaTable) globals.get(entityList.getKey());
-				// TODO prevent accessing all components
-				// entityGroup.set(entityGroup.keyCount() + 1, entity.getLuaEntity());
 			}
 		}
 	}

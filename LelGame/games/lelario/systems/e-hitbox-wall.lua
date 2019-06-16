@@ -6,7 +6,7 @@ end
 
 function update()
 	for i, entity in ipairs(entities) do
-		if not entity.speed.noclip then
+		if not entity.speed.noclip and game.camera:isInView(entity.position.x, entity.position.y, entity.size.width, entity.size.height) then
 			local ex1 = entity.position.x
 			local ey1 = entity.position.y
 			local ex2 = ex1 + entity.size.width

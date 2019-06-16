@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<entity-template name="text">
+<entity-template name="texture">
 	<component template="size">
-		<field name="width">100</field>
-		<field name="height">100</field>
+		<field name="width">200</field>
+		<field name="height">200</field>
 	</component>
-	<component template="text">
-		<field name="string">Text</field>
+	<component template="texture">
+		<field name="name">spark-pudding.png</field>
 	</component>
 	<component template="position">
 		<field name="x">0</field>

@@ -3,8 +3,10 @@ function getRequiredComponents()
 end
 
 function updateEntities(entity)
-		entity.position.x = entity.position.x + entity.speed.x
-		entity.position.y = entity.position.y + entity.speed.y
+		if game.camera:isInView(entity.position.x, entity.position.y, entity.size.width, entity.size.height) or entity.animatedSprite ~= nil then
+			entity.position.x = entity.position.x + entity.speed.x
+			entity.position.y = entity.position.y + entity.speed.y
+		end
 end
 
 function updateAcceleratedEntities(entity)

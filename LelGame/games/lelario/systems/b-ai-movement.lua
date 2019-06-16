@@ -11,6 +11,8 @@ function update()
 			elseif entity.acceleration.touchWallLeft then
 				entity.acceleration.movingLeft = false
 				entity.acceleration.movingRight = true
+			elseif entity.acceleration.touchWallDown then
+				entity.speed.y = -10
 			end
 		end
 	end

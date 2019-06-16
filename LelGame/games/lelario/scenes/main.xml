@@ -24,8 +24,8 @@
 </entity>
 	<entity name="sky" template="empty" z-index="-10">
 		<component template="size">
-			<field name="width">1344</field>
-			<field name="height">832</field>
+			<field name="width">1911</field>
+			<field name="height">1298</field>
 		</component>
 		<component template="color">
 			<field name="a">255</field>
@@ -40,11 +40,19 @@
 			<field name="initialX">-1</field>
 		</component>
 		<component template="position">
-			<field name="x">-64.0</field>
-			<field name="y">-64.0</field>
+			<field name="x">-313.0</field>
+			<field name="y">-293.0</field>
 		</component>
 </entity>
 	<entity name="player" template="empty" z-index="2">
+		<component template="debug">
+		</component>
+		<component template="speedForces">
+			<field name="gravity">1.5</field>
+			<field name="wind">0.0</field>
+		</component>
+		<component template="speed">
+		</component>
 		<component template="acceleration">
 			<field name="decelerationDown">0.0</field>
 			<field name="movingUp">false</field>
@@ -70,15 +78,11 @@
 		<component template="jumpController">
 		</component>
 		<component template="size">
-			<field name="width">64</field>
-			<field name="height">64</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">1.5</field>
-			<field name="wind">0.0</field>
+			<field name="width">213</field>
+			<field name="height">256</field>
 		</component>
 		<component template="animatedSprite">
-			<field name="currentDelay">1</field>
+			<field name="currentDelay">2</field>
 			<field name="standIndex">9</field>
 			<field name="jumpFrames">1</field>
 			<field name="currentAnimation">stand</field>
@@ -95,7 +99,7 @@
 		</component>
 		<component template="position">
 			<field name="x">704.0</field>
-			<field name="y">448.0</field>
+			<field name="y">191.0</field>
 		</component>
 		<component template="camera">
 			<field name="mode">SPRING</field>
@@ -103,8 +107,6 @@
 			<field name="enabled">true</field>
 		</component>
 		<component template="accelerationController">
-		</component>
-		<component template="speed">
 		</component>
 		<component template="jump">
 			<field name="airDuration">0</field>
@@ -227,8 +229,8 @@
 			<field name="height">58</field>
 		</component>
 		<component template="position">
-			<field name="x">10392.0</field>
-			<field name="y">430.0</field>
+			<field name="x">10395.0</field>
+			<field name="y">225.0</field>
 		</component>
 </entity>
 	<entity name="question-block" template="question-block" z-index="-1">
@@ -299,7 +301,7 @@
 			<field name="y">256.0</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">4</field>
+			<field name="currentDelay">17</field>
 			<field name="col">0</field>
 			<field name="file">blocks.png</field>
 			<field name="delay">17</field>
@@ -737,8 +739,8 @@
 <component template="hitboxWall" deleted="true"/></entity>
 	<entity name="ground 1" template="ground-grass" z-index="-1">
 		<component template="size">
-			<field name="width">64.0</field>
-			<field name="height">64.0</field>
+			<field name="width">64</field>
+			<field name="height">64</field>
 		</component>
 		<component template="tiledTexture">
 			<field name="size-tile">16</field>
@@ -2621,16 +2623,6 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">3080</field>
-			<field name="y">512</field>
-		</component>
-</entity>
-	<entity name="mushroom" template="goomba" z-index="0">
-		<component template="size">
-			<field name="width">64</field>
-			<field name="height">64</field>
-		</component>
-		<component template="position">
 			<field name="x">3082</field>
 			<field name="y">512</field>
 		</component>
@@ -2642,16 +2634,6 @@
 		</component>
 		<component template="position">
 			<field name="x">7754</field>
-			<field name="y">512</field>
-		</component>
-</entity>
-	<entity name="mushroom" template="goomba" z-index="0">
-		<component template="size">
-			<field name="width">64</field>
-			<field name="height">64</field>
-		</component>
-		<component template="position">
-			<field name="x">7690</field>
 			<field name="y">512</field>
 		</component>
 </entity>
@@ -2794,13 +2776,35 @@
 		</component>
 </entity>
 	<entity name="mushroom" template="goomba" z-index="0">
+		<component template="acceleration">
+			<field name="decelerationDown">0.0</field>
+			<field name="movingUp">false</field>
+			<field name="decelerationLeft">0.0</field>
+			<field name="touchWallRight">false</field>
+			<field name="movingRight">true</field>
+			<field name="maxSpeedRight">3.0</field>
+			<field name="accelerationLeft">5.0</field>
+			<field name="accelerationDown">0.0</field>
+			<field name="touchWallLeft">false</field>
+			<field name="touchWallDown">true</field>
+			<field name="maxSpeedLeft">3.0</field>
+			<field name="accelerationUp">0.0</field>
+			<field name="decelerationUp">0.0</field>
+			<field name="decelerationRight">0.0</field>
+			<field name="accelerationRight">5.0</field>
+			<field name="maxSpeedDown">20.0</field>
+			<field name="movingLeft">false</field>
+			<field name="movingDown">false</field>
+			<field name="maxSpeedUp">200.0</field>
+			<field name="touchWallUp">false</field>
+		</component>
 		<component template="size">
 			<field name="width">64</field>
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">1536</field>
-			<field name="y">320</field>
+			<field name="x">1344</field>
+			<field name="y">512</field>
 		</component>
 </entity>
 	<entity name="sky" template="empty" z-index="-9">
@@ -2809,24 +2813,20 @@
 			<field name="height">386</field>
 		</component>
 		<component template="parallax">
-			<field name="cx">0.5</field>
-			<field name="cy">0.5</field>
+			<field name="cx">1.0</field>
+			<field name="cy">1.0</field>
 			<field name="initialY">-1</field>
 			<field name="initialX">-1</field>
 		</component>
 		<component template="texture">
 			<field name="name">cloud.png</field>
 		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">0.5</field>
-		</component>
 		<component template="position">
-			<field name="x">479.0</field>
-			<field name="y">17.0</field>
+			<field name="x">825.0</field>
+			<field name="y">-438.0</field>
 		</component>
 		<component template="speed">
-			<field name="x">0.0</field>
+			<field name="x">2.0</field>
 			<field name="y">0.0</field>
 			<field name="noclip">true</field>
 		</component>
@@ -2850,11 +2850,11 @@
 			<field name="x">1</field>
 			<field name="auto-tile">true</field>
 			<field name="y">1</field>
-			<field name="size-target">20</field>
+			<field name="size-target">25</field>
 		</component>
 		<component template="position">
-			<field name="x">562.0</field>
-			<field name="y">439.0</field>
+			<field name="x">562</field>
+			<field name="y">439</field>
 		</component>
 <component template="debug" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="10">
@@ -3324,118 +3324,6 @@
 			<field name="name">world1-1.wav</field>
 		</component>
 </entity>
-	<entity name="sky" template="empty" z-index="-9">
-		<component template="size">
-			<field name="width">1198</field>
-			<field name="height">386</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">0.5</field>
-			<field name="cy">0.5</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">0.5</field>
-		</component>
-		<component template="position">
-			<field name="x">1658</field>
-			<field name="y">45</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="-9">
-		<component template="size">
-			<field name="width">1198</field>
-			<field name="height">386</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">0.5</field>
-			<field name="cy">0.5</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">0.5</field>
-		</component>
-		<component template="position">
-			<field name="x">2855.0</field>
-			<field name="y">-38.0</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="-9">
-		<component template="size">
-			<field name="width">1198</field>
-			<field name="height">386</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">0.5</field>
-			<field name="cy">0.5</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">0.5</field>
-		</component>
-		<component template="position">
-			<field name="x">3967.0</field>
-			<field name="y">74.0</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="-9">
-		<component template="size">
-			<field name="width">1198</field>
-			<field name="height">386</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">0.5</field>
-			<field name="cy">0.5</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">0.5</field>
-		</component>
-		<component template="position">
-			<field name="x">5123.0</field>
-			<field name="y">-6.0</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
 	<entity name="texture" template="pipe" z-index="-5">
 		<component template="size">
 			<field name="width">1014</field>
@@ -3581,86 +3469,6 @@
 		<component template="position">
 			<field name="x">17536.0</field>
 			<field name="y">512.0</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="9">
-		<component template="size">
-			<field name="width">1334</field>
-			<field name="height">502</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.3</field>
-			<field name="cy">-0.3</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="position">
-			<field name="x">18835</field>
-			<field name="y">-199</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="9">
-		<component template="size">
-			<field name="width">1334</field>
-			<field name="height">502</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.3</field>
-			<field name="cy">-0.3</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">-0.1</field>
-		</component>
-		<component template="position">
-			<field name="x">19569.73121288293</field>
-			<field name="y">167.63303464225714</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="9">
-		<component template="size">
-			<field name="width">1334</field>
-			<field name="height">502</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.3</field>
-			<field name="cy">-0.3</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">cloud.png</field>
-		</component>
-		<component template="speedForces">
-			<field name="gravity">0.0</field>
-			<field name="wind">-0.1</field>
-		</component>
-		<component template="position">
-			<field name="x">16427.642265754792</field>
-			<field name="y">-145.74655949016108</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">true</field>
 		</component>
 </entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4518,33 +4326,14 @@
 			<field name="name">trees.png</field>
 		</component>
 		<component template="position">
-			<field name="x">18438.0</field>
-			<field name="y">38.0</field>
-		</component>
-</entity>
-	<entity name="texture" template="pipe" z-index="5">
-		<component template="size">
-			<field name="width">1014</field>
-			<field name="height">770</field>
-		</component>
-		<component template="parallax">
-			<field name="cx">-0.15</field>
-			<field name="cy">-0.15</field>
-			<field name="initialY">-1</field>
-			<field name="initialX">-1</field>
-		</component>
-		<component template="texture">
-			<field name="name">trees.png</field>
-		</component>
-		<component template="position">
 			<field name="x">19263</field>
 			<field name="y">34</field>
 		</component>
 </entity>
 	<entity name="texture" template="pipe" z-index="5">
 		<component template="size">
-			<field name="width">1014</field>
-			<field name="height">770</field>
+			<field name="width">1386</field>
+			<field name="height">601</field>
 		</component>
 		<component template="parallax">
 			<field name="cx">-0.15</field>
@@ -4557,7 +4346,7 @@
 		</component>
 		<component template="position">
 			<field name="x">20113.0</field>
-			<field name="y">39.0</field>
+			<field name="y">207.0</field>
 		</component>
 </entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4660,14 +4449,14 @@
 			<field name="y">-320</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4680,14 +4469,14 @@
 			<field name="y">-256</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4700,14 +4489,14 @@
 			<field name="y">-192</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4720,14 +4509,14 @@
 			<field name="y">-128</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4740,14 +4529,14 @@
 			<field name="y">-64</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4760,14 +4549,14 @@
 			<field name="y">0</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4780,14 +4569,14 @@
 			<field name="y">64</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4800,14 +4589,14 @@
 			<field name="y">128.0</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4820,14 +4609,14 @@
 			<field name="y">192</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4840,14 +4629,14 @@
 			<field name="y">256</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4860,14 +4649,14 @@
 			<field name="y">320</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="ground 1" template="tiled-texture" z-index="0">
@@ -4880,205 +4669,16 @@
 			<field name="y">384</field>
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">0</field>
+			<field name="currentDelay">2</field>
 			<field name="col">0</field>
 			<field name="file">magnet-wave.png</field>
 			<field name="delay">5</field>
 			<field name="size">16</field>
 			<field name="frames">2</field>
 			<field name="row">0</field>
-			<field name="currentFrameIndex">0</field>
+			<field name="currentFrameIndex">1</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
-	<entity name="texture" template="pipe" z-index="0">
-		<component template="size">
-			<field name="width">1014</field>
-			<field name="height">599</field>
-		</component>
-		<component template="texture">
-			<field name="name">factory-wall.png</field>
-		</component>
-		<component template="position">
-			<field name="x">21134.026512923563</field>
-			<field name="y">45.99793611893489</field>
-		</component>
-		<component template="camera">
-			<field name="mode">SPRING</field>
-			<field name="scaling">1.41</field>
-			<field name="enabled">false</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="-10">
-		<component template="size">
-			<field name="width">960</field>
-			<field name="height">549</field>
-		</component>
-		<component template="color">
-			<field name="a">255</field>
-			<field name="r">30</field>
-			<field name="b">255</field>
-			<field name="g">144</field>
-		</component>
-		<component template="position">
-			<field name="x">21142</field>
-			<field name="y">61</field>
-		</component>
-</entity>
-	<entity name="sky" template="empty" z-index="-9">
-		<component template="size">
-			<field name="width">65</field>
-			<field name="height">66</field>
-		</component>
-		<component template="texture">
-			<field name="name">schaffre.png</field>
-		</component>
-		<component template="position">
-			<field name="x">21850.0</field>
-			<field name="y">348.0</field>
-		</component>
-</entity>
-	<entity name="ground 1" template="tiled-texture" z-index="0">
-		<component template="hitboxWall">
-			<field name="noLeftCollision">false</field>
-			<field name="noRightCollision">false</field>
-			<field name="frictionX">0.0</field>
-			<field name="frictionY">0.0</field>
-			<field name="bounceCoeffY">1.0</field>
-			<field name="noTopCollision">false</field>
-			<field name="bounceCoeffX">1.0</field>
-			<field name="noBottomCollision">false</field>
-		</component>
-		<component template="size">
-			<field name="width">512</field>
-			<field name="height">768</field>
-		</component>
-		<component template="position">
-			<field name="x">20675.0</field>
-			<field name="y">-77.0</field>
-		</component>
-<component template="tiledTexture" deleted="true"/></entity>
-	<entity name="ground 1" template="tiled-texture" z-index="0">
-		<component template="hitboxWall">
-			<field name="noLeftCollision">false</field>
-			<field name="noRightCollision">false</field>
-			<field name="frictionX">0.0</field>
-			<field name="frictionY">0.0</field>
-			<field name="bounceCoeffY">1.0</field>
-			<field name="noTopCollision">false</field>
-			<field name="bounceCoeffX">1.0</field>
-			<field name="noBottomCollision">false</field>
-		</component>
-		<component template="size">
-			<field name="width">512</field>
-			<field name="height">768</field>
-		</component>
-		<component template="position">
-			<field name="x">22094</field>
-			<field name="y">-43</field>
-		</component>
-<component template="tiledTexture" deleted="true"/></entity>
-	<entity name="ground 1" template="tiled-texture" z-index="0">
-		<component template="hitboxWall">
-			<field name="noLeftCollision">false</field>
-			<field name="noRightCollision">false</field>
-			<field name="frictionX">0.0</field>
-			<field name="frictionY">0.0</field>
-			<field name="bounceCoeffY">1.0</field>
-			<field name="noTopCollision">false</field>
-			<field name="bounceCoeffX">1.0</field>
-			<field name="noBottomCollision">false</field>
-		</component>
-		<component template="size">
-			<field name="width">1112</field>
-			<field name="height">768</field>
-		</component>
-		<component template="position">
-			<field name="x">21081.0</field>
-			<field name="y">603.0</field>
-		</component>
-<component template="tiledTexture" deleted="true"/></entity>
-	<entity name="ground 1" template="tiled-texture" z-index="7">
-		<component template="acceleration">
-			<field name="decelerationDown">0.0</field>
-			<field name="movingUp">false</field>
-			<field name="decelerationLeft">0.0</field>
-			<field name="touchWallRight">false</field>
-			<field name="movingRight">false</field>
-			<field name="maxSpeedRight">20.0</field>
-			<field name="accelerationLeft">0.0</field>
-			<field name="accelerationDown">0.0</field>
-			<field name="touchWallLeft">false</field>
-			<field name="touchWallDown">false</field>
-			<field name="maxSpeedLeft">20.0</field>
-			<field name="accelerationUp">0.0</field>
-			<field name="decelerationUp">0.0</field>
-			<field name="decelerationRight">0.0</field>
-			<field name="accelerationRight">0.0</field>
-			<field name="maxSpeedDown">20.0</field>
-			<field name="movingLeft">false</field>
-			<field name="movingDown">false</field>
-			<field name="maxSpeedUp">20.0</field>
-			<field name="touchWallUp">false</field>
-		</component>
-		<component template="size">
-			<field name="width">35</field>
-			<field name="height">37</field>
-		</component>
-		<component template="tiledTexture">
-			<field name="size-tile">16</field>
-			<field name="file">tilesetgb.png</field>
-			<field name="spacing">0</field>
-			<field name="has-borders">false</field>
-			<field name="x">14</field>
-			<field name="auto-tile">false</field>
-			<field name="y">14</field>
-			<field name="size-target">64</field>
-		</component>
-		<component template="position">
-			<field name="x">21641.0</field>
-			<field name="y">537.0</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">5.0</field>
-			<field name="noclip">false</field>
-		</component>
-		<component template="jump">
-		</component>
-</entity>
-	<entity name="ground 1" template="tiled-texture" z-index="0">
-		<component template="hitboxWall">
-			<field name="noLeftCollision">false</field>
-			<field name="noRightCollision">false</field>
-			<field name="frictionX">0.0</field>
-			<field name="frictionY">0.0</field>
-			<field name="bounceCoeffY">1.0</field>
-			<field name="noTopCollision">false</field>
-			<field name="bounceCoeffX">1.0</field>
-			<field name="noBottomCollision">false</field>
-		</component>
-		<component template="size">
-			<field name="width">1112</field>
-			<field name="height">768</field>
-		</component>
-		<component template="position">
-			<field name="x">21067.0</field>
-			<field name="y">-682.0</field>
-		</component>
-<component template="tiledTexture" deleted="true"/></entity>
-	<entity name="texture" template="pipe" z-index="6">
-		<component template="size">
-			<field name="width">165</field>
-			<field name="height">62</field>
-		</component>
-		<component template="texture">
-			<field name="name">factory-sign.png</field>
-		</component>
-		<component template="position">
-			<field name="x">21210.0</field>
-			<field name="y">124.0</field>
-		</component>
-</entity>
 	<entity name="player" template="empty" z-index="2">
 		<component template="acceleration">
 			<field name="decelerationDown">0.0</field>
@@ -5127,7 +4727,7 @@
 		<component template="speed">
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">20</field>
+			<field name="currentDelay">16</field>
 			<field name="col">0</field>
 			<field name="file">blocks.png</field>
 			<field name="delay">20</field>
@@ -5143,8 +4743,8 @@
 			<field name="height">64</field>
 		</component>
 		<component template="position">
-			<field name="x">14080</field>
-			<field name="y">320</field>
+			<field name="x">14016.0</field>
+			<field name="y">320.0</field>
 		</component>
 		<component template="breakable">
 			<field name="delay">10</field>
@@ -5210,8 +4810,8 @@
 			<field name="name">schaffre.png</field>
 		</component>
 		<component template="position">
-			<field name="x">14406.0</field>
-			<field name="y">495.0</field>
+			<field name="x">14416</field>
+			<field name="y">493</field>
 		</component>
 <component template="tiledTexture" deleted="true"/></entity>
 	<entity name="mushroom" template="goomba" z-index="0">
@@ -5304,156 +4904,6 @@
 			<field name="y">478.0</field>
 		</component>
 </entity>
-	<entity name="ground 1" template="tiled-texture" z-index="7">
-		<component template="acceleration">
-			<field name="decelerationDown">0.0</field>
-			<field name="movingUp">false</field>
-			<field name="decelerationLeft">4.0</field>
-			<field name="touchWallRight">false</field>
-			<field name="movingRight">false</field>
-			<field name="maxSpeedRight">4.0</field>
-			<field name="accelerationLeft">4.0</field>
-			<field name="accelerationDown">0.0</field>
-			<field name="touchWallLeft">false</field>
-			<field name="touchWallDown">false</field>
-			<field name="maxSpeedLeft">4.0</field>
-			<field name="accelerationUp">0.0</field>
-			<field name="decelerationUp">0.0</field>
-			<field name="decelerationRight">4.0</field>
-			<field name="accelerationRight">4.0</field>
-			<field name="maxSpeedDown">0.0</field>
-			<field name="movingLeft">false</field>
-			<field name="movingDown">false</field>
-			<field name="maxSpeedUp">0.0</field>
-			<field name="touchWallUp">false</field>
-		</component>
-		<component template="hitboxWall">
-			<field name="noLeftCollision">false</field>
-			<field name="noRightCollision">false</field>
-			<field name="frictionX">0.0</field>
-			<field name="frictionY">0.0</field>
-			<field name="bounceCoeffY">1.0</field>
-			<field name="noTopCollision">false</field>
-			<field name="bounceCoeffX">1.0</field>
-			<field name="noBottomCollision">false</field>
-		</component>
-		<component template="size">
-			<field name="width">131</field>
-			<field name="height">24</field>
-		</component>
-		<component template="tiledTexture">
-			<field name="size-tile">15</field>
-			<field name="file">tilesetgb.png</field>
-			<field name="spacing">0</field>
-			<field name="has-borders">false</field>
-			<field name="x">0</field>
-			<field name="auto-tile">true</field>
-			<field name="y">2</field>
-			<field name="size-target">64</field>
-		</component>
-		<component template="position">
-			<field name="x">21595.0</field>
-			<field name="y">509.0</field>
-		</component>
-		<component template="accelerationController">
-			<field name="keyLeft">j</field>
-			<field name="keyUp">w</field>
-			<field name="keyDown">s</field>
-			<field name="keyRight">l</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">false</field>
-		</component>
-</entity>
-	<entity name="ground 1" template="tiled-texture" z-index="7">
-		<component template="acceleration">
-			<field name="decelerationDown">0.0</field>
-			<field name="movingUp">false</field>
-			<field name="decelerationLeft">4.0</field>
-			<field name="touchWallRight">false</field>
-			<field name="movingRight">false</field>
-			<field name="maxSpeedRight">4.0</field>
-			<field name="accelerationLeft">4.0</field>
-			<field name="accelerationDown">0.0</field>
-			<field name="touchWallLeft">false</field>
-			<field name="touchWallDown">false</field>
-			<field name="maxSpeedLeft">4.0</field>
-			<field name="accelerationUp">0.0</field>
-			<field name="decelerationUp">0.0</field>
-			<field name="decelerationRight">4.0</field>
-			<field name="accelerationRight">4.0</field>
-			<field name="maxSpeedDown">0.0</field>
-			<field name="movingLeft">false</field>
-			<field name="movingDown">false</field>
-			<field name="maxSpeedUp">0.0</field>
-			<field name="touchWallUp">false</field>
-		</component>
-		<component template="hitboxWall">
-			<field name="noLeftCollision">false</field>
-			<field name="noRightCollision">false</field>
-			<field name="frictionX">0.0</field>
-			<field name="frictionY">0.0</field>
-			<field name="bounceCoeffY">1.0</field>
-			<field name="noTopCollision">false</field>
-			<field name="bounceCoeffX">1.0</field>
-			<field name="noBottomCollision">false</field>
-		</component>
-		<component template="size">
-			<field name="width">129</field>
-			<field name="height">23</field>
-		</component>
-		<component template="tiledTexture">
-			<field name="size-tile">15</field>
-			<field name="file">tilesetgb.png</field>
-			<field name="spacing">0</field>
-			<field name="has-borders">false</field>
-			<field name="x">0</field>
-			<field name="auto-tile">true</field>
-			<field name="y">2</field>
-			<field name="size-target">64</field>
-		</component>
-		<component template="position">
-			<field name="x">21596.0</field>
-			<field name="y">142.0</field>
-		</component>
-		<component template="accelerationController">
-			<field name="keyLeft">left</field>
-			<field name="keyUp">w</field>
-			<field name="keyDown">s</field>
-			<field name="keyRight">right</field>
-		</component>
-		<component template="speed">
-			<field name="x">0.0</field>
-			<field name="y">0.0</field>
-			<field name="noclip">false</field>
-		</component>
-</entity>
-	<entity name="question-block" template="question-block" z-index="2">
-		<component template="hitboxWall">
-			<field name="noLeftCollision">false</field>
-			<field name="noRightCollision">false</field>
-			<field name="frictionX">0.0</field>
-			<field name="frictionY">0.0</field>
-			<field name="bounceCoeffY">2.0</field>
-			<field name="noTopCollision">false</field>
-			<field name="bounceCoeffX">2.0</field>
-			<field name="noBottomCollision">false</field>
-		</component>
-		<component template="size">
-			<field name="width">64</field>
-			<field name="height">64</field>
-		</component>
-		<component template="position">
-			<field name="x">21668.0</field>
-			<field name="y">-142.0</field>
-		</component>
-		<component template="breakable">
-			<field name="delay">1</field>
-			<field name="type">question</field>
-		</component>
-</entity>
 	<entity name="mushroom" template="goomba" z-index="0">
 		<component template="size">
 			<field name="width">60</field>
@@ -5511,9 +4961,13 @@
 		</component>
 <component template="acceleration" deleted="true"/><component template="tiledTexture" deleted="true"/><component template="accelerationAI" deleted="true"/><component template="speedForces" deleted="true"/><component template="speed" deleted="true"/></entity>
 	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">256</field>
+		</component>
 		<component template="position">
-			<field name="x">8896</field>
-			<field name="y">320</field>
+			<field name="x">8896.0</field>
+			<field name="y">320.0</field>
 		</component>
 </entity>
 	<entity name="hitbox" template="wall" z-index="0">
@@ -5549,6 +5003,10 @@
 		</component>
 </entity>
 	<entity name="hitbox" template="wall" z-index="0">
+		<component template="size">
+			<field name="width">64</field>
+			<field name="height">256</field>
+		</component>
 		<component template="position">
 			<field name="x">8704.0</field>
 			<field name="y">320.0</field>
@@ -5752,7 +5210,7 @@
 		<component template="speed">
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">20</field>
+			<field name="currentDelay">16</field>
 			<field name="col">0</field>
 			<field name="file">blocks.png</field>
 			<field name="delay">20</field>
@@ -5804,13 +5262,13 @@
 			<field name="wind">0.0</field>
 		</component>
 		<component template="position">
-			<field name="x">13376</field>
-			<field name="y">-256</field>
+			<field name="x">13376.0</field>
+			<field name="y">-256.0</field>
 		</component>
 		<component template="speed">
 		</component>
 		<component template="animatedTile">
-			<field name="currentDelay">20</field>
+			<field name="currentDelay">16</field>
 			<field name="col">0</field>
 			<field name="file">blocks.png</field>
 			<field name="delay">20</field>

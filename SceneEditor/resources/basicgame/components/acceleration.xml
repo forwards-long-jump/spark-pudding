@@ -8,16 +8,16 @@
 	<field type="BOOLEAN" name="touchWallRight">false</field>
 	<field type="BOOLEAN" name="touchWallUp">false</field>
 	<field type="BOOLEAN" name="touchWallDown">false</field>
-	<field type="DOUBLE" name="maxSpeedLeft">20</field>
-	<field type="DOUBLE" name="maxSpeedRight">20</field>
-	<field type="DOUBLE" name="maxSpeedUp">20</field>
-	<field type="DOUBLE" name="maxSpeedDown">20</field>
-	<field type="DOUBLE" name="decelerationLeft">1</field>
-	<field type="DOUBLE" name="decelerationRight">1</field>
-	<field type="DOUBLE" name="decelerationUp">1</field>
+	<field type="DOUBLE" name="maxSpeedLeft">30</field>
+	<field type="DOUBLE" name="maxSpeedRight">30</field>
+	<field type="DOUBLE" name="maxSpeedUp">100</field>
+	<field type="DOUBLE" name="maxSpeedDown">100</field>
+	<field type="DOUBLE" name="decelerationLeft">3.5</field>
+	<field type="DOUBLE" name="decelerationRight">3.5</field>
+	<field type="DOUBLE" name="decelerationUp">0</field>
 	<field type="DOUBLE" name="decelerationDown">1</field>
-	<field type="DOUBLE" name="accelerationLeft">1</field>
-	<field type="DOUBLE" name="accelerationRight">1</field>
-	<field type="DOUBLE" name="accelerationUp">1</field>
-	<field type="DOUBLE" name="accelerationDown">1</field>
+	<field type="DOUBLE" name="accelerationLeft">5</field>
+	<field type="DOUBLE" name="accelerationRight">5</field>
+	<field type="DOUBLE" name="accelerationUp">0</field>
+	<field type="DOUBLE" name="accelerationDown">0</field>
 </component>
