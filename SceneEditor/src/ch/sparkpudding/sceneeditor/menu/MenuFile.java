@@ -49,7 +49,13 @@ public class MenuFile extends JMenu {
 		
 		// TODO: This action is not working at this moment and have been disabled in the meantime
 		itemNew.setEnabled(false);
-		
+		itemExit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 	}
 
 	/**
