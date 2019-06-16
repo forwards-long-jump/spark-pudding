@@ -13,6 +13,12 @@ import ch.sparkpudding.coreengine.Lel;
 import ch.sparkpudding.coreengine.ResourceLocator;
 import ch.sparkpudding.coreengine.utils.Pair;
 
+/**
+ * Main API to draw element on screen
+ * 
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br>
+ *
+ */
 public class Graphics {
 	private static Graphics instance;
 
@@ -131,9 +137,9 @@ public class Graphics {
 	/**
 	 * Changes the current color used by the painter
 	 * 
-	 * @param int r
-	 * @param int g
-	 * @param int b
+	 * @param r red value
+	 * @param g green value
+	 * @param b blue value
 	 */
 	public void setColor(int r, int g, int b) {
 		g2d.setColor(new Color(r, g, b));
@@ -142,15 +148,15 @@ public class Graphics {
 	/**
 	 * Changes the current color used by the painter
 	 * 
-	 * @param int r
-	 * @param int g
-	 * @param int b
-	 * @param int a
+	 * @param r red value
+	 * @param g green value
+	 * @param b blue value
+	 * @param a alpha value
 	 */
 	public void setColor(int r, int g, int b, int a) {
 		g2d.setColor(new Color(r, g, b, a));
 	}
-	
+
 	/**
 	 * Changes the current width of the pen
 	 * 
@@ -164,7 +170,7 @@ public class Graphics {
 	 * Draw a moving line for selections
 	 * 
 	 * @param width   of the line
-	 * @param scacing between lines
+	 * @param spacing between lines
 	 * @param phase   line spacing offset
 	 */
 	public void setAnimatedDashedLine(float width, float spacing, float phase) {
@@ -229,7 +235,7 @@ public class Graphics {
 	public void setBackground(int r, int g, int b) {
 		g2d.setBackground(new Color(r, g, b));
 	}
-	
+
 	/**
 	 * Sets the background color
 	 * 
@@ -241,7 +247,6 @@ public class Graphics {
 	public void setBackground(int r, int g, int b, int a) {
 		g2d.setBackground(new Color(r, g, b, a));
 	}
-
 
 	/**
 	 * Clears the specified rectangle by filling it with the background color of the
@@ -352,9 +357,7 @@ public class Graphics {
 	/**
 	 * Draws a closed polygon defined by arrays of x and y coordinates
 	 * 
-	 * @param xPoints Array of the x coordinates
-	 * @param yPoints Array of the y coordinates
-	 * @param nPoints Number of points
+	 * @param points Array of points
 	 */
 	public void drawPolygon(LuaTable points) {
 		int nPoints = points.length();
@@ -372,9 +375,7 @@ public class Graphics {
 	/**
 	 * Fills a closed polygon defined by arrays of x and y coordinates
 	 * 
-	 * @param xPoints Array of the x coordinates
-	 * @param yPoints Array of the y coordinates
-	 * @param nPoints Number of points
+	 * @param points Array of points
 	 */
 	public void fillPolygon(LuaTable points) {
 		int nPoints = points.length();

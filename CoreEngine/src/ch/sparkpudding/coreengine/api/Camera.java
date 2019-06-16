@@ -39,7 +39,7 @@ public class Camera {
 	 * Apply translate and scale to the context. Context must be saved and restaured
 	 * manually
 	 *
-	 * @param g2d
+	 * @param g2d Graphic context
 	 */
 	public void applyTransforms(Graphics2D g2d) {
 		Lel.coreEngine.getCamera().applyTransforms(g2d);
@@ -49,7 +49,7 @@ public class Camera {
 	 * Apply translate and scale to the context. Context must be saved and restaured
 	 * manually
 	 *
-	 * @param g2d
+	 * @param g2d Graphic context
 	 */
 	public void resetTransforms(Graphics2D g2d) {
 		Lel.coreEngine.getCamera().resetTransforms(g2d);
@@ -66,10 +66,9 @@ public class Camera {
 	}
 
 	/**
-	 * Set the target position for the camera to move to
+	 * Set the target scale of the camera
 	 *
-	 * @param x coordinate
-	 * @param y coordinate
+	 * @param s scale
 	 */
 	public void setTargetScaling(float s) {
 		Lel.coreEngine.getCamera().setTargetScaling(s);
@@ -159,10 +158,10 @@ public class Camera {
 	/**
 	 * Change the camera boundary
 	 * 
-	 * @param x      of the boundary
-	 * @param y      of the boundary
-	 * @param width  of the boundary
-	 * @param height of the boundary
+	 * @param x of the boundary
+	 * @param y of the boundary
+	 * @param w of the boundary
+	 * @param h of the boundary
 	 */
 	public void setBoundary(float x, float y, float w, float h) {
 		Lel.coreEngine.getCamera().setBoundary(new Rectangle((int) x, (int) y, (int) w, (int) h));

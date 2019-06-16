@@ -1,5 +1,6 @@
 package ch.sparkpudding.sceneeditor.panel;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
@@ -47,6 +48,8 @@ public class PanelScene extends JPanel {
 	private JButton buttonRemoveScene;
 	private JButton buttonAddScene;
 
+	private JPanel panelButtons;
+
 	private Rectangle transformStartRectangle;
 
 	private static final String TITLE = "Scenes";
@@ -69,6 +72,8 @@ public class PanelScene extends JPanel {
 	 */
 	private void init() {
 		comboBoxScenes = new JComboBox<String>();
+		
+		panelButtons = new JPanel();
 
 		this.buttonAddScene = new JButton(ImageStorage.PLUS);
 		buttonAddScene.setBorderPainted(false);
@@ -76,8 +81,7 @@ public class PanelScene extends JPanel {
 		this.buttonRemoveScene = new JButton(ImageStorage.TRASH);
 		buttonRemoveScene.setBorderPainted(false);
 		buttonRemoveScene.setContentAreaFilled(false);
-		
-		
+
 		buttonRemoveScene.setPreferredSize(buttonAddScene.getPreferredSize());
 
 		comboBoxScenes.setEditable(true);
@@ -87,16 +91,19 @@ public class PanelScene extends JPanel {
 	 * Setup the layout of the panel
 	 */
 	private void setupLayout() {
-		setLayout(new FlowLayout());
+		setLayout(new BorderLayout());
 
 		comboBoxScenes.setPreferredSize(
 				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
 		comboBoxScenes.setMaximumSize(
 				new Dimension(PanelSidebarRight.BASIC_ELEMENT_WIDTH, comboBoxScenes.getPreferredSize().height));
 
-		add(comboBoxScenes);
-		add(buttonRemoveScene);
-		add(buttonAddScene);
+		panelButtons.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		panelButtons.add(buttonRemoveScene);
+		panelButtons.add(buttonAddScene);
+		
+		add(comboBoxScenes, BorderLayout.CENTER);
+		add(panelButtons, BorderLayout.EAST);
 
 		setBorder(BorderFactory.createTitledBorder(TITLE));
 	}

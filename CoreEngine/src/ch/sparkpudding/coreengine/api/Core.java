@@ -91,7 +91,7 @@ public class Core {
 	 * @param reset or not the new scene
 	 */
 	public void setScene(String name, boolean reset) {
-		if(!Lel.coreEngine.getScenes().containsKey(name)) {
+		if (!Lel.coreEngine.getScenes().containsKey(name)) {
 			Lel.coreEngine.notifyGameError(new Exception("Scene not found: " + name));
 			return;
 		}
@@ -102,7 +102,16 @@ public class Core {
 			}
 		});
 	}
-	
+
+	/**
+	 * Change the state of the pause
+	 * 
+	 * @param isPause is the game should be paused
+	 */
+	public void setPause(boolean isPause) {
+		Lel.coreEngine.setPause(isPause);
+	}
+
 	/**
 	 * Reset the current scene
 	 */

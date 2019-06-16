@@ -15,7 +15,7 @@ import ch.sparkpudding.coreengine.ResourceLocator;
 /**
  * API that allow to play sound from the systems
  * 
- * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br/>
+ * @author Alexandre Bianchi, Pierre Bürki, Loïck Jeanneret, John Leuba<br>
  *         Creation Date : 6 May 2019
  *
  */
@@ -91,7 +91,7 @@ public class Sound {
 			currentMusic = null;
 		}
 	}
-	
+
 	/**
 	 * Pauses the currently playing music if there is one
 	 */
@@ -120,7 +120,7 @@ public class Sound {
 	public void play(String name) throws LineUnavailableException, IOException {
 		AudioInputStream audioInputStream = resourceLocator.getSound(name);
 
-		if (audioInputStream == null) {			
+		if (audioInputStream == null) {
 			return;
 		}
 

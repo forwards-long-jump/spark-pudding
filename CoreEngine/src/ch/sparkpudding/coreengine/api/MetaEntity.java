@@ -19,7 +19,7 @@ public class MetaEntity {
 	/**
 	 * ctor
 	 * 
-	 * @param entity
+	 * @param entity the entity
 	 */
 	public MetaEntity(Entity entity) {
 		this.entity = entity;

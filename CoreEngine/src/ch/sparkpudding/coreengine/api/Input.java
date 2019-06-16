@@ -32,17 +32,17 @@ public class Input {
 	/**
 	 * Return the state of specified key
 	 * 
-	 * @param keyCode
+	 * @param keyCode The code representing the key
 	 * @return the state of specified key
 	 */
 	public boolean isKeyDown(int keyCode) {
 		return input.isKeyDown(keyCode);
 	}
-	
+
 	/**
 	 * Return the state of specified key
 	 * 
-	 * @param key
+	 * @param key name of the key
 	 * @return the state of specified key
 	 */
 	public boolean isKeyDown(String key) {
@@ -52,7 +52,7 @@ public class Input {
 	/**
 	 * Return the state of specified mouse button
 	 * 
-	 * @param keyCode
+	 * @param keyCode The code representing the key
 	 * @return the state of specified mouse button
 	 */
 	public boolean isMouseButtonDown(int keyCode) {
@@ -213,7 +213,7 @@ public class Input {
 	 * @param y of the rectangle
 	 * @param w of the rectangle
 	 * @param h of the rectangle
-	 * @return
+	 * @return {@code True} if the mouse is contained in the Rectangle
 	 */
 	public boolean isMouseInRectangle(double x, double y, double w, double h) {
 		Point2D mouseLocation = Lel.coreEngine.panelPositionToWorld(input.getMousePosition());
@@ -223,7 +223,7 @@ public class Input {
 	/**
 	 * Get a keycode from a given string Based on
 	 * 
-	 * @param str
+	 * @param str name of the key
 	 * @return keycode corresponding to a key
 	 */
 	public int keyFromString(String str) {
