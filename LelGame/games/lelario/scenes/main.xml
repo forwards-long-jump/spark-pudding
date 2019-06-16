@@ -45,14 +45,6 @@
 		</component>
 </entity>
 	<entity name="player" template="empty" z-index="2">
-		<component template="debug">
-		</component>
-		<component template="speedForces">
-			<field name="gravity">1.5</field>
-			<field name="wind">0.0</field>
-		</component>
-		<component template="speed">
-		</component>
 		<component template="acceleration">
 			<field name="decelerationDown">0.0</field>
 			<field name="movingUp">false</field>
@@ -75,11 +67,17 @@
 			<field name="maxSpeedUp">50.0</field>
 			<field name="touchWallUp">false</field>
 		</component>
+		<component template="debug">
+		</component>
 		<component template="jumpController">
 		</component>
 		<component template="size">
 			<field name="width">64</field>
 			<field name="height">128</field>
+		</component>
+		<component template="speedForces">
+			<field name="gravity">1.5</field>
+			<field name="wind">0.0</field>
 		</component>
 		<component template="animatedSprite">
 			<field name="currentDelay">2</field>
@@ -107,6 +105,8 @@
 			<field name="enabled">true</field>
 		</component>
 		<component template="accelerationController">
+		</component>
+		<component template="speed">
 		</component>
 		<component template="jump">
 			<field name="airDuration">0</field>
