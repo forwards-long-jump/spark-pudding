@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
@@ -164,6 +165,9 @@ public class ModalStart extends Modal {
 			JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup",
 					JOptionPane.ERROR_MESSAGE);
 			return;
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(mainPanel, "No games found at this location.", "Error during editor startup",
+					JOptionPane.ERROR_MESSAGE);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(mainPanel,
 					"Cannot open game. Error: \n\n" + e.getMessage() + "\n\nCheck the console for more details.",
