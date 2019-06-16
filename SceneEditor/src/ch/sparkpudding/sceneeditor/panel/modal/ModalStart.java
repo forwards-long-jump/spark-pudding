@@ -7,8 +7,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Paths;
+import java.nio.file.spi.FileSystemProvider;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -159,8 +163,21 @@ public class ModalStart extends Modal {
 	 */
 	private void openGame() {
 		try {
-			SceneEditor.coreEngine = new CoreEngine(gamePath,
-					Paths.get(Main.class.getResource("/leleditor").toURI()).toString());
+			URI uri = Paths.get("./resources/leleditor").toUri();
+			if ("jar".equals(uri.getScheme())) {
+				for (FileSystemProvider provider : FileSystemProvider.installedProviders()) {
+					if (provider.getScheme().equalsIgnoreCase("jar")) {
+						try {
+							provider.getFileSystem(uri);
+						} catch (FileSystemNotFoundException e) {
+							// in this case we need to initialize it first:
+							provider.newFileSystem(uri, Collections.emptyMap());
+						}
+					}
+				}
+			}
+
+			SceneEditor.coreEngine = new CoreEngine(gamePath, Paths.get("./resources/leleditor").toString());
 		} catch (URISyntaxException e) {
 			JOptionPane.showMessageDialog(mainPanel, "Invalid path", "Error during editor startup",
 					JOptionPane.ERROR_MESSAGE);

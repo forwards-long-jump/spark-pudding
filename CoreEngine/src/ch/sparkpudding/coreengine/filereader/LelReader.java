@@ -135,7 +135,7 @@ public class LelReader {
 				if (file.isDirectory()) {
 					populateMaps(file, map);
 				} else {
-					map.put(file.getAbsolutePath().substring(this.directory.length()), file);
+					map.put(file.getAbsolutePath(), file);
 				}
 			}
 		} catch (NullPointerException e) {

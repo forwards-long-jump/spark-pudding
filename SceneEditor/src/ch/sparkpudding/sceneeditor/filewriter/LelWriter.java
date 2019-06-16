@@ -2,11 +2,13 @@ package ch.sparkpudding.sceneeditor.filewriter;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.spi.FileSystemProvider;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -17,7 +19,6 @@ import ch.sparkpudding.coreengine.ecs.component.Component;
 import ch.sparkpudding.coreengine.ecs.component.Field;
 import ch.sparkpudding.coreengine.ecs.entity.Entity;
 import ch.sparkpudding.coreengine.ecs.entity.Scene;
-import ch.sparkpudding.sceneeditor.Main;
 
 /**
  * The class to write all the file of a game from the SceneEditor
@@ -81,12 +82,26 @@ public class LelWriter {
 		Path src;
 		try {
 			if (isEmptyGame) {
-				src = Paths.get(Main.class.getResource("/emptygame").toURI());
+				src = Paths.get("./resources/emptygame");
 			} else {
-				src = Paths.get(Main.class.getResource("/basicgame").toURI());
+				src = Paths.get("./resources/basicgame");
 			}
 			Path dest = Paths.get(directory);
 
+		
+			if ("jar".equals(src.toUri().getScheme())) {
+				for (FileSystemProvider provider : FileSystemProvider.installedProviders()) {
+					if (provider.getScheme().equalsIgnoreCase("jar")) {
+						try {
+							provider.getFileSystem(src.toUri());
+						} catch (FileSystemNotFoundException e) {
+							// in this case we need to initialize it first:
+							provider.newFileSystem(src.toUri(), Collections.emptyMap());
+						}
+					}
+				}
+			}
+			
 			Files.walk(src).forEach(source -> {
 				try {
 					Files.copy(source, dest.resolve(src.relativize(source)), StandardCopyOption.REPLACE_EXISTING);
@@ -94,7 +109,8 @@ public class LelWriter {
 					JOptionPane.showMessageDialog(null, e.getStackTrace(), "IO Error", JOptionPane.ERROR_MESSAGE);
 				}
 			});
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e.getStackTrace(), "IO Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
